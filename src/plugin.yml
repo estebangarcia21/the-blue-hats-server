@@ -1,0 +1,50 @@
+name: TheBlueHatsPit
+main: me.stevemmmmm.server.core.Main
+version: v1.0
+depend: [ServerCore]
+commands:
+    pitenchant:
+        description: Use it to enchant some weapons xD xD
+        usage: /pitenchant
+    mysticenchants:
+        description: Lists the enchants
+        usage: /mysticenchants
+    pitabout:
+        description: Information about this plugin
+        usage: /pitabout
+    givefreshitem:
+        description: Gives a fresh item
+        usage: /givefreshitem
+    giveprot:
+        description: Gives prot
+        usage: /giveprot
+    setgold:
+        description: Sets gold
+        usage: /setgold
+    givebread:
+        description: Gives bread
+        usage: /givebread
+    spawn:
+        description: Sends the player to spawn
+        usage: /spawn
+    respawn:
+        description: Sends the player to spawn
+        usage: /respawn
+    givearrows:
+        description: Gives arrows
+        usage: /givearrows
+    giveobsidian:
+        description: Gives obby
+        usage: /giveobsidian
+    unenchant:
+        description: Unenchants stuff
+        usage: /unenchant
+    duel:
+        description: Duels a player
+        usage: /duel
+    togglepvp:
+        description: Toggles pvp
+        usage: /togglepvp
+    selectworld:
+        description: Selects the world
+        usage: /selectworld
