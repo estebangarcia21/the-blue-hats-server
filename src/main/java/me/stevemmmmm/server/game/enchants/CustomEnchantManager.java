@@ -16,22 +16,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.stevemmmmm.server.core.Main;
+import me.stevemmmmm.server.game.utils.RomanNumeralConverter;
 import me.stevemmmmm.server.game.utils.SortCustomEnchantByName;
 
 public class CustomEnchantManager {
-    private static CustomEnchantManager instance;
-
     private final ArrayList<CustomEnchant> enchants = new ArrayList<>();
-
-    private CustomEnchantManager() {
-    }
-
-    public static CustomEnchantManager getInstance() {
-        if (instance == null)
-            instance = new CustomEnchantManager();
-
-        return instance;
-    }
+    private final RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
 
     public ArrayList<CustomEnchant> getEnchants() {
         return enchants;
@@ -69,7 +59,7 @@ public class CustomEnchantManager {
             if (tierValue > 2)
                 tierValue = 2;
 
-            String tier = convertToRomanNumeral(tierValue + (itemHasAlreadyTieredUp ? 0 : 1));
+            String tier = romanNumeralConverter.convertToRomanNumeral(tierValue + (itemHasAlreadyTieredUp ? 0 : 1));
 
             ChatColor tierColor = null;
             switch (tierValue + 1) {
@@ -114,9 +104,10 @@ public class CustomEnchantManager {
                     break;
             }
 
-            String rare = ChatColor.LIGHT_PURPLE + "RARE! " + ChatColor.BLUE + enchant.getName()
-                    + (level != 1 ? " " + convertToRomanNumeral(level) : "");
-            String normal = ChatColor.BLUE + enchant.getName() + (level != 1 ? " " + convertToRomanNumeral(level) : "");
+            String token = (level != 1 ? " " + romanNumeralConverter.convertToRomanNumeral(level) : "");
+
+            String rare = ChatColor.LIGHT_PURPLE + "RARE! " + ChatColor.BLUE + enchant.getName() + token;
+            String normal = ChatColor.BLUE + enchant.getName() + token;
 
             List<String> enchantLore = enchant.getDescription(level);
 
@@ -286,7 +277,7 @@ public class CustomEnchantManager {
             }
 
             for (int i = 0; i < enchantData.size(); i++) {
-                if (convertRomanNumeralToInteger(enchantData.get(i)) == -1) {
+                if (romanNumeralConverter.convertRomanNumeralToInteger(enchantData.get(i)) == -1) {
                     enchantName.append(enchantData.get(i));
                     if (i != enchantData.size() - 1)
                         enchantName.append(" ");
@@ -345,7 +336,7 @@ public class CustomEnchantManager {
 
         for (int i = 2; i <= 3; i++) {
             if (lore.contains(appendRare + ChatColor.BLUE + enchant.getName() + " "
-                    + CustomEnchantManager.getInstance().convertToRomanNumeral(i)))
+                    + romanNumeralConverter.convertToRomanNumeral(i)))
                 return true;
         }
 
@@ -378,12 +369,12 @@ public class CustomEnchantManager {
             }
 
             for (int i = 0; i < enchantData.size(); i++) {
-                if (convertRomanNumeralToInteger(enchantData.get(i)) == -1) {
+                if (romanNumeralConverter.convertRomanNumeralToInteger(enchantData.get(i)) == -1) {
                     enchantName.append(enchantData.get(i));
                     if (i != enchantData.size() - 1)
                         enchantName.append(" ");
                 } else {
-                    level = convertRomanNumeralToInteger(enchantData.get(i));
+                    level = romanNumeralConverter.convertRomanNumeralToInteger(enchantData.get(i));
                 }
             }
 
@@ -450,90 +441,6 @@ public class CustomEnchantManager {
     public boolean percentChance(double percent) {
         return Double.parseDouble(
                 new DecimalFormat("#0.0").format(ThreadLocalRandom.current().nextDouble(0, 99))) <= percent;
-    }
-
-    public String convertToRomanNumeral(int value) {
-        switch (value) {
-            case 0:
-                return "None";
-            case 1:
-                return "I";
-            case 2:
-                return "II";
-            case 3:
-                return "III";
-            case 4:
-                return "IV";
-            case 5:
-                return "V";
-            case 6:
-                return "VI";
-            case 7:
-                return "VII";
-            case 8:
-                return "VIII";
-            case 9:
-                return "IX";
-            case 10:
-                return "X";
-            case 11:
-                return "XI";
-            case 12:
-                return "XII";
-            case 13:
-                return "XIII";
-            case 14:
-                return "XIV";
-            case 15:
-                return "XV";
-            case 16:
-                return "XVI";
-            case 17:
-                return "XVII";
-            case 18:
-                return "XVIII";
-            case 19:
-                return "XIX";
-            case 20:
-                return "XX";
-            case 21:
-                return "XXI";
-            case 22:
-                return "XXII";
-            case 23:
-                return "XXIII";
-            case 24:
-                return "XXIV";
-            case 25:
-                return "XXV";
-            case 26:
-                return "XXVI";
-            case 27:
-                return "XXVII";
-            case 28:
-                return "XXVIII";
-            case 29:
-                return "XXIX";
-            case 30:
-                return "XXX";
-            case 35:
-                return "XXXV";
-        }
-
-        return null;
-    }
-
-    public int convertRomanNumeralToInteger(String numeral) {
-        switch (numeral) {
-            case "I":
-                return 1;
-            case "II":
-                return 2;
-            case "III":
-                return 3;
-        }
-
-        return -1;
     }
 
     public ChatColor getChatColorFromPantsColor(String color) {
