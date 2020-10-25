@@ -9,6 +9,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import me.stevemmmmm.server.game.managers.DamageManager;
 
 public class Vampire extends Perk {
+    private DamageManager damageManager;
+
+    public Vampire(DamageManager damageManager) {
+        this.damageManager = damageManager;
+    }
+
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         int healthValue = 1;
@@ -37,7 +43,7 @@ public class Vampire extends Perk {
                 return;
         }
 
-        if (!DamageManager.getInstance().playerIsInCanceledEvent(player))
+        if (!damageManager.playerIsInCanceledEvent(player))
             return;
 
         player.setHealth(Math.min(player.getHealth() + healthValue,
