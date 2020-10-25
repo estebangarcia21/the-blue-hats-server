@@ -51,10 +51,6 @@ public class Wasp extends CustomEnchant {
     }
 
     @Override
-    public void applyEnchant(int level, Object... args) {
-    }
-
-    @Override
     public String getName() {
         return "Wasp";
     }

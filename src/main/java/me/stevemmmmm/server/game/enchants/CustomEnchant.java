@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -18,25 +19,11 @@ import org.bukkit.inventory.ItemStack;
 import me.stevemmmmm.server.core.Main;
 import me.stevemmmmm.server.game.managers.DamageManager;
 import me.stevemmmmm.server.game.managers.RegionManager;
+import me.stevemmmmm.server.game.utils.RomanNumeralConverter;
 
 public abstract class CustomEnchant implements Listener {
     private final HashMap<UUID, CustomEnchantData> enchantData = new HashMap<>();
-
-    public abstract void applyEnchant(int level, Object... args);
-
-    public abstract String getName();
-
-    public abstract String getEnchantReferenceName();
-
-    public abstract ArrayList<String> getDescription(int level);
-
-    public abstract boolean isDisabledOnPassiveWorld();
-
-    public abstract EnchantGroup getEnchantGroup();
-
-    public abstract boolean isRareEnchant();
-
-    public abstract Material[] getEnchantItemTypes();
+    private final RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
 
     public boolean isCompatibleWith(Material material) {
         for (Material mat : getEnchantItemTypes()) {
@@ -48,65 +35,48 @@ public abstract class CustomEnchant implements Listener {
         return false;
     }
 
-    public boolean attemptEnchantExecution(ItemStack source, Consumer<Integer> execution,
-            EnchantDependency... dependencies) {
-        // TODO Implement toggle pvp command
-        // if (TogglePvPCommand.pvpIsToggledOff)
-        // return false;
-
-        if (itemHasEnchant(source, this))
-            return calculateConditions(source, args);
+    public boolean attemptEnchantExecution(EnchantProcData data, Consumer<Integer> execution) {
+        if (itemHasEnchant(data.getItemSource(), this))
+            return calculateConditions(data, null);
 
         return false;
     }
 
-    public boolean attemptEnchantExecution(ItemStack source, boolean condition, Object... args) {
-        // TODO Implement toggle pvp command
-        // if (TogglePvPCommand.pvpIsToggledOff)
-        // return false;
+    private boolean calculateConditions(EnchantProcData data, Consumer<Integer> execution) {
+        DamageManager damageManager = data.getDamageManager();
 
-        if (itemHasEnchant(source, this)) {
-            if (!condition)
-                return false;
-
-            return calculateConditions(source, args);
-        }
-
-        return false;
-    }
-
-    private boolean calculateConditions(ItemStack source, Consumer<Integer> execution,
-            EnchantDependency[] dependencies) {
-        for (Object object : args) {
-            if (object instanceof Player) {
-                Player player = (Player) object;
-
-                if (DamageManager.getInstance().playerIsInCanceledEvent(player))
-                    return false;
+        for (Entity entity : data.getInteractedEntities()) {
+            if (entity instanceof Player) {
+                Player player = (Player) entity;
 
                 if (player.getWorld().getName().equals("ThePit_0")) {
-                    for (CustomEnchant enchant : CustomEnchantManager.getInstance().getRawItemEnchants(source)) {
-                        if (enchant.isDisabledOnPassiveWorld())
-                            return false;
-                    }
+                    if (isDisabledOnPassiveWorld())
+                        return false;
+                }
+
+                if (damageManager != null) {
+                    if (data.getDamageManager().playerIsInCanceledEvent(player))
+                        return false;
                 }
 
                 if (RegionManager.getInstance().playerIsInRegion(player, RegionManager.RegionType.SPAWN))
                     return false;
             }
 
-            if (object instanceof Arrow) {
-                Arrow arrow = (Arrow) object;
+            if (entity instanceof Arrow) {
+                Arrow arrow = (Arrow) entity;
 
-                if (DamageManager.getInstance().arrowIsInCanceledEvent(arrow))
-                    return false;
+                if (damageManager != null) {
+                    if (damageManager.arrowIsInCanceledEvent(arrow))
+                        return false;
+                }
 
                 if (RegionManager.getInstance().locationIsInRegion(arrow.getLocation(), RegionManager.RegionType.SPAWN))
                     return false;
             }
         }
 
-        applyEnchant(getEnchantLevel(source, this), args);
+        execution.accept(getEnchantLevel(data.getItemSource(), this));
 
         return true;
     }
@@ -136,7 +106,7 @@ public abstract class CustomEnchant implements Listener {
         return ThreadLocalRandom.current().nextInt(0, 100) <= percent;
     }
 
-    public static boolean itemHasEnchant(ItemStack item, CustomEnchant enchant) {
+    public boolean itemHasEnchant(ItemStack item, CustomEnchant enchant) {
         if (item == null || item.getType() == Material.AIR)
             return false;
 
@@ -155,14 +125,14 @@ public abstract class CustomEnchant implements Listener {
 
         for (int i = 2; i <= 3; i++) {
             if (lore.contains(appendRare + ChatColor.BLUE + enchant.getName() + " "
-                    + CustomEnchantManager.getInstance().convertToRomanNumeral(i)))
+                    + romanNumeralConverter.convertToRomanNumeral(i)))
                 return true;
         }
 
         return false;
     }
 
-    public static boolean itemHasEnchant(ItemStack item, CustomEnchant enchant, int level) {
+    public boolean itemHasEnchant(ItemStack item, CustomEnchant enchant, int level) {
         if (item == null || item.getType() == Material.AIR)
             return false;
 
@@ -180,10 +150,10 @@ public abstract class CustomEnchant implements Listener {
             return lore.contains(appendRare + ChatColor.BLUE + enchant.getName());
 
         return lore.contains(appendRare + ChatColor.BLUE + enchant.getName() + " "
-                + CustomEnchantManager.getInstance().convertToRomanNumeral(level));
+                + romanNumeralConverter.convertToRomanNumeral(level));
     }
 
-    public static int getEnchantLevel(ItemStack item, CustomEnchant enchant) {
+    public int getEnchantLevel(ItemStack item, CustomEnchant enchant) {
         if (item == null || item.getType() == Material.AIR)
             return 0;
 
@@ -202,7 +172,7 @@ public abstract class CustomEnchant implements Listener {
 
         for (int i = 2; i <= 3; i++) {
             if (lore.contains(appendRare + ChatColor.BLUE + enchant.getName() + " "
-                    + CustomEnchantManager.getInstance().convertToRomanNumeral(i)))
+                    + romanNumeralConverter.convertToRomanNumeral(i)))
                 return i;
         }
 
@@ -252,4 +222,18 @@ public abstract class CustomEnchant implements Listener {
             }
         }, 0L, 20L));
     }
+
+    public abstract String getName();
+
+    public abstract String getEnchantReferenceName();
+
+    public abstract ArrayList<String> getDescription(int level);
+
+    public abstract boolean isDisabledOnPassiveWorld();
+
+    public abstract EnchantGroup getEnchantGroup();
+
+    public abstract boolean isRareEnchant();
+
+    public abstract Material[] getEnchantItemTypes();
 }
