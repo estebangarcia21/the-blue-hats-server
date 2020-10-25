@@ -11,11 +11,9 @@ import me.stevemmmmm.server.game.managers.BowManager;
 import me.stevemmmmm.server.game.managers.DamageManager;
 
 public class Main extends JavaPlugin {
-    public static Main instance;
-
     @Override
     public void onEnable() {
-        instance = this;
+        Main mainInstance = this;
 
         Logger log = Bukkit.getLogger();
 
@@ -23,7 +21,7 @@ public class Main extends JavaPlugin {
         log.info("   The Hypixel Pit Remake by Stevemmmmm   ");
         log.info("------------------------------------------");
 
-        registerObjects();
+        registerObjects(mainInstance);
     }
 
     @Override
@@ -31,10 +29,10 @@ public class Main extends JavaPlugin {
 
     }
 
-    private void registerObjects() {
+    private void registerObjects(Main mainInstance) {
         DamageManager damageManager = new DamageManager();
         BowManager bowManager = new BowManager();
-        CustomEnchantManager customEnchantManager = new CustomEnchantManager();
+        CustomEnchantManager customEnchantManager = new CustomEnchantManager(mainInstance);
 
         registerEnchants(damageManager, bowManager, customEnchantManager);
         registerPerks(damageManager, bowManager, customEnchantManager);
