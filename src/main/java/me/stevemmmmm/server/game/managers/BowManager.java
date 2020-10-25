@@ -40,8 +40,4 @@ public class BowManager {
     public ItemStack getLeggingsFromArrow(Arrow arrow) {
         return data.get(arrow).getLeggings();
     }
-
-    public int add(int a, int b) {
-        return a + b;
-    }
 }
