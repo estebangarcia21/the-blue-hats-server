@@ -1,13 +1,10 @@
 package me.stevemmmmm.server.game.enchants;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -16,13 +13,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import me.stevemmmmm.server.core.Main;
 import me.stevemmmmm.server.game.managers.DamageManager;
 import me.stevemmmmm.server.game.managers.RegionManager;
 import me.stevemmmmm.server.game.utils.RomanNumeralConverter;
 
 public abstract class CustomEnchant implements Listener {
-    private final HashMap<UUID, CustomEnchantData> enchantData = new HashMap<>();
     private final RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
 
     public boolean isCompatibleWith(Material material) {
@@ -83,23 +78,6 @@ public abstract class CustomEnchant implements Listener {
 
     public boolean getAttemptedEnchantExecutionFeedback(ItemStack source) {
         return false;
-    }
-
-    public void startCooldown(Player player, long ticks, boolean isSeconds) {
-        if (isSeconds)
-            ticks *= 20;
-
-        CustomEnchantData data = enchantData.get(player.getUniqueId());
-
-        data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Main.instance, () -> {
-            data.setCooldownTime(data.getCooldownTime() - 1);
-
-            if (data.getCooldownTime() <= 0) {
-                data.setCooldownTime(0);
-
-                Bukkit.getServer().getScheduler().cancelTask(data.getCooldownTaskId());
-            }
-        }, 0L, 1L));
     }
 
     public boolean percentChance(int percent) {
@@ -177,50 +155,6 @@ public abstract class CustomEnchant implements Listener {
         }
 
         return 0;
-    }
-
-    public void updateHitCount(Player player) {
-        CustomEnchantData data = enchantData.get(player.getUniqueId());
-
-        data.setCooldownTime(0L);
-        data.setHitsWithEnchant(data.getHitsWithEnchant() + 1);
-
-        startHitResetTimer(player);
-    }
-
-    public void updateHitCount(Player player, int amount) {
-        CustomEnchantData data = enchantData.get(player.getUniqueId());
-
-        data.setCooldownTime(0L);
-        data.setHitsWithEnchant(data.getHitsWithEnchant() + amount);
-
-        startHitResetTimer(player);
-    }
-
-    public boolean hasRequiredHits(Player player, int hitAmount) {
-        CustomEnchantData data = enchantData.get(player.getUniqueId());
-
-        if (data.getHitsWithEnchant() >= hitAmount) {
-            data.setHitsWithEnchant(0);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public void startHitResetTimer(Player player) {
-        CustomEnchantData data = enchantData.get(player.getUniqueId());
-
-        data.setHitResetTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Main.instance, () -> {
-            data.setHitResetTime(data.getHitResetTime() - 1);
-
-            if (data.getCooldownTime() <= 0) {
-                data.setHitResetTime(0);
-
-                Bukkit.getServer().getScheduler().cancelTask(data.getHitResetTaskId());
-            }
-        }, 0L, 20L));
     }
 
     public abstract String getName();

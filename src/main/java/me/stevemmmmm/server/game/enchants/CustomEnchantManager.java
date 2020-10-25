@@ -23,12 +23,18 @@ public class CustomEnchantManager {
     private final ArrayList<CustomEnchant> enchants = new ArrayList<>();
     private final RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
 
+    private Main mainInstance;
+
+    public CustomEnchantManager(Main mainInstance) {
+        this.mainInstance = mainInstance;
+    }
+
     public ArrayList<CustomEnchant> getEnchants() {
         return enchants;
     }
 
     public void registerEnchant(CustomEnchant enchant) {
-        Main.instance.getServer().getPluginManager().registerEvents(enchant, Main.instance);
+        mainInstance.getServer().getPluginManager().registerEvents(enchant, mainInstance);
 
         enchants.add(enchant);
         enchants.sort(new SortCustomEnchantByName());
