@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -35,15 +36,13 @@ public class Wasp extends CustomEnchant {
         if (!(arrow.getShooter() instanceof Player))
             return;
 
-        attemptEnchantExecution(bowManager.getBowFromArrow(arrow), level -> {
-            Player hitPlayer = (Player) event.getEntity();
+        Player hitPlayer = (Player) event.getEntity();
 
-            hitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, duration.getValueAtLevel(level),
-                    weaknessAmplifier.getValueAtLevel(level), true));
-        });
-
-        // attemptEnchantExecution(bowManager.getBowFromArrow(arrow),
-        // event.getEntity());
+        attemptEnchantExecution(new EnchantProcData(bowManager.getBowFromArrow(arrow), new Entity[] { hitPlayer }),
+                level -> {
+                    hitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
+                            duration.getValueAtLevel(level), weaknessAmplifier.getValueAtLevel(level), true));
+                });
     }
 
     @EventHandler
