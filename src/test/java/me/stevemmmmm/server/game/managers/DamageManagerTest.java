@@ -21,6 +21,10 @@ public class DamageManagerTest {
         canceledPlayers.add(player.getUniqueId());
 
         assertEquals(true, manager.playerIsInCanceledEvent(player));
+
+        canceledPlayers.remove(player.getUniqueId());
+
+        assertEquals(false, manager.playerIsInCanceledEvent(player));
     }
 
     @Test
@@ -36,5 +40,9 @@ public class DamageManagerTest {
         canceledPlayers.add(player.getUniqueId());
 
         assertEquals(true, manager.arrowIsInCanceledEvent(arrow));
+
+        canceledPlayers.remove(player.getUniqueId());
+
+        assertEquals(false, manager.arrowIsInCanceledEvent(arrow));
     }
 }
