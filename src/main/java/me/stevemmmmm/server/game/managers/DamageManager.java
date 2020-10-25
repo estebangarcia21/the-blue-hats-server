@@ -21,4 +21,8 @@ public class DamageManager {
 
         return false;
     }
+
+    public ArrayList<UUID> getCanceledPlayers() {
+        return canceledPlayers;
+    }
 }
