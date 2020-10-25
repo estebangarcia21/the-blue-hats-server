@@ -29,6 +29,7 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
@@ -38,6 +39,12 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+
     <pluginManagement>
       <plugins>
         <plugin>

@@ -1,7 +1,6 @@
 name: TheBlueHatsPit
 main: me.stevemmmmm.server.core.Main
-version: v1.0
-depend: [ServerCore]
+version: 2.0
 commands:
     pitenchant:
         description: Use it to enchant some weapons xD xD
