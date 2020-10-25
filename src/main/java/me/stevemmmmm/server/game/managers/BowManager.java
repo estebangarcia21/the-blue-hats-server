@@ -11,16 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public class BowManager {
-    private static BowManager instance;
-
     private final HashMap<Arrow, PlayerInventory> data = new HashMap<>();
-
-    public static BowManager getInstance() {
-        if (instance == null)
-            instance = new BowManager();
-
-        return instance;
-    }
 
     @EventHandler
     public void onArrowShoot(EntityShootBowEvent event) {

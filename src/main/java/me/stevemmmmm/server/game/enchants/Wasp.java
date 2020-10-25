@@ -8,6 +8,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -18,23 +19,40 @@ public class Wasp extends CustomEnchant {
     private final EnchantProperty<Integer> weaknessAmplifier = new EnchantProperty<>(1, 2, 3);
     private final EnchantProperty<Integer> duration = new EnchantProperty<>(6, 11, 16);
 
+    private BowManager bowManager;
+
+    public Wasp(BowManager bowManager) {
+        this.bowManager = bowManager;
+    }
+
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Arrow && event.getEntity() instanceof Player) {
-            Arrow arrow = (Arrow) event.getDamager();
+        if (!(event.getDamager() instanceof Arrow) || !(event.getEntity() instanceof Player))
+            return;
 
-            if (arrow.getShooter() instanceof Player) {
-                attemptEnchantExecution(BowManager.getInstance().getBowFromArrow(arrow), event.getEntity());
-            }
-        }
+        Arrow arrow = (Arrow) event.getDamager();
+
+        if (!(arrow.getShooter() instanceof Player))
+            return;
+
+        attemptEnchantExecution(bowManager.getBowFromArrow(arrow), level -> {
+            Player hitPlayer = (Player) event.getEntity();
+
+            hitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, duration.getValueAtLevel(level),
+                    weaknessAmplifier.getValueAtLevel(level), true));
+        });
+
+        // attemptEnchantExecution(bowManager.getBowFromArrow(arrow),
+        // event.getEntity());
+    }
+
+    @EventHandler
+    public void onArrowShootEvent(EntityShootBowEvent event) {
+        bowManager.onArrowShoot(event);
     }
 
     @Override
     public void applyEnchant(int level, Object... args) {
-        Player hitPlayer = (Player) args[0];
-
-        hitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, duration.getValueAtLevel(level),
-                weaknessAmplifier.getValueAtLevel(level), true));
     }
 
     @Override

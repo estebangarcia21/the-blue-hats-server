@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -47,7 +48,8 @@ public abstract class CustomEnchant implements Listener {
         return false;
     }
 
-    public boolean attemptEnchantExecution(ItemStack source, Object... args) {
+    public boolean attemptEnchantExecution(ItemStack source, Consumer<Integer> execution,
+            EnchantDependency... dependencies) {
         // TODO Implement toggle pvp command
         // if (TogglePvPCommand.pvpIsToggledOff)
         // return false;
@@ -73,7 +75,8 @@ public abstract class CustomEnchant implements Listener {
         return false;
     }
 
-    private boolean calculateConditions(ItemStack source, Object[] args) {
+    private boolean calculateConditions(ItemStack source, Consumer<Integer> execution,
+            EnchantDependency[] dependencies) {
         for (Object object : args) {
             if (object instanceof Player) {
                 Player player = (Player) object;

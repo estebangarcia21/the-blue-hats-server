@@ -7,18 +7,11 @@ import java.util.UUID;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 
-public class DamageManager {
-    private static DamageManager instance;
+import me.stevemmmmm.server.game.enchants.EnchantDependency;
 
+public class DamageManager implements EnchantDependency {
     private final HashMap<UUID, DamageEventData> eventData = new HashMap<>();
     private final ArrayList<UUID> canceledPlayers = new ArrayList<>();
-
-    public static DamageManager getInstance() {
-        if (instance == null)
-            instance = new DamageManager();
-
-        return instance;
-    }
 
     public boolean playerIsInCanceledEvent(Player player) {
         return canceledPlayers.contains(player.getUniqueId());
@@ -28,6 +21,11 @@ public class DamageManager {
         if (arrow.getShooter() instanceof Player)
             return canceledPlayers.contains(((Player) arrow.getShooter()).getUniqueId());
 
+        return false;
+    }
+
+    @Override
+    public boolean canProc() {
         return false;
     }
 }

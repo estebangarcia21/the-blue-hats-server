@@ -5,6 +5,9 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.stevemmmmm.server.game.managers.BowManager;
+import me.stevemmmmm.server.game.managers.DamageManager;
+
 public class Main extends JavaPlugin {
     public static Main instance;
 
@@ -22,5 +25,10 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
+    }
+
+    private void registerEnchants() {
+        DamageManager damageManager = new DamageManager();
+        BowManager bowManager = new BowManager();
     }
 }
