@@ -7,9 +7,7 @@ import java.util.UUID;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 
-import me.stevemmmmm.server.game.enchants.EnchantDependency;
-
-public class DamageManager implements EnchantDependency {
+public class DamageManager {
     private final HashMap<UUID, DamageEventData> eventData = new HashMap<>();
     private final ArrayList<UUID> canceledPlayers = new ArrayList<>();
 
@@ -21,11 +19,6 @@ public class DamageManager implements EnchantDependency {
         if (arrow.getShooter() instanceof Player)
             return canceledPlayers.contains(((Player) arrow.getShooter()).getUniqueId());
 
-        return false;
-    }
-
-    @Override
-    public boolean canProc() {
         return false;
     }
 }
