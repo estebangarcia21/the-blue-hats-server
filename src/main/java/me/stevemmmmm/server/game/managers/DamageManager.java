@@ -22,7 +22,6 @@ public class DamageManager {
 
     public boolean playerIsInCanceledEvent(Player player) {
         return canceledPlayers.contains(player.getUniqueId());
-
     }
 
     public boolean arrowIsInCanceledEvent(Arrow arrow) {
