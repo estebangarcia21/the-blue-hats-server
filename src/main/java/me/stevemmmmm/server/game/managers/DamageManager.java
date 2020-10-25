@@ -1,5 +1,6 @@
 package me.stevemmmmm.server.game.managers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -10,9 +11,7 @@ public class DamageManager {
     private static DamageManager instance;
 
     private final HashMap<UUID, DamageEventData> eventData = new HashMap<>();
-
-    private DamageManager() {
-    }
+    private final ArrayList<UUID> canceledPlayers = new ArrayList<>();
 
     public static DamageManager getInstance() {
         if (instance == null)
@@ -22,12 +21,14 @@ public class DamageManager {
     }
 
     public boolean playerIsInCanceledEvent(Player player) {
-        // TODO Implmenent
-        return true;
+        return canceledPlayers.contains(player.getUniqueId());
+
     }
 
     public boolean arrowIsInCanceledEvent(Arrow arrow) {
-        // TODO Implement
-        return true;
+        if (arrow.getShooter() instanceof Player)
+            return canceledPlayers.contains(((Player) arrow.getShooter()).getUniqueId());
+
+        return false;
     }
 }
