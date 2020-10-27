@@ -1,4 +1,4 @@
-target/
+target
 
 .classpath
 .project
@@ -7,6 +7,8 @@ target/
 .DS_Store
 
 .vscode
+
+bin
 
 # Ignore Gradle project-specific cache directory
 .gradle
