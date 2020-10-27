@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"
+    }
+}
+
+dependencies {
+    implementation 'org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT'
+    testImplementation 'org.mockito:mockito-core:3.5.15'
+    testImplementation 'junit:junit:4.11'
+}
+
+group = 'me.stevemmmmm.server'
+version = '0.1'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

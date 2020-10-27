@@ -8,6 +8,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 
 public class DamageManager {
+    @SuppressWarnings("unused")
     private final HashMap<UUID, DamageEventData> eventData = new HashMap<>();
     private final ArrayList<UUID> canceledPlayers = new ArrayList<>();
 

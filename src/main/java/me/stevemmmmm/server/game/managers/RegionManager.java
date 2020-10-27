@@ -31,7 +31,6 @@ public class RegionManager {
     }
 
     private void initSpawnRegions() {
-        // TODO Read JSON file
         // Genisis Spawn
         spawnLocations.put(Map.GENISIS, new Location(null, 0.5, 86.5, 11.5, -180, 0));
 

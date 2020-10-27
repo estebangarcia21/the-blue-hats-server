@@ -21,6 +21,8 @@ public class Main extends JavaPlugin {
         log.info("   The Hypixel Pit Remake by Stevemmmmm   ");
         log.info("------------------------------------------");
 
+        log.info("Hi!");
+
         registerObjects(mainInstance);
     }
 
@@ -45,6 +47,5 @@ public class Main extends JavaPlugin {
 
     private void registerPerks(DamageManager damageManager, BowManager bowManager,
             CustomEnchantManager customEnchantManager) {
-        // TODO Register vampire
     }
 }
