@@ -47,13 +47,13 @@ public class CustomEnchantTest {
 
     @Test
     public void testAttemptEnchantExecution() {
-        assertEquals(true, enchant.attemptEnchantExecution(item, null));
+        assertEquals(true, enchant.canExecuteEnchant(item, null));
 
         when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp II").build());
-        assertEquals(true, enchant.attemptEnchantExecution(item, null));
+        assertEquals(true, enchant.canExecuteEnchant(item, null));
 
         when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp III").build());
-        assertEquals(true, enchant.attemptEnchantExecution(item, null));
+        assertEquals(true, enchant.canExecuteEnchant(item, null));
     }
 
     @Test
