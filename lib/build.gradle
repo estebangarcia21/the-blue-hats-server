@@ -1,0 +1,12 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    // Use JCenter for resolving dependencies.
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13'
+}
