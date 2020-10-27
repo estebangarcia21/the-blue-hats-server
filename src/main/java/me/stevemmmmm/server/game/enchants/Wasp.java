@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -17,7 +18,7 @@ import me.stevemmmmm.server.game.managers.BowManager;
 import me.stevemmmmm.server.game.utils.LoreBuilder;
 
 public class Wasp extends CustomEnchant {
-    private final EnchantProperty<Integer> weaknessAmplifier = new EnchantProperty<>(1, 2, 3);
+    private final EnchantProperty<Integer> amplifier = new EnchantProperty<>(1, 2, 3);
     private final EnchantProperty<Integer> duration = new EnchantProperty<>(6, 11, 16);
 
     private BowManager bowManager;
@@ -38,16 +39,23 @@ public class Wasp extends CustomEnchant {
 
         Player hitPlayer = (Player) event.getEntity();
 
-        attemptEnchantExecution(new EnchantProcData(bowManager.getBowFromArrow(arrow), new Entity[] { hitPlayer }),
-                level -> {
-                    hitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
-                            duration.getValueAtLevel(level), weaknessAmplifier.getValueAtLevel(level), true));
-                });
+        ItemStack caller = bowManager.getBowFromArrow(arrow);
+
+        if (!attemptEnchantExecution(caller, new Entity[] { hitPlayer }))
+            return;
+
+        int level = getEnchantLevel(caller);
+
+        executeEnchant(hitPlayer, duration.getValueAtLevel(level), amplifier.getValueAtLevel(level));
     }
 
     @EventHandler
     public void onArrowShootEvent(EntityShootBowEvent event) {
         bowManager.onArrowShoot(event);
+    }
+
+    public void executeEnchant(Player hitPlayer, int duration, int amplifier) {
+        hitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, duration * 20, amplifier));
     }
 
     @Override

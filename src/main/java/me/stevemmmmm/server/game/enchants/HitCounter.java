@@ -9,15 +9,16 @@ import org.bukkit.entity.Player;
 import me.stevemmmmm.server.core.Main;
 
 public class HitCounter {
+    private final HashMap<UUID, HitCounterData> timerData = new HashMap<>();
+
     private Main mainInstance;
-    private HashMap<UUID, HitCounterData> timerData;
 
     public HitCounter(Main mainInstance) {
         this.mainInstance = mainInstance;
     }
 
-    public void updateHitCount(Player player) {
-        HitCounterData data = timerData.get(player.getUniqueId());
+    public void addOne(Player player) {
+        HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
 
         data.setHitResetTime(0L);
         data.setHitsWithEnchant(data.getHitsWithEnchant() + 1);
@@ -25,8 +26,8 @@ public class HitCounter {
         startHitResetTimer(player);
     }
 
-    public void updateHitCount(Player player, int amount) {
-        HitCounterData data = timerData.get(player.getUniqueId());
+    public void add(Player player, int amount) {
+        HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
 
         data.setHitResetTime(0L);
         data.setHitsWithEnchant(data.getHitsWithEnchant() + amount);
@@ -34,8 +35,8 @@ public class HitCounter {
         startHitResetTimer(player);
     }
 
-    public boolean hasRequiredHits(Player player, int hitAmount) {
-        HitCounterData data = timerData.get(player.getUniqueId());
+    public boolean hasHits(Player player, int hitAmount) {
+        HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
 
         if (data.getHitsWithEnchant() >= hitAmount) {
             data.setHitsWithEnchant(0);
@@ -47,7 +48,7 @@ public class HitCounter {
     }
 
     public void startHitResetTimer(Player player) {
-        HitCounterData data = timerData.get(player.getUniqueId());
+        HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
 
         data.setHitResetTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(mainInstance, () -> {
             data.setHitResetTime(data.getHitResetTime() - 1);
