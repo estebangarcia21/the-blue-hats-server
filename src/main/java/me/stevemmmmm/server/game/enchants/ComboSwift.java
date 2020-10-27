@@ -31,7 +31,7 @@ public class ComboSwift extends CustomEnchant {
             Player damager = (Player) event.getDamager();
             ItemStack source = damager.getInventory().getItemInMainHand();
 
-            if (!attemptEnchantExecution(source, new Entity[] { damager }))
+            if (!canExecuteEnchant(source, new Entity[] { damager }))
                 return;
 
             int level = getEnchantLevel(source);

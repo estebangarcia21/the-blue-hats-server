@@ -28,14 +28,14 @@ public abstract class CustomEnchant implements Listener {
         return false;
     }
 
-    public boolean attemptEnchantExecution(ItemStack source, Entity[] interactedEntities) {
+    public boolean canExecuteEnchant(ItemStack source, Entity[] interactedEntities) {
         if (itemHasEnchant(source))
             return calculateConditions(source, interactedEntities, null);
 
         return false;
     }
 
-    public boolean attemptEnchantExecution(ItemStack source, Entity[] interactedEntities, DamageManager damageManager) {
+    public boolean canExecuteEnchant(ItemStack source, Entity[] interactedEntities, DamageManager damageManager) {
         if (itemHasEnchant(source))
             return calculateConditions(source, interactedEntities, damageManager);
 

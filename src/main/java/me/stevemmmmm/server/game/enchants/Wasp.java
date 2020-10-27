@@ -41,7 +41,7 @@ public class Wasp extends CustomEnchant {
 
         ItemStack caller = bowManager.getBowFromArrow(arrow);
 
-        if (!attemptEnchantExecution(caller, new Entity[] { hitPlayer }))
+        if (!canExecuteEnchant(caller, new Entity[] { hitPlayer }))
             return;
 
         int level = getEnchantLevel(caller);
