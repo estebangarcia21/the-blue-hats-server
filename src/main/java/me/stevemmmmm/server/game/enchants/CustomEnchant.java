@@ -107,32 +107,6 @@ public abstract class CustomEnchant implements Listener {
         return false;
     }
 
-    // public boolean itemHasEnchant(ItemStack item, CustomEnchant enchant) {
-    // if (item == null || item.getType() == Material.AIR)
-    // return false;
-
-    // if (item.getItemMeta().getLore() == null)
-    // return false;
-
-    // List<String> lore = item.getItemMeta().getLore();
-
-    // String appendRare = "";
-
-    // if (enchant.isRareEnchant())
-    // appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
-
-    // if (lore.contains(appendRare + ChatColor.BLUE + enchant.getName()))
-    // return true;
-
-    // for (int i = 2; i <= 3; i++) {
-    // if (lore.contains(appendRare + ChatColor.BLUE + enchant.getName() + " "
-    // + romanNumeralConverter.convertToRomanNumeral(i)))
-    // return true;
-    // }
-
-    // return false;
-    // }
-
     public int getEnchantLevel(ItemStack item) {
         if (item == null || item.getType() == Material.AIR)
             return 0;
@@ -157,36 +131,6 @@ public abstract class CustomEnchant implements Listener {
         }
 
         return 0;
-    }
-
-    // public int getEnchantLevel(ItemStack item, CustomEnchant enchant) {
-    // if (item == null || item.getType() == Material.AIR)
-    // return 0;
-
-    // if (item.getItemMeta().getLore() == null)
-    // return 0;
-
-    // List<String> lore = item.getItemMeta().getLore();
-
-    // String appendRare = "";
-
-    // if (enchant.isRareEnchant())
-    // appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
-
-    // if (lore.contains(appendRare + ChatColor.BLUE + enchant.getName()))
-    // return 1;
-
-    // for (int i = 2; i <= 3; i++) {
-    // if (lore.contains(appendRare + ChatColor.BLUE + enchant.getName() + " "
-    // + romanNumeralConverter.convertToRomanNumeral(i)))
-    // return i;
-    // }
-
-    // return 0;
-    // }
-
-    public void executeEnchant(int level) {
-        System.out.println("Unimplemented enchant: " + getClass().getName());
     }
 
     public abstract String getName();
