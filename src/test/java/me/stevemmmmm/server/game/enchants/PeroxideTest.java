@@ -19,6 +19,11 @@ public class PeroxideTest {
 
         enchant.executeEnchant(player, duration, amplifier);
 
+        duration = 5;
+        amplifier = 3;
+
+        enchant.executeEnchant(player, duration, amplifier);
+
         verify(player).addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, duration * 20, amplifier));
     }
 }
