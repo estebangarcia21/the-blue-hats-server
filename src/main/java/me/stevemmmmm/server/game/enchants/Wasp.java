@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import me.stevemmmmm.server.game.enchants.templates.ArrowHitPlayer;
 import me.stevemmmmm.server.game.managers.BowManager;
 import me.stevemmmmm.server.game.utils.LoreBuilder;
 
@@ -24,29 +23,17 @@ public class Wasp extends CustomEnchant {
     private BowManager bowManager;
 
     public Wasp(BowManager bowManager) {
+        super(new ArrowHitPlayer());
+
         this.bowManager = bowManager;
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Arrow) || !(event.getEntity() instanceof Player))
-            return;
-
-        Arrow arrow = (Arrow) event.getDamager();
-
-        if (!(arrow.getShooter() instanceof Player))
-            return;
-
-        Player hitPlayer = (Player) event.getEntity();
-
-        ItemStack caller = bowManager.getBowFromArrow(arrow);
-
-        if (!canExecuteEnchant(caller, new Entity[] { hitPlayer }))
-            return;
-
-        int level = getEnchantLevel(caller);
-
-        executeEnchant(hitPlayer, duration.getValueAtLevel(level), amplifier.getValueAtLevel(level));
+        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(),
+                inventory -> bowManager.getBowFromArrow((Arrow) event.getDamager()),
+                level -> executeEnchant((Player) event.getEntity(), duration.getValueAtLevel(level),
+                        amplifier.getValueAtLevel(level)));
     }
 
     @EventHandler

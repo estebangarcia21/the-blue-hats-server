@@ -9,30 +9,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import me.stevemmmmm.server.game.enchants.templates.PlayerHitPlayer;
 import me.stevemmmmm.server.game.utils.LoreBuilder;
 
 public class Healer extends CustomEnchant {
     private final EnchantProperty<Integer> healAmount = new EnchantProperty<>(2, 4, 6);
 
+    public Healer() {
+        super(new PlayerHitPlayer());
+    }
+
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        playerAndPlayer(event.getDamager(), event.getEntity(), inventory -> inventory.getItemInMainHand(),
-                level -> executeEnchant((Player) event.getDamager(), (Player) event.getEntity(),
-                        healAmount.getValueAtLevel(level)));
-
-        // if (event.getDamager() instanceof Player && event.getEntity() instanceof
-        // Player) {
-        // Player player = (Player) event.getEntity();
-        // ItemStack source = player.getInventory().getItemInMainHand();
-        // int level = getEnchantLevel(source);
-
-        // if (!canExecuteEnchant(source, new Entity[] { event.getEntity(),
-        // event.getDamager() }))
-        // return;
-
-        // executeEnchant((Player) event.getDamager(), player,
-        // healAmount.getValueAtLevel(level));
-        // }
+        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(),
+                inventory -> inventory.getItemInMainHand(), level -> executeEnchant((Player) event.getDamager(),
+                        (Player) event.getEntity(), healAmount.getValueAtLevel(level)));
     }
 
     public void executeEnchant(Player damager, Player damaged, int healAmount) {

@@ -10,49 +10,27 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import me.stevemmmmm.server.game.enchants.templates.ArrowHitPlayer;
+import me.stevemmmmm.server.game.enchants.templates.PlayerHitPlayer;
 import me.stevemmmmm.server.game.utils.LoreBuilder;
 
 public class Peroxide extends CustomEnchant {
     private final EnchantProperty<Integer> regenTime = new EnchantProperty<>(5, 8, 8);
     private final EnchantProperty<Integer> effectAmplifier = new EnchantProperty<>(0, 0, 1);
 
+    public Peroxide() {
+        super(new PlayerHitPlayer(), new ArrowHitPlayer());
+    }
+
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        playerAndPlayer(event.getDamager(), event.getEntity(), inventory -> inventory.getItemInMainHand(),
-                level -> executeEnchant((Player) event.getEntity(), regenTime.getValueAtLevel(level),
-                        effectAmplifier.getValueAtLevel(level)));
+        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(),
+                inventory -> inventory.getItemInMainHand(), level -> executeEnchant((Player) event.getEntity(),
+                        regenTime.getValueAtLevel(level), effectAmplifier.getValueAtLevel(level)));
 
-        // if (event.getDamager() instanceof Player && event.getEntity() instanceof
-        // Player) {
-        // Player player = (Player) event.getEntity();
-        // ItemStack source = player.getInventory().getLeggings();
-        // int level = getEnchantLevel(source);
-
-        // if (!canExecuteEnchant(source, new Entity[] { event.getEntity(),
-        // event.getDamager() }))
-        // return;
-
-        // executeEnchant(player, regenTime.getValueAtLevel(level),
-        // effectAmplifier.getValueAtLevel(level));
-        // }
-
-        // if (event.getDamager() instanceof Arrow && event.getEntity() instanceof
-        // Player) {
-        // Arrow arrow = (Arrow) event.getDamager();
-
-        // if (arrow.getShooter() instanceof Player) {
-        // Player player = (Player) arrow.getShooter();
-        // ItemStack source = player.getInventory().getLeggings();
-        // int level = getEnchantLevel(source);
-
-        // if (!canExecuteEnchant(source, new Entity[] { event.getEntity(),
-        // event.getDamager(), arrow }))
-        // return;
-
-        // executeEnchant(player, regenTime.getValueAtLevel(level),
-        // effectAmplifier.getValueAtLevel(level));
-        // }
-        // }
+        getEventTemplates()[1].run(this, event.getDamager(), event.getEntity(),
+                inventory -> inventory.getItemInMainHand(), level -> executeEnchant((Player) event.getEntity(),
+                        regenTime.getValueAtLevel(level), effectAmplifier.getValueAtLevel(level)));
     }
 
     public void executeEnchant(Player hitPlayer, int regenTime, int effectAmplifier) {
