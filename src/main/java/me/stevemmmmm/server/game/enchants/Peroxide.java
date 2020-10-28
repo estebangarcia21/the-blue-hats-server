@@ -24,13 +24,13 @@ public class Peroxide extends CustomEnchant {
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(),
-                inventory -> inventory.getItemInMainHand(), level -> executeEnchant((Player) event.getEntity(),
-                        regenTime.getValueAtLevel(level), effectAmplifier.getValueAtLevel(level)));
+        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), inventory -> inventory.getLeggings(),
+                level -> executeEnchant((Player) event.getEntity(), regenTime.getValueAtLevel(level),
+                        effectAmplifier.getValueAtLevel(level)));
 
-        getEventTemplates()[1].run(this, event.getDamager(), event.getEntity(),
-                inventory -> inventory.getItemInMainHand(), level -> executeEnchant((Player) event.getEntity(),
-                        regenTime.getValueAtLevel(level), effectAmplifier.getValueAtLevel(level)));
+        getEventTemplates()[1].run(this, event.getDamager(), event.getEntity(), inventory -> inventory.getLeggings(),
+                level -> executeEnchant((Player) event.getEntity(), regenTime.getValueAtLevel(level),
+                        effectAmplifier.getValueAtLevel(level)));
     }
 
     public void executeEnchant(Player hitPlayer, int regenTime, int effectAmplifier) {
