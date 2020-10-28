@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -26,7 +27,24 @@ public class DamageManagerTest {
         MockitoAnnotations.openMocks(this);
 
         manager = new DamageManager();
-        canceledPlayers = manager.getCanceledPlayers();
+
+        try {
+            Field field;
+            field = DamageManager.class.getDeclaredField("canceledPlayers");
+
+            field.setAccessible(true);
+
+            Object value = field.get(manager);
+
+            if (value instanceof ArrayList<?>) {
+                @SuppressWarnings("unchecked")
+                ArrayList<UUID> canceledPlayers = (ArrayList<UUID>) value;
+
+                this.canceledPlayers = canceledPlayers;
+            }
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
