@@ -6,11 +6,7 @@ import static org.mockito.Mockito.when;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +22,7 @@ public class CustomEnchantTest {
     @Mock
     private ItemMeta meta;
 
-    private Wasp enchant;
+    private CustomEnchant enchant;
 
     @Before
     public void setup() {
@@ -85,47 +81,5 @@ public class CustomEnchantTest {
 
         when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "").build());
         assertEquals(0, enchant.getEnchantLevel(item));
-    }
-
-    @Test
-    public void testPlayerAndPlayer() {
-        Player damager = mock(Player.class);
-        Player damagee = mock(Player.class);
-
-        PlayerInventory inventory = mock(PlayerInventory.class);
-        World world = mock(World.class);
-
-        when(damagee.getInventory()).thenReturn(inventory);
-        when(damagee.getWorld()).thenReturn(world);
-        when(damager.getWorld()).thenReturn(world);
-
-        when(world.getName()).thenReturn("");
-
-        when(inventory.getItemInMainHand()).thenReturn(item);
-
-        assertEquals(true, enchant.playerAndPlayer(damager, damagee, inv -> inv.getItemInMainHand(), level -> {
-        }));
-    }
-
-    @Test
-    public void testArrowAndPlayer() {
-        Arrow arrow = mock(Arrow.class);
-        Player damager = mock(Player.class);
-        Player damagee = mock(Player.class);
-
-        PlayerInventory inventory = mock(PlayerInventory.class);
-        World world = mock(World.class);
-
-        when(arrow.getShooter()).thenReturn(damager);
-        when(damagee.getInventory()).thenReturn(inventory);
-        when(damagee.getWorld()).thenReturn(world);
-        when(damager.getWorld()).thenReturn(world);
-
-        when(world.getName()).thenReturn("");
-
-        when(inventory.getItemInMainHand()).thenReturn(item);
-
-        assertEquals(true, enchant.arrowAndPlayer(arrow, damagee, inv -> inv.getItemInMainHand(), level -> {
-        }));
     }
 }
