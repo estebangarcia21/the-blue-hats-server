@@ -2,6 +2,8 @@ package me.stevemmmmm.server.game.enchants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -10,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import me.stevemmmmm.server.game.managers.DamageManager;
 import me.stevemmmmm.server.game.utils.RomanNumeralConverter;
@@ -131,6 +134,44 @@ public abstract class CustomEnchant implements Listener {
         }
 
         return 0;
+    }
+
+    public boolean playerAndPlayer(Entity damager, Entity damagee, Function<PlayerInventory, ItemStack> getSource,
+            Consumer<Integer> onSuccess) {
+        if (damager instanceof Player && damagee instanceof Player) {
+            Player player = (Player) damagee;
+            ItemStack source = getSource.apply(player.getInventory());
+
+            if (!canExecuteEnchant(source, new Entity[] { damager, damagee }))
+                return false;
+
+            onSuccess.accept(getEnchantLevel(source));
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean arrowAndPlayer(Entity damager, Entity damagee, Function<PlayerInventory, ItemStack> getSource,
+            Consumer<Integer> onSuccess) {
+        if (damager instanceof Arrow && damagee instanceof Player) {
+            Arrow arrow = (Arrow) damager;
+
+            if (arrow.getShooter() instanceof Player) {
+                Player player = (Player) damagee;
+                ItemStack source = getSource.apply(player.getInventory());
+
+                if (!canExecuteEnchant(source, new Entity[] { damager, damagee }))
+                    return false;
+
+                onSuccess.accept(getEnchantLevel(source));
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public abstract String getName();
