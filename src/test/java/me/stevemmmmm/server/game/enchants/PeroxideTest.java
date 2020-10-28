@@ -14,8 +14,11 @@ public class PeroxideTest {
         Peroxide enchant = new Peroxide();
         Player player = mock(Player.class);
 
-        enchant.executeEnchant(player, 1, 1);
+        int duration = 2;
+        int amplifier = 1;
 
-        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 1));
+        enchant.executeEnchant(player, duration, amplifier);
+
+        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, duration * 20, amplifier));
     }
 }
