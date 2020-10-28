@@ -24,6 +24,14 @@ public class ComboSwiftTest {
 
         comboSwift.executeEnchant(player, hitsNeeded, speedTime, amplifier);
 
-        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedTime * 20, 1, true));
+        hitsNeeded = 6;
+        speedTime = 7;
+        amplifier = 0;
+
+        when(hitCounter.hasHits(player, hitsNeeded)).thenReturn(true);
+
+        comboSwift.executeEnchant(player, hitsNeeded, speedTime, amplifier);
+
+        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedTime * 20, amplifier, true));
     }
 }
