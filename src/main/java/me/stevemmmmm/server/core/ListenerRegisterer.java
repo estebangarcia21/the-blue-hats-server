@@ -1,6 +1,7 @@
 package me.stevemmmmm.server.core;
 
 import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
+import me.stevemmmmm.server.game.enchants.Peroxide;
 import me.stevemmmmm.server.game.enchants.Wasp;
 import me.stevemmmmm.server.game.managers.BowManager;
 import me.stevemmmmm.server.game.managers.DamageManager;
@@ -18,6 +19,7 @@ public class ListenerRegisterer {
     private void registerEnchants(DamageManager damageManager, BowManager bowManager,
             CustomEnchantManager customEnchantManager) {
         customEnchantManager.registerEnchant(new Wasp(bowManager));
+        customEnchantManager.registerEnchant(new Peroxide());
     }
 
     private void registerPerks(DamageManager damageManager, BowManager bowManager,
