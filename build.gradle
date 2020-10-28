@@ -15,8 +15,10 @@ repositories {
 
 dependencies {
     implementation 'org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT'
-    testImplementation 'org.mockito:mockito-core:3.5.15'
     testImplementation 'junit:junit:4.11'
+    testImplementation 'org.mockito:mockito-core:3.5.15'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.0-beta.5'
+    testImplementation 'org.powermock:powermock-module-junit4:1.6.2'
 }
 
 sourceCompatibility = 1.8
