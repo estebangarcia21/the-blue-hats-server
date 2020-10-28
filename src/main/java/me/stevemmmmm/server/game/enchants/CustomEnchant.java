@@ -12,7 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import me.stevemmmmm.server.game.managers.DamageManager;
-import me.stevemmmmm.server.game.managers.RegionManager;
 import me.stevemmmmm.server.game.utils.RomanNumeralConverter;
 
 public abstract class CustomEnchant implements Listener {
@@ -58,8 +57,10 @@ public abstract class CustomEnchant implements Listener {
                             return false;
                     }
 
-                    if (RegionManager.getInstance().playerIsInRegion(player, RegionManager.RegionType.SPAWN))
-                        return false;
+                    // TODO GET RID OF THIS SINGLETON FASTQ!Q!!~!!!
+                    // if (RegionManager.getInstance().playerIsInRegion(player,
+                    // RegionManager.RegionType.SPAWN))
+                    // return false;
                 }
 
                 if (entity instanceof Arrow) {
@@ -70,9 +71,9 @@ public abstract class CustomEnchant implements Listener {
                             return false;
                     }
 
-                    if (RegionManager.getInstance().locationIsInRegion(arrow.getLocation(),
-                            RegionManager.RegionType.SPAWN))
-                        return false;
+                    // if (RegionManager.getInstance().locationIsInRegion(arrow.getLocation(),
+                    // RegionManager.RegionType.SPAWN))
+                    // return false;
                 }
             }
         }
