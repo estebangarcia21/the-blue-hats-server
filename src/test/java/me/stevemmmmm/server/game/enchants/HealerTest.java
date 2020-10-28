@@ -16,18 +16,23 @@ public class HealerTest {
         Player damaged = mock(Player.class);
         Player damager = mock(Player.class);
 
-        when(damaged.getHealth()).thenReturn(0D);
-        when(damager.getHealth()).thenReturn(0D);
+        double maxHealth = 20;
+        int healAmount = 4;
 
         when(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH)).thenReturn(mock(AttributeInstance.class));
         when(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH)).thenReturn(mock(AttributeInstance.class));
 
-        when(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).thenReturn(20D);
-        when(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).thenReturn(20D);
+        when(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).thenReturn(maxHealth);
+        when(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).thenReturn(maxHealth);
 
-        enchant.executeEnchant(damager, damaged, 3);
+        enchant.executeEnchant(damager, damaged, healAmount);
 
-        verify(damaged).setHealth(damaged.getHealth() + 3);
-        verify(damager).setHealth(damager.getHealth() + 3);
+        verify(damaged).setHealth(damaged.getHealth() + healAmount);
+        verify(damager).setHealth(damager.getHealth() + healAmount);
+
+        enchant.executeEnchant(damager, damaged, 22);
+
+        verify(damaged).setHealth(maxHealth);
+        verify(damager).setHealth(maxHealth);
     }
 }

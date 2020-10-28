@@ -16,8 +16,11 @@ public class WaspTest {
         Player player = mock(Player.class);
         Wasp wasp = new Wasp(new BowManager());
 
-        wasp.executeEnchant(player, 1, 1);
+        int duration = 2;
+        int amplifier = 1;
 
-        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20, 1, true));
+        wasp.executeEnchant(player, duration, amplifier);
+
+        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, duration * 20, amplifier, true));
     }
 }

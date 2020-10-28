@@ -4,12 +4,9 @@ import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -21,31 +18,41 @@ public class Peroxide extends CustomEnchant {
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            ItemStack source = player.getInventory().getLeggings();
-            int level = getEnchantLevel(source);
+        playerAndPlayer(event.getDamager(), event.getEntity(), inventory -> inventory.getItemInMainHand(),
+                level -> executeEnchant((Player) event.getEntity(), regenTime.getValueAtLevel(level),
+                        effectAmplifier.getValueAtLevel(level)));
 
-            if (!canExecuteEnchant(source, new Entity[] { event.getEntity(), event.getDamager() }))
-                return;
+        // if (event.getDamager() instanceof Player && event.getEntity() instanceof
+        // Player) {
+        // Player player = (Player) event.getEntity();
+        // ItemStack source = player.getInventory().getLeggings();
+        // int level = getEnchantLevel(source);
 
-            executeEnchant(player, regenTime.getValueAtLevel(level), effectAmplifier.getValueAtLevel(level));
-        }
+        // if (!canExecuteEnchant(source, new Entity[] { event.getEntity(),
+        // event.getDamager() }))
+        // return;
 
-        if (event.getDamager() instanceof Arrow && event.getEntity() instanceof Player) {
-            Arrow arrow = (Arrow) event.getDamager();
+        // executeEnchant(player, regenTime.getValueAtLevel(level),
+        // effectAmplifier.getValueAtLevel(level));
+        // }
 
-            if (arrow.getShooter() instanceof Player) {
-                Player player = (Player) arrow.getShooter();
-                ItemStack source = player.getInventory().getLeggings();
-                int level = getEnchantLevel(source);
+        // if (event.getDamager() instanceof Arrow && event.getEntity() instanceof
+        // Player) {
+        // Arrow arrow = (Arrow) event.getDamager();
 
-                if (!canExecuteEnchant(source, new Entity[] { event.getEntity(), event.getDamager(), arrow }))
-                    return;
+        // if (arrow.getShooter() instanceof Player) {
+        // Player player = (Player) arrow.getShooter();
+        // ItemStack source = player.getInventory().getLeggings();
+        // int level = getEnchantLevel(source);
 
-                executeEnchant(player, regenTime.getValueAtLevel(level), effectAmplifier.getValueAtLevel(level));
-            }
-        }
+        // if (!canExecuteEnchant(source, new Entity[] { event.getEntity(),
+        // event.getDamager(), arrow }))
+        // return;
+
+        // executeEnchant(player, regenTime.getValueAtLevel(level),
+        // effectAmplifier.getValueAtLevel(level));
+        // }
+        // }
     }
 
     public void executeEnchant(Player hitPlayer, int regenTime, int effectAmplifier) {

@@ -16,10 +16,14 @@ public class ComboSwiftTest {
         HitCounter hitCounter = mock(HitCounter.class);
         ComboSwift comboSwift = new ComboSwift(hitCounter);
 
-        when(hitCounter.hasHits(player, 5)).thenReturn(true);
+        int hitsNeeded = 5;
+        int speedTime = 2;
+        int amplifier = 1;
 
-        comboSwift.executeEnchant(player, 5, 1, 1);
+        when(hitCounter.hasHits(player, hitsNeeded)).thenReturn(true);
 
-        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 1, true));
+        comboSwift.executeEnchant(player, hitsNeeded, speedTime, amplifier);
+
+        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedTime * 20, 1, true));
     }
 }
