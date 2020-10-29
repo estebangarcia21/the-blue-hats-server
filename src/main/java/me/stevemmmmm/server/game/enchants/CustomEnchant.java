@@ -1,9 +1,8 @@
 package me.stevemmmmm.server.game.enchants;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
+import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
+import me.stevemmmmm.server.game.managers.DamageManager;
+import me.stevemmmmm.server.game.utils.RomanNumeralConverter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -12,9 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
-import me.stevemmmmm.server.game.managers.DamageManager;
-import me.stevemmmmm.server.game.utils.RomanNumeralConverter;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CustomEnchant implements Listener {
     private final RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
@@ -97,7 +95,7 @@ public abstract class CustomEnchant implements Listener {
         if (item == null || item.getType() == Material.AIR)
             return false;
 
-        if (Objects.requireNonNull(item.getItemMeta()).getLore() == null)
+        if (item.getItemMeta().getLore() == null)
             return false;
 
         List<String> lore = item.getItemMeta().getLore();
@@ -107,7 +105,7 @@ public abstract class CustomEnchant implements Listener {
         if (isRareEnchant())
             appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
 
-        if (Objects.requireNonNull(lore).contains(appendRare + ChatColor.BLUE + getName()))
+        if (lore.contains(appendRare + ChatColor.BLUE + getName()))
             return true;
 
         for (int i = 2; i <= 3; i++) {
@@ -123,7 +121,7 @@ public abstract class CustomEnchant implements Listener {
         if (item == null || item.getType() == Material.AIR)
             return 0;
 
-        if (Objects.requireNonNull(item.getItemMeta()).getLore() == null)
+        if (item.getItemMeta().getLore() == null)
             return 0;
 
         List<String> lore = item.getItemMeta().getLore();
@@ -133,7 +131,7 @@ public abstract class CustomEnchant implements Listener {
         if (isRareEnchant())
             appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
 
-        if (Objects.requireNonNull(lore).contains(appendRare + ChatColor.BLUE + getName()))
+        if (lore.contains(appendRare + ChatColor.BLUE + getName()))
             return 1;
 
         for (int i = 2; i <= 3; i++) {

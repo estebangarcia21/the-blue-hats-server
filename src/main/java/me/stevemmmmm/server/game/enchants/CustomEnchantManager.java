@@ -184,7 +184,7 @@ public class CustomEnchantManager {
     }
 
     public int getItemLives(ItemStack item) {
-        if (Objects.requireNonNull(item.getItemMeta()).getLore() == null)
+        if (item.getItemMeta().getLore() == null)
             return 0;
 
         ArrayList<String> keyWords = new ArrayList<>(

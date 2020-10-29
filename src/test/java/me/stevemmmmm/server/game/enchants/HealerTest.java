@@ -24,8 +24,8 @@ public class HealerTest {
         when(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH)).thenReturn(mock(AttributeInstance.class));
         when(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH)).thenReturn(mock(AttributeInstance.class));
 
-        when(Objects.requireNonNull(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()).thenReturn(maxHealth);
-        when(Objects.requireNonNull(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()).thenReturn(maxHealth);
+        when(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).thenReturn(maxHealth);
+        when(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).thenReturn(maxHealth);
 
         enchant.executeEnchant(damager, damaged, healAmount);
 

@@ -30,9 +30,9 @@ public class Healer extends CustomEnchant {
 
     public void executeEnchant(Player damager, Player damaged, int healAmount) {
         damager.setHealth(Math.min(damager.getHealth() + healAmount,
-                Objects.requireNonNull(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()));
+                damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
         damaged.setHealth(Math.min(damaged.getHealth() + healAmount,
-                Objects.requireNonNull(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()));
+                damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
     }
 
     @Override
