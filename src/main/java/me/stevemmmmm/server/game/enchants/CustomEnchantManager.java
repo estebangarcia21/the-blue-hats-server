@@ -1,11 +1,7 @@
 package me.stevemmmmm.server.game.enchants;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.ChatColor;
@@ -126,7 +122,7 @@ public class CustomEnchantManager {
 
             List<String> lore = meta.getLore() != null ? meta.getLore() : new ArrayList<>();
 
-            if (previousDisplayName != null && item.getType() == Material.LEATHER_LEGGINGS) {
+            if (item.getType() == Material.LEATHER_LEGGINGS) {
                 if (ChatColor.stripColor(previousDisplayName.split(" ")[0]).equalsIgnoreCase("Fresh")) {
                     lore = new ArrayList<>();
 
@@ -140,7 +136,7 @@ public class CustomEnchantManager {
                 }
             }
 
-            if (previousDisplayName != null && item.getType() == Material.GOLDEN_SWORD) {
+            if (item.getType() == Material.GOLDEN_SWORD) {
                 if (ChatColor.stripColor(previousDisplayName.split(" ")[0]).equalsIgnoreCase("Mystic")) {
                     lore = new ArrayList<>();
 
@@ -153,7 +149,7 @@ public class CustomEnchantManager {
                 }
             }
 
-            if (previousDisplayName != null && item.getType() == Material.BOW) {
+            if (item.getType() == Material.BOW) {
                 if (ChatColor.stripColor(previousDisplayName.split(" ")[0]).equalsIgnoreCase("Mystic")) {
                     lore = new ArrayList<>();
 
@@ -188,7 +184,7 @@ public class CustomEnchantManager {
     }
 
     public int getItemLives(ItemStack item) {
-        if (item.getItemMeta().getLore() == null)
+        if (Objects.requireNonNull(item.getItemMeta()).getLore() == null)
             return 0;
 
         ArrayList<String> keyWords = new ArrayList<>(
@@ -444,10 +440,11 @@ public class CustomEnchantManager {
         return -1;
     }
 
-    public boolean percentChance(double percent) {
-        return Double.parseDouble(
-                new DecimalFormat("#0.0").format(ThreadLocalRandom.current().nextDouble(0, 99))) <= percent;
-    }
+    // public boolean percentChance(double percent) {
+    // return Double.parseDouble(
+    // new DecimalFormat("#0.0").format(ThreadLocalRandom.current().nextDouble(0,
+    // 99))) <= percent;
+    // }
 
     public ChatColor getChatColorFromPantsColor(String color) {
         switch (color.toLowerCase()) {
