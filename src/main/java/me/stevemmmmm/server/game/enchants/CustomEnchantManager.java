@@ -1,8 +1,10 @@
 package me.stevemmmmm.server.game.enchants;
 
-import java.text.DecimalFormat;
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
