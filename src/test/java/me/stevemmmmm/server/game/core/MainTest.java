@@ -27,6 +27,7 @@ import me.stevemmmmm.server.core.Main;
 import me.stevemmmmm.server.core.Registerer;
 import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
 import me.stevemmmmm.server.game.managers.BowManager;
+import me.stevemmmmm.server.game.managers.CombatManager;
 import me.stevemmmmm.server.game.managers.DamageManager;
 
 @RunWith(PowerMockRunner.class)
@@ -37,12 +38,14 @@ public class MainTest {
 
     private CustomEnchantManager customEnchantManager;
     private Registerer registerer;
+    private DamageManager damageManager;
 
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
         customEnchantManager = spy(new CustomEnchantManager(main));
         registerer = main;
+        damageManager = new DamageManager(customEnchantManager, new CombatManager(mock(Main.class)));
     }
 
     @Test
@@ -70,7 +73,7 @@ public class MainTest {
         doCallRealMethod().when(main).registerEnchants(any(), any(), any());
         doNothing().when(customEnchantManager).registerEnchant(any());
 
-        registerer.registerEnchants(new DamageManager(), new BowManager(), customEnchantManager);
+        registerer.registerEnchants(damageManager, new BowManager(), customEnchantManager);
 
         verify(customEnchantManager, atLeast(1)).registerEnchant(any());
     }
@@ -80,7 +83,7 @@ public class MainTest {
         doCallRealMethod().when(main).registerEnchants(any(), any(), any());
         doNothing().when(customEnchantManager).registerEnchant(any());
 
-        registerer.registerEnchants(new DamageManager(), new BowManager(), customEnchantManager);
+        registerer.registerEnchants(damageManager, new BowManager(), customEnchantManager);
 
         verify(customEnchantManager, atLeast(1)).registerEnchant(any());
     }
@@ -90,7 +93,7 @@ public class MainTest {
         doCallRealMethod().when(main).registerEnchants(any(), any(), any());
         doNothing().when(customEnchantManager).registerEnchant(any());
 
-        registerer.registerEnchants(new DamageManager(), new BowManager(), customEnchantManager);
+        registerer.registerEnchants(damageManager, new BowManager(), customEnchantManager);
 
         verify(customEnchantManager, atLeast(1)).registerEnchant(any());
     }

@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -24,11 +25,11 @@ public class Peroxide extends CustomEnchant {
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), inventory -> inventory.getLeggings(),
+        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
                 level -> executeEnchant((Player) event.getEntity(), regenTime.getValueAtLevel(level),
                         effectAmplifier.getValueAtLevel(level)));
 
-        getEventTemplates()[1].run(this, event.getDamager(), event.getEntity(), inventory -> inventory.getLeggings(),
+        getEventTemplates()[1].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
                 level -> executeEnchant((Player) event.getEntity(), regenTime.getValueAtLevel(level),
                         effectAmplifier.getValueAtLevel(level)));
     }

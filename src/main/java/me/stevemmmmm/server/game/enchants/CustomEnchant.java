@@ -1,8 +1,8 @@
 package me.stevemmmmm.server.game.enchants;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
+import me.stevemmmmm.server.game.managers.DamageManager;
+import me.stevemmmmm.server.game.utils.RomanNumeralConverter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -11,9 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
-import me.stevemmmmm.server.game.managers.DamageManager;
-import me.stevemmmmm.server.game.utils.RomanNumeralConverter;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CustomEnchant implements Listener {
     private final RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();

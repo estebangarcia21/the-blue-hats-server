@@ -1,6 +1,7 @@
 package me.stevemmmmm.server.game.enchants.templates;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -56,7 +57,7 @@ public class EventTemplateTest {
 
         when(inventory.getItemInMainHand()).thenReturn(item);
 
-        assertEquals(true, template.run(enchant, damager, damagee, inv -> inv.getItemInMainHand(), level -> {
+        assertTrue(template.run(enchant, damager, damagee, PlayerInventory::getItemInMainHand, level -> {
         }));
     }
 
@@ -79,7 +80,7 @@ public class EventTemplateTest {
 
         when(inventory.getItemInMainHand()).thenReturn(item);
 
-        assertEquals(true, template.run(enchant, arrow, damagee, inv -> inv.getItemInMainHand(), level -> {
+        assertTrue(template.run(enchant, arrow, damagee, PlayerInventory::getItemInMainHand, level -> {
         }));
     }
 }

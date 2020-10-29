@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -23,8 +24,7 @@ public class SprintDrain extends CustomEnchant {
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(),
-                inventory -> inventory.getItemInMainHand(),
+        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
                 level -> executeEnchant((Player) event.getDamager(), (Player) event.getEntity(),
                         speedDuration.getValueAtLevel(level), speedAmplifier.getValueAtLevel(level), level));
     }

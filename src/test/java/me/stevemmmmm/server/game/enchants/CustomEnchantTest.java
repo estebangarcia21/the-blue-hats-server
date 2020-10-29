@@ -1,6 +1,6 @@
 package me.stevemmmmm.server.game.enchants;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -41,32 +41,32 @@ public class CustomEnchantTest {
         when(enchantMock.getEnchantItemTypes()).thenReturn(new Material[] { Material.BOW });
         when(enchantMock.isCompatibleWith(Material.BOW)).thenCallRealMethod();
 
-        assertEquals(true, enchantMock.isCompatibleWith(Material.BOW));
+        assertTrue(enchantMock.isCompatibleWith(Material.BOW));
     }
 
     @Test
     public void testAttemptEnchantExecution() {
-        assertEquals(true, enchant.canExecuteEnchant(item, null));
+        assertTrue(enchant.canExecuteEnchant(item, null));
 
         when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp II").build());
-        assertEquals(true, enchant.canExecuteEnchant(item, null));
+        assertTrue(enchant.canExecuteEnchant(item, null));
 
         when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp III").build());
-        assertEquals(true, enchant.canExecuteEnchant(item, null));
+        assertTrue(enchant.canExecuteEnchant(item, null));
     }
 
     @Test
     public void testItemHasEnchant() {
-        assertEquals(true, enchant.itemHasEnchant(item));
+        assertTrue(enchant.itemHasEnchant(item));
 
         when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp II").build());
-        assertEquals(true, enchant.itemHasEnchant(item));
+        assertTrue(enchant.itemHasEnchant(item));
 
         when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp III").build());
-        assertEquals(true, enchant.itemHasEnchant(item));
+        assertTrue(enchant.itemHasEnchant(item));
 
         when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "").build());
-        assertEquals(false, enchant.itemHasEnchant(item));
+        assertFalse(enchant.itemHasEnchant(item));
     }
 
     @Test

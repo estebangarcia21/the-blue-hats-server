@@ -5,19 +5,17 @@ import java.util.ArrayList;
 import org.bukkit.Material;
 
 public interface EnchantInformation {
-    public abstract void applyEnchant(int level, Object... args);
+    String getName();
 
-    public abstract String getName();
+    String getEnchantReferenceName();
 
-    public abstract String getEnchantReferenceName();
+    ArrayList<String> getDescription(int level);
 
-    public abstract ArrayList<String> getDescription(int level);
+    boolean isDisabledOnPassiveWorld();
 
-    public abstract boolean isDisabledOnPassiveWorld();
+    EnchantGroup getEnchantGroup();
 
-    public abstract EnchantGroup getEnchantGroup();
+    boolean isRareEnchant();
 
-    public abstract boolean isRareEnchant();
-
-    public abstract Material[] getEnchantItemTypes();
+    Material[] getEnchantItemTypes();
 }

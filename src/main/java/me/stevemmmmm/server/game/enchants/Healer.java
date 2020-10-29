@@ -1,6 +1,7 @@
 package me.stevemmmmm.server.game.enchants;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,6 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import me.stevemmmmm.server.game.enchants.templates.PlayerHitPlayer;
 import me.stevemmmmm.server.game.utils.LoreBuilder;
+import org.bukkit.inventory.PlayerInventory;
 
 public class Healer extends CustomEnchant {
     private final EnchantProperty<Integer> healAmount = new EnchantProperty<>(2, 4, 6);
@@ -22,7 +24,7 @@ public class Healer extends CustomEnchant {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(),
-                inventory -> inventory.getItemInMainHand(), level -> executeEnchant((Player) event.getDamager(),
+                PlayerInventory::getItemInMainHand, level -> executeEnchant((Player) event.getDamager(),
                         (Player) event.getEntity(), healAmount.getValueAtLevel(level)));
     }
 

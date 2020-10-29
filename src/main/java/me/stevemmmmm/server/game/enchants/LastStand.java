@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -23,17 +24,16 @@ public class LastStand extends CustomEnchant {
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), inventory -> inventory.getLeggings(),
+        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
                 level -> executeEnchant((Player) event.getEntity(), effectAmplifier.getValueAtLevel(level)));
 
-        getEventTemplates()[1].run(this, event.getDamager(), event.getEntity(), inventory -> inventory.getLeggings(),
+        getEventTemplates()[1].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
                 level -> executeEnchant((Player) event.getEntity(), effectAmplifier.getValueAtLevel(level)));
     }
 
     public void executeEnchant(Player damaged, int effectAmplifier) {
-        if (damaged.getHealth() > 10) {
+        if (damaged.getHealth() > 10)
             damaged.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, effectAmplifier, true));
-        }
     }
 
     @Override

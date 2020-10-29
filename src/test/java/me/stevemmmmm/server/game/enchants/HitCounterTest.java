@@ -1,6 +1,7 @@
 package me.stevemmmmm.server.game.enchants;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import org.bukkit.entity.Player;
@@ -28,29 +29,29 @@ public class HitCounterTest {
     public void testAddOne() {
         counter.addOne(player);
 
-        assertEquals(true, counter.hasHits(player, 1));
+        assertTrue(counter.hasHits(player, 1));
     }
 
     @Test(expected = NullPointerException.class)
     public void testAdd() {
         counter.add(player, 5);
 
-        assertEquals(true, counter.hasHits(player, 5));
+        assertTrue(counter.hasHits(player, 5));
     }
 
     @Test
     public void testHasRequiredHits() {
-        assertEquals(true, counter.hasHits(player, 0) && !counter.hasHits(player, 1));
+        assertTrue(counter.hasHits(player, 0) && !counter.hasHits(player, 1));
     }
 
     @Test(expected = NullPointerException.class)
     public void testHitResetTimer() {
         counter.add(player, 5);
 
-        assertEquals(true, counter.hasHits(player, 5));
+        assertTrue(counter.hasHits(player, 5));
 
         counter.startHitResetTimer(player);
 
-        assertEquals(true, counter.hasHits(player, 0) && !counter.hasHits(player, 1));
+        assertTrue(counter.hasHits(player, 0) && !counter.hasHits(player, 1));
     }
 }

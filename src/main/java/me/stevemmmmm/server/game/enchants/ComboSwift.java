@@ -36,8 +36,7 @@ public class ComboSwift extends CustomEnchant {
 
             int level = getEnchantLevel(source);
 
-            executeEnchant(damager, hitsNeeded.getValueAtLevel(level), speedTime.getValueAtLevel(level),
-                    speedAmplifier.getValueAtLevel(level));
+            executeEnchant(damager, hitsNeeded.getValueAtLevel(level), speedTime.getValueAtLevel(level), speedAmplifier.getValueAtLevel(level));
         }
     }
 
