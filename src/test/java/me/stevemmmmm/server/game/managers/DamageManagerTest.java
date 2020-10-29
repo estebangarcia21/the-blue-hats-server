@@ -1,6 +1,6 @@
 package me.stevemmmmm.server.game.managers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -15,6 +15,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import me.stevemmmmm.server.core.Main;
+import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
+
 public class DamageManagerTest {
     @Mock
     private Player player;
@@ -25,8 +28,9 @@ public class DamageManagerTest {
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        Main main = mock(Main.class);
 
-        manager = new DamageManager();
+        manager = new DamageManager(new CustomEnchantManager(main), new CombatManager(main));
 
         try {
             Field field;
@@ -50,10 +54,10 @@ public class DamageManagerTest {
     @Test
     public void testPlayerIsInCanceledEvent() {
         canceledPlayers.add(player.getUniqueId());
-        assertEquals(true, manager.playerIsInCanceledEvent(player));
+        assertTrue(manager.playerIsInCanceledEvent(player));
 
         canceledPlayers.remove(player.getUniqueId());
-        assertEquals(false, manager.playerIsInCanceledEvent(player));
+        assertFalse(manager.playerIsInCanceledEvent(player));
     }
 
     @Test
@@ -63,9 +67,9 @@ public class DamageManagerTest {
         when(arrow.getShooter()).thenReturn(player);
 
         canceledPlayers.add(player.getUniqueId());
-        assertEquals(true, manager.arrowIsInCanceledEvent(arrow));
+        assertTrue(manager.arrowIsInCanceledEvent(arrow));
 
         canceledPlayers.remove(player.getUniqueId());
-        assertEquals(false, manager.arrowIsInCanceledEvent(arrow));
+        assertFalse(manager.arrowIsInCanceledEvent(arrow));
     }
 }

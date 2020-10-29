@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class PeroxideTest {
     @Test
-    public void testRegenerationIsGivenToPlayer() {
+    public void testExecuteEnchant() {
         Peroxide enchant = new Peroxide();
         Player player = mock(Player.class);
 

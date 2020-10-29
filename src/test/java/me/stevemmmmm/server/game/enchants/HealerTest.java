@@ -9,6 +9,8 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.junit.Test;
 
+import java.util.Objects;
+
 public class HealerTest {
     @Test
     public void testPlayersGetHealed() {
@@ -22,8 +24,8 @@ public class HealerTest {
         when(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH)).thenReturn(mock(AttributeInstance.class));
         when(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH)).thenReturn(mock(AttributeInstance.class));
 
-        when(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).thenReturn(maxHealth);
-        when(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).thenReturn(maxHealth);
+        when(Objects.requireNonNull(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()).thenReturn(maxHealth);
+        when(Objects.requireNonNull(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()).thenReturn(maxHealth);
 
         enchant.executeEnchant(damager, damaged, healAmount);
 
