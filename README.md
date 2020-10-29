@@ -1,1 +1,2 @@
 TBHS
+![Logo](logo.svg)
