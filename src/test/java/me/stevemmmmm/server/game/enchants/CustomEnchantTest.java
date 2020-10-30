@@ -1,9 +1,7 @@
 package me.stevemmmmm.server.game.enchants;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import me.stevemmmmm.server.game.managers.BowManager;
+import me.stevemmmmm.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -13,73 +11,80 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import me.stevemmmmm.server.game.managers.BowManager;
-import me.stevemmmmm.server.game.utils.LoreBuilder;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CustomEnchantTest {
+    @Mock
+    private CustomEnchant mockEnchant;
     @Mock
     private ItemStack item;
     @Mock
     private ItemMeta meta;
 
-    private CustomEnchant enchant;
+    private CustomEnchant realEnchant;
 
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
 
-        enchant = new Wasp(new BowManager());
+        realEnchant = new Wasp(new BowManager());
 
         when(item.getItemMeta()).thenReturn(meta);
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp").build());
+        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName()).build());
+
+        mockEnchant = mock(CustomEnchant.class);
+
+        when(mockEnchant.isCompatibleWith(any())).thenCallRealMethod();
     }
 
     @Test
-    public void testIsCompatibleWith() {
-        CustomEnchant enchantMock = mock(CustomEnchant.class);
+    public void IsCompatibleWhenMaterialsAreEqual() {
+        when(mockEnchant.getEnchantItemTypes()).thenReturn(new Material[] { Material.BOW });
 
-        when(enchantMock.getEnchantItemTypes()).thenReturn(new Material[] { Material.BOW });
-        when(enchantMock.isCompatibleWith(Material.BOW)).thenCallRealMethod();
-
-        assertTrue(enchantMock.isCompatibleWith(Material.BOW));
+        assertTrue(mockEnchant.isCompatibleWith(Material.BOW));
     }
 
     @Test
-    public void testAttemptEnchantExecution() {
-        assertTrue(enchant.canExecuteEnchant(item, null));
+    public void IsNotCompatibleWhenMaterialsAreNotEqual() {
+        when(mockEnchant.getEnchantItemTypes()).thenReturn(new Material[] { Material.ARROW });
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp II").build());
-        assertTrue(enchant.canExecuteEnchant(item, null));
-
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp III").build());
-        assertTrue(enchant.canExecuteEnchant(item, null));
+        assertFalse(mockEnchant.isCompatibleWith(Material.COBBLESTONE));
     }
 
     @Test
-    public void testItemHasEnchant() {
-        assertTrue(enchant.itemHasEnchant(item));
+    public void ExecutesEnchantWhenItemHasProperLore() {
+        assertTrue(realEnchant.canExecuteEnchant(item, null));
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp II").build());
-        assertTrue(enchant.itemHasEnchant(item));
+        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " II").build());
+        assertTrue(realEnchant.canExecuteEnchant(item, null));
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp III").build());
-        assertTrue(enchant.itemHasEnchant(item));
+        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " III").build());
+        assertTrue(realEnchant.canExecuteEnchant(item, null));
+    }
+
+    @Test
+    public void DoesNotExecuteEnchantWhenItemHasImproperLore() {
+        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " IV").build());
+        assertFalse(realEnchant.itemHasEnchant(item));
 
         when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "").build());
-        assertFalse(enchant.itemHasEnchant(item));
+        assertFalse(realEnchant.itemHasEnchant(item));
     }
 
     @Test
-    public void testGetEnchantLevel() {
-        assertEquals(1, enchant.getEnchantLevel(item));
+    public void GetsEnchantLevelWhenItemHasProperLore() {
+        assertEquals(1, realEnchant.getEnchantLevel(item));
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp II").build());
-        assertEquals(2, enchant.getEnchantLevel(item));
+        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " II").build());
+        assertEquals(2, realEnchant.getEnchantLevel(item));
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "Wasp III").build());
-        assertEquals(3, enchant.getEnchantLevel(item));
+        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " III").build());
+        assertEquals(3, realEnchant.getEnchantLevel(item));
 
         when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "").build());
-        assertEquals(0, enchant.getEnchantLevel(item));
+        assertEquals(0, realEnchant.getEnchantLevel(item));
     }
 }

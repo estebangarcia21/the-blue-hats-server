@@ -1,37 +1,47 @@
 package me.stevemmmmm.server.game.enchants;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.mockito.Mockito.*;
 
 public class ComboSwiftTest {
+    @Mock
+    private Player player;
+    @Mock
+    private HitCounter hitCounter;
+
+    private ComboSwift comboSwift;
+
+    private final int HITS_NEEDED = 5;
+    private final int SPEED_TIME = 2;
+    private final int AMPLIFIER = 1;
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+
+        comboSwift = new ComboSwift(hitCounter);
+    }
+
     @Test
-    public void testSpeedGivenOnHit() {
-        Player player = mock(Player.class);
-        HitCounter hitCounter = mock(HitCounter.class);
-        ComboSwift comboSwift = new ComboSwift(hitCounter);
+    public void SpeedGivenIfHitsNeededAreReached() {
+        when(hitCounter.hasHits(player, HITS_NEEDED)).thenReturn(true);
 
-        int hitsNeeded = 5;
-        int speedTime = 2;
-        int amplifier = 1;
+        comboSwift.executeEnchant(player, HITS_NEEDED, SPEED_TIME, AMPLIFIER);
 
-        when(hitCounter.hasHits(player, hitsNeeded)).thenReturn(true);
+        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, SPEED_TIME * 20, AMPLIFIER, true));
+    }
 
-        comboSwift.executeEnchant(player, hitsNeeded, speedTime, amplifier);
+    @Test
+    public void SpeedNotGivenIfHitsNeededAreNotReached() {
+        comboSwift.executeEnchant(player, HITS_NEEDED, SPEED_TIME, AMPLIFIER);
 
-        hitsNeeded = 6;
-        speedTime = 7;
-        amplifier = 0;
-
-        when(hitCounter.hasHits(player, hitsNeeded)).thenReturn(true);
-
-        comboSwift.executeEnchant(player, hitsNeeded, speedTime, amplifier);
-
-        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedTime * 20, amplifier, true));
+        verify(player, never()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, SPEED_TIME * 20, AMPLIFIER, true));
     }
 }
