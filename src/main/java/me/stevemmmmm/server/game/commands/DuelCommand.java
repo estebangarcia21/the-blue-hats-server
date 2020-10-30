@@ -1,4 +1,4 @@
-package me.stevemmmmm.server.commands;
+package me.stevemmmmm.server.game.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,7 +29,8 @@ public class DuelCommand implements CommandExecutor {
                         return true;
                     }
 
-                    DuelingManager.getInstance().startDuel(new Duel(player, Bukkit.getPlayer(args[0])));
+                    // TODO Dueling manager
+//                    DuelingManager.getInstance().startDuel(new Duel(player, Bukkit.getPlayer(args[0])));
                 }
             }
         }

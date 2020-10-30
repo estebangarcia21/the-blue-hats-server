@@ -1,4 +1,4 @@
-package me.stevemmmmm.server.commands;
+package me.stevemmmmm.server.game.commands;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -9,14 +9,20 @@ import org.bukkit.entity.Player;
 
 import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
 
-public class TutorialCommand implements CommandExecutor {
+public class MysticEnchantsCommand implements CommandExecutor {
+    private CustomEnchantManager manager;
+
+    public MysticEnchantsCommand(CustomEnchantManager manager) {
+        this.manager = manager;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (label.equalsIgnoreCase("tutorial")) {
-                int pages = 1;
+            if (label.equalsIgnoreCase("mysticenchants")) {
+                int pages = manager.getEnchants().size() / 9;
 
                 int page = 1;
 
@@ -36,26 +42,21 @@ public class TutorialCommand implements CommandExecutor {
                     return true;
                 }
 
-                // ChatColor.RED.toString() + ChatColor.BOLD + "M" + ChatColor.YELLOW.toString()
-                // + ChatColor.BOLD + "y" + ChatColor.GREEN.toString() + ChatColor.BOLD + "s" +
-                // ChatColor.AQUA.toString() + ChatColor.BOLD + "t" +
-                // ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "i" +
-                // ChatColor.BLUE.toString() + ChatColor.BOLD + "c"
-                player.sendMessage(ChatColor.YELLOW.toString() + ChatColor.BOLD.toString() + "TUTORIAL! (" + page + "/"
-                        + (pages + 1) + ")");
+                player.sendMessage(ChatColor.YELLOW.toString() + ChatColor.BOLD.toString() + "Mystic Enchants (" + page
+                        + "/" + (pages + 1) + ")");
 
                 for (int i = 0; i < 9; i++) {
                     int index = i + ((page - 1) * 9);
 
-                    if (index > CustomEnchantManager.getInstance().getEnchants().size() - 1) {
+                    if (index > manager.getEnchants().size() - 1) {
                         player.sendMessage(" ");
                         continue;
                     }
 
                     player.sendMessage(ChatColor.GRAY + "■ " + ChatColor.RED
-                            + CustomEnchantManager.getInstance().getEnchants().get(index).getName() + ChatColor.GOLD
+                            + manager.getEnchants().get(index).getName() + ChatColor.GOLD
                             + " ▶ " + ChatColor.YELLOW
-                            + CustomEnchantManager.getInstance().getEnchants().get(index).getEnchantReferenceName());
+                            + manager.getEnchants().get(index).getEnchantReferenceName());
                 }
             }
         }

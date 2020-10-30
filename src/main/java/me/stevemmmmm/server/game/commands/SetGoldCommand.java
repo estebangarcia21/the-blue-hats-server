@@ -1,5 +1,6 @@
-package me.stevemmmmm.server.commands;
+package me.stevemmmmm.server.game.commands;
 
+import me.stevemmmmm.server.game.managers.GrindingSystem;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -8,6 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SetGoldCommand implements CommandExecutor {
+    private GrindingSystem system;
+
+    public SetGoldCommand(GrindingSystem system) {
+        this.system = system;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
@@ -22,7 +29,8 @@ public class SetGoldCommand implements CommandExecutor {
                             if (gold > 1000000000.00)
                                 gold = 1000000000.00;
 
-                            GrindingSystem.getInstance().setPlayerGold(player, gold);
+                            // TODO Implement grinding system
+//                            system.setPlayerGold(player, gold);
                         } else {
                             player.sendMessage(
                                     ChatColor.RED + "Error! " + ChatColor.DARK_PURPLE + "Usage: /setgold <amount>");

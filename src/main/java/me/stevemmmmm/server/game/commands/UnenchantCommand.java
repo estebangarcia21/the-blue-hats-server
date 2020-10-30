@@ -1,5 +1,7 @@
-package me.stevemmmmm.server.commands;
+package me.stevemmmmm.server.game.commands;
 
+import me.stevemmmmm.server.game.enchants.CustomEnchant;
+import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -8,10 +10,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.stevemmmmm.server.game.enchants.CustomEnchant;
-import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
-
 public class UnenchantCommand implements CommandExecutor {
+    private CustomEnchantManager manager;
+
+    public UnenchantCommand(CustomEnchantManager manager) {
+        this.manager = manager;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
@@ -23,7 +28,7 @@ public class UnenchantCommand implements CommandExecutor {
                 } else {
                     CustomEnchant customEnchant = null;
 
-                    for (CustomEnchant enchant : CustomEnchantManager.getInstance().getEnchants()) {
+                    for (CustomEnchant enchant : manager.getEnchants()) {
                         if (enchant.getEnchantReferenceName().equalsIgnoreCase(args[0])) {
                             customEnchant = enchant;
                         }
@@ -55,13 +60,13 @@ public class UnenchantCommand implements CommandExecutor {
                         return true;
                     }
 
-                    if (!CustomEnchantManager.getInstance().itemContainsEnchant(item, customEnchant)) {
+                    if (!manager.itemContainsEnchant(item, customEnchant)) {
                         player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
                                 + " This item does not have the specified enchant!");
                         return true;
                     }
 
-                    CustomEnchantManager.getInstance().removeEnchant(item, customEnchant);
+                    manager.removeEnchant(item, customEnchant);
                     player.sendMessage(ChatColor.DARK_PURPLE + "Success!" + ChatColor.RED
                             + " You unenchanted the enchant successfully!");
                     player.updateInventory();

@@ -1,4 +1,4 @@
-package me.stevemmmmm.server.commands;
+package me.stevemmmmm.server.game.commands;
 
 import java.util.ArrayList;
 

@@ -1,22 +1,14 @@
 package me.stevemmmmm.server.core;
 
-import java.util.logging.Logger;
-
+import me.stevemmmmm.server.game.commands.*;
+import me.stevemmmmm.server.game.enchants.*;
+import me.stevemmmmm.server.game.managers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.stevemmmmm.server.commands.EnchantCommand;
-import me.stevemmmmm.server.commands.GiveFreshItemCommand;
-import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
-import me.stevemmmmm.server.game.enchants.LastStand;
-import me.stevemmmmm.server.game.enchants.Peroxide;
-import me.stevemmmmm.server.game.enchants.SprintDrain;
-import me.stevemmmmm.server.game.enchants.Wasp;
-import me.stevemmmmm.server.game.managers.BowManager;
-import me.stevemmmmm.server.game.managers.CombatManager;
-import me.stevemmmmm.server.game.managers.DamageManager;
+import java.util.logging.Logger;
 
-public class Main extends JavaPlugin implements Registerer {
+public class Main extends JavaPlugin implements Registerer, PluginInfo {
     @Override
     public void onEnable() {
         Main main = this;
@@ -29,11 +21,14 @@ public class Main extends JavaPlugin implements Registerer {
 
         CustomEnchantManager customEnchantManager = new CustomEnchantManager(main);
         DamageManager damageManager = new DamageManager(customEnchantManager, new CombatManager(main));
+        CombatManager combatManager = new CombatManager(main);
         BowManager bowManager = new BowManager();
+        WorldSelectionManager worldSelectionManager = new WorldSelectionManager(main);
+        GrindingSystem grindingSystem = new GrindingSystem();
 
-        registerCommands(main, customEnchantManager);
         registerEnchants(damageManager, bowManager, customEnchantManager);
         registerPerks(damageManager, bowManager, customEnchantManager);
+        registerCommands(main, damageManager, combatManager, grindingSystem, customEnchantManager, worldSelectionManager);
     }
 
     @Override
@@ -41,20 +36,48 @@ public class Main extends JavaPlugin implements Registerer {
 
     }
 
-    public void registerEnchants(DamageManager damageManager, BowManager bowManager,
-            CustomEnchantManager customEnchantManager) {
+    public void registerEnchants(DamageManager damageManager, BowManager bowManager, CustomEnchantManager customEnchantManager) {
         customEnchantManager.registerEnchant(new Wasp(bowManager));
         customEnchantManager.registerEnchant(new Peroxide());
         customEnchantManager.registerEnchant(new SprintDrain());
         customEnchantManager.registerEnchant(new LastStand());
     }
 
-    public void registerPerks(DamageManager damageManager, BowManager bowManager,
-            CustomEnchantManager customEnchantManager) {
+    public void registerPerks(DamageManager damageManager, BowManager bowManager, CustomEnchantManager customEnchantManager) {
     }
 
-    public void registerCommands(Main main, CustomEnchantManager customEnchantManager) {
-        main.getCommand("pitenchant").setExecutor(new EnchantCommand(customEnchantManager));
-        main.getCommand("givefreshitem").setExecutor(new GiveFreshItemCommand());
+    public void registerCommands(Main main, DamageManager damageManager, CombatManager combatManager, GrindingSystem grindingSystem, CustomEnchantManager customEnchantManager, WorldSelectionManager worldSelectionManager) {
+        getCommand("pitenchant").setExecutor(new EnchantCommand(customEnchantManager));
+        getCommand("mysticenchants").setExecutor(new MysticEnchantsCommand(customEnchantManager));
+        getCommand("selectworld").setExecutor(new SelectWorldCommand(worldSelectionManager));
+        getCommand("pitabout").setExecutor(new PitAboutCommand());
+        getCommand("givefreshitem").setExecutor(new GiveFreshItemCommand());
+        getCommand("duel").setExecutor(new DuelCommand());
+        getCommand("giveprot").setExecutor(new GiveProtCommand());
+        getCommand("setgold").setExecutor(new SetGoldCommand(grindingSystem));
+        getCommand("givebread").setExecutor(new GiveBreadCommand());
+        getCommand("givearrows").setExecutor(new GiveArrowCommand());
+        getCommand("giveobsidian").setExecutor(new GiveObsidianCommand());
+        getCommand("unenchant").setExecutor(new UnenchantCommand(customEnchantManager));
+        getCommand("togglepvp").setExecutor(new TogglePvPCommand(damageManager));
+
+        SpawnCommand spawnCommand = new SpawnCommand(combatManager, new CooldownTimer(main));
+        getCommand("spawn").setExecutor(spawnCommand);
+        getCommand("respawn").setExecutor(spawnCommand);
+    }
+
+    @Override
+    public String getPluginName() {
+        return "The Blue Hats Pit";
+    }
+
+    @Override
+    public String getVersion() {
+        return "v2.0";
+    }
+
+    @Override
+    public String getDiscord() {
+        return "Stevemmmmm#8894";
     }
 }

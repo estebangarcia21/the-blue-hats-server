@@ -1,4 +1,4 @@
-package me.stevemmmmm.server.commands;
+package me.stevemmmmm.server.game.commands;
 
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -32,7 +32,7 @@ public class GiveProtCommand implements CommandExecutor {
                 ItemMeta swordMeta = sword.getItemMeta();
 
                 swordMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-                swordMeta.spigot().setUnbreakable(true);
+                swordMeta.setUnbreakable(true);
 
                 sword.setItemMeta(swordMeta);
 
@@ -47,7 +47,7 @@ public class GiveProtCommand implements CommandExecutor {
         ItemMeta meta = item.getItemMeta();
 
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
-        meta.spigot().setUnbreakable(true);
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
     }

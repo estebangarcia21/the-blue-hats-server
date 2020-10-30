@@ -1,4 +1,4 @@
-package me.stevemmmmm.server.commands;
+package me.stevemmmmm.server.game.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,10 +15,17 @@ import me.stevemmmmm.server.game.managers.DamageManager;
 public class TogglePvPCommand implements CommandExecutor, Listener {
     public static boolean pvpIsToggledOff;
 
+    private DamageManager manager;
+
+    public TogglePvPCommand(DamageManager manager) {
+        this.manager = manager;
+    }
+
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         if (pvpIsToggledOff) {
-            DamageManager.getInstance().setEventAsCanceled(event);
+            // TODO Implement
+//            manager.setEventAsCanceled(event);
         }
     }
 

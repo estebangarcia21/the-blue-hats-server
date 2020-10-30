@@ -1,15 +1,14 @@
 package me.stevemmmmm.server.core;
 
 import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
-import me.stevemmmmm.server.game.managers.BowManager;
-import me.stevemmmmm.server.game.managers.DamageManager;
+import me.stevemmmmm.server.game.managers.*;
 
 public interface Registerer {
-    public void registerEnchants(DamageManager damageManager, BowManager bowManager,
+    void registerEnchants(DamageManager damageManager, BowManager bowManager,
             CustomEnchantManager customEnchantManager);
 
-    public void registerPerks(DamageManager damageManager, BowManager bowManager,
+    void registerPerks(DamageManager damageManager, BowManager bowManager,
             CustomEnchantManager customEnchantManager);
 
-    public void registerCommands(Main main, CustomEnchantManager customEnchantManager);
+    void registerCommands(Main main, DamageManager damageManager, CombatManager combatManager, GrindingSystem grindingSystem, CustomEnchantManager customEnchantManager, WorldSelectionManager worldSelectionManager);
 }
