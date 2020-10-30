@@ -1,6 +1,7 @@
 package me.stevemmmmm.server.game.enchants;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -12,6 +13,7 @@ public class LastStandTest {
     public void testExecuteEnchant() {
         LastStand enchant = new LastStand();
         Player player = mock(Player.class);
+        when(player.getHealth()).thenReturn(5D);
 
         int amplifier = 1;
 

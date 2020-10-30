@@ -32,7 +32,7 @@ public class LastStand extends CustomEnchant {
     }
 
     public void executeEnchant(Player damaged, int effectAmplifier) {
-        if (damaged.getHealth() > 10)
+        if (damaged.getHealth() < 10)
             damaged.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, effectAmplifier, true));
     }
 
