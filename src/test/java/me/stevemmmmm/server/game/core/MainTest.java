@@ -54,7 +54,6 @@ public class MainTest {
         doCallRealMethod().when(main).onEnable();
         doNothing().when(main).registerEnchants(any(), any(), any());
 
-
         logger = mock(Logger.class);
 
         when(Bukkit.getLogger()).thenReturn(logger);
