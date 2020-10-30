@@ -27,9 +27,7 @@ public class LoreBuilder {
     public LoreBuilder writeVariable(int id, int level) {
         if (parameters.get(id) != null) {
             try {
-                if (condition)
-                    description.set(lineIndex,
-                            description.get(lineIndex) + color.toString() + parameters.get(id)[level - 1]);
+                if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + parameters.get(id)[level - 1]);
             } catch (NullPointerException | IndexOutOfBoundsException ignored) {
 
             }
@@ -40,9 +38,7 @@ public class LoreBuilder {
 
     public LoreBuilder writeVariable(ChatColor color, int id, int level) {
         if (parameters.get(id) != null) {
-            if (condition)
-                description.set(lineIndex,
-                        description.get(lineIndex) + color.toString() + parameters.get(id)[level - 1]);
+            if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + parameters.get(id)[level - 1]);
         }
 
         return this;
@@ -58,15 +54,13 @@ public class LoreBuilder {
     }
 
     public LoreBuilder write(String value) {
-        if (condition)
-            description.set(lineIndex, description.get(lineIndex) + color.toString() + value);
+        if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + value);
 
         return this;
     }
 
     public LoreBuilder write(ChatColor color, String value) {
-        if (condition)
-            description.set(lineIndex, description.get(lineIndex) + color.toString() + value);
+        if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + value);
 
         return this;
     }
@@ -74,8 +68,7 @@ public class LoreBuilder {
     public LoreBuilder setColor(ChatColor color) {
         this.color = color;
 
-        if (condition)
-            description.set(lineIndex, description.get(lineIndex) + color.toString());
+        if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString());
 
         return this;
     }
@@ -87,8 +80,7 @@ public class LoreBuilder {
     }
 
     public LoreBuilder writeOnlyIf(boolean condition, String value) {
-        if (condition)
-            description.set(lineIndex, description.get(lineIndex) + color.toString() + value);
+        if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + value);
 
         return this;
     }
