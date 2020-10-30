@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class SprintDrainTest {
     @Test
-    public void testEnchantExecution() {
+    public void DamagerGetsSpeedWhenArrowHitsPlayer() {
         SprintDrain enchant = new SprintDrain();
         Player player = mock(Player.class);
         Player damagee = mock(Player.class);
@@ -24,6 +24,21 @@ public class SprintDrainTest {
         verify(player).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedDuration * 20, amplifier));
 
         level = 2;
+
+        enchant.executeEnchant(player, damagee, speedDuration, amplifier, level);
+
+        verify(damagee).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
+    }
+
+    @Test
+    public void DamageeGetsSlownessWhenHitByArrow() {
+        SprintDrain enchant = new SprintDrain();
+        Player player = mock(Player.class);
+        Player damagee = mock(Player.class);
+
+        int speedDuration = 3;
+        int amplifier = 1;
+        int level = 2;
 
         enchant.executeEnchant(player, damagee, speedDuration, amplifier, level);
 

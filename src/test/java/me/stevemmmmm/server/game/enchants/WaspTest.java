@@ -12,7 +12,7 @@ import me.stevemmmmm.server.game.managers.BowManager;
 
 public class WaspTest {
     @Test
-    public void testWeaknessIsAddedToPlayer() {
+    public void WeaknessIsAddedToPlayerWhenHitByArrow() {
         Player player = mock(Player.class);
         Wasp wasp = new Wasp(new BowManager());
 

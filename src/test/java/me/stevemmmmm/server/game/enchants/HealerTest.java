@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class HealerTest {
     @Test
-    public void testPlayersGetHealed() {
+    public void DamagerAndDamageeGetHealedWhenHit() {
         Healer enchant = new Healer();
         Player damaged = mock(Player.class);
         Player damager = mock(Player.class);

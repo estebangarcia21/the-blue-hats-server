@@ -41,7 +41,7 @@ public class EventTemplateTest {
     }
 
     @Test
-    public void testPlayerHitPlayerTemplate() {
+    public void EventTemplateRunWhenPlayerHitsPlayer() {
         EventTemplate template = new PlayerHitPlayer();
         Player damager = mock(Player.class);
         Player damagee = mock(Player.class);
@@ -57,12 +57,11 @@ public class EventTemplateTest {
 
         when(inventory.getItemInMainHand()).thenReturn(item);
 
-        assertTrue(template.run(enchant, damager, damagee, PlayerInventory::getItemInMainHand, level -> {
-        }));
+        assertTrue(template.run(enchant, damager, damagee, PlayerInventory::getItemInMainHand, level -> { }));
     }
 
     @Test
-    public void testArrowHitPlayerTemplate() {
+    public void EventTemplateRunWhenArrowHitsPlayer() {
         EventTemplate template = new ArrowHitPlayer();
         Arrow arrow = mock(Arrow.class);
         Player damager = mock(Player.class);
@@ -80,7 +79,6 @@ public class EventTemplateTest {
 
         when(inventory.getItemInMainHand()).thenReturn(item);
 
-        assertTrue(template.run(enchant, arrow, damagee, PlayerInventory::getItemInMainHand, level -> {
-        }));
+        assertTrue(template.run(enchant, arrow, damagee, PlayerInventory::getItemInMainHand, level -> { }));
     }
 }

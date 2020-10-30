@@ -35,6 +35,8 @@ import me.stevemmmmm.server.game.managers.DamageManager;
 public class MainTest {
     @Mock
     private Main main;
+    @Mock
+    private Logger logger;
 
     private CustomEnchantManager customEnchantManager;
     private Registerer registerer;
@@ -43,23 +45,24 @@ public class MainTest {
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        PowerMockito.mockStatic(Bukkit.class);
+
         customEnchantManager = spy(new CustomEnchantManager(main));
         registerer = main;
         damageManager = new DamageManager(customEnchantManager, new CombatManager(mock(Main.class)));
-    }
 
-    @Test
-    public void testOnEnable() {
         doCallRealMethod().when(main).onEnable();
         doNothing().when(main).registerEnchants(any(), any(), any());
 
-        PowerMockito.mockStatic(Bukkit.class);
 
-        Logger logger = mock(Logger.class);
+        logger = mock(Logger.class);
 
         when(Bukkit.getLogger()).thenReturn(logger);
         doNothing().when(logger).info(anyString());
+    }
 
+    @Test
+    public void LogsTitleMessageOnEnable() {
         main.onEnable();
 
         verify(logger).info("   The Hypixel Pit Remake by Stevemmmmm   ");
@@ -69,7 +72,9 @@ public class MainTest {
     }
 
     @Test
-    public void testRegisterEnchants() {
+    public void EnchantsAreRegistered() {
+        main.onEnable();
+
         doCallRealMethod().when(main).registerEnchants(any(), any(), any());
         doNothing().when(customEnchantManager).registerEnchant(any());
 
@@ -79,7 +84,9 @@ public class MainTest {
     }
 
     @Test
-    public void testRegisterPerks() {
+    public void PerksAreRegistered() {
+        main.onEnable();
+
         doCallRealMethod().when(main).registerEnchants(any(), any(), any());
         doNothing().when(customEnchantManager).registerEnchant(any());
 
@@ -89,7 +96,9 @@ public class MainTest {
     }
 
     @Test
-    public void testRegisterCommands() {
+    public void CommandsAreRegistered() {
+        main.onEnable();
+
         doCallRealMethod().when(main).registerEnchants(any(), any(), any());
         doNothing().when(customEnchantManager).registerEnchant(any());
 

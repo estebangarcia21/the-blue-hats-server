@@ -1,16 +1,15 @@
 package me.stevemmmmm.server.game.enchants;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.junit.Test;
 
+import static org.mockito.Mockito.*;
+
 public class LastStandTest {
     @Test
-    public void testExecuteEnchant() {
+    public void GivesResistanceWhenHealthIsLessThan10() {
         LastStand enchant = new LastStand();
         Player player = mock(Player.class);
         when(player.getHealth()).thenReturn(5D);
@@ -19,10 +18,19 @@ public class LastStandTest {
 
         enchant.executeEnchant(player, amplifier);
 
-        amplifier = 3;
+        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, amplifier, true));
+    }
+
+    @Test
+    public void DoesNotGiveResistanceWhenHealthIsGreaterThan10() {
+        LastStand enchant = new LastStand();
+        Player player = mock(Player.class);
+        when(player.getHealth()).thenReturn(15D);
+
+        int amplifier = 1;
 
         enchant.executeEnchant(player, amplifier);
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, amplifier, true));
+        verify(player, never()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, amplifier, true));
     }
 }

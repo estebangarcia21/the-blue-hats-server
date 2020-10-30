@@ -10,17 +10,12 @@ import org.junit.Test;
 
 public class PeroxideTest {
     @Test
-    public void testExecuteEnchant() {
+    public void DamageeGetsRegenerationWhenHit() {
         Peroxide enchant = new Peroxide();
         Player player = mock(Player.class);
 
         int duration = 2;
         int amplifier = 1;
-
-        enchant.executeEnchant(player, duration, amplifier);
-
-        duration = 5;
-        amplifier = 3;
 
         enchant.executeEnchant(player, duration, amplifier);
 

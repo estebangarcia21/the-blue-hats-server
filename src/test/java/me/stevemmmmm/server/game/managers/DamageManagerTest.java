@@ -52,7 +52,7 @@ public class DamageManagerTest {
     }
 
     @Test
-    public void testPlayerIsInCanceledEvent() {
+    public void PlayerIsInCanceledEventWhenInCanceledEventsList() {
         canceledPlayers.add(player.getUniqueId());
         assertTrue(manager.playerIsInCanceledEvent(player));
 
@@ -61,7 +61,7 @@ public class DamageManagerTest {
     }
 
     @Test
-    public void testArrowIsInCanceledEvent() {
+    public void ArrowIsInCanceledEventWhenShooterIsInCanceledEventsList() {
         Arrow arrow = mock(Arrow.class);
 
         when(arrow.getShooter()).thenReturn(player);
