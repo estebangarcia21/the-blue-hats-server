@@ -7,7 +7,7 @@ import org.bukkit.ChatColor;
 
 public class LoreBuilder {
     private final ArrayList<String> description = new ArrayList<>();
-    private final List<String[]> parameters = new ArrayList<>();
+    private final List<String[]> variables = new ArrayList<>();
 
     private boolean condition = true;
     private int lineIndex;
@@ -19,15 +19,15 @@ public class LoreBuilder {
     }
 
     public LoreBuilder declareVariable(String... values) {
-        parameters.add(values);
+        variables.add(values);
 
         return this;
     }
 
     public LoreBuilder writeVariable(int id, int level) {
-        if (parameters.get(id) != null) {
+        if (variables.get(id) != null) {
             try {
-                if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + parameters.get(id)[level - 1]);
+                if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + variables.get(id)[level - 1]);
             } catch (NullPointerException | IndexOutOfBoundsException ignored) {
 
             }
@@ -37,8 +37,8 @@ public class LoreBuilder {
     }
 
     public LoreBuilder writeVariable(ChatColor color, int id, int level) {
-        if (parameters.get(id) != null) {
-            if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + parameters.get(id)[level - 1]);
+        if (variables.get(id) != null) {
+            if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + variables.get(id)[level - 1]);
         }
 
         return this;
@@ -65,6 +65,12 @@ public class LoreBuilder {
         return this;
     }
 
+    public LoreBuilder writeOnlyIf(boolean condition, String value) {
+        if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + value);
+
+        return this;
+    }
+
     public LoreBuilder setColor(ChatColor color) {
         this.color = color;
 
@@ -75,12 +81,6 @@ public class LoreBuilder {
 
     public LoreBuilder resetColor() {
         this.color = ChatColor.GRAY;
-
-        return this;
-    }
-
-    public LoreBuilder writeOnlyIf(boolean condition, String value) {
-        if (condition) description.set(lineIndex, description.get(lineIndex) + color.toString() + value);
 
         return this;
     }
