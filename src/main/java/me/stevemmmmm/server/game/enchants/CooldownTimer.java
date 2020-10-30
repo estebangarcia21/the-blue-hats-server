@@ -9,20 +9,17 @@ import org.bukkit.entity.Player;
 import me.stevemmmmm.server.core.Main;
 
 public class CooldownTimer {
-    private Main mainInstance;
-    private HashMap<UUID, CooldownTimerData> timerData;
+    private Main main;
+    private HashMap<UUID, CooldownTimerData> timerData = new HashMap<>();
 
-    public CooldownTimer(Main mainInstance) {
-        this.mainInstance = mainInstance;
+    public CooldownTimer(Main main) {
+        this.main = main;
     }
 
-    public void startCooldown(Player player, long ticks, boolean isSeconds) {
-        if (isSeconds)
-            ticks *= 20;
-
+    public void startCooldown(Player player, long ticks) {
         CooldownTimerData data = timerData.putIfAbsent(player.getUniqueId(), new CooldownTimerData());
 
-        data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(mainInstance, () -> {
+        data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main, () -> {
             data.setCooldownTime(data.getCooldownTime() - 1);
 
             if (data.getCooldownTime() <= 0) {
@@ -31,6 +28,26 @@ public class CooldownTimer {
                 Bukkit.getServer().getScheduler().cancelTask(data.getCooldownTaskId());
             }
         }, 0L, 1L));
+    }
+
+    public void startCooldown(Player player, long ticks, Runnable post) {
+        CooldownTimerData data = timerData.putIfAbsent(player.getUniqueId(), new CooldownTimerData());
+
+        data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main, () -> {
+            data.setCooldownTime(data.getCooldownTime() - 1);
+
+            if (data.getCooldownTime() <= 0) {
+                data.setCooldownTime(0);
+
+                post.run();
+
+                Bukkit.getServer().getScheduler().cancelTask(data.getCooldownTaskId());
+            }
+        }, 0L, 1L));
+    }
+
+    public boolean isOnCooldown(Player player) {
+        return timerData.get(player.getUniqueId()).isOnCooldown();
     }
 }
 
