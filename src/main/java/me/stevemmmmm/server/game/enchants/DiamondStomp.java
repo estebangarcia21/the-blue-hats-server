@@ -101,5 +101,4 @@ public class DiamondStomp extends CustomEnchant {
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.GOLDEN_SWORD };
     }
-
 }
