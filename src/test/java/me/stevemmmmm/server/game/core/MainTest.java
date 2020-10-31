@@ -15,7 +15,9 @@ import java.util.logging.Logger;
 
 import me.stevemmmmm.server.game.managers.*;
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -29,7 +31,7 @@ import me.stevemmmmm.server.core.Registerer;
 import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ Bukkit.class })
+@PrepareForTest({ Bukkit.class, PluginCommand.class })
 public class MainTest {
     @Mock
     private Main main;
@@ -49,6 +51,7 @@ public class MainTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         PowerMockito.mockStatic(Bukkit.class);
+        PowerMockito.mockStatic(PluginCommand.class);
 
         registerer = main;
 
@@ -59,17 +62,20 @@ public class MainTest {
         worldSelectionManager = new WorldSelectionManager(main);
         customEnchantManager = spy(new CustomEnchantManager(main));
 
-        doCallRealMethod().when(main).onEnable();
-        doNothing().when(main).registerGameLogic(any(), any(), any(), any(), any(), any(), any());
-
-        logger = mock(Logger.class);
-
+        when(main.getCommand(any())).thenReturn(mock(PluginCommand.class));
         when(Bukkit.getLogger()).thenReturn(logger);
+
+        doCallRealMethod().when(main).onEnable();
+        doCallRealMethod().when(main).registerGameLogic(any(), any(), any(), any(), any(), any(), any());
+
         doNothing().when(logger).info(anyString());
+        doNothing().when(customEnchantManager).registerEnchant(any());
     }
 
     @Test
     public void LogsTitleMessageOnEnable() {
+        doNothing().when(main).registerGameLogic(any(), any(), any(), any(), any(), any(), any());
+
         main.onEnable();
 
         verify(logger).info("   The Hypixel Pit Remake by Stevemmmmm   ");
@@ -80,38 +86,19 @@ public class MainTest {
 
     @Test
     public void EnchantsAreRegistered() {
-        main.onEnable();
-
-        doNothing().when(customEnchantManager).registerEnchant(any());
-
         registerer.registerGameLogic(main, damageManager, combatManager, bowManager, grindingSystem,
                 customEnchantManager, worldSelectionManager);
 
         verify(customEnchantManager, atLeast(1)).registerEnchant(any());
     }
-//
-//    @Test
-//    public void PerksAreRegistered() {
-//        main.onEnable();
-//
-//        doCallRealMethod().when(main).registerEnchants(any(), any(), any());
-//        doNothing().when(customEnchantManager).registerEnchant(any());
-//
-//        registerer.registerGameLogic(main, damageManager, new CombatManager(main), new BowManager(),
-//                new GrindingSystem(), customEnchantManager, new WorldSelectionManager(main));
-//
-//        verify(customEnchantManager, atLeast(1)).registerEnchant(any());
-//    }
-//
-//    @Test
-//    public void CommandsAreRegistered() {
-//        main.onEnable();
-//
-//        doCallRealMethod().when(main).registerEnchants(any(), any(), any());
-//        doNothing().when(customEnchantManager).registerEnchant(any());
-//
-//        registerer.registerEnchants(damageManager, new BowManager(), customEnchantManager);
-//
-//        verify(customEnchantManager, atLeast(1)).registerEnchant(any());
-//    }
+
+    @Test
+    public void CommandsAreRegistered() {
+        registerer.registerGameLogic(main, damageManager, combatManager, bowManager, grindingSystem,
+                customEnchantManager, worldSelectionManager);
+
+        verify(main, atLeast(1)).getCommand(any());
+    }
+
+    // TODO Register perks test
 }
