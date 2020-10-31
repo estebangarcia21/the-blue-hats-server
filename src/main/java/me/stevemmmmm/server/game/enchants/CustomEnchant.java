@@ -10,9 +10,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public abstract class CustomEnchant implements Listener {
     private final RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
@@ -23,8 +26,10 @@ public abstract class CustomEnchant implements Listener {
         this.templates = templates;
     }
 
-    public EventTemplate[] getEventTemplates() {
-        return templates;
+    public void runEventTemplates(CustomEnchant enchant, Entity damager, Entity damagee, Function<PlayerInventory, ItemStack> getSource, Consumer<Integer> onSuccess) {
+        for (EventTemplate template : templates) {
+            template.run(enchant, damager, damagee, getSource, onSuccess);
+        }
     }
 
     public boolean isCompatibleWith(Material material) {
