@@ -2,6 +2,7 @@ package me.stevemmmmm.server.game.enchants;
 
 import java.util.ArrayList;
 
+import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,17 +20,13 @@ public class Peroxide extends CustomEnchant {
     private final EnchantProperty<Integer> regenTime = new EnchantProperty<>(5, 8, 8);
     private final EnchantProperty<Integer> effectAmplifier = new EnchantProperty<>(0, 0, 1);
 
-    public Peroxide() {
-        super(new PlayerHitPlayer(), new ArrowHitPlayer());
+    public Peroxide(EventTemplate... templates) {
+        super(templates);
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
-                level -> executeEnchant((Player) event.getEntity(), regenTime.getValueAtLevel(level),
-                        effectAmplifier.getValueAtLevel(level)));
-
-        getEventTemplates()[1].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
+        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
                 level -> executeEnchant((Player) event.getEntity(), regenTime.getValueAtLevel(level),
                         effectAmplifier.getValueAtLevel(level)));
     }

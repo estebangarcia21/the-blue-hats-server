@@ -26,9 +26,8 @@ public class Main extends JavaPlugin implements Registerer, PluginInfo {
         WorldSelectionManager worldSelectionManager = new WorldSelectionManager(main);
         GrindingSystem grindingSystem = new GrindingSystem();
 
-        registerEnchants(damageManager, bowManager, customEnchantManager);
-        registerPerks(damageManager, bowManager, customEnchantManager);
-        registerCommands(main, damageManager, combatManager, grindingSystem, customEnchantManager, worldSelectionManager);
+        registerGameLogic(main, damageManager, combatManager, bowManager, grindingSystem, customEnchantManager,
+                worldSelectionManager);
     }
 
     @Override
@@ -36,17 +35,18 @@ public class Main extends JavaPlugin implements Registerer, PluginInfo {
 
     }
 
-    public void registerEnchants(DamageManager damageManager, BowManager bowManager, CustomEnchantManager customEnchantManager) {
+    public void registerGameLogic(Main main, DamageManager damageManager, CombatManager combatManager,
+                           BowManager bowManager, GrindingSystem grindingSystem,
+                                  CustomEnchantManager customEnchantManager,
+                                  WorldSelectionManager worldSelectionManager) {
+        // Enchants
         customEnchantManager.registerEnchant(new Wasp(bowManager));
         customEnchantManager.registerEnchant(new Peroxide());
         customEnchantManager.registerEnchant(new SprintDrain());
         customEnchantManager.registerEnchant(new LastStand());
-    }
+        customEnchantManager.registerEnchant(new ComboSwift(new HitCounter(main)));
 
-    public void registerPerks(DamageManager damageManager, BowManager bowManager, CustomEnchantManager customEnchantManager) {
-    }
-
-    public void registerCommands(Main main, DamageManager damageManager, CombatManager combatManager, GrindingSystem grindingSystem, CustomEnchantManager customEnchantManager, WorldSelectionManager worldSelectionManager) {
+        // Perks
         getCommand("pitenchant").setExecutor(new EnchantCommand(customEnchantManager));
         getCommand("mysticenchants").setExecutor(new MysticEnchantsCommand(customEnchantManager));
         getCommand("selectworld").setExecutor(new SelectWorldCommand(worldSelectionManager));

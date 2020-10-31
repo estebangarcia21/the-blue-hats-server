@@ -2,6 +2,7 @@ package me.stevemmmmm.server.game.enchants;
 
 import java.util.ArrayList;
 
+import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,13 +19,13 @@ public class SprintDrain extends CustomEnchant {
     private final EnchantProperty<Integer> speedDuration = new EnchantProperty<>(5, 5, 7);
     private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 0, 1);
 
-    public SprintDrain() {
-        super(new ArrowHitPlayer());
+    public SprintDrain(EventTemplate... templates) {
+        super(templates);
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
+        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
                 level -> executeEnchant((Player) event.getDamager(), (Player) event.getEntity(),
                         speedDuration.getValueAtLevel(level), speedAmplifier.getValueAtLevel(level), level));
     }
