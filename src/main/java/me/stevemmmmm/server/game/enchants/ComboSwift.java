@@ -1,18 +1,17 @@
 package me.stevemmmmm.server.game.enchants;
 
-import java.util.ArrayList;
-
+import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
+import me.stevemmmmm.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.stevemmmmm.server.game.utils.LoreBuilder;
+import java.util.ArrayList;
 
 public class ComboSwift extends CustomEnchant {
     private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);
@@ -21,23 +20,17 @@ public class ComboSwift extends CustomEnchant {
 
     private HitCounter hitCounter;
 
-    public ComboSwift(HitCounter hitCounter) {
+    public ComboSwift(HitCounter hitCounter, EventTemplate... templates) {
+        super(templates);
+
         this.hitCounter = hitCounter;
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
-            Player damager = (Player) event.getDamager();
-            ItemStack source = damager.getInventory().getItemInMainHand();
-
-            if (!canExecuteEnchant(source, new Entity[] { damager }))
-                return;
-
-            int level = getEnchantLevel(source);
-
-            executeEnchant(damager, hitsNeeded.getValueAtLevel(level), speedTime.getValueAtLevel(level), speedAmplifier.getValueAtLevel(level));
-        }
+        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
+                level -> executeEnchant((Player) event.getDamager(), hitsNeeded.getValueAtLevel(level),
+                        speedTime.getValueAtLevel(level), speedAmplifier.getValueAtLevel(level)));
     }
 
     public void executeEnchant(Player player, int hitsNeeded, int duration, int amplifier) {
