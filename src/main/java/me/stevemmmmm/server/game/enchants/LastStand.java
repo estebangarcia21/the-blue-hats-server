@@ -1,7 +1,7 @@
 package me.stevemmmmm.server.game.enchants;
 
-import java.util.ArrayList;
-
+import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
+import me.stevemmmmm.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,23 +11,18 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.stevemmmmm.server.game.enchants.templates.ArrowHitPlayer;
-import me.stevemmmmm.server.game.enchants.templates.PlayerHitPlayer;
-import me.stevemmmmm.server.game.utils.LoreBuilder;
+import java.util.ArrayList;
 
 public class LastStand extends CustomEnchant {
     private final EnchantProperty<Integer> effectAmplifier = new EnchantProperty<>(0, 1, 2);
 
-    public LastStand() {
-        super(new PlayerHitPlayer(), new ArrowHitPlayer());
+    public LastStand(EventTemplate... templates) {
+        super(templates);
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
-                level -> executeEnchant((Player) event.getEntity(), effectAmplifier.getValueAtLevel(level)));
-
-        getEventTemplates()[1].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
+        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
                 level -> executeEnchant((Player) event.getEntity(), effectAmplifier.getValueAtLevel(level)));
     }
 

@@ -1,7 +1,8 @@
 package me.stevemmmmm.server.game.enchants;
 
-import java.util.ArrayList;
-
+import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
+import me.stevemmmmm.server.game.managers.DamageManager;
+import me.stevemmmmm.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -9,23 +10,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-import me.stevemmmmm.server.game.enchants.templates.PlayerHitPlayer;
-import me.stevemmmmm.server.game.managers.DamageManager;
-import me.stevemmmmm.server.game.utils.LoreBuilder;
+import java.util.ArrayList;
 
 public class DiamondStomp extends CustomEnchant {
     private final EnchantProperty<Double> percentDamageIncrease = new EnchantProperty<>(0.7, 0.12, 0.25);
 
     private DamageManager manager;
 
-    public DiamondStomp(DamageManager manager) {
-        super(new PlayerHitPlayer());
+    public DiamondStomp(DamageManager manager, EventTemplate... templates) {
+        super(templates);
+
         this.manager = manager;
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
+        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
                 level -> executeEnchant((Player) event.getDamager(), level, event));
     }
 
@@ -56,10 +56,7 @@ public class DiamondStomp extends CustomEnchant {
         }
 
         if (player.getInventory().getBoots() != null) {
-            if (player.getInventory().getBoots().getType() == Material.DIAMOND_BOOTS) {
-                return true;
-            }
-
+            return player.getInventory().getBoots().getType() == Material.DIAMOND_BOOTS;
         }
 
         return false;
