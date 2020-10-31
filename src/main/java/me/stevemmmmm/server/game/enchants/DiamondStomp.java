@@ -1,0 +1,105 @@
+package me.stevemmmmm.server.game.enchants;
+
+import java.util.ArrayList;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.PlayerInventory;
+
+import me.stevemmmmm.server.game.enchants.templates.PlayerHitPlayer;
+import me.stevemmmmm.server.game.managers.DamageManager;
+import me.stevemmmmm.server.game.utils.LoreBuilder;
+
+public class DiamondStomp extends CustomEnchant {
+    private final EnchantProperty<Double> percentDamageIncrease = new EnchantProperty<>(0.7, 0.12, 0.25);
+
+    private DamageManager manager;
+
+    public DiamondStomp(DamageManager manager) {
+        super(new PlayerHitPlayer());
+        this.manager = manager;
+    }
+
+    @EventHandler
+    public void onHit(EntityDamageByEntityEvent event) {
+        getEventTemplates()[0].run(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
+                level -> executeEnchant((Player) event.getDamager(), level, event));
+    }
+
+    public void executeEnchant(Player player, int level, EntityDamageByEntityEvent event) {
+        if (playerHasDiamondPiece(player)) {
+            // manager.addDamage(event, percentDamageIncrease.getValueAtLevel(level),
+            // CalculationMode.ADDITIVE);
+        }
+    }
+
+    private boolean playerHasDiamondPiece(Player player) {
+        if (player.getInventory().getHelmet() != null) {
+            if (player.getInventory().getHelmet().getType() == Material.DIAMOND_HELMET) {
+                return true;
+            }
+        }
+
+        if (player.getInventory().getChestplate() != null) {
+            if (player.getInventory().getHelmet().getType() == Material.DIAMOND_CHESTPLATE) {
+                return true;
+            }
+        }
+
+        if (player.getInventory().getLeggings() != null) {
+            if (player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS) {
+                return true;
+            }
+        }
+
+        if (player.getInventory().getBoots() != null) {
+            if (player.getInventory().getBoots().getType() == Material.DIAMOND_BOOTS) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "Diamond Stomp";
+    }
+
+    @Override
+    public String getEnchantReferenceName() {
+        return "Diamondstomp";
+    }
+
+    @Override
+    public ArrayList<String> getDescription(int level) {
+        return new LoreBuilder().declareVariable("7%", "12%", "25%").write("Deal ").setColor(ChatColor.RED).write("+")
+                .writeVariable(0, level).resetColor().write(" damage vs. players").next().write("wearing diamond armor")
+                .build();
+    }
+
+    @Override
+    public boolean isDisabledOnPassiveWorld() {
+        return false;
+    }
+
+    @Override
+    public EnchantGroup getEnchantGroup() {
+        return EnchantGroup.A;
+    }
+
+    @Override
+    public boolean isRareEnchant() {
+        return false;
+    }
+
+    @Override
+    public Material[] getEnchantItemTypes() {
+        return new Material[] { Material.GOLDEN_SWORD };
+    }
+
+}
