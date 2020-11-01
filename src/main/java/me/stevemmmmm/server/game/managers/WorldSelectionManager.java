@@ -1,8 +1,15 @@
 package me.stevemmmmm.server.game.managers;
 
-import me.stevemmmmm.server.core.Main;
-import me.stevemmmmm.server.game.utils.LoreBuilder;
-import org.bukkit.*;
+import java.util.ArrayList;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,13 +17,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import me.stevemmmmm.server.core.Main;
+import me.stevemmmmm.server.game.utils.LoreBuilder;
 
 public class WorldSelectionManager implements Listener {
     private final String inventoryName = ChatColor.LIGHT_PURPLE + "World Selection";
@@ -43,10 +49,10 @@ public class WorldSelectionManager implements Listener {
         displaySelectionMenu(event.getPlayer());
     }
 
-//    @EventHandler
-//    public void onChunkUnload(ChunkUnloadEvent event) {
-//        event.setCancelled(true);
-//    }
+    // @EventHandler
+    // public void onChunkUnload(ChunkUnloadEvent event) {
+    // event.setCancelled(true);
+    // }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {

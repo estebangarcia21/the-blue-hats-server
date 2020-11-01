@@ -30,7 +30,7 @@ public class SetGoldCommand implements CommandExecutor {
                                 gold = 1000000000.00;
 
                             // TODO Implement grinding system
-//                            system.setPlayerGold(player, gold);
+                            // system.setPlayerGold(player, gold);
                         } else {
                             player.sendMessage(
                                     ChatColor.RED + "Error! " + ChatColor.DARK_PURPLE + "Usage: /setgold <amount>");
