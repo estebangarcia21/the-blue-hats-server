@@ -1,12 +1,5 @@
 package me.stevemmmmm.server.game.commands;
 
-import java.util.HashMap;
-import java.util.UUID;
-
-import me.stevemmmmm.server.game.enchants.CooldownTimer;
-import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
-import me.stevemmmmm.server.game.managers.CombatManager;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
@@ -14,7 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.stevemmmmm.server.core.Main;
+import me.stevemmmmm.server.game.enchants.CooldownTimer;
+import me.stevemmmmm.server.game.managers.CombatManager;
 import me.stevemmmmm.server.game.managers.RegionManager;
 
 public class SpawnCommand implements CommandExecutor {
@@ -48,8 +42,8 @@ public class SpawnCommand implements CommandExecutor {
                     }
                 } else {
                     player.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "HOLD UP! " + ChatColor.GRAY
-                            + "Can't /respawn while fighting (" + ChatColor.RED
-                            + manager.getCombatTime(player) + "s" + ChatColor.GRAY + " left)");
+                            + "Can't /respawn while fighting (" + ChatColor.RED + manager.getCombatTime(player) + "s"
+                            + ChatColor.GRAY + " left)");
                 }
             }
         }

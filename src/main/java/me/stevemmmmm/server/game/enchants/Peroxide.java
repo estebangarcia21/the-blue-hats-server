@@ -2,7 +2,6 @@ package me.stevemmmmm.server.game.enchants;
 
 import java.util.ArrayList;
 
-import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,8 +11,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.stevemmmmm.server.game.enchants.templates.ArrowHitPlayer;
-import me.stevemmmmm.server.game.enchants.templates.PlayerHitPlayer;
+import me.stevemmmmm.server.game.enchants.templates.EventTemplate;
 import me.stevemmmmm.server.game.utils.LoreBuilder;
 
 public class Peroxide extends CustomEnchant {

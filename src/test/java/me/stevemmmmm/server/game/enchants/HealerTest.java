@@ -9,8 +9,6 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.junit.Test;
 
-import java.util.Objects;
-
 public class HealerTest {
     @Test
     public void DamagerAndDamageeGetHealedWhenHit() {
