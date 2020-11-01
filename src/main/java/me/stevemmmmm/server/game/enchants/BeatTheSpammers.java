@@ -15,6 +15,7 @@ import me.stevemmmmm.server.game.utils.LoreBuilder;
 
 public class BeatTheSpammers extends CustomEnchant {
     private EnchantProperty<Float> damageAmount = new EnchantProperty<>(.10f, .25f, .40f);
+    
     private DamageManager manager;
 
     public BeatTheSpammers(DamageManager manager, EventTemplate... templates) {
@@ -30,11 +31,10 @@ public class BeatTheSpammers extends CustomEnchant {
     }
 
     public void executeEnchant(Player player, int level, EntityDamageByEntityEvent event) {
-        // if (((Player) args[0]).getInventory().getItemInHand().getType() ==
-        // Material.BOW) {
-        // manager.addDamage(((EntityDamageByEntityEvent) args[1]),
-        // damageAmount.getValueAtLevel(level), CalculationMode.ADDITIVE);
-
+//         if (((Player) args[0]).getInventory().getItemInHand().getType() ==
+//         Material.BOW) {
+//         manager.addDamage(((EntityDamageByEntityEvent) args[1]),
+//         damageAmount.getValueAtLevel(level), CalculationMode.ADDITIVE);
     }
 
     @Override
