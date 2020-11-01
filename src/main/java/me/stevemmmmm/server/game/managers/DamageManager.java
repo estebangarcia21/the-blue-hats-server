@@ -9,13 +9,8 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffectType;
 
-import me.stevemmmmm.server.game.enchants.CustomEnchant;
 import me.stevemmmmm.server.game.enchants.CustomEnchantManager;
 import me.stevemmmmm.server.game.enchants.Mirror;
 
