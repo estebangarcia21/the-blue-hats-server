@@ -6,11 +6,9 @@
 
 The new repository where The Blue Hats Server is maintained. ([Old Repository](https://github.com/Im-Stevemmmmm/the-blue-hats-server-old))
 
-## Installation
-
 ## About
 
-The Blue Hats Server is an open source community project that attempts to replicate The Hypixel Pit so that people may test enchants or play with friends on a local Minecraft server.
+The Blue Hats Server is an open source community project that attempts to replicate The Hypixel Pit so that people may test enchants or play with friends on a local Minecraft server. This project was founded by Im-Stevemmmmm.
 
 ## Installation and Starting the Server
 
@@ -20,7 +18,7 @@ To install the server, download the latest release under the release section. On
 
 Start up the server by opening the `start-server.bat` file.
 
-### Starting the Server on MacOS / UNIX
+### Starting the Server on MacOS / Unix
 
 Open a terminal window in the server directory. Then, execute the command `./start-server`. You may need to set permissions to read and execute the script. If so, execute the command `chmod 755 start-server`.
 
