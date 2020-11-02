@@ -35,7 +35,7 @@ public class DamageManagerTest {
 
         try {
             Field field;
-            field = DamageManager.class.getDeclaredField("canceledPlayers");
+            field = manager.getClass().getDeclaredField("canceledPlayers");
 
             field.setAccessible(true);
 
