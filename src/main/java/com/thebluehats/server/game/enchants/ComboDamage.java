@@ -31,7 +31,6 @@ public class ComboDamage extends CustomEnchant {
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
                 level -> executeEnchant((Player) event.getDamager(), level, event));
-
     }
 
     public void executeEnchant(Player damager, int level, EntityDamageByEntityEvent event) {
