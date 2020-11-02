@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group = 'me.stevemmmmm.server'
-version = '0.0.1'
+group = 'com.thebluehats.server'
+version = '0.1.0'
 
 repositories {
     mavenCentral()
