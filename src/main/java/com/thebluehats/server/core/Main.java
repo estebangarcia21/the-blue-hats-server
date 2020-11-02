@@ -2,18 +2,16 @@ package com.thebluehats.server.core;
 
 import com.thebluehats.server.game.commands.*;
 import com.thebluehats.server.game.enchants.*;
+import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.combat.CombatManager;
+import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.enchants.CooldownTimer;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
-import com.thebluehats.server.game.perks.Vampire;
-import me.stevemmmmm.server.game.commands.*;
-import me.stevemmmmm.server.game.enchants.*;
-import com.thebluehats.server.game.managers.combat.BowManager;
-import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.game.GrindingSystem;
 import com.thebluehats.server.game.managers.game.PerkManager;
 import com.thebluehats.server.game.managers.game.WorldSelectionManager;
+import com.thebluehats.server.game.perks.Vampire;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
