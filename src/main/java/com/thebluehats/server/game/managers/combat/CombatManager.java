@@ -16,8 +16,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import com.thebluehats.server.core.Main;
 
 public class CombatManager implements Listener {
-    private final HashMap<UUID, Integer> combatTasks = new HashMap<>();
-    private final HashMap<UUID, Integer> combatTime = new HashMap<>();
+    private final HashMap<UUID, CombatTimerData> data = new HashMap<>();
 
     private Main main;
 
@@ -27,7 +26,7 @@ public class CombatManager implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        combatTime.put(event.getPlayer().getUniqueId(), 0);
+        data.put(event.getPlayer().getUniqueId(), new CombatTimerData());
     }
 
     @EventHandler
@@ -51,43 +50,61 @@ public class CombatManager implements Listener {
     }
 
     public boolean playerIsInCombat(Player player) {
-        return combatTime.getOrDefault(player.getUniqueId(), 0) != 0;
+        return data.get(player.getUniqueId()).getTime() != 0;
     }
 
     public void combatTag(Player player) {
+        CombatTimerData timerData = data.get(player.getUniqueId());
         if (RegionManager.getInstance().playerIsInRegion(player, RegionManager.RegionType.SPAWN))
             return;
 
-        combatTime.put(player.getUniqueId(), calculateCombatTime(player));
+        timerData.setTime(calculateCombatTime());
 
-        if (!combatTasks.containsKey(player.getUniqueId()))
-            combatTasks.put(player.getUniqueId(),
-                    Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main, () -> {
-                        if (combatTime.get(player.getUniqueId()) == 0) {
-                            Bukkit.getServer().getScheduler().cancelTask(combatTasks.get(player.getUniqueId()));
-                            combatTasks.remove(player.getUniqueId());
-                            return;
-                        }
-
-                        combatTime.put(player.getUniqueId(), combatTime.get(player.getUniqueId()) - 1);
-                    }, 0L, 20L));
+        if (!timerData.isOnCooldown()) {
+            timerData.setTaskId( Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main,
+                    () -> {  if (timerData.getTime() == 0) { Bukkit.getServer().getScheduler().cancelTask(timerData.getTaskId()); return; } timerData.setTime(timerData.getTime() - 1); }, 0L, 20L));
+        }
     }
 
     public int getCombatTime(Player player) {
-        return combatTime.get(player.getUniqueId());
+        return data.get(player.getUniqueId()).getTime();
     }
 
-    private int calculateCombatTime(Player player) {
-        int time = 15;
-
-        return time;
+    private int calculateCombatTime() {
+        return 15;
     }
 
     private void removePlayerFromCombat(Player player) {
+        CombatTimerData timerData = data.get(player.getUniqueId());
+
         if (playerIsInCombat(player)) {
-            Bukkit.getServer().getScheduler().cancelTask(combatTasks.get(player.getUniqueId()));
-            combatTime.put(player.getUniqueId(), 0);
-            combatTasks.remove(player.getUniqueId());
+            Bukkit.getServer().getScheduler().cancelTask(timerData.getTaskId());
+            timerData.setTime(0);
         }
+    }
+}
+
+class CombatTimerData {
+    private int time;
+    private int taskId;
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
+    }
+
+    public boolean isOnCooldown() {
+        return time != 0;
     }
 }
