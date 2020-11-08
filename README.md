@@ -24,6 +24,6 @@ Open a terminal window in the server directory. Then, execute the command `./sta
 
 ### Connecting to the Server
 
-Open up Minecraft in version 1.8.8 or higher. Once Minecraft is loaded, go to your server list and press add server or direct connect. For the server IP, type in localhost and press connect. For the best experience, it is recommended to log on with Minecraft 1.8.9.
+Open up Minecraft in version 1.16.3 (1.8.8+ will be supported in the future). Once Minecraft is loaded, go to your server list and press add server or direct connect. For the server IP, type in localhost and press connect. For the best experience, it is recommended to log on with Minecraft 1.8.9.
 
 To stop the server, execute the command in-game `/stop`.
