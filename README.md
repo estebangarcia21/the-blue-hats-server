@@ -2,8 +2,6 @@
  <img src="logo.png" width="75%">
 </p>
 
-[![Build Status](https://travis-ci.com/Im-Stevemmmmm/the-blue-hats-server.svg?token=PEACAwmqx1WqwmDYcv9Z&branch=master)](https://travis-ci.com/Im-Stevemmmmm/the-blue-hats-server)
-
 The new repository where The Blue Hats Server is maintained. ([Old Repository](https://github.com/Im-Stevemmmmm/the-blue-hats-server-old))
 
 ## About
