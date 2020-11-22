@@ -1,11 +1,10 @@
 package com.thebluehats.server.game.enchants;
 
-import java.util.ArrayList;
-
+import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,9 +15,11 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Peroxide extends CustomEnchant {
-    private final EnchantProperty<Integer> regenTime = new EnchantProperty<>(5, 8, 8);
-    private final EnchantProperty<Integer> effectAmplifier = new EnchantProperty<>(0, 0, 1);
+import java.util.ArrayList;
+
+public class Peroxide extends CustomEnchant<PotionEffectArgs>  {
+    private final EnchantProperty<Integer> REGEN_DURATION = new EnchantProperty<>(5, 8, 8);
+    private final EnchantProperty<Integer> REGEN_AMPLIFIER = new EnchantProperty<>(0, 0, 1);
 
     public Peroxide(EventTemplate... templates) {
         super(templates);
@@ -27,13 +28,14 @@ public class Peroxide extends CustomEnchant {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
-                level -> executeEnchant((Player) event.getEntity(), regenTime.getValueAtLevel(level),
-                        effectAmplifier.getValueAtLevel(level)));
+                level -> execute(new PotionEffectArgs((Player) event.getEntity(), REGEN_DURATION.getValueAtLevel(level),
+                        REGEN_AMPLIFIER.getValueAtLevel(level))));
     }
 
-    public void executeEnchant(Player hitPlayer, int regenTime, int effectAmplifier) {
-        hitPlayer.addPotionEffect(
-                new PotionEffect(PotionEffectType.REGENERATION, regenTime * 20, effectAmplifier, true));
+    @Override
+    public void execute(PotionEffectArgs args) {
+        args.getPlayer().addPotionEffect(
+                new PotionEffect(PotionEffectType.REGENERATION, args.getDuration() * 20, args.getAmplifier(), true));
     }
 
     @Override

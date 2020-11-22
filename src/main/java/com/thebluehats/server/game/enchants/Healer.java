@@ -15,8 +15,8 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.ArrayList;
 
-public class Healer extends CustomEnchant {
-    private final EnchantProperty<Integer> healAmount = new EnchantProperty<>(2, 4, 6);
+public class Healer extends CustomEnchant<HealerArgs> {
+    private final EnchantProperty<Integer> HEAL_AMOUNT = new EnchantProperty<>(2, 4, 6);
 
     public Healer(EventTemplate... templates) {
         super(templates);
@@ -25,11 +25,17 @@ public class Healer extends CustomEnchant {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> executeEnchant((Player) event.getDamager(), (Player) event.getEntity(),
-                        healAmount.getValueAtLevel(level)));
+                level -> execute(new HealerArgs((Player) event.getDamager(), (Player) event.getEntity(),
+                        HEAL_AMOUNT.getValueAtLevel(level))));
     }
 
-    public void executeEnchant(Player damager, Player damaged, int healAmount) {
+
+    @Override
+    public void execute(HealerArgs args) {
+        Player damager = args.getDamager();
+        Player damaged = args.getDamaged();
+        int healAmount = args.getHealAmount();
+
         damager.setHealth(Math.min(damager.getHealth() + healAmount,
                 damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
         damaged.setHealth(Math.min(damaged.getHealth() + healAmount,
@@ -71,5 +77,29 @@ public class Healer extends CustomEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.GOLDEN_SWORD };
+    }
+}
+
+class HealerArgs {
+    private Player damager;
+    private Player damaged;
+    private int healAmount;
+
+    public HealerArgs(Player damager, Player damaged, int healAmount) {
+        this.damager = damager;
+        this.damaged = damaged;
+        this.healAmount = healAmount;
+    }
+
+    public Player getDamager() {
+        return damager;
+    }
+
+    public Player getDamaged() {
+        return damaged;
+    }
+
+    public int getHealAmount() {
+        return healAmount;
     }
 }

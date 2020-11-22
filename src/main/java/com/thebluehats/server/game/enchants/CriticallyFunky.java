@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.xml.transform.Templates;
 
+import com.thebluehats.server.game.enchants.args.PlayerAndDamageEventArgs;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
@@ -22,11 +23,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class CriticallyFunky extends CustomEnchant {
-    private final EnchantProperty<Float> damageReduction = new EnchantProperty<>(0.35f, 0.35f, 0.6f);
-    private final EnchantProperty<Float> damageIncrease = new EnchantProperty<>(0f, .14f, .3f);
+public class CriticallyFunky extends CustomEnchant<PlayerAndDamageEventArgs>  {
+    private final EnchantProperty<Float> DAMAGE_REDUCTION = new EnchantProperty<>(0.35f, 0.35f, 0.6f);
+    private final EnchantProperty<Float> DAMAGE_INCREASE = new EnchantProperty<>(0f, .14f, .3f);
+    private final ArrayList<UUID> EXTRA_DAMAGE_QUEUE = new ArrayList<>();
 
-    private final List<UUID> queue = new ArrayList<>();
     private DamageManager manager;
 
     public CriticallyFunky(DamageManager manager, EventTemplate... templates) {
@@ -38,39 +39,40 @@ public class CriticallyFunky extends CustomEnchant {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> executeEnchant((Player) event.getDamager(), level, event));
+                level -> execute(new PlayerAndDamageEventArgs((Player) event.getDamager(), event)));
     }
 
-    public void executeEnchant(Player damager, int level, EntityDamageByEntityEvent event) {
+    @Override
+    public void execute(PlayerAndDamageEventArgs args) {
+        // if (event.getDamager() instanceof Arrow) {
+        // Arrow arrow = (Arrow) event.getDamager();
+
+        // if (!arrow.isCritical())
+        // return;
+        // } else if (damager instanceof Player) {
+        // damager = (Player) damager;
+        // }
+
+        // if (damager == null)
+        // return;
+
+        // if (!manager.isCriticalHit(damager))
+        // return;
+
+        // if (queue.contains(damager.getUniqueId())) {
+        // manager.addDamage(event, damageIncrease.getValueAtLevel(level),
+        // CalculationMode.ADDITIVE);
+        // queue.remove(damager.getUniqueId());
+        // }
+
+        // if (level != 1) {
+        // queue.add(event.getEntity().getUniqueId());
+        // }
+
+        // manager.reduceDamage(event, damageReduction.getValueAtLevel(level));
+        // manager.removeExtraCriticalDamage(event);
+        // }
     }
-    // if (event.getDamager() instanceof Arrow) {
-    // Arrow arrow = (Arrow) event.getDamager();
-
-    // if (!arrow.isCritical())
-    // return;
-    // } else if (damager instanceof Player) {
-    // damager = (Player) damager;
-    // }
-
-    // if (damager == null)
-    // return;
-
-    // if (!manager.isCriticalHit(damager))
-    // return;
-
-    // if (queue.contains(damager.getUniqueId())) {
-    // manager.addDamage(event, damageIncrease.getValueAtLevel(level),
-    // CalculationMode.ADDITIVE);
-    // queue.remove(damager.getUniqueId());
-    // }
-
-    // if (level != 1) {
-    // queue.add(event.getEntity().getUniqueId());
-    // }
-
-    // manager.reduceDamage(event, damageReduction.getValueAtLevel(level));
-    // manager.removeExtraCriticalDamage(event);
-    // }
 
     @Override
     public String getName() {

@@ -1,7 +1,8 @@
 package com.thebluehats.server.game.enchants;
 
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
 import com.thebluehats.server.game.managers.combat.BowManager;
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -18,9 +19,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 
-public class Wasp extends CustomEnchant {
-    private final EnchantProperty<Integer> amplifier = new EnchantProperty<>(1, 2, 3);
-    private final EnchantProperty<Integer> duration = new EnchantProperty<>(6, 11, 16);
+public class Wasp extends CustomEnchant<PotionEffectArgs> {
+    private final EnchantProperty<Integer> WEAKNESS_DURATION = new EnchantProperty<>(6, 11, 16);
+    private final EnchantProperty<Integer> WEAKNESS_AMPLIFIER = new EnchantProperty<>(1, 2, 3);
 
     private BowManager bowManager;
 
@@ -34,8 +35,8 @@ public class Wasp extends CustomEnchant {
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(),
                 inventory -> bowManager.getBowFromArrow((Arrow) event.getDamager()),
-                level -> executeEnchant((Player) event.getEntity(), duration.getValueAtLevel(level),
-                        amplifier.getValueAtLevel(level)));
+                level -> execute(new PotionEffectArgs((Player) event.getEntity(), WEAKNESS_DURATION.getValueAtLevel(level),
+                        WEAKNESS_AMPLIFIER.getValueAtLevel(level))));
     }
 
     @EventHandler
@@ -43,8 +44,10 @@ public class Wasp extends CustomEnchant {
         bowManager.onArrowShoot(event);
     }
 
-    public void executeEnchant(Player hitPlayer, int duration, int amplifier) {
-        hitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, duration * 20, amplifier));
+    @Override
+    public void execute(PotionEffectArgs args) {
+        args.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, args.getDuration() * 20,
+                args.getAmplifier()));
     }
 
     @Override
@@ -61,7 +64,7 @@ public class Wasp extends CustomEnchant {
     public ArrayList<String> getDescription(int level) {
         return new LoreBuilder().declareVariable("II", "III", "IV").setColor(ChatColor.GRAY).write("Apply ")
                 .setColor(ChatColor.RED).write("Weakness ").writeVariable(0, level).setColor(ChatColor.GRAY)
-                .write(" (" + duration.getValueAtLevel(level) + "s) on hit").build();
+                .write(" (" + WEAKNESS_DURATION.getValueAtLevel(level) + "s) on hit").build();
     }
 
     @Override

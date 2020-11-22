@@ -1,13 +1,11 @@
 package com.thebluehats.server.game.enchants;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.junit.Test;
+
+import static org.mockito.Mockito.*;
 
 public class HealerTest {
     @Test
@@ -25,12 +23,12 @@ public class HealerTest {
         when(damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).thenReturn(maxHealth);
         when(damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).thenReturn(maxHealth);
 
-        enchant.executeEnchant(damager, damaged, healAmount);
+        enchant.execute(new HealerArgs(damager, damaged, healAmount));
 
         verify(damaged).setHealth(damaged.getHealth() + healAmount);
         verify(damager).setHealth(damager.getHealth() + healAmount);
 
-        enchant.executeEnchant(damager, damaged, 22);
+        enchant.execute(new HealerArgs(damager, damaged, 22));
 
         verify(damaged).setHealth(maxHealth);
         verify(damager).setHealth(maxHealth);

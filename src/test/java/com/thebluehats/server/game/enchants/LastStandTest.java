@@ -16,7 +16,7 @@ public class LastStandTest {
 
         int amplifier = 1;
 
-        enchant.executeEnchant(player, amplifier);
+        enchant.execute(new LastStandArgs(player, amplifier));
 
         verify(player).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, amplifier, true));
     }
@@ -29,7 +29,7 @@ public class LastStandTest {
 
         int amplifier = 1;
 
-        enchant.executeEnchant(player, amplifier);
+        enchant.execute(new LastStandArgs(player, amplifier));
 
         verify(player, never()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, amplifier, true));
     }

@@ -1,8 +1,8 @@
 package com.thebluehats.server.game.enchants;
 
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
@@ -16,8 +16,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 
-public class LastStand extends CustomEnchant {
-    private final EnchantProperty<Integer> effectAmplifier = new EnchantProperty<>(0, 1, 2);
+public class LastStand extends CustomEnchant<LastStandArgs> {
+    private final EnchantProperty<Integer> RESISTANCE_AMPLIFIER = new EnchantProperty<>(0, 1, 2);
 
     public LastStand(EventTemplate... templates) {
         super(templates);
@@ -26,12 +26,16 @@ public class LastStand extends CustomEnchant {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
-                level -> executeEnchant((Player) event.getEntity(), effectAmplifier.getValueAtLevel(level)));
+                level -> execute(new LastStandArgs((Player) event.getEntity(),
+                        RESISTANCE_AMPLIFIER.getValueAtLevel(level))));
     }
 
-    public void executeEnchant(Player damaged, int effectAmplifier) {
+    @Override
+    public void execute(LastStandArgs args) {
+        Player damaged = args.getDamaged();
+
         if (damaged.getHealth() < 10)
-            damaged.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, effectAmplifier, true));
+            damaged.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, args.getEffectAmplifier(), true));
     }
 
     @Override
@@ -69,5 +73,23 @@ public class LastStand extends CustomEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.LEATHER_LEGGINGS };
+    }
+}
+
+class LastStandArgs {
+    private Player damaged;
+    private int effectAmplifier;
+
+    public LastStandArgs(Player damaged, int effectAmplifier) {
+        this.damaged = damaged;
+        this.effectAmplifier = effectAmplifier;
+    }
+
+    public Player getDamaged() {
+        return damaged;
+    }
+
+    public int getEffectAmplifier() {
+        return effectAmplifier;
     }
 }

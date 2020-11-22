@@ -2,6 +2,7 @@ package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
 
+import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -17,9 +18,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.thebluehats.server.game.utils.LoreBuilder;
 
-public class SprintDrain extends CustomEnchant {
-    private final EnchantProperty<Integer> speedDuration = new EnchantProperty<>(5, 5, 7);
-    private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 0, 1);
+public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
+    private final EnchantProperty<Integer> SPEED_DURATION = new EnchantProperty<>(5, 5, 7);
+    private final EnchantProperty<Integer> SPEED_AMPLIFIER = new EnchantProperty<>(0, 0, 1);
 
     public SprintDrain(EventTemplate... templates) {
         super(templates);
@@ -28,17 +29,17 @@ public class SprintDrain extends CustomEnchant {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> executeEnchant((Player) event.getDamager(), (Player) event.getEntity(),
-                        speedDuration.getValueAtLevel(level), speedAmplifier.getValueAtLevel(level), level));
+                level -> execute(new SprintDrainArgs((Player) event.getDamager(), (Player) event.getEntity(),
+                        SPEED_DURATION.getValueAtLevel(level), SPEED_AMPLIFIER.getValueAtLevel(level), level)));
     }
 
-    public void executeEnchant(Player damager, Player damaged, int speedDuration, int speedAmplifier, int level) {
-        damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedDuration * 20, speedAmplifier));
+    @Override
+    public void execute(SprintDrainArgs args) {
+        args.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, args.getDuration() * 20, args.getAmplifier()));
 
-        if (level == 1)
-            return;
+        if (args.getLevel() == 1) return;
 
-        damaged.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
+        args.getDamaged().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
     }
 
     @Override
@@ -78,5 +79,25 @@ public class SprintDrain extends CustomEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.BOW };
+    }
+}
+
+class SprintDrainArgs extends PotionEffectArgs {
+    private Player damaged;
+    private int level;
+
+    public SprintDrainArgs(Player damager, Player damaged, int duration, int amplifier, int level) {
+        super(damager, duration, amplifier);
+
+        this.damaged = damaged;
+        this.level = level;
+    }
+
+    public Player getDamaged() {
+        return damaged;
+    }
+
+    public int getLevel() {
+        return level;
     }
 }

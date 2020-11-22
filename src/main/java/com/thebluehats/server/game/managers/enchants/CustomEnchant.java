@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public abstract class CustomEnchant implements Listener {
+public abstract class CustomEnchant<T> implements Listener {
     private final RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
 
     private EventTemplate[] templates;
@@ -147,6 +147,8 @@ public abstract class CustomEnchant implements Listener {
 
         return 0;
     }
+
+    public abstract void execute(T args);
 
     public abstract String getName();
 

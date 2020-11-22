@@ -2,6 +2,7 @@ package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
 
+import com.thebluehats.server.game.enchants.args.PlayerAndDamageEventArgs;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
@@ -16,9 +17,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class ComboDamage extends CustomEnchant {
-    private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);
-    private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.2f, .3f, .45f);
+public class ComboDamage extends CustomEnchant<PlayerAndDamageEventArgs> {
+    private final EnchantProperty<Float> DAMAGE_AMOUNT = new EnchantProperty<>(.2f, .3f, .45f);
+    private final EnchantProperty<Integer> HITS_NEEDED = new EnchantProperty<>(4, 3, 3);
+
     private DamageManager manager;
 
     public ComboDamage(DamageManager manager, EventTemplate... templates) {
@@ -30,10 +32,11 @@ public class ComboDamage extends CustomEnchant {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> executeEnchant((Player) event.getDamager(), level, event));
+                level -> execute(new PlayerAndDamageEventArgs((Player) event.getDamager(), event)));
     }
 
-    public void executeEnchant(Player damager, int level, EntityDamageByEntityEvent event) {
+    @Override
+    public void execute(PlayerAndDamageEventArgs args) {
         // updateHitCount(damager);
 
         // if (hasRequiredHits(damager, hitsNeeded.getValueAtLevel(level))) {

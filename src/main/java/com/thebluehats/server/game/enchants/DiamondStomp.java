@@ -1,5 +1,6 @@
 package com.thebluehats.server.game.enchants;
 
+import com.thebluehats.server.game.enchants.args.PlayerAndDamageEventArgs;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -15,8 +16,8 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.ArrayList;
 
-public class DiamondStomp extends CustomEnchant {
-    private final EnchantProperty<Double> percentDamageIncrease = new EnchantProperty<>(0.7, 0.12, 0.25);
+public class DiamondStomp extends CustomEnchant<PlayerAndDamageEventArgs> {
+    private final EnchantProperty<Double> PERCENT_DAMAGE_INCREASE = new EnchantProperty<>(0.7, 0.12, 0.25);
 
     private DamageManager manager;
 
@@ -29,11 +30,12 @@ public class DiamondStomp extends CustomEnchant {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> executeEnchant((Player) event.getDamager(), level, event));
+                level -> execute(new PlayerAndDamageEventArgs((Player) event.getDamager(), event)));
     }
 
-    public void executeEnchant(Player player, int level, EntityDamageByEntityEvent event) {
-        if (playerHasDiamondPiece(player)) {
+    @Override
+    public void execute(PlayerAndDamageEventArgs args) {
+        if (playerHasDiamondPiece(args.getPlayer())) {
             // manager.addDamage(event, percentDamageIncrease.getValueAtLevel(level),
             // CalculationMode.ADDITIVE);
         }

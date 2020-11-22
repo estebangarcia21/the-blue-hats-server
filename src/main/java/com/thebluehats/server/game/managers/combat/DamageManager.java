@@ -171,7 +171,7 @@ public class DamageManager {
             }
         } else if (level != 1) {
             try {
-                if (reflectTo.getHealth() - (damage * mirror.damageReflection.getValueAtLevel(level)) < 0) {
+                if (reflectTo.getHealth() - (damage * mirror.DAMAGE_REFLECTION.getValueAtLevel(level)) < 0) {
                     safeSetPlayerHealth(target, 0);
                 } else {
                     reflectTo.damage(0);
@@ -179,7 +179,7 @@ public class DamageManager {
                     combatManager.combatTag(target);
 
                     safeSetPlayerHealth(reflectTo, Math.max(0,
-                            reflectTo.getHealth() - (damage * mirror.damageReflection.getValueAtLevel(level))));
+                            reflectTo.getHealth() - (damage * mirror.DAMAGE_REFLECTION.getValueAtLevel(level))));
                 }
             } catch (NullPointerException ignored) {
 

@@ -2,6 +2,7 @@ package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
 
+import com.thebluehats.server.game.enchants.args.PlayerAndDamageEventArgs;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -16,8 +17,8 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.thebluehats.server.game.managers.combat.DamageManager;
 
-public class BeatTheSpammers extends CustomEnchant {
-    private EnchantProperty<Float> damageAmount = new EnchantProperty<>(.10f, .25f, .40f);
+public class BeatTheSpammers extends CustomEnchant<PlayerAndDamageEventArgs> {
+    private EnchantProperty<Float> DAMAGE_AMOUNT = new EnchantProperty<>(.10f, .25f, .40f);
     
     private DamageManager manager;
 
@@ -30,10 +31,11 @@ public class BeatTheSpammers extends CustomEnchant {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> executeEnchant((Player) event.getDamager(), level, event));
+                level -> execute(new PlayerAndDamageEventArgs((Player) event.getDamager(), event)));
     }
 
-    public void executeEnchant(Player player, int level, EntityDamageByEntityEvent event) {
+    @Override
+    public void execute(PlayerAndDamageEventArgs args) {
 //         if (((Player) args[0]).getInventory().getItemInHand().getType() ==
 //         Material.BOW) {
 //         manager.addDamage(((EntityDamageByEntityEvent) args[1]),

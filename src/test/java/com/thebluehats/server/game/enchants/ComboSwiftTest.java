@@ -1,5 +1,6 @@
 package com.thebluehats.server.game.enchants;
 
+import com.thebluehats.server.game.enchants.args.PotionEffectWithHitsNeededArgs;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -32,17 +33,22 @@ public class ComboSwiftTest {
 
     @Test
     public void SpeedGivenIfHitsNeededAreReached() {
+        PotionEffectWithHitsNeededArgs args = mock(PotionEffectWithHitsNeededArgs.class);
+
         when(hitCounter.hasHits(player, HITS_NEEDED)).thenReturn(true);
 
-        comboSwift.executeEnchant(player, HITS_NEEDED, SPEED_TIME, AMPLIFIER);
+        when(args.getPlayer()).thenReturn(player);
+        when(args.getHitsNeeded()).thenReturn(HITS_NEEDED);
+        when(args.getDuration()).thenReturn(SPEED_TIME);
+        when(args.getAmplifier()).thenReturn(AMPLIFIER);
 
+        comboSwift.execute(args);
         verify(player).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, SPEED_TIME * 20, AMPLIFIER, true));
     }
 
     @Test
     public void SpeedNotGivenIfHitsNeededAreNotReached() {
-        comboSwift.executeEnchant(player, HITS_NEEDED, SPEED_TIME, AMPLIFIER);
-
+        comboSwift.execute(new PotionEffectWithHitsNeededArgs(player, HITS_NEEDED, SPEED_TIME, AMPLIFIER));
         verify(player, never()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, SPEED_TIME * 20, AMPLIFIER, true));
     }
 }

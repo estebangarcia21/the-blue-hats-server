@@ -1,8 +1,8 @@
 package com.thebluehats.server.game.enchants;
 
+import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.utils.LoreBuilder;
-import com.thebluehats.server.game.managers.combat.BowManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -19,13 +19,13 @@ import static org.mockito.Mockito.when;
 
 public class CustomEnchantTest {
     @Mock
-    private CustomEnchant mockEnchant;
+    private CustomEnchant<?> mockEnchant;
     @Mock
     private ItemStack item;
     @Mock
     private ItemMeta meta;
 
-    private CustomEnchant realEnchant;
+    private CustomEnchant<?> realEnchant;
 
     @Before
     public void setup() {

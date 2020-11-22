@@ -10,8 +10,11 @@ import org.bukkit.Material;
 
 import com.thebluehats.server.game.utils.LoreBuilder;
 
-public class Mirror extends CustomEnchant {
-    public final EnchantProperty<Float> damageReflection = new EnchantProperty<>(0f, .25f, .5f);
+public class Mirror extends CustomEnchant<Integer> {
+    public final EnchantProperty<Float> DAMAGE_REFLECTION = new EnchantProperty<>(0f, .25f, .5f);
+
+    @Override
+    public void execute(Integer arg) { }
 
     @Override
     public String getName() {

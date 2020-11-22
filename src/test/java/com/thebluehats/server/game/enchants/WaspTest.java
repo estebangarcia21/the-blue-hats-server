@@ -1,14 +1,14 @@
 package com.thebluehats.server.game.enchants;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
+import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
+import com.thebluehats.server.game.managers.combat.BowManager;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.junit.Test;
 
-import com.thebluehats.server.game.managers.combat.BowManager;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class WaspTest {
     @Test
@@ -16,11 +16,10 @@ public class WaspTest {
         Player player = mock(Player.class);
         Wasp wasp = new Wasp(new BowManager());
 
-        int duration = 2;
-        int amplifier = 1;
+        final int DURATION = 2;
+        final int AMPLIFIER = 1;
 
-        wasp.executeEnchant(player, duration, amplifier);
-
-        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, duration * 20, amplifier, true));
+        wasp.execute(new PotionEffectArgs(player, DURATION, AMPLIFIER));
+        verify(player).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, DURATION * 20, AMPLIFIER, true));
     }
 }
