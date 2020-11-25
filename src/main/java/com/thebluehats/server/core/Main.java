@@ -5,6 +5,9 @@ import com.thebluehats.server.game.enchants.*;
 import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.combat.DamageManager;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayer;
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayer;
 import com.thebluehats.server.game.managers.enchants.CooldownTimer;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
@@ -60,17 +63,18 @@ public class Main extends JavaPlugin implements Registerer, PluginInfo {
                                   BowManager bowManager, GrindingSystem grindingSystem,
                                   CustomEnchantManager customEnchantManager,
                                   WorldSelectionManager worldSelectionManager, PerkManager perkManager) {
-        // Enchants
-        customEnchantManager.registerEnchant(new Wasp(bowManager));
-        customEnchantManager.registerEnchant(new Peroxide());
-        customEnchantManager.registerEnchant(new SprintDrain());
-        customEnchantManager.registerEnchant(new LastStand());
+
+        EventTemplate playerHitPlayer = new PlayerHitPlayer();
+        EventTemplate arrowHitPlayer = new ArrowHitPlayer();
+
+        customEnchantManager.registerEnchant(new Wasp(bowManager, arrowHitPlayer));
+        customEnchantManager.registerEnchant(new Peroxide(playerHitPlayer, arrowHitPlayer));
+        customEnchantManager.registerEnchant(new SprintDrain(arrowHitPlayer));
+        customEnchantManager.registerEnchant(new LastStand(arrowHitPlayer, playerHitPlayer));
         customEnchantManager.registerEnchant(new ComboSwift(new HitCounter(main)));
 
-        // Perks
         perkManager.registerPerk(new Vampire(damageManager));
 
-        // Commands
         getCommand("pitenchant").setExecutor(new EnchantCommand(customEnchantManager));
         getCommand("mysticenchants").setExecutor(new MysticEnchantsCommand(customEnchantManager));
         getCommand("selectworld").setExecutor(new SelectWorldCommand(worldSelectionManager));
