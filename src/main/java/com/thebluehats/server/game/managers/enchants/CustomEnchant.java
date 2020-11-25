@@ -26,7 +26,8 @@ public abstract class CustomEnchant<T> implements Listener {
         this.templates = templates;
     }
 
-    public void runEventTemplates(CustomEnchant enchant, Entity damager, Entity damagee, Function<PlayerInventory, ItemStack> getSource, Consumer<Integer> onSuccess) {
+    public void runEventTemplates(CustomEnchant<?> enchant, Entity damager, Entity damagee, Function<PlayerInventory,
+            ItemStack> getSource, Consumer<Integer> onSuccess) {
         for (EventTemplate template : templates) {
             template.run(enchant, damager, damagee, getSource, onSuccess);
         }

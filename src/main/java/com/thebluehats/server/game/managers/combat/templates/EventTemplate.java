@@ -10,6 +10,6 @@ import org.bukkit.inventory.PlayerInventory;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 
 public interface EventTemplate {
-    boolean run(CustomEnchant enchant, Entity damager, Entity damagee, Function<PlayerInventory, ItemStack> getSource,
-                Consumer<Integer> onSuccess);
+    boolean run(CustomEnchant<?> enchant, Entity damager, Entity damagee,
+                Function<PlayerInventory, ItemStack> getSource, Consumer<Integer> onSuccess);
 }

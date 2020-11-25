@@ -11,14 +11,12 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class PlayerHitPlayer implements EventTemplate {
     @Override
-    public boolean run(CustomEnchant enchant, Entity damager, Entity damagee,
-                       Function<PlayerInventory, ItemStack> getSource, Consumer<Integer> onSuccess) {
+    public boolean run(CustomEnchant<?> enchant, Entity damager, Entity damagee, Function<PlayerInventory, ItemStack> getSource, Consumer<Integer> onSuccess) {
         if (damager instanceof Player && damagee instanceof Player) {
             Player player = (Player) damagee;
             ItemStack source = getSource.apply(player.getInventory());
 
-            if (!enchant.canExecuteEnchant(source, new Entity[] { damager, damagee }))
-                return false;
+            if (!enchant.canExecuteEnchant(source, new Entity[] { damager, damagee })) return false;
 
             onSuccess.accept(enchant.getEnchantLevel(source));
 

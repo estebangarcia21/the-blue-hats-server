@@ -11,8 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public class ArrowHitPlayer implements EventTemplate {
-    public boolean run(CustomEnchant enchant, Entity damager, Entity damagee,
-                       Function<PlayerInventory, ItemStack> getSource, Consumer<Integer> onSuccess) {
+    public boolean run(CustomEnchant<?> enchant, Entity damager, Entity damagee, Function<PlayerInventory, ItemStack> getSource, Consumer<Integer> onSuccess) {
         if (damager instanceof Arrow && damagee instanceof Player) {
             Arrow arrow = (Arrow) damager;
 
@@ -20,8 +19,7 @@ public class ArrowHitPlayer implements EventTemplate {
                 Player player = (Player) damagee;
                 ItemStack source = getSource.apply(player.getInventory());
 
-                if (!enchant.canExecuteEnchant(source, new Entity[] { damager, damagee }))
-                    return false;
+                if (!enchant.canExecuteEnchant(source, new Entity[] { damager, damagee })) return false;
 
                 onSuccess.accept(enchant.getEnchantLevel(source));
 
