@@ -2,7 +2,7 @@
  <img src="logo.png" width="75%">
 </p>
 
-The new repository where The Blue Hats Server is maintained. ([Old Repository](https://github.com/Im-Stevemmmmm/the-blue-hats-server-old))
+The new repository where The Blue Hats Server is maintained. ([Click here for the old repository](https://github.com/Im-Stevemmmmm/the-blue-hats-server-old))
 
 ## About
 
