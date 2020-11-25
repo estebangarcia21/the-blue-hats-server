@@ -1,8 +1,8 @@
 package com.thebluehats.server.game.managers.enchants;
 
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.utils.RomanNumeralConverter;
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.utils.PitUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -18,8 +18,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class CustomEnchant<T> implements Listener {
-    private final RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
-
     private EventTemplate[] templates;
 
     protected CustomEnchant(EventTemplate... templates) {
@@ -45,19 +43,12 @@ public abstract class CustomEnchant<T> implements Listener {
 
     public boolean canExecuteEnchant(ItemStack source, Entity[] interactedEntities) {
         if (itemHasEnchant(source))
-            return calculateConditions(source, interactedEntities, null);
+            return calculateConditions(interactedEntities);
 
         return false;
     }
 
-    public boolean canExecuteEnchant(ItemStack source, Entity[] interactedEntities, DamageManager damageManager) {
-        if (itemHasEnchant(source))
-            return calculateConditions(source, interactedEntities, damageManager);
-
-        return false;
-    }
-
-    private boolean calculateConditions(ItemStack source, Entity[] interactedEntities, DamageManager damageManager) {
+    private boolean calculateConditions(Entity[] interactedEntities) {
         if (interactedEntities != null) {
             for (Entity entity : interactedEntities) {
                 if (entity instanceof Player) {
@@ -68,10 +59,10 @@ public abstract class CustomEnchant<T> implements Listener {
                             return false;
                     }
 
-                    if (damageManager != null) {
-                        if (damageManager.playerIsInCanceledEvent(player))
-                            return false;
-                    }
+//                    if (damageManager != null) {
+//                        if (damageManager.playerIsInCanceledEvent(player))
+//                            return false;
+//                    }
 
                     // TODO GET RID OF THIS SINGLETON FASTQ!Q!!~!!!
                     // if (RegionManager.getInstance().playerIsInRegion(player,
@@ -82,10 +73,10 @@ public abstract class CustomEnchant<T> implements Listener {
                 if (entity instanceof Arrow) {
                     Arrow arrow = (Arrow) entity;
 
-                    if (damageManager != null) {
-                        if (damageManager.arrowIsInCanceledEvent(arrow))
-                            return false;
-                    }
+//                    if (damageManager != null) {
+//                        if (damageManager.arrowIsInCanceledEvent(arrow))
+//                            return false;
+//                    }
 
                     // if (RegionManager.getInstance().locationIsInRegion(arrow.getLocation(),
                     // RegionManager.RegionType.SPAWN))
@@ -98,52 +89,38 @@ public abstract class CustomEnchant<T> implements Listener {
     }
 
     public boolean itemHasEnchant(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR)
-            return false;
-
-        if (item.getItemMeta().getLore() == null)
-            return false;
+        if (item == null || item.getType() == Material.AIR)return false;
+        if (item.getItemMeta().getLore() == null) return false;
 
         List<String> lore = item.getItemMeta().getLore();
 
         String appendRare = "";
+        if (isRareEnchant())appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
 
-        if (isRareEnchant())
-            appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
-
-        if (lore.contains(appendRare + ChatColor.BLUE + getName()))
-            return true;
+        if (lore.contains(appendRare + ChatColor.BLUE + getName())) return true;
 
         for (int i = 2; i <= 3; i++) {
-            if (lore.contains(
-                    appendRare + ChatColor.BLUE + getName() + " " + romanNumeralConverter.convertToRomanNumeral(i)))
-                return true;
+            if (lore.contains(appendRare + ChatColor.BLUE + getName() + " " + PitUtils.RomanNumerals.convertToRomanNumeral(i)))return true;
         }
 
         return false;
     }
 
     public int getEnchantLevel(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR)
-            return 0;
-
-        if (item.getItemMeta().getLore() == null)
-            return 0;
+        if (item == null || item.getType() == Material.AIR) return 0;
+        if (item.getItemMeta().getLore() == null) return 0;
 
         List<String> lore = item.getItemMeta().getLore();
 
         String appendRare = "";
+        if (isRareEnchant()) appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
 
-        if (isRareEnchant())
-            appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
-
-        if (lore.contains(appendRare + ChatColor.BLUE + getName()))
-            return 1;
+        if (lore.contains(appendRare + ChatColor.BLUE + getName())) return 1;
 
         for (int i = 2; i <= 3; i++) {
-            if (lore.contains(
-                    appendRare + ChatColor.BLUE + getName() + " " + romanNumeralConverter.convertToRomanNumeral(i)))
+            if (lore.contains(appendRare + ChatColor.BLUE + getName() + " " + PitUtils.RomanNumerals.convertToRomanNumeral(i))) {
                 return i;
+            }
         }
 
         return 0;

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.thebluehats.server.game.utils.PitUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,12 +15,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.thebluehats.server.core.Main;
-import com.thebluehats.server.game.utils.RomanNumeralConverter;
 import com.thebluehats.server.game.utils.SortCustomEnchantByName;
 
 public class CustomEnchantManager {
-    private final ArrayList<CustomEnchant> enchants = new ArrayList<>();
-    private final RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
+    private final ArrayList<CustomEnchant<?>> enchants = new ArrayList<>();
 
     private Main mainInstance;
 
@@ -27,11 +26,11 @@ public class CustomEnchantManager {
         this.mainInstance = mainInstance;
     }
 
-    public ArrayList<CustomEnchant> getEnchants() {
+    public ArrayList<CustomEnchant<?>> getEnchants() {
         return enchants;
     }
 
-    public void registerEnchant(CustomEnchant enchant) {
+    public void registerEnchant(CustomEnchant<?> enchant) {
         mainInstance.getServer().getPluginManager().registerEvents(enchant, mainInstance);
 
         enchants.add(enchant);
@@ -51,19 +50,18 @@ public class CustomEnchantManager {
         return true;
     }
 
-    public void addEnchants(ItemStack item, int level, CustomEnchant... enchants) {
+    public void addEnchants(ItemStack item, int level, CustomEnchant<?>... enchants) {
         boolean itemHasAlreadyTieredUp = false;
 
-        for (CustomEnchant enchant : enchants) {
+        for (CustomEnchant<?> enchant : enchants) {
             ItemMeta meta = item.getItemMeta();
             String previousDisplayName = meta.getDisplayName();
 
             int tierValue = getItemTier(item);
 
-            if (tierValue > 2)
-                tierValue = 2;
+            if (tierValue > 2) tierValue = 2;
 
-            String tier = romanNumeralConverter.convertToRomanNumeral(tierValue + (itemHasAlreadyTieredUp ? 0 : 1));
+            String tier = PitUtils.RomanNumerals.convertToRomanNumeral(tierValue + (itemHasAlreadyTieredUp ? 0 : 1));
 
             ChatColor tierColor = null;
             switch (tierValue + 1) {
@@ -108,7 +106,7 @@ public class CustomEnchantManager {
                     break;
             }
 
-            String token = (level != 1 ? " " + romanNumeralConverter.convertToRomanNumeral(level) : "");
+            String token = (level != 1 ? " " + PitUtils.RomanNumerals.convertToRomanNumeral(level) : "");
 
             String rare = ChatColor.LIGHT_PURPLE + "RARE! " + ChatColor.BLUE + enchant.getName() + token;
             String normal = ChatColor.BLUE + enchant.getName() + token;
@@ -251,7 +249,7 @@ public class CustomEnchantManager {
 
     }
 
-    public void removeEnchant(ItemStack item, CustomEnchant enchant) {
+    public void removeEnchant(ItemStack item, CustomEnchant<?> enchant) {
         ItemMeta meta = item.getItemMeta();
 
         List<String> lore = meta.getLore();
@@ -281,7 +279,7 @@ public class CustomEnchantManager {
             }
 
             for (int i = 0; i < enchantData.size(); i++) {
-                if (romanNumeralConverter.convertRomanNumeralToInteger(enchantData.get(i)) == -1) {
+                if (PitUtils.RomanNumerals.convertRomanNumeralToInteger(enchantData.get(i)) == -1) {
                     enchantName.append(enchantData.get(i));
                     if (i != enchantData.size() - 1)
                         enchantName.append(" ");
@@ -324,7 +322,7 @@ public class CustomEnchantManager {
         item.setItemMeta(meta);
     }
 
-    public boolean itemContainsEnchant(ItemStack item, CustomEnchant enchant) {
+    public boolean itemContainsEnchant(ItemStack item, CustomEnchant<?> enchant) {
         if (item.getItemMeta().getLore() == null || enchant == null)
             return false;
 
@@ -340,15 +338,15 @@ public class CustomEnchantManager {
 
         for (int i = 2; i <= 3; i++) {
             if (lore.contains(appendRare + ChatColor.BLUE + enchant.getName() + " "
-                    + romanNumeralConverter.convertToRomanNumeral(i)))
+                    + PitUtils.RomanNumerals.convertToRomanNumeral(i)))
                 return true;
         }
 
         return false;
     }
 
-    public HashMap<CustomEnchant, Integer> getItemEnchants(ItemStack item) {
-        HashMap<CustomEnchant, Integer> enchantsToLevels = new HashMap<>();
+    public HashMap<CustomEnchant<?>, Integer> getItemEnchants(ItemStack item) {
+        HashMap<CustomEnchant<?>, Integer> enchantsToLevels = new HashMap<>();
 
         if (item.getType() == Material.AIR)
             return enchantsToLevels;
@@ -373,18 +371,18 @@ public class CustomEnchantManager {
             }
 
             for (int i = 0; i < enchantData.size(); i++) {
-                if (romanNumeralConverter.convertRomanNumeralToInteger(enchantData.get(i)) == -1) {
+                if (PitUtils.RomanNumerals.convertRomanNumeralToInteger(enchantData.get(i)) == -1) {
                     enchantName.append(enchantData.get(i));
                     if (i != enchantData.size() - 1)
                         enchantName.append(" ");
                 } else {
-                    level = romanNumeralConverter.convertRomanNumeralToInteger(enchantData.get(i));
+                    level = PitUtils.RomanNumerals.convertRomanNumeralToInteger(enchantData.get(i));
                 }
             }
 
             String name = enchantName.toString().trim();
 
-            for (CustomEnchant enchant : getEnchants()) {
+            for (CustomEnchant<?> enchant : getEnchants()) {
                 if (enchant.getName().equals(name)) {
                     enchantsToLevels.put(enchant, level);
                     break;
@@ -401,20 +399,20 @@ public class CustomEnchantManager {
 
         int tokens = 0;
 
-        for (Map.Entry<CustomEnchant, Integer> entry : getItemEnchants(item).entrySet()) {
+        for (Map.Entry<CustomEnchant<?>, Integer> entry : getItemEnchants(item).entrySet()) {
             tokens += entry.getValue();
         }
 
         return tokens;
     }
 
-    public List<CustomEnchant> getRawItemEnchants(ItemStack item) {
+    public List<CustomEnchant<?>> getRawItemEnchants(ItemStack item) {
         if (item == null)
             return new ArrayList<>();
 
-        ArrayList<CustomEnchant> enchants = new ArrayList<>();
+        ArrayList<CustomEnchant<?>> enchants = new ArrayList<>();
 
-        for (CustomEnchant enchant : getEnchants()) {
+        for (CustomEnchant<?> enchant : getEnchants()) {
             if (itemContainsEnchant(item, enchant)) {
                 enchants.add(enchant);
             }
