@@ -1,16 +1,15 @@
 package com.thebluehats.server.game.enchants;
 
 import com.thebluehats.server.game.managers.combat.BowManager;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayer;
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,31 +17,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class CustomEnchantTest {
-    @Mock
-    private CustomEnchant<?> mockEnchant;
-    @Mock
-    private ItemStack item;
-    @Mock
-    private ItemMeta meta;
-
-    private CustomEnchant<?> realEnchant;
-
-    @Before
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-
-        realEnchant = new Wasp(new BowManager());
-
-        when(item.getItemMeta()).thenReturn(meta);
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName()).build());
-
-        mockEnchant = mock(CustomEnchant.class);
-
-        when(mockEnchant.isCompatibleWith(any())).thenCallRealMethod();
-    }
-
     @Test
     public void IsCompatibleWhenMaterialsAreEqual() {
+        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<?> mockEnchant = mock(CustomEnchant.class);
+        ItemStack mockItem = mock(ItemStack.class);
+        ItemMeta mockItemMeta = mock(ItemMeta.class);
+
+        when(mockItem.getItemMeta()).thenReturn(mockItemMeta);
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName()).build());
+
+        when(mockEnchant.isCompatibleWith(any())).thenCallRealMethod();
         when(mockEnchant.getEnchantItemTypes()).thenReturn(new Material[] { Material.BOW });
 
         assertTrue(mockEnchant.isCompatibleWith(Material.BOW));
@@ -50,6 +35,17 @@ public class CustomEnchantTest {
 
     @Test
     public void IsNotCompatibleWhenMaterialsAreNotEqual() {
+        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<?> mockEnchant = mock(CustomEnchant.class);
+        ItemStack mockItem = mock(ItemStack.class);
+        ItemMeta mockItemMeta = mock(ItemMeta.class);
+
+        when(mockItem.getItemMeta()).thenReturn(mockItemMeta);
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName()).build());
+
+        when(mockEnchant.isCompatibleWith(any())).thenCallRealMethod();
+        when(mockEnchant.getEnchantItemTypes()).thenReturn(new Material[] { Material.BOW });
+
         when(mockEnchant.getEnchantItemTypes()).thenReturn(new Material[] { Material.ARROW });
 
         assertFalse(mockEnchant.isCompatibleWith(Material.COBBLESTONE));
@@ -57,35 +53,66 @@ public class CustomEnchantTest {
 
     @Test
     public void ExecutesEnchantWhenItemHasProperLore() {
-        assertTrue(realEnchant.canExecuteEnchant(item, null));
+        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<?> mockEnchant = mock(CustomEnchant.class);
+        ItemStack mockItem = mock(ItemStack.class);
+        ItemMeta mockItemMeta = mock(ItemMeta.class);
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " II").build());
-        assertTrue(realEnchant.canExecuteEnchant(item, null));
+        when(mockItem.getItemMeta()).thenReturn(mockItemMeta);
+        when(mockEnchant.isCompatibleWith(any())).thenCallRealMethod();
+        when(mockEnchant.getEnchantItemTypes()).thenReturn(new Material[] { Material.BOW });
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " III").build());
-        assertTrue(realEnchant.canExecuteEnchant(item, null));
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName()).build());
+        assertTrue(realEnchant.canExecuteEnchant(mockItem, null));
+
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " II").build());
+        assertTrue(realEnchant.canExecuteEnchant(mockItem, null));
+
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " III").build());
+        assertTrue(realEnchant.canExecuteEnchant(mockItem, null));
     }
 
     @Test
     public void DoesNotExecuteEnchantWhenItemHasImproperLore() {
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " IV").build());
-        assertFalse(realEnchant.itemHasEnchant(item));
+        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<?> mockEnchant = mock(CustomEnchant.class);
+        ItemStack mockItem = mock(ItemStack.class);
+        ItemMeta mockItemMeta = mock(ItemMeta.class);
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "").build());
-        assertFalse(realEnchant.itemHasEnchant(item));
+        when(mockItem.getItemMeta()).thenReturn(mockItemMeta);
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName()).build());
+
+        when(mockEnchant.isCompatibleWith(any())).thenCallRealMethod();
+        when(mockEnchant.getEnchantItemTypes()).thenReturn(new Material[] { Material.BOW });
+
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " IV").build());
+        assertFalse(realEnchant.itemHasEnchant(mockItem));
+
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "").build());
+        assertFalse(realEnchant.itemHasEnchant(mockItem));
     }
 
     @Test
     public void GetsEnchantLevelWhenItemHasProperLore() {
-        assertEquals(1, realEnchant.getEnchantLevel(item));
+        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<?> mockEnchant = mock(CustomEnchant.class);
+        ItemStack mockItem = mock(ItemStack.class);
+        ItemMeta mockItemMeta = mock(ItemMeta.class);
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " II").build());
-        assertEquals(2, realEnchant.getEnchantLevel(item));
+        when(mockItem.getItemMeta()).thenReturn(mockItemMeta);
+        when(mockEnchant.isCompatibleWith(any())).thenCallRealMethod();
+        when(mockEnchant.getEnchantItemTypes()).thenReturn(new Material[] { Material.BOW });
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " III").build());
-        assertEquals(3, realEnchant.getEnchantLevel(item));
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName()).build());
+        assertEquals(1, realEnchant.getEnchantLevel(mockItem));
 
-        when(meta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "").build());
-        assertEquals(0, realEnchant.getEnchantLevel(item));
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " II").build());
+        assertEquals(2, realEnchant.getEnchantLevel(mockItem));
+
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, realEnchant.getName() + " III").build());
+        assertEquals(3, realEnchant.getEnchantLevel(mockItem));
+
+        when(mockItemMeta.getLore()).thenReturn(new LoreBuilder().write(ChatColor.BLUE, "").build());
+        assertEquals(0, realEnchant.getEnchantLevel(mockItem));
     }
 }
