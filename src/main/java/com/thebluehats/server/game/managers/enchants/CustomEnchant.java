@@ -1,6 +1,5 @@
 package com.thebluehats.server.game.managers.enchants;
 
-import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.utils.PitUtils;
 import org.bukkit.ChatColor;
@@ -20,7 +19,7 @@ import java.util.function.Function;
 public abstract class CustomEnchant<T> implements Listener {
     private EventTemplate[] templates;
 
-    protected CustomEnchant(EventTemplate... templates) {
+    protected CustomEnchant(EventTemplate[] templates) {
         this.templates = templates;
     }
 
@@ -42,8 +41,7 @@ public abstract class CustomEnchant<T> implements Listener {
     }
 
     public boolean canExecuteEnchant(ItemStack source, Entity[] interactedEntities) {
-        if (itemHasEnchant(source))
-            return calculateConditions(interactedEntities);
+        if (itemHasEnchant(source)) return calculateConditions(interactedEntities);
 
         return false;
     }
@@ -100,7 +98,7 @@ public abstract class CustomEnchant<T> implements Listener {
         if (lore.contains(appendRare + ChatColor.BLUE + getName())) return true;
 
         for (int i = 2; i <= 3; i++) {
-            if (lore.contains(appendRare + ChatColor.BLUE + getName() + " " + PitUtils.RomanNumerals.convertToRomanNumeral(i)))return true;
+            if (lore.contains(appendRare + ChatColor.BLUE + getName() + " " + PitUtils.RomanNumerals.convertToRomanNumeral(i))) return true;
         }
 
         return false;

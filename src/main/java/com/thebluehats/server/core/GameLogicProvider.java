@@ -8,7 +8,7 @@ import com.thebluehats.server.game.managers.game.GrindingSystem;
 import com.thebluehats.server.game.managers.game.PerkManager;
 import com.thebluehats.server.game.managers.game.WorldSelectionManager;
 
-public interface Registerer {
+public interface GameLogicProvider {
     void registerGameLogic(Main main, DamageManager damageManager, CombatManager combatManager,
                            BowManager bowManager, GrindingSystem grindingSystem,
                            CustomEnchantManager customEnchantManager,

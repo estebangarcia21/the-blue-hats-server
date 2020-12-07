@@ -2,6 +2,7 @@ package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
 
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -12,6 +13,10 @@ import com.thebluehats.server.game.utils.LoreBuilder;
 
 public class Mirror extends CustomEnchant<Integer> {
     public final EnchantProperty<Float> DAMAGE_REFLECTION = new EnchantProperty<>(0f, .25f, .5f);
+
+    protected Mirror(EventTemplate[] templates) {
+        super(templates);
+    }
 
     @Override
     public void execute(Integer arg) { }

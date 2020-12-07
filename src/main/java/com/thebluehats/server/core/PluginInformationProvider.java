@@ -1,6 +1,6 @@
 package com.thebluehats.server.core;
 
-public interface PluginInfo {
+public interface PluginInformationProvider {
     String getPluginName();
 
     String getVersion();

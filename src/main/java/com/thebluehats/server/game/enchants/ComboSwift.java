@@ -25,7 +25,7 @@ public class ComboSwift extends CustomEnchant<PotionEffectWithHitsNeededArgs> {
 
     private HitCounter hitCounter;
 
-    public ComboSwift(HitCounter hitCounter, EventTemplate... templates) {
+    public ComboSwift(HitCounter hitCounter, EventTemplate[] templates) {
         super(templates);
 
         this.hitCounter = hitCounter;

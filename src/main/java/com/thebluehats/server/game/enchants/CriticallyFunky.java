@@ -30,7 +30,7 @@ public class CriticallyFunky extends CustomEnchant<PlayerAndDamageEventArgs>  {
 
     private DamageManager manager;
 
-    public CriticallyFunky(DamageManager manager, EventTemplate... templates) {
+    public CriticallyFunky(DamageManager manager, EventTemplate[] templates) {
         super(templates);
 
         this.manager = manager;

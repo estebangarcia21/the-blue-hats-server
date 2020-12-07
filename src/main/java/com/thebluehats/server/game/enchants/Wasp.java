@@ -25,7 +25,7 @@ public class Wasp extends CustomEnchant<PotionEffectArgs> {
 
     private BowManager bowManager;
 
-    public Wasp(BowManager bowManager, EventTemplate... templates) {
+    public Wasp(BowManager bowManager, EventTemplate[] templates) {
         super(templates);
 
         this.bowManager = bowManager;
@@ -35,8 +35,8 @@ public class Wasp extends CustomEnchant<PotionEffectArgs> {
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(),
                 inventory -> bowManager.getBowFromArrow((Arrow) event.getDamager()),
-                level -> execute(new PotionEffectArgs((Player) event.getEntity(), WEAKNESS_DURATION.getValueAtLevel(level),
-                        WEAKNESS_AMPLIFIER.getValueAtLevel(level))));
+                level -> execute(new PotionEffectArgs((Player) event.getEntity(),
+                        WEAKNESS_DURATION.getValueAtLevel(level), WEAKNESS_AMPLIFIER.getValueAtLevel(level))));
     }
 
     @EventHandler
@@ -46,8 +46,7 @@ public class Wasp extends CustomEnchant<PotionEffectArgs> {
 
     @Override
     public void execute(PotionEffectArgs args) {
-        args.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, args.getDuration() * 20,
-                args.getAmplifier()));
+        args.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, args.getDuration() * 20, args.getAmplifier()));
     }
 
     @Override

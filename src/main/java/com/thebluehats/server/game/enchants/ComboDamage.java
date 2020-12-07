@@ -23,7 +23,7 @@ public class ComboDamage extends CustomEnchant<PlayerAndDamageEventArgs> {
 
     private DamageManager manager;
 
-    public ComboDamage(DamageManager manager, EventTemplate... templates) {
+    public ComboDamage(DamageManager manager, EventTemplate[] templates) {
         super(templates);
 
         this.manager = manager;

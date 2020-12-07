@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class LastStand extends CustomEnchant<LastStandArgs> {
     private final EnchantProperty<Integer> RESISTANCE_AMPLIFIER = new EnchantProperty<>(0, 1, 2);
 
-    public LastStand(EventTemplate... templates) {
+    public LastStand(EventTemplate[] templates) {
         super(templates);
     }
 

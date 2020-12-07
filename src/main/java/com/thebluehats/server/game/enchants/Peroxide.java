@@ -21,7 +21,7 @@ public class Peroxide extends CustomEnchant<PotionEffectArgs>  {
     private final EnchantProperty<Integer> REGEN_DURATION = new EnchantProperty<>(5, 8, 8);
     private final EnchantProperty<Integer> REGEN_AMPLIFIER = new EnchantProperty<>(0, 0, 1);
 
-    public Peroxide(EventTemplate... templates) {
+    public Peroxide(EventTemplate[] templates) {
         super(templates);
     }
 

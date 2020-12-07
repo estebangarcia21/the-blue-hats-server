@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class Healer extends CustomEnchant<HealerArgs> {
     private final EnchantProperty<Integer> HEAL_AMOUNT = new EnchantProperty<>(2, 4, 6);
 
-    public Healer(EventTemplate... templates) {
+    public Healer(EventTemplate[] templates) {
         super(templates);
     }
 

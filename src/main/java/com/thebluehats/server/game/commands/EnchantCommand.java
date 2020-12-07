@@ -104,7 +104,7 @@ public class EnchantCommand implements CommandExecutor {
                         int rareTokens = 0;
                         int rareEnchantCount = 0;
 
-                        for (Map.Entry<CustomEnchant, Integer> entry : customEnchantManager.getItemEnchants(item)
+                        for (Map.Entry<CustomEnchant<?>, Integer> entry : customEnchantManager.getItemEnchants(item)
                                 .entrySet()) {
                             if (entry.getKey().isRareEnchant()) {
                                 rareTokens += entry.getValue();

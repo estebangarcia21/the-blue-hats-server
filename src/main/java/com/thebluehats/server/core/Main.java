@@ -20,7 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
 
-public class Main extends JavaPlugin implements Registerer, PluginInfo {
+public class Main extends JavaPlugin implements GameLogicProvider, PluginInformationProvider {
     @Override
     public void onEnable() {
         Main main = this;
@@ -63,15 +63,21 @@ public class Main extends JavaPlugin implements Registerer, PluginInfo {
                                   BowManager bowManager, GrindingSystem grindingSystem,
                                   CustomEnchantManager customEnchantManager,
                                   WorldSelectionManager worldSelectionManager, PerkManager perkManager) {
-
         EventTemplate playerHitPlayer = new PlayerHitPlayer();
         EventTemplate arrowHitPlayer = new ArrowHitPlayer();
 
-        customEnchantManager.registerEnchant(new Wasp(bowManager, arrowHitPlayer));
-        customEnchantManager.registerEnchant(new Peroxide(playerHitPlayer, arrowHitPlayer));
-        customEnchantManager.registerEnchant(new SprintDrain(arrowHitPlayer));
-        customEnchantManager.registerEnchant(new LastStand(arrowHitPlayer, playerHitPlayer));
-        customEnchantManager.registerEnchant(new ComboSwift(new HitCounter(main)));
+        EventTemplate[][] commonTemplates = new EventTemplate[3][];
+        commonTemplates[0] = new EventTemplate[] { arrowHitPlayer };
+        commonTemplates[1] = new EventTemplate[] { playerHitPlayer };
+        commonTemplates[2] = new EventTemplate[] { arrowHitPlayer, playerHitPlayer };
+
+        customEnchantManager.registerEnchant(new Wasp(bowManager, commonTemplates[0]));
+        customEnchantManager.registerEnchant(new Peroxide(commonTemplates[0]));
+        customEnchantManager.registerEnchant(new SprintDrain(commonTemplates[0]));
+
+        customEnchantManager.registerEnchant(new ComboSwift(new HitCounter(main), commonTemplates[1]));
+
+        customEnchantManager.registerEnchant(new LastStand(commonTemplates[2]));
 
         perkManager.registerPerk(new Vampire(damageManager));
 

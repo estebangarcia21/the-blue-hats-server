@@ -17,7 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 public class DamageManager {
     private final HashMap<UUID, EventData> eventData = new HashMap<>();
     private final ArrayList<UUID> canceledPlayers = new ArrayList<>();
-    private final Mirror mirror = new Mirror();
+//    private final Mirror mirror = new Mirror(null);
 
     private CustomEnchantManager customEnchantManager;
     private CombatManager combatManager;
@@ -150,42 +150,42 @@ public class DamageManager {
     // return false;
     // }
 
-    public void doTrueDamage(Player target, double damage) {
-        if (mirror.itemHasEnchant(target.getInventory().getLeggings())) {
-            target.setHealth(Math.max(0, target.getHealth() - damage));
-            target.damage(0);
-        }
-    }
-
-    public void doTrueDamage(Player target, double damage, Player reflectTo) {
-        int level = mirror.getEnchantLevel(target.getInventory().getLeggings());
-
-        combatManager.combatTag(target);
-
-        if (!mirror.itemHasEnchant(target.getInventory().getLeggings())) {
-            if (target.getHealth() - damage < 0) {
-                safeSetPlayerHealth(target, 0);
-            } else {
-                target.damage(0);
-                safeSetPlayerHealth(target, target.getHealth() - damage);
-            }
-        } else if (level != 1) {
-            try {
-                if (reflectTo.getHealth() - (damage * mirror.DAMAGE_REFLECTION.getValueAtLevel(level)) < 0) {
-                    safeSetPlayerHealth(target, 0);
-                } else {
-                    reflectTo.damage(0);
-
-                    combatManager.combatTag(target);
-
-                    safeSetPlayerHealth(reflectTo, Math.max(0,
-                            reflectTo.getHealth() - (damage * mirror.DAMAGE_REFLECTION.getValueAtLevel(level))));
-                }
-            } catch (NullPointerException ignored) {
-
-            }
-        }
-    }
+//    public void doTrueDamage(Player target, double damage) {
+//        if (mirror.itemHasEnchant(target.getInventory().getLeggings())) {
+//            target.setHealth(Math.max(0, target.getHealth() - damage));
+//            target.damage(0);
+//        }
+//    }
+//
+//    public void doTrueDamage(Player target, double damage, Player reflectTo) {
+//        int level = mirror.getEnchantLevel(target.getInventory().getLeggings());
+//
+//        combatManager.combatTag(target);
+//
+//        if (!mirror.itemHasEnchant(target.getInventory().getLeggings())) {
+//            if (target.getHealth() - damage < 0) {
+//                safeSetPlayerHealth(target, 0);
+//            } else {
+//                target.damage(0);
+//                safeSetPlayerHealth(target, target.getHealth() - damage);
+//            }
+//        } else if (level != 1) {
+//            try {
+//                if (reflectTo.getHealth() - (damage * mirror.DAMAGE_REFLECTION.getValueAtLevel(level)) < 0) {
+//                    safeSetPlayerHealth(target, 0);
+//                } else {
+//                    reflectTo.damage(0);
+//
+//                    combatManager.combatTag(target);
+//
+//                    safeSetPlayerHealth(reflectTo, Math.max(0,
+//                            reflectTo.getHealth() - (damage * mirror.DAMAGE_REFLECTION.getValueAtLevel(level))));
+//                }
+//            } catch (NullPointerException ignored) {
+//
+//            }
+//        }
+//    }
 
     public void safeSetPlayerHealth(Player player, double health) {
         if (!RegionManager.getInstance().playerIsInRegion(player, RegionManager.RegionType.SPAWN)) {

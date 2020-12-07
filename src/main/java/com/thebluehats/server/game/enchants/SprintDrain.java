@@ -22,7 +22,7 @@ public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
     private final EnchantProperty<Integer> SPEED_DURATION = new EnchantProperty<>(5, 5, 7);
     private final EnchantProperty<Integer> SPEED_AMPLIFIER = new EnchantProperty<>(0, 0, 1);
 
-    public SprintDrain(EventTemplate... templates) {
+    public SprintDrain(EventTemplate[] templates) {
         super(templates);
     }
 

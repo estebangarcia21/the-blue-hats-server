@@ -22,7 +22,7 @@ public class BeatTheSpammers extends CustomEnchant<PlayerAndDamageEventArgs> {
     
     private DamageManager manager;
 
-    public BeatTheSpammers(DamageManager manager, EventTemplate... templates) {
+    public BeatTheSpammers(DamageManager manager, EventTemplate[] templates) {
         super(templates);
 
         this.manager = manager;

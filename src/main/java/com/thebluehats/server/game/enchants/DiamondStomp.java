@@ -21,7 +21,7 @@ public class DiamondStomp extends CustomEnchant<PlayerAndDamageEventArgs> {
 
     private DamageManager manager;
 
-    public DiamondStomp(DamageManager manager, EventTemplate... templates) {
+    public DiamondStomp(DamageManager manager, EventTemplate[] templates) {
         super(templates);
 
         this.manager = manager;
