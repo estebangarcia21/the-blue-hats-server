@@ -1,5 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
@@ -10,7 +12,7 @@ import static org.mockito.Mockito.*;
 public class HealerTest {
     @Test
     public void DamagerAndDamageeGetHealedWhenHit() {
-        Healer enchant = new Healer();
+        Healer enchant = new Healer(new EventTemplate[] { new PlayerHitPlayer() });
         Player damaged = mock(Player.class);
         Player damager = mock(Player.class);
 
