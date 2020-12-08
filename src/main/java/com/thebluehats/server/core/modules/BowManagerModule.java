@@ -13,5 +13,6 @@ public class BowManagerModule extends AbstractModule {
     }
 
     @Override
-    protected void configure() { }
+    protected void configure() {
+    }
 }

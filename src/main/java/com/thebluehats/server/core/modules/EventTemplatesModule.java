@@ -33,5 +33,6 @@ public class EventTemplatesModule extends AbstractModule {
     }
 
     @Override
-    public void configure() { }
+    protected void configure() {
+    }
 }

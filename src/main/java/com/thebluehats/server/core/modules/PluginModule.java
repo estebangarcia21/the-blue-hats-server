@@ -1,6 +1,7 @@
 package com.thebluehats.server.core.modules;
 
 import com.google.inject.AbstractModule;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PluginModule extends AbstractModule {
@@ -12,6 +13,6 @@ public class PluginModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        this.bind(JavaPlugin.class).toInstance(plugin);
+        bind(JavaPlugin.class).toInstance(plugin);
     }
 }

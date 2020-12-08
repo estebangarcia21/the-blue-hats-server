@@ -13,5 +13,6 @@ public class GrindingSystemModule extends AbstractModule {
     }
 
     @Override
-    public void configure() { }
+    protected void configure() {
+    }
 }
