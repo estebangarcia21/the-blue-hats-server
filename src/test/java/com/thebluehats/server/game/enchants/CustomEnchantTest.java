@@ -1,7 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
 import com.thebluehats.server.game.managers.combat.BowManager;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayer;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.utils.LoreBuilder;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class CustomEnchantTest {
     @Test
     public void IsCompatibleWhenMaterialsAreEqual() {
-        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() });
         CustomEnchant<?> mockEnchant = mock(CustomEnchant.class);
         ItemStack mockItem = mock(ItemStack.class);
         ItemMeta mockItemMeta = mock(ItemMeta.class);
@@ -35,7 +35,7 @@ public class CustomEnchantTest {
 
     @Test
     public void IsNotCompatibleWhenMaterialsAreNotEqual() {
-        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() });
         CustomEnchant<?> mockEnchant = mock(CustomEnchant.class);
         ItemStack mockItem = mock(ItemStack.class);
         ItemMeta mockItemMeta = mock(ItemMeta.class);
@@ -53,7 +53,7 @@ public class CustomEnchantTest {
 
     @Test
     public void ExecutesEnchantWhenItemHasProperLore() {
-        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() });
         CustomEnchant<?> mockEnchant = mock(CustomEnchant.class);
         ItemStack mockItem = mock(ItemStack.class);
         ItemMeta mockItemMeta = mock(ItemMeta.class);
@@ -74,7 +74,7 @@ public class CustomEnchantTest {
 
     @Test
     public void DoesNotExecuteEnchantWhenItemHasImproperLore() {
-        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() });
         CustomEnchant<?> mockEnchant = mock(CustomEnchant.class);
         ItemStack mockItem = mock(ItemStack.class);
         ItemMeta mockItemMeta = mock(ItemMeta.class);
@@ -94,7 +94,7 @@ public class CustomEnchantTest {
 
     @Test
     public void GetsEnchantLevelWhenItemHasProperLore() {
-        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<?> realEnchant = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() });
         CustomEnchant<?> mockEnchant = mock(CustomEnchant.class);
         ItemStack mockItem = mock(ItemStack.class);
         ItemMeta mockItemMeta = mock(ItemMeta.class);

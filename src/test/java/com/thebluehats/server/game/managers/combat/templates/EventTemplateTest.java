@@ -1,7 +1,6 @@
 package com.thebluehats.server.game.managers.combat.templates;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.endsWith;
 import static org.mockito.Mockito.*;
 
 import com.thebluehats.server.game.enchants.Wasp;
@@ -15,10 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import com.thebluehats.server.game.managers.combat.BowManager;
 
@@ -44,10 +40,10 @@ public class EventTemplateTest {
         when(damagee.getInventory()).thenReturn(inventory);
         when(damagee.getWorld()).thenReturn(world);
 
-        CustomEnchant<PotionEffectArgs> enchant = spy(new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() }));
+        CustomEnchant<PotionEffectArgs> enchant = spy(new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() }));
         doNothing().when(enchant).execute(any());
 
-        EventTemplate template = new PlayerHitPlayer();
+        EventTemplate template = new PlayerHitPlayerTemplate();
 
         template.run(enchant, damager, damagee, PlayerInventory::getItemInMainHand, level -> enchant.execute(mock(PotionEffectArgs.class)));
         verify(enchant).execute(any());
@@ -77,10 +73,10 @@ public class EventTemplateTest {
         Arrow arrow = mock(Arrow.class);
         when(arrow.getShooter()).thenReturn(damager);
 
-        CustomEnchant<PotionEffectArgs> enchant = spy(new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() }));
+        CustomEnchant<PotionEffectArgs> enchant = spy(new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() }));
         doNothing().when(enchant).execute(any());
 
-        EventTemplate template = new ArrowHitPlayer();
+        EventTemplate template = new ArrowHitPlayerTemplate();
 
         template.run(enchant, arrow, damagee, PlayerInventory::getItemInMainHand, level -> enchant.execute(mock(PotionEffectArgs.class)));
         verify(enchant).execute(any());

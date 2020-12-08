@@ -1,18 +1,14 @@
 package com.thebluehats.server.game.enchants;
 
-import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
 import com.thebluehats.server.game.enchants.args.PotionEffectWithHitsNeededArgs;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayer;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.*;
 
@@ -27,7 +23,7 @@ public class ComboSwiftTest {
         Player player = mock(Player.class);
         HitCounter hitCounter = mock(HitCounter.class);
 
-        CustomEnchant<PotionEffectWithHitsNeededArgs> comboSwift = new ComboSwift(hitCounter, new EventTemplate[] { new PlayerHitPlayer() });
+        CustomEnchant<PotionEffectWithHitsNeededArgs> comboSwift = new ComboSwift(hitCounter, new EventTemplate[] { new PlayerHitPlayerTemplate() });
 
         PotionEffectWithHitsNeededArgs args = spy(new PotionEffectWithHitsNeededArgs(player, SPEED_TIME, AMPLIFIER, HITS_NEEDED));
 
@@ -47,7 +43,7 @@ public class ComboSwiftTest {
         Player player = mock(Player.class);
         HitCounter hitCounter = mock(HitCounter.class);
 
-        ComboSwift comboSwift = new ComboSwift(hitCounter, new EventTemplate[] { new PlayerHitPlayer() });
+        ComboSwift comboSwift = new ComboSwift(hitCounter, new EventTemplate[] { new PlayerHitPlayerTemplate() });
 
         PotionEffectWithHitsNeededArgs args = spy(new PotionEffectWithHitsNeededArgs(player, SPEED_TIME, AMPLIFIER, HITS_NEEDED));
 

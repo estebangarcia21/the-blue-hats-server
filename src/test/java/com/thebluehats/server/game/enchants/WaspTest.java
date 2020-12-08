@@ -2,7 +2,7 @@ package com.thebluehats.server.game.enchants;
 
 import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
 import com.thebluehats.server.game.managers.combat.BowManager;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayer;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -16,7 +16,7 @@ public class WaspTest {
     @Test
     public void WeaknessIsAddedToPlayerWhenHitByArrow() {
         Player player = mock(Player.class);
-        Wasp wasp = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayer() });
+        Wasp wasp = new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() });
 
         final int DURATION = 2;
         final int AMPLIFIER = 1;

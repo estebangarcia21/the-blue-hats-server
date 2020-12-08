@@ -3,7 +3,7 @@ package com.thebluehats.server.game.enchants;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayer;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class SprintDrainTest {
         Player player = mock(Player.class);
         Player damagee = mock(Player.class);
 
-        CustomEnchant<SprintDrainArgs> enchant = new SprintDrain(new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<SprintDrainArgs> enchant = new SprintDrain(new EventTemplate[] { new ArrowHitPlayerTemplate() });
 
         enchant.execute(new SprintDrainArgs(player, damagee, SPEED_DURATION, SPEED_AMPLIFIER, 1));
         verify(player).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, SPEED_DURATION * 20, SPEED_AMPLIFIER));
@@ -35,7 +35,7 @@ public class SprintDrainTest {
         Player player = mock(Player.class);
         Player damagee = mock(Player.class);
 
-        CustomEnchant<SprintDrainArgs> enchant = new SprintDrain(new EventTemplate[] { new ArrowHitPlayer() });
+        CustomEnchant<SprintDrainArgs> enchant = new SprintDrain(new EventTemplate[] { new ArrowHitPlayerTemplate() });
 
         enchant.execute(new SprintDrainArgs(player, damagee, SPEED_DURATION, SPEED_AMPLIFIER, 2));
         verify(damagee).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));

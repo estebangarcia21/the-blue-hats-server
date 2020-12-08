@@ -1,7 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayer;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -12,7 +12,7 @@ import static org.mockito.Mockito.*;
 public class LastStandTest {
     @Test
     public void GivesResistanceWhenHealthIsLessThan10() {
-        LastStand enchant = new LastStand(new EventTemplate[] { new PlayerHitPlayer() });
+        LastStand enchant = new LastStand(new EventTemplate[] { new PlayerHitPlayerTemplate() });
 
         Player player = mock(Player.class);
         when(player.getHealth()).thenReturn(5D);
@@ -26,7 +26,7 @@ public class LastStandTest {
 
     @Test
     public void DoesNotGiveResistanceWhenHealthIsGreaterThan10() {
-        LastStand enchant = new LastStand(new EventTemplate[] { new PlayerHitPlayer() });
+        LastStand enchant = new LastStand(new EventTemplate[] { new PlayerHitPlayerTemplate() });
         
         Player player = mock(Player.class);
         when(player.getHealth()).thenReturn(15D);

@@ -1,9 +1,9 @@
 package com.thebluehats.server.game.enchants;
 
 import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayer;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayer;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 public class PeroxideTest {
     @Test
     public void DamageeGetsRegenerationWhenHit() {
-        Peroxide enchant = new Peroxide(new EventTemplate[] { new ArrowHitPlayer(), new PlayerHitPlayer() });
+        Peroxide enchant = new Peroxide(new EventTemplate[] { new ArrowHitPlayerTemplate(), new PlayerHitPlayerTemplate() });
         Player player = mock(Player.class);
 
         int duration = 2;
