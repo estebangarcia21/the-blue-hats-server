@@ -3,6 +3,7 @@ package com.thebluehats.server.game.commands;
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -28,9 +29,9 @@ public class UnenchantCommand implements CommandExecutor {
                 if (args.length == 0) {
                     player.sendMessage(ChatColor.DARK_PURPLE + "Usage:" + ChatColor.RED + " /unenchant <enchant>");
                 } else {
-                    CustomEnchant customEnchant = null;
+                    CustomEnchant<?> customEnchant = null;
 
-                    for (CustomEnchant enchant : manager.getEnchants()) {
+                    for (CustomEnchant<?> enchant : manager.getEnchants()) {
                         if (enchant.getEnchantReferenceName().equalsIgnoreCase(args[0])) {
                             customEnchant = enchant;
                         }

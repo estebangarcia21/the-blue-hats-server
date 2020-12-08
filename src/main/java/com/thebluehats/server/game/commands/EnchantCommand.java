@@ -5,6 +5,7 @@ import java.util.Map;
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,9 +33,9 @@ public class EnchantCommand implements CommandExecutor {
                     player.sendMessage(
                             ChatColor.DARK_PURPLE + "Usage:" + ChatColor.RED + " /pitenchant <enchant> <level>");
                 } else {
-                    CustomEnchant customEnchant = null;
+                    CustomEnchant<?> customEnchant = null;
 
-                    for (CustomEnchant enchant : customEnchantManager.getEnchants()) {
+                    for (CustomEnchant<?> enchant : customEnchantManager.getEnchants()) {
                         if (enchant.getEnchantReferenceName().equalsIgnoreCase(args[0])) {
                             customEnchant = enchant;
                         }
