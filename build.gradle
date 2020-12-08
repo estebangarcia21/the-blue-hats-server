@@ -1,9 +1,10 @@
 plugins {
-    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id "java"
 }
 
-group = 'com.thebluehats.server'
-version = '0.1'
+group = "com.thebluehats.server"
+version = "0.1"
 
 repositories {
     mavenCentral()
@@ -12,18 +13,19 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT'
-    testImplementation 'junit:junit:4.11'
-    testImplementation 'org.mockito:mockito-core:3.5.15'
-    testImplementation 'org.powermock:powermock-api-mockito2:2.0.0'
-    testImplementation 'org.powermock:powermock-module-junit4:2.0.0'
+    compile "org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT"
+    compile "com.google.inject:guice:4.1.0"
+    testImplementation "junit:junit:4.11"
+    testImplementation "org.mockito:mockito-core:3.5.15"
+    testImplementation "org.powermock:powermock-api-mockito2:2.0.0"
+    testImplementation "org.powermock:powermock-module-junit4:2.0.0"
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    options.encoding = "UTF-8"
 }
 
 tasks.withType(Test) {
