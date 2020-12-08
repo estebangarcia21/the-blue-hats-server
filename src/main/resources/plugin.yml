@@ -42,9 +42,6 @@ commands:
     duel:
         description: Duels a player
         usage: /duel
-    togglepvp:
-        description: Toggles pvp
-        usage: /togglepvp
     selectworld:
         description: Selects the world
         usage: /selectworld
