@@ -1,33 +1,20 @@
 package com.thebluehats.server.core;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.thebluehats.server.core.modules.*;
 import com.thebluehats.server.game.commands.*;
 import com.thebluehats.server.game.enchants.*;
-import com.thebluehats.server.game.managers.combat.BowManager;
-import com.thebluehats.server.game.managers.combat.CombatManager;
-import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayer;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayer;
-import com.thebluehats.server.game.managers.enchants.CooldownTimer;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
-import com.thebluehats.server.game.managers.enchants.HitCounter;
-import com.thebluehats.server.game.managers.game.GrindingSystem;
 import com.thebluehats.server.game.managers.game.PerkManager;
-import com.thebluehats.server.game.managers.game.WorldSelectionManager;
 import com.thebluehats.server.game.perks.Vampire;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.logging.Logger;
-
-public class Main extends JavaPlugin implements GameLogicProvider, PluginInformationProvider {
+public class Main extends JavaPlugin implements PluginInformationProvider {
     @Override
     public void onEnable() {
-        Main main = this;
-
-        Logger log = Bukkit.getLogger();
-
-        log.info("\n" +
+        Bukkit.getLogger().info("\n" +
                 "\n" +
                 "  _______ _            ____  _              _    _       _          _____                          \n" +
                 " |__   __| |          |  _ \\| |            | |  | |     | |        / ____|                         \n" +
@@ -42,60 +29,57 @@ public class Main extends JavaPlugin implements GameLogicProvider, PluginInforma
                 "  |___/\\_, | |___/\\__\\___|\\_/\\___|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|\n" +
                 "       |__/                                                     \n");
 
-        CustomEnchantManager customEnchantManager = new CustomEnchantManager(main);
-        DamageManager damageManager = new DamageManager(customEnchantManager, new CombatManager(main));
-        CombatManager combatManager = new CombatManager(main);
-        BowManager bowManager = new BowManager();
-        WorldSelectionManager worldSelectionManager = new WorldSelectionManager(main);
-        GrindingSystem grindingSystem = new GrindingSystem();
-        PerkManager perkManager = new PerkManager();
+        Injector injector = Guice.createInjector(
+                new PluginModule(this),
+                new EventTemplatesModule(),
+                new BowManagerModule(),
+                new HitCounterModule(),
+                new CombatManagerModule(),
+                new DamageManagerModule(),
+                new CooldownTimerModule()
+        );
 
-        registerGameLogic(main, damageManager, combatManager, bowManager, grindingSystem, customEnchantManager,
-                worldSelectionManager, perkManager);
+
+        registerEnchants(injector);
+        registerPerks(injector);
+        registerCommands(injector);
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable() { }
 
+    private void registerEnchants(Injector injector) {
+        CustomEnchantManager customEnchantManager = injector.getInstance(CustomEnchantManager.class);
+
+        customEnchantManager.registerEnchant(injector.getInstance(Wasp.class));
+        customEnchantManager.registerEnchant(injector.getInstance(Peroxide.class));
+        customEnchantManager.registerEnchant(injector.getInstance(SprintDrain.class));
+        customEnchantManager.registerEnchant(injector.getInstance(ComboSwift.class));
+        customEnchantManager.registerEnchant(injector.getInstance(LastStand.class));
     }
 
-    public void registerGameLogic(Main main, DamageManager damageManager, CombatManager combatManager,
-                                  BowManager bowManager, GrindingSystem grindingSystem,
-                                  CustomEnchantManager customEnchantManager,
-                                  WorldSelectionManager worldSelectionManager, PerkManager perkManager) {
-        EventTemplate playerHitPlayer = new PlayerHitPlayer();
-        EventTemplate arrowHitPlayer = new ArrowHitPlayer();
+    private void registerPerks(Injector injector) {
+        PerkManager perkManager = new PerkManager();
 
-        EventTemplate[][] commonTemplates = new EventTemplate[3][];
-        commonTemplates[0] = new EventTemplate[] { arrowHitPlayer };
-        commonTemplates[1] = new EventTemplate[] { playerHitPlayer };
-        commonTemplates[2] = new EventTemplate[] { arrowHitPlayer, playerHitPlayer };
+        perkManager.registerPerk(injector.getInstance(Vampire.class));
+    }
 
-        customEnchantManager.registerEnchant(new Wasp(bowManager, commonTemplates[0]));
-        customEnchantManager.registerEnchant(new Peroxide(commonTemplates[0]));
-        customEnchantManager.registerEnchant(new SprintDrain(commonTemplates[0]));
+    private void registerCommands(Injector injector) {
+        getCommand("pitenchant").setExecutor(injector.getInstance(EnchantCommand.class));
+        getCommand("mysticenchants").setExecutor(injector.getInstance(MysticEnchantsCommand.class));
+        getCommand("selectworld").setExecutor(injector.getInstance(SelectWorldCommand.class));
+        getCommand("setgold").setExecutor(injector.getInstance(SetGoldCommand.class));
+        getCommand("unenchant").setExecutor(injector.getInstance(UnenchantCommand.class));
 
-        customEnchantManager.registerEnchant(new ComboSwift(new HitCounter(main), commonTemplates[1]));
-
-        customEnchantManager.registerEnchant(new LastStand(commonTemplates[2]));
-
-        perkManager.registerPerk(new Vampire(damageManager));
-
-        getCommand("pitenchant").setExecutor(new EnchantCommand(customEnchantManager));
-        getCommand("mysticenchants").setExecutor(new MysticEnchantsCommand(customEnchantManager));
-        getCommand("selectworld").setExecutor(new SelectWorldCommand(worldSelectionManager));
         getCommand("pitabout").setExecutor(new PitAboutCommand());
         getCommand("givefreshitem").setExecutor(new GiveFreshItemCommand());
         getCommand("duel").setExecutor(new DuelCommand());
         getCommand("giveprot").setExecutor(new GiveProtCommand());
-        getCommand("setgold").setExecutor(new SetGoldCommand(grindingSystem));
         getCommand("givebread").setExecutor(new GiveBreadCommand());
         getCommand("givearrows").setExecutor(new GiveArrowCommand());
         getCommand("giveobsidian").setExecutor(new GiveObsidianCommand());
-        getCommand("unenchant").setExecutor(new UnenchantCommand(customEnchantManager));
-        getCommand("togglepvp").setExecutor(new TogglePvPCommand(damageManager));
 
-        SpawnCommand spawnCommand = new SpawnCommand(combatManager, new CooldownTimer(main));
+        SpawnCommand spawnCommand = injector.getInstance(SpawnCommand.class);
         getCommand("spawn").setExecutor(spawnCommand);
         getCommand("respawn").setExecutor(spawnCommand);
     }
