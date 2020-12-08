@@ -3,8 +3,9 @@ package com.thebluehats.server.game.managers.game;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.thebluehats.server.core.Main;
+import com.google.inject.Inject;
 import com.thebluehats.server.game.utils.LoreBuilder;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -22,20 +23,22 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class WorldSelectionManager implements Listener {
     private final String inventoryName = ChatColor.LIGHT_PURPLE + "World Selection";
     private final Inventory gui = Bukkit.createInventory(null, 9, inventoryName);
 
     private final ArrayList<UUID> mayExitGuiSelection = new ArrayList<>();
-    private Main main;
+    private JavaPlugin plugin;
 
-    public WorldSelectionManager(Main main) {
-        this.main = main;
+    @Inject
+    public WorldSelectionManager(JavaPlugin plugin) {
+        this.plugin = plugin;
     }
 
     public void displaySelectionMenu(Player player) {
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(main, () -> {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             generateGui();
 
             player.teleport(new Location(player.getWorld(), -90.5, 60, 0.5));
@@ -79,7 +82,7 @@ public class WorldSelectionManager implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         if (event.getView().getTitle().equals(inventoryName)) {
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(main, () -> {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 if (!mayExitGuiSelection.contains(event.getPlayer().getUniqueId())) {
                     event.getPlayer().openInventory(gui);
                 } else {
@@ -90,7 +93,7 @@ public class WorldSelectionManager implements Listener {
     }
 
     private void transportToWorld(HumanEntity player, String worldName) {
-        World world = main.getServer().createWorld(new WorldCreator(worldName));
+        World world = plugin.getServer().createWorld(new WorldCreator(worldName));
         Location location = RegionManager.getInstance().getSpawnLocation(((Player) player));
         Location spawnLocation = new Location(world, location.getX(), location.getY(), location.getZ(),
                 location.getYaw(), location.getPitch());
@@ -100,7 +103,7 @@ public class WorldSelectionManager implements Listener {
 
         player.sendMessage(ChatColor.GREEN + "You will be teleported soon...");
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(main, () -> player.teleport(spawnLocation), 20L);
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.teleport(spawnLocation), 20L);
     }
 
     private void generateGui() {

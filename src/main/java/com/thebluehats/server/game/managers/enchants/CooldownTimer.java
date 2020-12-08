@@ -3,23 +3,26 @@ package com.thebluehats.server.game.managers.enchants;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.google.inject.Inject;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import com.thebluehats.server.core.Main;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class CooldownTimer {
-    private Main main;
     private HashMap<UUID, CooldownTimerData> timerData = new HashMap<>();
 
-    public CooldownTimer(Main main) {
-        this.main = main;
+    private final JavaPlugin plugin;
+
+    @Inject
+    public CooldownTimer(JavaPlugin plugin) {
+        this.plugin = plugin;
     }
 
     public void startCooldown(Player player, long ticks) {
         CooldownTimerData data = timerData.putIfAbsent(player.getUniqueId(), new CooldownTimerData());
 
-        data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main, () -> {
+        data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             data.setCooldownTime(data.getCooldownTime() - 1);
 
             if (data.getCooldownTime() <= 0) {
@@ -33,7 +36,7 @@ public class CooldownTimer {
     public void startCooldown(Player player, long ticks, Runnable post) {
         CooldownTimerData data = timerData.putIfAbsent(player.getUniqueId(), new CooldownTimerData());
 
-        data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main, () -> {
+        data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             data.setCooldownTime(data.getCooldownTime() - 1);
 
             if (data.getCooldownTime() <= 0) {

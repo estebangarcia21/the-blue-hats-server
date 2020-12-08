@@ -1,8 +1,10 @@
 package com.thebluehats.server.game.commands;
 
+import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.enchants.CooldownTimer;
 import com.thebluehats.server.game.managers.game.RegionManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
@@ -14,6 +16,7 @@ public class SpawnCommand implements CommandExecutor {
     private CombatManager manager;
     private CooldownTimer cooldownTimer;
 
+    @Inject
     public SpawnCommand(CombatManager manager, CooldownTimer cooldownTimer) {
         this.manager = manager;
         this.cooldownTimer = cooldownTimer;

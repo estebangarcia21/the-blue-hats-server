@@ -3,18 +3,20 @@ package com.thebluehats.server.game.managers.enchants;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.google.inject.Inject;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import com.thebluehats.server.core.Main;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class HitCounter {
     private final HashMap<UUID, HitCounterData> timerData = new HashMap<>();
 
-    private Main mainInstance;
+    private final JavaPlugin plugin;
 
-    public HitCounter(Main mainInstance) {
-        this.mainInstance = mainInstance;
+    @Inject
+    public HitCounter(JavaPlugin plugin) {
+        this.plugin = plugin;
     }
 
     public void addOne(Player player) {
@@ -50,7 +52,7 @@ public class HitCounter {
     public void startHitResetTimer(Player player) {
         HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
 
-        data.setHitResetTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(mainInstance, () -> {
+        data.setHitResetTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             data.setHitResetTime(data.getHitResetTime() - 1);
 
             if (data.getHitResetTime() <= 0) {

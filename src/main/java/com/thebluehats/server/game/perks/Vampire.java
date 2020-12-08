@@ -1,16 +1,16 @@
 package com.thebluehats.server.game.perks;
 
 import com.google.inject.Inject;
+import com.thebluehats.server.game.managers.combat.DamageManager;
+
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import com.thebluehats.server.game.managers.combat.DamageManager;
-
 public class Vampire extends Perk {
-    private DamageManager damageManager;
+    private final DamageManager damageManager;
 
     @Inject
     public Vampire(DamageManager damageManager) {
