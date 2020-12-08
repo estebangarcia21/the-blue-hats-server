@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class PlayerHitPlayer implements EventTemplate {
+public class PlayerHitPlayerTemplate implements EventTemplate {
     @Override
     public void run(CustomEnchant<?> enchant, Entity damager, Entity damagee, Function<PlayerInventory, ItemStack> getSource, Consumer<Integer> onSuccess) {
         if (damager instanceof Player && damagee instanceof Player) {

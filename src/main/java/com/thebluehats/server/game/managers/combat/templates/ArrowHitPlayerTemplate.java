@@ -10,7 +10,7 @@ import org.bukkit.inventory.PlayerInventory;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class ArrowHitPlayer implements EventTemplate {
+public class ArrowHitPlayerTemplate implements EventTemplate {
     public void run(CustomEnchant<?> enchant, Entity damager, Entity damagee, Function<PlayerInventory, ItemStack> getSource, Consumer<Integer> onSuccess) {
         if (damager instanceof Arrow && damagee instanceof Player) {
             Arrow arrow = (Arrow) damager;
