@@ -1,10 +1,9 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "java"
 }
 
 group = "com.thebluehats.server"
-version = "0.1"
+version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -13,12 +12,26 @@ repositories {
 }
 
 dependencies {
-    compile "org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT"
-    compile "com.google.inject:guice:4.1.0"
+    implementation "org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT"
+    implementation "com.google.inject:guice:4.1.0"
     testImplementation "junit:junit:4.11"
     testImplementation "org.mockito:mockito-core:3.5.15"
     testImplementation "org.powermock:powermock-api-mockito2:2.0.0"
     testImplementation "org.powermock:powermock-module-junit4:2.0.0"
+}
+
+task productionBuild(type: Jar) {
+    manifest {
+        attributes "Implementation-Title": "The Blue Hats Server",
+                "Implementation-Version": archiveVersion,
+                "Main-Class": "com.thebluehats.server.core.Main"
+    }
+
+    archiveBaseName = project.name + "-fatJar"
+
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    with jar
 }
 
 sourceCompatibility = 1.8
