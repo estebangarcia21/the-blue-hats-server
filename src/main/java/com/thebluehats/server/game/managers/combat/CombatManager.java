@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.game.RegionManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -13,8 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import com.thebluehats.server.core.Main;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CombatManager implements Listener {

@@ -1,5 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
+import java.util.ArrayList;
+
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
 import com.thebluehats.server.game.enchants.args.PotionEffectWithHitsNeededArgs;
@@ -9,6 +11,7 @@ import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
 import com.thebluehats.server.game.utils.LoreBuilder;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,8 +20,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.ArrayList;
 
 public class ComboSwift extends CustomEnchant<PotionEffectWithHitsNeededArgs> {
     private final EnchantProperty<Integer> speedTime = new EnchantProperty<>(3, 4, 5);
@@ -37,8 +38,9 @@ public class ComboSwift extends CustomEnchant<PotionEffectWithHitsNeededArgs> {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> execute((new PotionEffectWithHitsNeededArgs((Player) event.getDamager(), speedTime.getValueAtLevel(level),
-                        speedAmplifier.getValueAtLevel(level), hitsNeeded.getValueAtLevel(level)))));
+                level -> execute((new PotionEffectWithHitsNeededArgs((Player) event.getDamager(),
+                        speedTime.getValueAtLevel(level), speedAmplifier.getValueAtLevel(level),
+                        hitsNeeded.getValueAtLevel(level)))));
     }
 
     @Override
@@ -48,7 +50,8 @@ public class ComboSwift extends CustomEnchant<PotionEffectWithHitsNeededArgs> {
         hitCounter.addOne(player);
 
         if (hitCounter.hasHits(player, args.getHitsNeeded())) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, args.getDuration() * 20, args.getAmplifier(), true));
+            player.addPotionEffect(
+                    new PotionEffect(PotionEffectType.SPEED, args.getDuration() * 20, args.getAmplifier(), true));
         }
     }
 
