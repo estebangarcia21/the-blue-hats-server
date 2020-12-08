@@ -1,5 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
+import com.google.inject.Inject;
+import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
 import com.thebluehats.server.game.enchants.args.PotionEffectWithHitsNeededArgs;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
@@ -19,13 +21,14 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 
 public class ComboSwift extends CustomEnchant<PotionEffectWithHitsNeededArgs> {
-    private final EnchantProperty<Integer> SPEED_TIME = new EnchantProperty<>(3, 4, 5);
-    private final EnchantProperty<Integer> SPEED_AMPLIFIER = new EnchantProperty<>(0, 1, 1);
-    private final EnchantProperty<Integer> HITS_NEEDED = new EnchantProperty<>(4, 3, 3);
+    private final EnchantProperty<Integer> speedTime = new EnchantProperty<>(3, 4, 5);
+    private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 1, 1);
+    private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);
 
-    private HitCounter hitCounter;
+    private final HitCounter hitCounter;
 
-    public ComboSwift(HitCounter hitCounter, EventTemplate[] templates) {
+    @Inject
+    public ComboSwift(HitCounter hitCounter, @PlayerHitPlayer EventTemplate[] templates) {
         super(templates);
 
         this.hitCounter = hitCounter;
@@ -34,8 +37,8 @@ public class ComboSwift extends CustomEnchant<PotionEffectWithHitsNeededArgs> {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> execute((new PotionEffectWithHitsNeededArgs((Player) event.getDamager(), SPEED_TIME.getValueAtLevel(level),
-                        SPEED_AMPLIFIER.getValueAtLevel(level), HITS_NEEDED.getValueAtLevel(level)))));
+                level -> execute((new PotionEffectWithHitsNeededArgs((Player) event.getDamager(), speedTime.getValueAtLevel(level),
+                        speedAmplifier.getValueAtLevel(level), hitsNeeded.getValueAtLevel(level)))));
     }
 
     @Override

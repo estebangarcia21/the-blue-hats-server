@@ -1,5 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
+import com.google.inject.Inject;
+import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
 import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
@@ -21,7 +23,8 @@ public class Peroxide extends CustomEnchant<PotionEffectArgs>  {
     private final EnchantProperty<Integer> REGEN_DURATION = new EnchantProperty<>(5, 8, 8);
     private final EnchantProperty<Integer> REGEN_AMPLIFIER = new EnchantProperty<>(0, 0, 1);
 
-    public Peroxide(EventTemplate[] templates) {
+    @Inject
+    public Peroxide(@AllEventTemplates EventTemplate[] templates) {
         super(templates);
     }
 

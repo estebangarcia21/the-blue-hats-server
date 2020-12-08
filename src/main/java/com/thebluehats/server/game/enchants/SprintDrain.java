@@ -2,6 +2,8 @@ package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
 
+import com.google.inject.Inject;
+import com.thebluehats.server.core.modules.annotations.ArrowHitPlayer;
 import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
@@ -22,7 +24,8 @@ public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
     private final EnchantProperty<Integer> SPEED_DURATION = new EnchantProperty<>(5, 5, 7);
     private final EnchantProperty<Integer> SPEED_AMPLIFIER = new EnchantProperty<>(0, 0, 1);
 
-    public SprintDrain(EventTemplate[] templates) {
+    @Inject
+    public SprintDrain(@ArrowHitPlayer EventTemplate[] templates) {
         super(templates);
     }
 

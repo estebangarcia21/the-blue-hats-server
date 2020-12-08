@@ -14,16 +14,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.thebluehats.server.core.Main;
 import com.thebluehats.server.game.utils.SortCustomEnchantByName;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import javax.inject.Inject;
 
 public class CustomEnchantManager {
     private final ArrayList<CustomEnchant<?>> enchants = new ArrayList<>();
 
-    private Main mainInstance;
+    private JavaPlugin plugin;
 
-    public CustomEnchantManager(Main mainInstance) {
-        this.mainInstance = mainInstance;
+    @Inject
+    public CustomEnchantManager(JavaPlugin plugin) {
+        this.plugin = plugin;
     }
 
     public ArrayList<CustomEnchant<?>> getEnchants() {
@@ -31,7 +34,7 @@ public class CustomEnchantManager {
     }
 
     public void registerEnchant(CustomEnchant<?> enchant) {
-        mainInstance.getServer().getPluginManager().registerEvents(enchant, mainInstance);
+        plugin.getServer().getPluginManager().registerEvents(enchant, plugin);
 
         enchants.add(enchant);
         enchants.sort(new SortCustomEnchantByName());

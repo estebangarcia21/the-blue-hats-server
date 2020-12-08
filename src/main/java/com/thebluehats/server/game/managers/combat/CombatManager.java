@@ -3,6 +3,7 @@ package com.thebluehats.server.game.managers.combat;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.game.RegionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
@@ -14,14 +15,16 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.thebluehats.server.core.Main;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class CombatManager implements Listener {
     private final HashMap<UUID, CombatTimerData> data = new HashMap<>();
 
-    private Main main;
+    private final JavaPlugin plugin;
 
-    public CombatManager(Main main) {
-        this.main = main;
+    @Inject
+    public CombatManager(JavaPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -61,7 +64,7 @@ public class CombatManager implements Listener {
         timerData.setTime(calculateCombatTime());
 
         if (!timerData.isOnCooldown()) {
-            timerData.setTaskId( Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main,
+            timerData.setTaskId( Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin,
                     () -> {  if (timerData.getTime() == 0) { Bukkit.getServer().getScheduler().cancelTask(timerData.getTaskId()); return; } timerData.setTime(timerData.getTime() - 1); }, 0L, 20L));
         }
     }

@@ -1,5 +1,6 @@
 package com.thebluehats.server.game.enchants;
 
+import com.thebluehats.server.core.modules.annotations.ArrowHitPlayer;
 import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
 import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
@@ -17,15 +18,17 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 
 public class Wasp extends CustomEnchant<PotionEffectArgs> {
     private final EnchantProperty<Integer> WEAKNESS_DURATION = new EnchantProperty<>(6, 11, 16);
     private final EnchantProperty<Integer> WEAKNESS_AMPLIFIER = new EnchantProperty<>(1, 2, 3);
 
-    private BowManager bowManager;
+    private final BowManager bowManager;
 
-    public Wasp(BowManager bowManager, EventTemplate[] templates) {
+    @Inject
+    public Wasp(BowManager bowManager, @ArrowHitPlayer EventTemplate[] templates) {
         super(templates);
 
         this.bowManager = bowManager;

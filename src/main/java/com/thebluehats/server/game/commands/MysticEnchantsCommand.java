@@ -1,5 +1,6 @@
 package com.thebluehats.server.game.commands;
 
+import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -9,8 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class MysticEnchantsCommand implements CommandExecutor {
-    private CustomEnchantManager manager;
+    private final CustomEnchantManager manager;
 
+    @Inject
     public MysticEnchantsCommand(CustomEnchantManager manager) {
         this.manager = manager;
     }

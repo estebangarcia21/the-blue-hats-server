@@ -1,5 +1,6 @@
 package com.thebluehats.server.game.commands;
 
+import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import org.bukkit.ChatColor;
@@ -11,8 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class UnenchantCommand implements CommandExecutor {
-    private CustomEnchantManager manager;
+    private final CustomEnchantManager manager;
 
+    @Inject
     public UnenchantCommand(CustomEnchantManager manager) {
         this.manager = manager;
     }

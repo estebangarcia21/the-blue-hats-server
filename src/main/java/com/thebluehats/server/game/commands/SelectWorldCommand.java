@@ -1,5 +1,6 @@
 package com.thebluehats.server.game.commands;
 
+import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.game.WorldSelectionManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -7,8 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SelectWorldCommand implements CommandExecutor {
-    private WorldSelectionManager manager;
+    private final WorldSelectionManager manager;
 
+    @Inject
     public SelectWorldCommand(WorldSelectionManager manager) {
         this.manager = manager;
     }

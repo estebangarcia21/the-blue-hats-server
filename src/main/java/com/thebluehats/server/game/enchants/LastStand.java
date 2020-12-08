@@ -1,5 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
+import com.google.inject.Inject;
+import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
@@ -17,9 +19,10 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 
 public class LastStand extends CustomEnchant<LastStandArgs> {
-    private final EnchantProperty<Integer> RESISTANCE_AMPLIFIER = new EnchantProperty<>(0, 1, 2);
+    private final EnchantProperty<Integer> resistanceAmplifier = new EnchantProperty<>(0, 1, 2);
 
-    public LastStand(EventTemplate[] templates) {
+    @Inject
+    public LastStand(@AllEventTemplates EventTemplate[] templates) {
         super(templates);
     }
 
@@ -27,7 +30,7 @@ public class LastStand extends CustomEnchant<LastStandArgs> {
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
                 level -> execute(new LastStandArgs((Player) event.getEntity(),
-                        RESISTANCE_AMPLIFIER.getValueAtLevel(level))));
+                        resistanceAmplifier.getValueAtLevel(level))));
     }
 
     @Override

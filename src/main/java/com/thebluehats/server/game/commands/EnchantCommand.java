@@ -2,6 +2,7 @@ package com.thebluehats.server.game.commands;
 
 import java.util.Map;
 
+import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import org.apache.commons.lang.StringUtils;
@@ -14,8 +15,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class EnchantCommand implements CommandExecutor {
-    private CustomEnchantManager customEnchantManager;
+    private final CustomEnchantManager customEnchantManager;
 
+    @Inject
     public EnchantCommand(CustomEnchantManager customEnchantManager) {
         this.customEnchantManager = customEnchantManager;
     }
