@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.google.inject.Inject;
 import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.game.RegionManager;
@@ -19,9 +20,10 @@ public class DamageManager {
     private final ArrayList<UUID> canceledPlayers = new ArrayList<>();
 //    private final Mirror mirror = new Mirror(null);
 
-    private CustomEnchantManager customEnchantManager;
-    private CombatManager combatManager;
+    private final CustomEnchantManager customEnchantManager;
+    private final CombatManager combatManager;
 
+    @Inject
     public DamageManager(CustomEnchantManager customEnchantManager, CombatManager combatManager) {
         this.customEnchantManager = customEnchantManager;
         this.combatManager = combatManager;
