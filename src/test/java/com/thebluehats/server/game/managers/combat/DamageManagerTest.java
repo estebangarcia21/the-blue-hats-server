@@ -1,6 +1,7 @@
 package com.thebluehats.server.game.managers.combat;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -9,9 +10,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import com.thebluehats.server.core.Main;
-import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
-import com.thebluehats.server.game.managers.combat.DamageManager;
+
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.junit.Before;
