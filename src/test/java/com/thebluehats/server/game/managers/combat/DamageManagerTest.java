@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import com.thebluehats.server.core.Main;
+import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 
 import org.bukkit.entity.Arrow;
@@ -31,7 +32,7 @@ public class DamageManagerTest {
         MockitoAnnotations.openMocks(this);
         Main main = mock(Main.class);
 
-        manager = new DamageManager(new CustomEnchantManager(main), new CombatManager(main));
+        manager = new DamageManager(new Mirror(null), new CustomEnchantManager(main), new CombatManager(main));
 
         try {
             Field field;

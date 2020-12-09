@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.logging.Logger;
 
+import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.combat.DamageManager;
@@ -91,7 +92,8 @@ public class MainTest {
         when(Bukkit.getLogger()).thenReturn(logger);
         doNothing().when(logger).info(anyString());
 
-        DamageManager damageManager = new DamageManager(customEnchantManager, new CombatManager(main));
+        DamageManager damageManager = new DamageManager(new Mirror(null), customEnchantManager,
+                new CombatManager(main));
         CombatManager combatManager = new CombatManager(main);
         BowManager bowManager = new BowManager();
         GrindingSystem grindingSystem = new GrindingSystem();
@@ -125,7 +127,8 @@ public class MainTest {
         when(Bukkit.getLogger()).thenReturn(logger);
         doNothing().when(logger).info(anyString());
 
-        DamageManager damageManager = new DamageManager(customEnchantManager, new CombatManager(main));
+        // DamageManager damageManager = new DamageManager(customEnchantManager, new
+        // CombatManager(main));
         CombatManager combatManager = new CombatManager(main);
         BowManager bowManager = new BowManager();
         GrindingSystem grindingSystem = new GrindingSystem();
@@ -159,7 +162,8 @@ public class MainTest {
         when(Bukkit.getLogger()).thenReturn(logger);
         doNothing().when(logger).info(anyString());
 
-        DamageManager damageManager = new DamageManager(customEnchantManager, new CombatManager(main));
+        // DamageManager damageManager = new DamageManager(customEnchantManager, new
+        // CombatManager(main));
         CombatManager combatManager = new CombatManager(main);
         BowManager bowManager = new BowManager();
         GrindingSystem grindingSystem = new GrindingSystem();
