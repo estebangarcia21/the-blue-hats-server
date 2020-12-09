@@ -24,6 +24,7 @@ import com.thebluehats.server.game.commands.SelectWorldCommand;
 import com.thebluehats.server.game.commands.SetGoldCommand;
 import com.thebluehats.server.game.commands.SpawnCommand;
 import com.thebluehats.server.game.commands.UnenchantCommand;
+import com.thebluehats.server.game.enchants.Billionaire;
 import com.thebluehats.server.game.enchants.ComboDamage;
 import com.thebluehats.server.game.enchants.ComboSwift;
 import com.thebluehats.server.game.enchants.LastStand;
@@ -77,6 +78,7 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         customEnchantManager.registerEnchant(injector.getInstance(ComboDamage.class));
         customEnchantManager.registerEnchant(injector.getInstance(LastStand.class));
         customEnchantManager.registerEnchant(injector.getInstance(Mirror.class));
+        customEnchantManager.registerEnchant(injector.getInstance(Billionaire.class));
     }
 
     private void registerPerks(Injector injector) {
@@ -86,6 +88,10 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
     }
 
     private void registerCommands(Injector injector) {
+        SpawnCommand spawnCommand = injector.getInstance(SpawnCommand.class);
+
+        getCommand("spawn").setExecutor(spawnCommand);
+        getCommand("respawn").setExecutor(spawnCommand);
         getCommand("pitenchant").setExecutor(injector.getInstance(EnchantCommand.class));
         getCommand("mysticenchants").setExecutor(injector.getInstance(MysticEnchantsCommand.class));
         getCommand("selectworld").setExecutor(injector.getInstance(SelectWorldCommand.class));
@@ -98,10 +104,6 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         getCommand("givebread").setExecutor(injector.getInstance(GiveBreadCommand.class));
         getCommand("givearrows").setExecutor(injector.getInstance(GiveArrowCommand.class));
         getCommand("giveobsidian").setExecutor(injector.getInstance(GiveObsidianCommand.class));
-
-        SpawnCommand spawnCommand = injector.getInstance(SpawnCommand.class);
-        getCommand("spawn").setExecutor(spawnCommand);
-        getCommand("respawn").setExecutor(spawnCommand);
     }
 
     @Override
