@@ -201,6 +201,7 @@ public class DamageManager {
                 && !player.hasPotionEffect(PotionEffectType.BLINDNESS);
     }
 
+    // TODO
     private double calculateDamage(double initialDamage, EntityDamageByEntityEvent event) {
         EventData data = eventData.get(event.getDamager().getUniqueId());
 

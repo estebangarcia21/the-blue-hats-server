@@ -38,9 +38,11 @@ public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
 
     @Override
     public void execute(SprintDrainArgs args) {
-        args.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, args.getDuration() * 20, args.getAmplifier()));
+        args.getPlayer().addPotionEffect(
+                new PotionEffect(PotionEffectType.SPEED, args.getDuration() * 20, args.getAmplifier()));
 
-        if (args.getLevel() == 1) return;
+        if (args.getLevel() == 1)
+            return;
 
         args.getDamaged().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
     }
