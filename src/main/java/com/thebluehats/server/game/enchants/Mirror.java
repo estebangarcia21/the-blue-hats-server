@@ -2,24 +2,25 @@ package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
 
+import com.google.inject.Inject;
+import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
-import com.thebluehats.server.game.managers.enchants.EnchantProperty;
+import com.thebluehats.server.game.utils.LoreBuilder;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-import com.thebluehats.server.game.utils.LoreBuilder;
-
 public class Mirror extends CustomEnchant<Integer> {
-    public final EnchantProperty<Float> DAMAGE_REFLECTION = new EnchantProperty<>(0f, .25f, .5f);
-
-    protected Mirror(EventTemplate[] templates) {
+    @Inject
+    public Mirror(@AllEventTemplates EventTemplate[] templates) {
         super(templates);
     }
 
     @Override
-    public void execute(Integer arg) { }
+    public void execute(Integer arg) {
+    }
 
     @Override
     public String getName() {
