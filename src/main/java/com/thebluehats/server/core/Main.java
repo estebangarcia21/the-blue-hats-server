@@ -9,6 +9,7 @@ import com.thebluehats.server.core.modules.CustomEnchantManagerModule;
 import com.thebluehats.server.core.modules.DamageManagerModule;
 import com.thebluehats.server.core.modules.EventTemplatesModule;
 import com.thebluehats.server.core.modules.HitCounterModule;
+import com.thebluehats.server.core.modules.MirrorModule;
 import com.thebluehats.server.core.modules.PluginModule;
 import com.thebluehats.server.game.commands.DuelCommand;
 import com.thebluehats.server.game.commands.EnchantCommand;
@@ -23,8 +24,10 @@ import com.thebluehats.server.game.commands.SelectWorldCommand;
 import com.thebluehats.server.game.commands.SetGoldCommand;
 import com.thebluehats.server.game.commands.SpawnCommand;
 import com.thebluehats.server.game.commands.UnenchantCommand;
+import com.thebluehats.server.game.enchants.ComboDamage;
 import com.thebluehats.server.game.enchants.ComboSwift;
 import com.thebluehats.server.game.enchants.LastStand;
+import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.enchants.Peroxide;
 import com.thebluehats.server.game.enchants.SprintDrain;
 import com.thebluehats.server.game.enchants.Wasp;
@@ -53,7 +56,7 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
 
         Injector injector = Guice.createInjector(new PluginModule(this), new CustomEnchantManagerModule(),
                 new CombatManagerModule(), new EventTemplatesModule(), new DamageManagerModule(),
-                new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule());
+                new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(), new MirrorModule());
 
         registerEnchants(injector);
         registerPerks(injector);
@@ -71,7 +74,9 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         customEnchantManager.registerEnchant(injector.getInstance(Peroxide.class));
         customEnchantManager.registerEnchant(injector.getInstance(SprintDrain.class));
         customEnchantManager.registerEnchant(injector.getInstance(ComboSwift.class));
+        customEnchantManager.registerEnchant(injector.getInstance(ComboDamage.class));
         customEnchantManager.registerEnchant(injector.getInstance(LastStand.class));
+        customEnchantManager.registerEnchant(injector.getInstance(Mirror.class));
     }
 
     private void registerPerks(Injector injector) {
@@ -86,14 +91,13 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         getCommand("selectworld").setExecutor(injector.getInstance(SelectWorldCommand.class));
         getCommand("setgold").setExecutor(injector.getInstance(SetGoldCommand.class));
         getCommand("unenchant").setExecutor(injector.getInstance(UnenchantCommand.class));
-
-        getCommand("pitabout").setExecutor(new PitAboutCommand());
-        getCommand("givefreshitem").setExecutor(new GiveFreshItemCommand());
-        getCommand("duel").setExecutor(new DuelCommand());
-        getCommand("giveprot").setExecutor(new GiveProtCommand());
-        getCommand("givebread").setExecutor(new GiveBreadCommand());
-        getCommand("givearrows").setExecutor(new GiveArrowCommand());
-        getCommand("giveobsidian").setExecutor(new GiveObsidianCommand());
+        getCommand("pitabout").setExecutor(injector.getInstance(PitAboutCommand.class));
+        getCommand("givefreshitem").setExecutor(injector.getInstance(GiveFreshItemCommand.class));
+        getCommand("duel").setExecutor(injector.getInstance(DuelCommand.class));
+        getCommand("giveprot").setExecutor(injector.getInstance(GiveProtCommand.class));
+        getCommand("givebread").setExecutor(injector.getInstance(GiveBreadCommand.class));
+        getCommand("givearrows").setExecutor(injector.getInstance(GiveArrowCommand.class));
+        getCommand("giveobsidian").setExecutor(injector.getInstance(GiveObsidianCommand.class));
 
         SpawnCommand spawnCommand = injector.getInstance(SpawnCommand.class);
         getCommand("spawn").setExecutor(spawnCommand);
