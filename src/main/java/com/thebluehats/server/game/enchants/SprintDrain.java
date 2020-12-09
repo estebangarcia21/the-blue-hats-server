@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.ArrowHitPlayer;
 import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.utils.LoreBuilder;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,8 +19,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import com.thebluehats.server.game.utils.LoreBuilder;
 
 public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
     private final EnchantProperty<Integer> SPEED_DURATION = new EnchantProperty<>(5, 5, 7);
@@ -86,8 +86,8 @@ public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
 }
 
 class SprintDrainArgs extends PotionEffectArgs {
-    private Player damaged;
-    private int level;
+    private final Player damaged;
+    private final int level;
 
     public SprintDrainArgs(Player damager, Player damaged, int duration, int amplifier, int level) {
         super(damager, duration, amplifier);
