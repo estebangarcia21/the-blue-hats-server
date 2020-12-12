@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.game.RegionManager;
+import com.thebluehats.server.game.managers.game.regionmanager.RegionManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
@@ -63,8 +63,13 @@ public class CombatManager implements Listener {
         timerData.setTime(calculateCombatTime());
 
         if (!timerData.isOnCooldown()) {
-            timerData.setTaskId( Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin,
-                    () -> {  if (timerData.getTime() == 0) { Bukkit.getServer().getScheduler().cancelTask(timerData.getTaskId()); return; } timerData.setTime(timerData.getTime() - 1); }, 0L, 20L));
+            timerData.setTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+                if (timerData.getTime() == 0) {
+                    Bukkit.getServer().getScheduler().cancelTask(timerData.getTaskId());
+                    return;
+                }
+                timerData.setTime(timerData.getTime() - 1);
+            }, 0L, 20L));
         }
     }
 
