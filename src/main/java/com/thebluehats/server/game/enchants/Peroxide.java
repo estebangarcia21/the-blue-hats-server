@@ -1,13 +1,16 @@
 package com.thebluehats.server.game.enchants;
 
+import java.util.ArrayList;
+
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
-import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
+import com.thebluehats.server.game.enchants.args.common.PotionEffectArgs;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,9 +20,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-
-public class Peroxide extends CustomEnchant<PotionEffectArgs>  {
+public class Peroxide extends CustomEnchant<PotionEffectArgs> {
     private final EnchantProperty<Integer> REGEN_DURATION = new EnchantProperty<>(5, 8, 8);
     private final EnchantProperty<Integer> REGEN_AMPLIFIER = new EnchantProperty<>(0, 0, 1);
 

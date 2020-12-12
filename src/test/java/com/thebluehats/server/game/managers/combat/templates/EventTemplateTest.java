@@ -1,12 +1,18 @@
 package com.thebluehats.server.game.managers.combat.templates;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.thebluehats.server.game.enchants.Wasp;
-import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
+import com.thebluehats.server.game.enchants.args.common.PotionEffectArgs;
+import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.utils.LoreBuilder;
+
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Arrow;
@@ -15,8 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.Test;
-
-import com.thebluehats.server.game.managers.combat.BowManager;
 
 public class EventTemplateTest {
     @Test
@@ -40,12 +44,14 @@ public class EventTemplateTest {
         when(damagee.getInventory()).thenReturn(inventory);
         when(damagee.getWorld()).thenReturn(world);
 
-        CustomEnchant<PotionEffectArgs> enchant = spy(new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() }));
+        CustomEnchant<PotionEffectArgs> enchant = spy(
+                new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() }));
         doNothing().when(enchant).execute(any());
 
         EventTemplate template = new PlayerHitPlayerTemplate();
 
-        template.run(enchant, damager, damagee, PlayerInventory::getItemInMainHand, level -> enchant.execute(mock(PotionEffectArgs.class)));
+        template.run(enchant, damager, damagee, PlayerInventory::getItemInMainHand,
+                level -> enchant.execute(mock(PotionEffectArgs.class)));
         verify(enchant).execute(any());
     }
 
@@ -73,12 +79,14 @@ public class EventTemplateTest {
         Arrow arrow = mock(Arrow.class);
         when(arrow.getShooter()).thenReturn(damager);
 
-        CustomEnchant<PotionEffectArgs> enchant = spy(new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() }));
+        CustomEnchant<PotionEffectArgs> enchant = spy(
+                new Wasp(new BowManager(), new EventTemplate[] { new ArrowHitPlayerTemplate() }));
         doNothing().when(enchant).execute(any());
 
         EventTemplate template = new ArrowHitPlayerTemplate();
 
-        template.run(enchant, arrow, damagee, PlayerInventory::getItemInMainHand, level -> enchant.execute(mock(PotionEffectArgs.class)));
+        template.run(enchant, arrow, damagee, PlayerInventory::getItemInMainHand,
+                level -> enchant.execute(mock(PotionEffectArgs.class)));
         verify(enchant).execute(any());
     }
 }

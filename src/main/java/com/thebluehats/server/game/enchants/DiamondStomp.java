@@ -1,20 +1,21 @@
 package com.thebluehats.server.game.enchants;
 
-import com.thebluehats.server.game.enchants.args.PlayerAndDamageEventArgs;
+import java.util.ArrayList;
+
+import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
+import com.thebluehats.server.game.managers.combat.DamageManager;
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.utils.LoreBuilder;
-import com.thebluehats.server.game.managers.combat.DamageManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
-
-import java.util.ArrayList;
 
 public class DiamondStomp extends CustomEnchant<PlayerAndDamageEventArgs> {
     private final EnchantProperty<Double> PERCENT_DAMAGE_INCREASE = new EnchantProperty<>(0.7, 0.12, 0.25);

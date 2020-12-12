@@ -1,4 +1,4 @@
-package com.thebluehats.server.game.enchants.args;
+package com.thebluehats.server.game.enchants.args.common;
 
 import org.bukkit.entity.Player;
 

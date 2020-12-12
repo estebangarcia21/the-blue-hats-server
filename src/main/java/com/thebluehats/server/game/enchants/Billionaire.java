@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
-import com.thebluehats.server.game.enchants.args.PlayerAndDamageEventArgs;
+import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;

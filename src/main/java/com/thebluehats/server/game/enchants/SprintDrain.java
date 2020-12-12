@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.ArrowHitPlayer;
-import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
+import com.thebluehats.server.game.enchants.args.common.PotionEffectArgs;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;

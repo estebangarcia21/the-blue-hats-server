@@ -2,12 +2,14 @@ package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
 
-import com.thebluehats.server.game.enchants.args.PlayerAndDamageEventArgs;
+import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
+import com.thebluehats.server.game.managers.combat.DamageManager;
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.utils.LoreBuilder;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,11 +17,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.thebluehats.server.game.managers.combat.DamageManager;
-
 public class BeatTheSpammers extends CustomEnchant<PlayerAndDamageEventArgs> {
     private EnchantProperty<Float> DAMAGE_AMOUNT = new EnchantProperty<>(.10f, .25f, .40f);
-    
+
     private DamageManager manager;
 
     public BeatTheSpammers(DamageManager manager, EventTemplate[] templates) {
@@ -36,10 +36,10 @@ public class BeatTheSpammers extends CustomEnchant<PlayerAndDamageEventArgs> {
 
     @Override
     public void execute(PlayerAndDamageEventArgs args) {
-//         if (((Player) args[0]).getInventory().getItemInHand().getType() ==
-//         Material.BOW) {
-//         manager.addDamage(((EntityDamageByEntityEvent) args[1]),
-//         damageAmount.getValueAtLevel(level), CalculationMode.ADDITIVE);
+        // if (((Player) args[0]).getInventory().getItemInHand().getType() ==
+        // Material.BOW) {
+        // manager.addDamage(((EntityDamageByEntityEvent) args[1]),
+        // damageAmount.getValueAtLevel(level), CalculationMode.ADDITIVE);
     }
 
     @Override

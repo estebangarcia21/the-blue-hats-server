@@ -1,13 +1,9 @@
 package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-import javax.xml.transform.Templates;
-
-import com.thebluehats.server.game.enchants.args.PlayerAndDamageEventArgs;
-import com.thebluehats.server.game.managers.combat.CalculationMode;
+import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
@@ -17,13 +13,12 @@ import com.thebluehats.server.game.utils.LoreBuilder;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class CriticallyFunky extends CustomEnchant<PlayerAndDamageEventArgs>  {
+public class CriticallyFunky extends CustomEnchant<PlayerAndDamageEventArgs> {
     private final EnchantProperty<Float> DAMAGE_REDUCTION = new EnchantProperty<>(0.35f, 0.35f, 0.6f);
     private final EnchantProperty<Float> DAMAGE_INCREASE = new EnchantProperty<>(0f, .14f, .3f);
     private final ArrayList<UUID> EXTRA_DAMAGE_QUEUE = new ArrayList<>();

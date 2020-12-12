@@ -1,16 +1,17 @@
 package com.thebluehats.server.game.enchants;
 
-import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import com.thebluehats.server.game.enchants.args.common.PotionEffectArgs;
 import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.junit.Test;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class WaspTest {
     @Test

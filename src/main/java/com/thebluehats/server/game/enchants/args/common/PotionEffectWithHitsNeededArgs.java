@@ -1,4 +1,4 @@
-package com.thebluehats.server.game.enchants.args;
+package com.thebluehats.server.game.enchants.args.common;
 
 import org.bukkit.entity.Player;
 
@@ -15,4 +15,3 @@ public class PotionEffectWithHitsNeededArgs extends PotionEffectArgs {
         return hitsNeeded;
     }
 }
-

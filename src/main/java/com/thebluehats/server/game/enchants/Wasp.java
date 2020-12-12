@@ -1,13 +1,18 @@
 package com.thebluehats.server.game.enchants;
 
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+
 import com.thebluehats.server.core.modules.annotations.ArrowHitPlayer;
-import com.thebluehats.server.game.enchants.args.PotionEffectArgs;
+import com.thebluehats.server.game.enchants.args.common.PotionEffectArgs;
 import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -17,9 +22,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import javax.inject.Inject;
-import java.util.ArrayList;
 
 public class Wasp extends CustomEnchant<PotionEffectArgs> {
     private final EnchantProperty<Integer> WEAKNESS_DURATION = new EnchantProperty<>(6, 11, 16);
@@ -49,7 +51,8 @@ public class Wasp extends CustomEnchant<PotionEffectArgs> {
 
     @Override
     public void execute(PotionEffectArgs args) {
-        args.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, args.getDuration() * 20, args.getAmplifier()));
+        args.getPlayer().addPotionEffect(
+                new PotionEffect(PotionEffectType.WEAKNESS, args.getDuration() * 20, args.getAmplifier()));
     }
 
     @Override
