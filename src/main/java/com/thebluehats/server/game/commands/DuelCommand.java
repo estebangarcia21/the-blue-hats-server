@@ -1,14 +1,14 @@
 package com.thebluehats.server.game.commands;
 
-import com.thebluehats.server.game.utils.CommandUtils;
+import com.thebluehats.server.game.utils.WorkInProgress;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class DuelCommand implements CommandExecutor {
+@WorkInProgress
+public class DuelCommand extends GameCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         String cmdName = "duel";
@@ -18,20 +18,19 @@ public class DuelCommand implements CommandExecutor {
 
             if (label.equalsIgnoreCase(cmdName)) {
                 if (args.length == 0) {
-                    player.sendMessage(CommandUtils.formatMessage(cmdName, String.format("/%s <player>", cmdName)));
+                    sendUsageMessage(player, cmdName, "Starts a duel with a player", "<level> ");
                 } else {
-                    if (Bukkit.getPlayer(args[0]) == null) {
-                        player.sendMessage(CommandUtils.formatMessage("Error!", "This player is not online!"));
+                    Player inputPlayer = Bukkit.getPlayer(args[0]);
 
+                    if (inputPlayer == null) {
+                        sendErrorMessage(player, "This player is not online!");
+                        return true;
+                    } else if (inputPlayer == player) {
+                        sendErrorMessage(player, "You can not duel yourself!");
                         return true;
                     }
 
-                    if (player == Bukkit.getPlayer(args[0])) {
-                        player.sendMessage(CommandUtils.formatMessage("Error!", "You can not duel yourself!"));
-                        return true;
-                    }
-
-                    // TODO Call duel manager
+                    // TODO Call duel start from the duel manager
                 }
             }
         }

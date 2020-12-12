@@ -10,12 +10,11 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class EnchantCommand implements CommandExecutor {
+public class EnchantCommand extends GameCommand {
     private final CustomEnchantManager customEnchantManager;
 
     @Inject
@@ -25,13 +24,17 @@ public class EnchantCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        String cmdName = "pitenchant";
+
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (label.equalsIgnoreCase("pitenchant")) {
+            if (label.equalsIgnoreCase(cmdName)) {
                 if (args.length == 0) {
-                    player.sendMessage(
-                            ChatColor.DARK_PURPLE + "Usage:" + ChatColor.RED + " /pitenchant <enchant> <level>");
+                    sendUsageMessage(player, cmdName, "Enchants an item with a custom enchant.", "enchant-name",
+                            "level");
+
+                    return true;
                 } else {
                     CustomEnchant<?> customEnchant = null;
 
