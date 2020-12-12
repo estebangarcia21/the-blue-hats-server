@@ -2,6 +2,8 @@ package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
 
+import com.google.inject.Inject;
+import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
 import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
@@ -18,11 +20,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
 public class DiamondStomp extends CustomEnchant<PlayerAndDamageEventArgs> {
-    private final EnchantProperty<Double> PERCENT_DAMAGE_INCREASE = new EnchantProperty<>(0.7, 0.12, 0.25);
+    private final EnchantProperty<Double> percentDamageIncrease = new EnchantProperty<>(0.7, 0.12, 0.25);
 
-    private DamageManager manager;
+    private final DamageManager manager;
 
-    public DiamondStomp(DamageManager manager, EventTemplate[] templates) {
+    @Inject
+    public DiamondStomp(DamageManager manager, @PlayerHitPlayer EventTemplate[] templates) {
         super(templates);
 
         this.manager = manager;

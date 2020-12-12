@@ -1,10 +1,15 @@
 package com.thebluehats.server.game.enchants;
 
+import java.util.ArrayList;
+
+import com.google.inject.Inject;
+import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
+import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.utils.LoreBuilder;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -13,12 +18,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.ArrayList;
-
 public class Healer extends CustomEnchant<HealerArgs> {
-    private final EnchantProperty<Integer> HEAL_AMOUNT = new EnchantProperty<>(2, 4, 6);
+    private final EnchantProperty<Integer> healAmount = new EnchantProperty<>(2, 4, 6);
 
-    public Healer(EventTemplate[] templates) {
+    @Inject
+    public Healer(@PlayerHitPlayer EventTemplate[] templates) {
         super(templates);
     }
 
@@ -26,9 +30,8 @@ public class Healer extends CustomEnchant<HealerArgs> {
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
                 level -> execute(new HealerArgs((Player) event.getDamager(), (Player) event.getEntity(),
-                        HEAL_AMOUNT.getValueAtLevel(level))));
+                        healAmount.getValueAtLevel(level))));
     }
-
 
     @Override
     public void execute(HealerArgs args) {
@@ -81,9 +84,9 @@ public class Healer extends CustomEnchant<HealerArgs> {
 }
 
 class HealerArgs {
-    private Player damager;
-    private Player damaged;
-    private int healAmount;
+    private final Player damager;
+    private final Player damaged;
+    private final int healAmount;
 
     public HealerArgs(Player damager, Player damaged, int healAmount) {
         this.damager = damager;

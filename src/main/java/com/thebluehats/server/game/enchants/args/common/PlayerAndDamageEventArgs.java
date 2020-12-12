@@ -4,8 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class PlayerAndDamageEventArgs {
-    private Player player;
-    private EntityDamageByEntityEvent event;
+    private final Player player;
+    private final EntityDamageByEntityEvent event;
 
     public PlayerAndDamageEventArgs(Player player, EntityDamageByEntityEvent event) {
         this.player = player;

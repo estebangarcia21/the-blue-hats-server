@@ -21,8 +21,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Peroxide extends CustomEnchant<PotionEffectArgs> {
-    private final EnchantProperty<Integer> REGEN_DURATION = new EnchantProperty<>(5, 8, 8);
-    private final EnchantProperty<Integer> REGEN_AMPLIFIER = new EnchantProperty<>(0, 0, 1);
+    private final EnchantProperty<Integer> regenDuration = new EnchantProperty<>(5, 8, 8);
+    private final EnchantProperty<Integer> regenAmplifier = new EnchantProperty<>(0, 0, 1);
 
     @Inject
     public Peroxide(@AllEventTemplates EventTemplate[] templates) {
@@ -32,8 +32,8 @@ public class Peroxide extends CustomEnchant<PotionEffectArgs> {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
-                level -> execute(new PotionEffectArgs((Player) event.getEntity(), REGEN_DURATION.getValueAtLevel(level),
-                        REGEN_AMPLIFIER.getValueAtLevel(level))));
+                level -> execute(new PotionEffectArgs((Player) event.getEntity(), regenDuration.getValueAtLevel(level),
+                        regenAmplifier.getValueAtLevel(level))));
     }
 
     @Override

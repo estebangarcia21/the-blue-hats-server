@@ -23,7 +23,7 @@ public class Billionaire extends CustomEnchant<PlayerAndDamageEventArgs> {
     private final EnchantProperty<Double> damageIncrease = new EnchantProperty<>(1.33D, 1.67D, 2D);
     private final EnchantProperty<Integer> goldNeeded = new EnchantProperty<>(100, 200, 350);
 
-    private DamageManager manager;
+    private final DamageManager manager;
 
     @Inject
     public Billionaire(DamageManager manager, @PlayerHitPlayer EventTemplate[] templates) {

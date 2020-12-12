@@ -3,6 +3,8 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.google.inject.Inject;
+import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
 import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
@@ -19,13 +21,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
 public class CriticallyFunky extends CustomEnchant<PlayerAndDamageEventArgs> {
-    private final EnchantProperty<Float> DAMAGE_REDUCTION = new EnchantProperty<>(0.35f, 0.35f, 0.6f);
-    private final EnchantProperty<Float> DAMAGE_INCREASE = new EnchantProperty<>(0f, .14f, .3f);
-    private final ArrayList<UUID> EXTRA_DAMAGE_QUEUE = new ArrayList<>();
+    private final EnchantProperty<Float> damageReduction = new EnchantProperty<>(0.35f, 0.35f, 0.6f);
+    private final EnchantProperty<Float> damageIncrease = new EnchantProperty<>(0f, .14f, .3f);
+    private final ArrayList<UUID> extraDamageQueue = new ArrayList<>();
 
-    private DamageManager manager;
+    private final DamageManager manager;
 
-    public CriticallyFunky(DamageManager manager, EventTemplate[] templates) {
+    @Inject
+    public CriticallyFunky(DamageManager manager, @PlayerHitPlayer EventTemplate[] templates) {
         super(templates);
 
         this.manager = manager;

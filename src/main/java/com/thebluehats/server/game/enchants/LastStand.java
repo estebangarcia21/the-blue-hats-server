@@ -1,5 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
+import java.util.ArrayList;
+
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
@@ -7,6 +9,7 @@ import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,8 +18,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.ArrayList;
 
 public class LastStand extends CustomEnchant<LastStandArgs> {
     private final EnchantProperty<Integer> resistanceAmplifier = new EnchantProperty<>(0, 1, 2);
@@ -28,9 +29,8 @@ public class LastStand extends CustomEnchant<LastStandArgs> {
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
-                level -> execute(new LastStandArgs((Player) event.getEntity(),
-                        resistanceAmplifier.getValueAtLevel(level))));
+        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings, level -> execute(
+                new LastStandArgs((Player) event.getEntity(), resistanceAmplifier.getValueAtLevel(level))));
     }
 
     @Override
@@ -38,7 +38,8 @@ public class LastStand extends CustomEnchant<LastStandArgs> {
         Player damaged = args.getDamaged();
 
         if (damaged.getHealth() < 10)
-            damaged.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, args.getEffectAmplifier(), true));
+            damaged.addPotionEffect(
+                    new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, args.getEffectAmplifier(), true));
     }
 
     @Override
@@ -80,8 +81,8 @@ public class LastStand extends CustomEnchant<LastStandArgs> {
 }
 
 class LastStandArgs {
-    private Player damaged;
-    private int effectAmplifier;
+    private final Player damaged;
+    private final int effectAmplifier;
 
     public LastStandArgs(Player damaged, int effectAmplifier) {
         this.damaged = damaged;

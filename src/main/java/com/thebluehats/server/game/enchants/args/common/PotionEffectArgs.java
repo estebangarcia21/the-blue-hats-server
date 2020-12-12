@@ -3,9 +3,9 @@ package com.thebluehats.server.game.enchants.args.common;
 import org.bukkit.entity.Player;
 
 public class PotionEffectArgs {
-    private Player player;
-    private int duration;
-    private int amplifier;
+    private final Player player;
+    private final int duration;
+    private final int amplifier;
 
     public PotionEffectArgs(Player player, int duration, int amplifier) {
         this.player = player;

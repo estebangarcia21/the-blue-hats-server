@@ -1,7 +1,13 @@
 package com.thebluehats.server.game.managers.enchants;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.utils.PitUtils;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -11,13 +17,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 public abstract class CustomEnchant<T> implements Listener {
-    private EventTemplate[] templates;
+    private final EventTemplate[] templates;
 
     protected CustomEnchant(EventTemplate[] templates) {
         this.templates = templates;

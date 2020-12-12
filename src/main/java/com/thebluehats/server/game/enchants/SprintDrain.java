@@ -21,8 +21,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
-    private final EnchantProperty<Integer> SPEED_DURATION = new EnchantProperty<>(5, 5, 7);
-    private final EnchantProperty<Integer> SPEED_AMPLIFIER = new EnchantProperty<>(0, 0, 1);
+    private final EnchantProperty<Integer> speedDuration = new EnchantProperty<>(5, 5, 7);
+    private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 0, 1);
 
     @Inject
     public SprintDrain(@ArrowHitPlayer EventTemplate[] templates) {
@@ -33,7 +33,7 @@ public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
     public void onHit(EntityDamageByEntityEvent event) {
         runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
                 level -> execute(new SprintDrainArgs((Player) event.getDamager(), (Player) event.getEntity(),
-                        SPEED_DURATION.getValueAtLevel(level), SPEED_AMPLIFIER.getValueAtLevel(level), level)));
+                        speedDuration.getValueAtLevel(level), speedAmplifier.getValueAtLevel(level), level)));
     }
 
     @Override

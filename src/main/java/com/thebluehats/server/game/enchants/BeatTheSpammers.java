@@ -2,6 +2,7 @@ package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
 
+import com.google.inject.Inject;
 import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
@@ -18,10 +19,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
 public class BeatTheSpammers extends CustomEnchant<PlayerAndDamageEventArgs> {
-    private EnchantProperty<Float> DAMAGE_AMOUNT = new EnchantProperty<>(.10f, .25f, .40f);
+    private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.10f, .25f, .40f);
 
-    private DamageManager manager;
+    private final DamageManager manager;
 
+    @Inject
     public BeatTheSpammers(DamageManager manager, EventTemplate[] templates) {
         super(templates);
 

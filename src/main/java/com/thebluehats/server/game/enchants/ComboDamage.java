@@ -20,10 +20,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
 public class ComboDamage extends CustomEnchant<PlayerAndDamageEventArgs> {
-    private final EnchantProperty<Float> DAMAGE_AMOUNT = new EnchantProperty<>(.2f, .3f, .45f);
-    private final EnchantProperty<Integer> HITS_NEEDED = new EnchantProperty<>(4, 3, 3);
+    private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.2f, .3f, .45f);
+    private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);
 
-    private DamageManager manager;
+    private final DamageManager manager;
 
     @Inject
     public ComboDamage(DamageManager manager, @PlayerHitPlayer EventTemplate[] templates) {

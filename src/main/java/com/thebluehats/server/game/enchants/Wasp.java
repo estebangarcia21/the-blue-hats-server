@@ -24,8 +24,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Wasp extends CustomEnchant<PotionEffectArgs> {
-    private final EnchantProperty<Integer> WEAKNESS_DURATION = new EnchantProperty<>(6, 11, 16);
-    private final EnchantProperty<Integer> WEAKNESS_AMPLIFIER = new EnchantProperty<>(1, 2, 3);
+    private final EnchantProperty<Integer> weaknessDuration = new EnchantProperty<>(6, 11, 16);
+    private final EnchantProperty<Integer> weaknessAmplifier = new EnchantProperty<>(1, 2, 3);
 
     private final BowManager bowManager;
 
@@ -41,7 +41,7 @@ public class Wasp extends CustomEnchant<PotionEffectArgs> {
         runEventTemplates(this, event.getDamager(), event.getEntity(),
                 inventory -> bowManager.getBowFromArrow((Arrow) event.getDamager()),
                 level -> execute(new PotionEffectArgs((Player) event.getEntity(),
-                        WEAKNESS_DURATION.getValueAtLevel(level), WEAKNESS_AMPLIFIER.getValueAtLevel(level))));
+                        weaknessDuration.getValueAtLevel(level), weaknessAmplifier.getValueAtLevel(level))));
     }
 
     @EventHandler
@@ -69,7 +69,7 @@ public class Wasp extends CustomEnchant<PotionEffectArgs> {
     public ArrayList<String> getDescription(int level) {
         return new LoreBuilder().declareVariable("II", "III", "IV").setColor(ChatColor.GRAY).write("Apply ")
                 .setColor(ChatColor.RED).write("Weakness ").writeVariable(0, level).setColor(ChatColor.GRAY)
-                .write(" (" + WEAKNESS_DURATION.getValueAtLevel(level) + "s) on hit").build();
+                .write(" (" + weaknessDuration.getValueAtLevel(level) + "s) on hit").build();
     }
 
     @Override
