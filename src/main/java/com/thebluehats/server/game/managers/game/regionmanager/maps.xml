@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml-model href="maps.xsd"?>
+<maps>
+    <map>
+        <name>Seasons</name>
+
+        <spawn-location>
+            <x>0.5</x>
+            <y>85.6</y>
+            <z>11.5</z>
+            <rotation>-180</rotation>
+        </spawn-location>
+
+        <bounds>
+            <min>
+                <x>35.5</x>
+                <y>77.5</y>
+                <z>30</z>
+            </min>
+        
+            <max>
+                <x>-42.5</x>
+                <y>111.5</y>
+                <z>-45.5</z>
+            </max>
+        </bounds>
+    </map>
+</maps>

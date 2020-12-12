@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="maps">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="map">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="name" type="xs:string" />
+                            <xs:element name="spawn-location">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="x" type="xs:string" />
+                                        <xs:element name="y" type="xs:string" />
+                                        <xs:element name="z" type="xs:string" />
+                                        <xs:element name="rotation" type="xs:string" />
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="bounds">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="min">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="x" type="xs:string" />
+                                                    <xs:element name="y" type="xs:string" />
+                                                    <xs:element name="z" type="xs:string" />
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="max">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="x" type="xs:string" />
+                                                    <xs:element name="y" type="xs:string" />
+                                                    <xs:element name="z" type="xs:string" />
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
