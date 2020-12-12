@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.ArrowHitPlayer;
-import com.thebluehats.server.game.enchants.args.common.PotionEffectArgs;
+import com.thebluehats.server.game.enchants.args.custom.SprintDrainArgs;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
@@ -84,25 +84,5 @@ public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.BOW };
-    }
-}
-
-class SprintDrainArgs extends PotionEffectArgs {
-    private final Player damaged;
-    private final int level;
-
-    public SprintDrainArgs(Player damager, Player damaged, int duration, int amplifier, int level) {
-        super(damager, duration, amplifier);
-
-        this.damaged = damaged;
-        this.level = level;
-    }
-
-    public Player getDamaged() {
-        return damaged;
-    }
-
-    public int getLevel() {
-        return level;
     }
 }

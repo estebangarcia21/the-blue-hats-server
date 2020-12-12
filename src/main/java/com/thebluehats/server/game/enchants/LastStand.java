@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
+import com.thebluehats.server.game.enchants.args.custom.LastStandArgs;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
@@ -77,23 +78,5 @@ public class LastStand extends CustomEnchant<LastStandArgs> {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.LEATHER_LEGGINGS };
-    }
-}
-
-class LastStandArgs {
-    private final Player damaged;
-    private final int effectAmplifier;
-
-    public LastStandArgs(Player damaged, int effectAmplifier) {
-        this.damaged = damaged;
-        this.effectAmplifier = effectAmplifier;
-    }
-
-    public Player getDamaged() {
-        return damaged;
-    }
-
-    public int getEffectAmplifier() {
-        return effectAmplifier;
     }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
+import com.thebluehats.server.game.enchants.args.custom.HealerArgs;
 import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
@@ -80,29 +81,5 @@ public class Healer extends CustomEnchant<HealerArgs> {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.GOLDEN_SWORD };
-    }
-}
-
-class HealerArgs {
-    private final Player damager;
-    private final Player damaged;
-    private final int healAmount;
-
-    public HealerArgs(Player damager, Player damaged, int healAmount) {
-        this.damager = damager;
-        this.damaged = damaged;
-        this.healAmount = healAmount;
-    }
-
-    public Player getDamager() {
-        return damager;
-    }
-
-    public Player getDamaged() {
-        return damaged;
-    }
-
-    public int getHealAmount() {
-        return healAmount;
     }
 }
