@@ -19,22 +19,22 @@ public class HitCounter {
         this.plugin = plugin;
     }
 
-    public void addOne(Player player) {
-        HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
+    public void addOne(UUID playerUuid) {
+        HitCounterData data = timerData.computeIfAbsent(playerUuid, k -> new HitCounterData());
 
         data.setHitResetTime(0L);
         data.setHitsWithEnchant(data.getHitsWithEnchant() + 1);
 
-        startHitResetTimer(player);
+        startHitResetTimer(playerUuid);
     }
 
-    public void add(Player player, int amount) {
-        HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
+    public void add(UUID playerUuid, int amount) {
+        HitCounterData data = timerData.computeIfAbsent(playerUuid, k -> new HitCounterData());
 
         data.setHitResetTime(0L);
         data.setHitsWithEnchant(data.getHitsWithEnchant() + amount);
 
-        startHitResetTimer(player);
+        startHitResetTimer(playerUuid);
     }
 
     public boolean hasHits(Player player, int hitAmount) {
@@ -49,8 +49,8 @@ public class HitCounter {
         return false;
     }
 
-    public void startHitResetTimer(Player player) {
-        HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
+    public void startHitResetTimer(UUID playerUuid) {
+        HitCounterData data = timerData.computeIfAbsent(playerUuid, k -> new HitCounterData());
 
         data.setHitResetTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             data.setHitResetTime(data.getHitResetTime() - 1);
