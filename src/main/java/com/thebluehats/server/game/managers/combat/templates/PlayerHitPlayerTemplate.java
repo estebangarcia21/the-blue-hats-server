@@ -1,24 +1,44 @@
 package com.thebluehats.server.game.managers.combat.templates;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.google.inject.Inject;
+import com.thebluehats.server.game.enchants.processedevents.ProcessedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
+import com.thebluehats.server.game.utils.EntityValidator;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class PlayerHitPlayerTemplate implements EventTemplate {
+public class PlayerHitPlayerTemplate
+        extends PostEventTemplate<EntityDamageByEntityEvent, ProcessedEntityDamageByEntityEvent> {
+    @Inject
+    public PlayerHitPlayerTemplate(CustomEnchantUtils customEnchantUtils) {
+        super(customEnchantUtils);
+    }
+
     @Override
-    public void run(CustomEnchant<?> enchant, Entity damager, Entity damagee, Function<PlayerInventory, ItemStack> getSource, Consumer<Integer> onSuccess) {
+    public void run(DamageEnchant enchant, EntityDamageByEntityEvent event,
+            Function<PlayerInventory, ItemStack> getSource, EntityValidator... validators) {
+        Entity damager = event.getDamager();
+        Entity damagee = event.getEntity();
+
         if (damager instanceof Player && damagee instanceof Player) {
             Player player = (Player) damagee;
             ItemStack source = getSource.apply(player.getInventory());
 
-            if (!enchant.canExecuteEnchant(source, new Entity[] { damager, damagee })) return;
+            for (EntityValidator validator : validators) {
+                if (!validator.validate(damager, damagee)) {
+                    return;
+                }
+            }
 
-            onSuccess.accept(enchant.getEnchantLevel(source));
-       }
+            enchant.execute(new ProcessedEntityDamageByEntityEvent(event, (Player) damager, (Player) damagee),
+                    customEnchantUtils.getEnchantLevel(enchant, source));
+        }
     }
 }
