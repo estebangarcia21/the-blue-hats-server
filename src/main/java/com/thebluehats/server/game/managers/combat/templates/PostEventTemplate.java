@@ -17,6 +17,6 @@ public abstract class PostEventTemplate<E extends Event, T> {
         this.customEnchantUtils = customEnchantUtils;
     }
 
-    abstract void run(DamageEnchant enchant, E event, Function<PlayerInventory, ItemStack> getSource,
-            EntityValidator... validators);
+    abstract void run(DamageEnchant enchant, E event, TargetPlayer targetPlayer,
+            Function<PlayerInventory, ItemStack> getSource, EntityValidator... validators);
 }
