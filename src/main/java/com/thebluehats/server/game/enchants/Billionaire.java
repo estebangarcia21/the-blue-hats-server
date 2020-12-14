@@ -51,7 +51,7 @@ public class Billionaire implements DamageEnchant {
         UUID key = data.getDamager().getUniqueId();
 
         PitDataModel playerData = pitDataRepository.findUnique(key);
-        float gold = playerData.getGold();
+        double gold = playerData.getGold();
 
         if (gold < goldNeeded.getValueAtLevel(level))
             return;
