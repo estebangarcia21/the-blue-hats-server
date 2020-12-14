@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     implementation "org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT"
+    implementation "com.konghq:unirest-java:3.11.04"
     implementation "com.google.inject:guice:4.1.0"
     testImplementation "junit:junit:4.11"
     testImplementation "org.mockito:mockito-core:3.5.15"
