@@ -3,9 +3,10 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
+import com.thebluehats.server.game.enchants.processedevents.ProcessedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -13,35 +14,33 @@ import com.thebluehats.server.game.utils.LoreBuilder;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class BeatTheSpammers extends CustomEnchant<PlayerAndDamageEventArgs> {
+public class BeatTheSpammers extends CustomEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.10f, .25f, .40f);
 
-    private final DamageManager manager;
+    private final DamageManager damageManager;
+    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
-    public BeatTheSpammers(DamageManager manager, EventTemplate[] templates) {
-        super(templates);
-
-        this.manager = manager;
+    public BeatTheSpammers(DamageManager damageManager, PlayerHitPlayerTemplate playerHitPlayerTemplate) {
+        this.damageManager = damageManager;
+        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> execute(new PlayerAndDamageEventArgs((Player) event.getDamager(), event)));
+        playerHitPlayerTemplate.run(this, event, PlayerInventory::getItemInMainHand, (e, level) -> run(e, level),
+                damageManager);
     }
 
-    @Override
-    public void execute(PlayerAndDamageEventArgs args) {
-        // if (((Player) args[0]).getInventory().getItemInHand().getType() ==
-        // Material.BOW) {
-        // manager.addDamage(((EntityDamageByEntityEvent) args[1]),
-        // damageAmount.getValueAtLevel(level), CalculationMode.ADDITIVE);
+    public void run(ProcessedEntityDamageByEntityEvent processedEvent, int level) {
+        if (processedEvent.getDamagee().getInventory().getItemInMainHand().getType() == Material.BOW) {
+            damageManager.addDamage(processedEvent.getEvent(), damageAmount.getValueAtLevel(level),
+                    CalculationMode.ADDITIVE);
+        }
     }
 
     @Override

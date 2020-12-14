@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.ArrowHitPlayer;
 import com.thebluehats.server.game.enchants.args.custom.SprintDrainArgs;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -25,7 +25,7 @@ public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
     private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 0, 1);
 
     @Inject
-    public SprintDrain(@ArrowHitPlayer EventTemplate[] templates) {
+    public SprintDrain(@ArrowHitPlayer PostEventTemplate[] templates) {
         super(templates);
     }
 

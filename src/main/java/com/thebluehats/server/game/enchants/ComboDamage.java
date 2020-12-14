@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
 import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -26,7 +26,7 @@ public class ComboDamage extends CustomEnchant<PlayerAndDamageEventArgs> {
     private final DamageManager manager;
 
     @Inject
-    public ComboDamage(DamageManager manager, @PlayerHitPlayer EventTemplate[] templates) {
+    public ComboDamage(DamageManager manager, @PlayerHitPlayer PostEventTemplate[] templates) {
         super(templates);
 
         this.manager = manager;

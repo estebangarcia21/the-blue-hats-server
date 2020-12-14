@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
 import com.thebluehats.server.game.enchants.args.common.PotionEffectWithHitsNeededArgs;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -29,7 +29,7 @@ public class ComboSwift extends CustomEnchant<PotionEffectWithHitsNeededArgs> {
     private final HitCounter hitCounter;
 
     @Inject
-    public ComboSwift(HitCounter hitCounter, @PlayerHitPlayer EventTemplate[] templates) {
+    public ComboSwift(HitCounter hitCounter, @PlayerHitPlayer PostEventTemplate[] templates) {
         super(templates);
 
         this.hitCounter = hitCounter;

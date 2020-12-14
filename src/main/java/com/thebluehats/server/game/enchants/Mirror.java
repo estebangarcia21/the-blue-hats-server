@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.utils.LoreBuilder;
@@ -14,7 +14,7 @@ import org.bukkit.Material;
 
 public class Mirror extends CustomEnchant<Integer> {
     @Inject
-    public Mirror(@AllEventTemplates EventTemplate[] templates) {
+    public Mirror(@AllEventTemplates PostEventTemplate[] templates) {
         super(templates);
     }
 

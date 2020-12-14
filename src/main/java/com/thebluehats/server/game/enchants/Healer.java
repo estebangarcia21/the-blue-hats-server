@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
 import com.thebluehats.server.game.enchants.args.custom.HealerArgs;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -23,7 +23,7 @@ public class Healer extends CustomEnchant<HealerArgs> {
     private final EnchantProperty<Integer> healAmount = new EnchantProperty<>(2, 4, 6);
 
     @Inject
-    public Healer(@PlayerHitPlayer EventTemplate[] templates) {
+    public Healer(@PlayerHitPlayer PostEventTemplate[] templates) {
         super(templates);
     }
 

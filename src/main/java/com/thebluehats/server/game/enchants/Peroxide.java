@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
 import com.thebluehats.server.game.enchants.args.common.PotionEffectArgs;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -25,7 +25,7 @@ public class Peroxide extends CustomEnchant<PotionEffectArgs> {
     private final EnchantProperty<Integer> regenAmplifier = new EnchantProperty<>(0, 0, 1);
 
     @Inject
-    public Peroxide(@AllEventTemplates EventTemplate[] templates) {
+    public Peroxide(@AllEventTemplates PostEventTemplate[] templates) {
         super(templates);
     }
 

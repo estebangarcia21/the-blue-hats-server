@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
 import com.thebluehats.server.game.enchants.args.custom.LastStandArgs;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -24,7 +24,7 @@ public class LastStand extends CustomEnchant<LastStandArgs> {
     private final EnchantProperty<Integer> resistanceAmplifier = new EnchantProperty<>(0, 1, 2);
 
     @Inject
-    public LastStand(@AllEventTemplates EventTemplate[] templates) {
+    public LastStand(@AllEventTemplates PostEventTemplate[] templates) {
         super(templates);
     }
 

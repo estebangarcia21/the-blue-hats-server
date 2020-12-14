@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import com.thebluehats.server.core.modules.annotations.ArrowHitPlayer;
-import com.thebluehats.server.game.enchants.args.common.PotionEffectArgs;
+import com.thebluehats.server.game.enchants.processedevents.ProcessedEntityDamageByEntityEvent;
 import com.thebluehats.server.game.managers.combat.BowManager;
-import com.thebluehats.server.game.managers.combat.templates.EventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -15,44 +14,39 @@ import com.thebluehats.server.game.utils.LoreBuilder;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Wasp extends CustomEnchant<PotionEffectArgs> {
+public class Wasp extends CustomEnchant {
     private final EnchantProperty<Integer> weaknessDuration = new EnchantProperty<>(6, 11, 16);
     private final EnchantProperty<Integer> weaknessAmplifier = new EnchantProperty<>(1, 2, 3);
 
     private final BowManager bowManager;
+    private final ArrowHitPlayerTemplate arrowHitPlayerTemplate;
 
     @Inject
-    public Wasp(BowManager bowManager, @ArrowHitPlayer EventTemplate[] templates) {
-        super(templates);
-
+    public Wasp(BowManager bowManager, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
         this.bowManager = bowManager;
+        this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        runEventTemplates(this, event.getDamager(), event.getEntity(),
-                inventory -> bowManager.getBowFromArrow((Arrow) event.getDamager()),
-                level -> execute(new PotionEffectArgs((Player) event.getEntity(),
-                        weaknessDuration.getValueAtLevel(level), weaknessAmplifier.getValueAtLevel(level))));
+        arrowHitPlayerTemplate.run(this, event, PlayerInventory::getItemInMainHand, (e, level) -> run(e, level));
+    }
+
+    public void run(ProcessedEntityDamageByEntityEvent processedEvent, int level) {
+        processedEvent.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
+                weaknessDuration.getValueAtLevel(level) * 20, weaknessAmplifier.getValueAtLevel(level)));
     }
 
     @EventHandler
     public void onArrowShootEvent(EntityShootBowEvent event) {
         bowManager.onArrowShoot(event);
-    }
-
-    @Override
-    public void execute(PotionEffectArgs args) {
-        args.getPlayer().addPotionEffect(
-                new PotionEffect(PotionEffectType.WEAKNESS, args.getDuration() * 20, args.getAmplifier()));
     }
 
     @Override
