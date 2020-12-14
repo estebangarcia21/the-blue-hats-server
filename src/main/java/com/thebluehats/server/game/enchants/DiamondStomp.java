@@ -3,10 +3,11 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.enchants.processedevents.ProcessedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -32,11 +33,12 @@ public class DiamondStomp implements DamageEnchant {
 
     @Override
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, PlayerInventory::getItemInMainHand, damageManager);
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
+                damageManager);
     }
 
     @Override
-    public void execute(ProcessedEntityDamageByEntityEvent data, int level) {
+    public void execute(PostEventTemplateResult data, int level) {
         Player damaged = data.getDamagee();
 
         if (playerHasDiamondPiece(damaged)) {

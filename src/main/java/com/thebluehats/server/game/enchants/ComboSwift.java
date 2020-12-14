@@ -1,12 +1,13 @@
 package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
-import com.thebluehats.server.game.enchants.args.common.PotionEffectWithHitsNeededArgs;
-import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
@@ -15,43 +16,40 @@ import com.thebluehats.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class ComboSwift extends CustomEnchant<PotionEffectWithHitsNeededArgs> {
+public class ComboSwift implements DamageEnchant {
     private final EnchantProperty<Integer> speedTime = new EnchantProperty<>(3, 4, 5);
     private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 1, 1);
     private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);
 
     private final HitCounter hitCounter;
+    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
-    public ComboSwift(HitCounter hitCounter, @PlayerHitPlayer PostEventTemplate[] templates) {
-        super(templates);
-
+    public ComboSwift(HitCounter hitCounter, PlayerHitPlayerTemplate playerHitPlayerTemplate) {
         this.hitCounter = hitCounter;
-    }
-
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> execute((new PotionEffectWithHitsNeededArgs((Player) event.getDamager(),
-                        speedTime.getValueAtLevel(level), speedAmplifier.getValueAtLevel(level),
-                        hitsNeeded.getValueAtLevel(level)))));
+        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
     }
 
     @Override
-    public void execute(PotionEffectWithHitsNeededArgs args) {
-        Player player = args.getPlayer();
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
+    }
 
-        hitCounter.addOne(player);
+    @Override
+    public void execute(PostEventTemplateResult data, int level) {
+        Player player = data.getDamager();
+        UUID playerUuid = player.getUniqueId();
 
-        if (hitCounter.hasHits(player, args.getHitsNeeded())) {
-            player.addPotionEffect(
-                    new PotionEffect(PotionEffectType.SPEED, args.getDuration() * 20, args.getAmplifier(), true));
+        hitCounter.addOne(playerUuid);
+
+        if (hitCounter.hasHits(player, hitsNeeded.getValueAtLevel(level))) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedTime.getValueAtLevel(level) * 20,
+                    speedAmplifier.getValueAtLevel(level), true));
         }
     }
 

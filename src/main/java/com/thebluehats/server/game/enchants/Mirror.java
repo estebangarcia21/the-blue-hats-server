@@ -2,9 +2,6 @@ package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
 
-import com.google.inject.Inject;
-import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
-import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.utils.LoreBuilder;
@@ -12,16 +9,7 @@ import com.thebluehats.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-public class Mirror extends CustomEnchant<Integer> {
-    @Inject
-    public Mirror(@AllEventTemplates PostEventTemplate[] templates) {
-        super(templates);
-    }
-
-    @Override
-    public void execute(Integer arg) {
-    }
-
+public class Mirror implements CustomEnchant {
     @Override
     public String getName() {
         return "Mirror";

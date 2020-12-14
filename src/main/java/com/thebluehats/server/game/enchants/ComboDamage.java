@@ -1,52 +1,60 @@
 package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
-import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
+import com.thebluehats.server.game.managers.enchants.HitCounter;
 import com.thebluehats.server.game.utils.LoreBuilder;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class ComboDamage extends CustomEnchant<PlayerAndDamageEventArgs> {
+public class ComboDamage implements DamageEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.2f, .3f, .45f);
     private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);
 
-    private final DamageManager manager;
+    private final DamageManager damageManager;
+    private final HitCounter hitCounter;
+    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
-    public ComboDamage(DamageManager manager, @PlayerHitPlayer PostEventTemplate[] templates) {
-        super(templates);
-
-        this.manager = manager;
-    }
-
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> execute(new PlayerAndDamageEventArgs((Player) event.getDamager(), event)));
+    public ComboDamage(DamageManager damamgeManager, HitCounter hitCounter,
+            PlayerHitPlayerTemplate playerHitPlayerTemplate) {
+        this.damageManager = damamgeManager;
+        this.hitCounter = hitCounter;
+        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
     }
 
     @Override
-    public void execute(PlayerAndDamageEventArgs args) {
-        // updateHitCount(damager);
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
+                damageManager);
+    }
 
-        // if (hasRequiredHits(damager, hitsNeeded.getValueAtLevel(level))) {
-        // damager.playSound(damager.getLocation(), Sound.ENTITY_DONKEY_HURT , 1, 0.5f);
-        // manager.addDamage(event, damageAmount.getValueAtLevel(level),
-        // CalculationMode.ADDITIVE);
-        //
+    @Override
+    public void execute(PostEventTemplateResult data, int level) {
+        Player damager = data.getDamager();
+        UUID playerUuid = damager.getUniqueId();
+
+        hitCounter.addOne(playerUuid);
+
+        if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(level))) {
+            damager.playSound(damager.getLocation(), Sound.ENTITY_DONKEY_HURT, 1, 0.5f);
+            damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(level), CalculationMode.ADDITIVE);
+        }
     }
 
     @Override

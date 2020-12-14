@@ -3,10 +3,10 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
-import com.thebluehats.server.game.enchants.args.custom.HealerArgs;
-import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
@@ -15,34 +15,32 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Healer extends CustomEnchant<HealerArgs> {
+public class Healer implements DamageEnchant {
     private final EnchantProperty<Integer> healAmount = new EnchantProperty<>(2, 4, 6);
 
-    @Inject
-    public Healer(@PlayerHitPlayer PostEventTemplate[] templates) {
-        super(templates);
-    }
+    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> execute(new HealerArgs((Player) event.getDamager(), (Player) event.getEntity(),
-                        healAmount.getValueAtLevel(level))));
+    @Inject
+    public Healer(PlayerHitPlayerTemplate playerHitPlayerTemplate) {
+        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
     }
 
     @Override
-    public void execute(HealerArgs args) {
-        Player damager = args.getDamager();
-        Player damaged = args.getDamaged();
-        int healAmount = args.getHealAmount();
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
+    }
 
-        damager.setHealth(Math.min(damager.getHealth() + healAmount,
+    @Override
+    public void execute(PostEventTemplateResult data, int level) {
+        Player damager = data.getDamager();
+        Player damaged = data.getDamagee();
+
+        damager.setHealth(Math.min(damager.getHealth() + healAmount.getValueAtLevel(level),
                 damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
-        damaged.setHealth(Math.min(damaged.getHealth() + healAmount,
+        damaged.setHealth(Math.min(damaged.getHealth() + healAmount.getValueAtLevel(level),
                 damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
     }
 

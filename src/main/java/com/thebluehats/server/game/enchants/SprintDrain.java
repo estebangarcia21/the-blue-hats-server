@@ -3,48 +3,46 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.core.modules.annotations.ArrowHitPlayer;
-import com.thebluehats.server.game.enchants.args.custom.SprintDrainArgs;
-import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class SprintDrain extends CustomEnchant<SprintDrainArgs> {
+public class SprintDrain implements DamageEnchant {
     private final EnchantProperty<Integer> speedDuration = new EnchantProperty<>(5, 5, 7);
     private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 0, 1);
 
-    @Inject
-    public SprintDrain(@ArrowHitPlayer PostEventTemplate[] templates) {
-        super(templates);
-    }
+    private final ArrowHitPlayerTemplate arrowHitPlayerTemplate;
 
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> execute(new SprintDrainArgs((Player) event.getDamager(), (Player) event.getEntity(),
-                        speedDuration.getValueAtLevel(level), speedAmplifier.getValueAtLevel(level), level)));
+    @Inject
+    public SprintDrain(ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
+        this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
     }
 
     @Override
-    public void execute(SprintDrainArgs args) {
-        args.getPlayer().addPotionEffect(
-                new PotionEffect(PotionEffectType.SPEED, args.getDuration() * 20, args.getAmplifier()));
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
+    }
 
-        if (args.getLevel() == 1)
+    @Override
+    public void execute(PostEventTemplateResult data, int level) {
+        data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+                speedDuration.getValueAtLevel(level) * 20, speedAmplifier.getValueAtLevel(level)));
+
+        if (level == 1)
             return;
 
-        args.getDamaged().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
+        data.getDamagee().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
     }
 
     @Override

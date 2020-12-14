@@ -1,60 +1,66 @@
 package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.enchants.processedevents.ProcessedEntityDamageByEntityEvent;
+import com.thebluehats.server.api.models.PitDataModel;
+import com.thebluehats.server.api.repos.Repository;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.grindingsystem.GrindingSystem;
 import com.thebluehats.server.game.utils.LoreBuilder;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Billionaire extends CustomEnchant {
+public class Billionaire implements DamageEnchant {
     private final EnchantProperty<Double> damageIncrease = new EnchantProperty<>(1.33D, 1.67D, 2D);
     private final EnchantProperty<Integer> goldNeeded = new EnchantProperty<>(100, 200, 350);
 
+    private final Repository<UUID, PitDataModel> pitDataRepository;
     private final DamageManager damageManager;
-    private final GrindingSystem grindingSystem;
     private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
-    public Billionaire(GrindingSystem grindingSystem, DamageManager damageManager,
+    public Billionaire(Repository<UUID, PitDataModel> pitDataRepository, DamageManager damageManager,
             PlayerHitPlayerTemplate playerHitPlayerTemplate) {
-        this.grindingSystem = grindingSystem;
+        this.pitDataRepository = pitDataRepository;
         this.damageManager = damageManager;
         this.playerHitPlayerTemplate = playerHitPlayerTemplate;
     }
 
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, PlayerInventory::getItemInMainHand, (e, level) -> run(e, level),
+    @Override
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
                 damageManager);
     }
 
-    public void run(ProcessedEntityDamageByEntityEvent event, int level) {
-        Player damagwr = event.getDamager();
-        
-        if (grindingSystem.getPlayerGold() >=
-        goldNeeded.getValueAtLevel(level)) {
-        GrindingSystem.setPlayerGold(player,
-        GrindingSystem.getPlayerGold(player) - goldNeeded.getValueAtLevel(level));
+    @Override
+    public void execute(PostEventTemplateResult data, int level) {
+        Player damager = data.getDamager();
+        UUID key = data.getDamager().getUniqueId();
 
-        DamageManager.addDamage((EntityDamageByEntityEvent) args.getEvent(),
-        damageIncrease.getValueAtLevel(level), CalculationMode.MULTIPLICATIVE);
-        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1,
-        0.73f);
+        PitDataModel playerData = pitDataRepository.findUnique(key);
+        float gold = playerData.getGold();
+
+        if (gold < goldNeeded.getValueAtLevel(level))
+            return;
+
+        pitDataRepository.update(key, model -> model.setGold(gold - goldNeeded.getValueAtLevel(level)));
+
+        damageManager.addDamage(data.getEvent(), damageIncrease.getValueAtLevel(level), CalculationMode.MULTIPLICATIVE);
+
+        damager.playSound(damager.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 0.73f);
     }
 
     @Override

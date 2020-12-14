@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.core.modules.annotations.PlayerHitPlayer;
-import com.thebluehats.server.game.enchants.args.common.PlayerAndDamageEventArgs;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
@@ -16,60 +18,54 @@ import com.thebluehats.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class CriticallyFunky extends CustomEnchant<PlayerAndDamageEventArgs> {
+public class CriticallyFunky implements DamageEnchant {
     private final EnchantProperty<Float> damageReduction = new EnchantProperty<>(0.35f, 0.35f, 0.6f);
     private final EnchantProperty<Float> damageIncrease = new EnchantProperty<>(0f, .14f, .3f);
     private final ArrayList<UUID> extraDamageQueue = new ArrayList<>();
 
-    private final DamageManager manager;
+    private final DamageManager damageManager;
+    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
+    private final ArrowHitPlayerTemplate arrowHitPlayerTemplate;
 
     @Inject
-    public CriticallyFunky(DamageManager manager, @PlayerHitPlayer PostEventTemplate[] templates) {
-        super(templates);
-
-        this.manager = manager;
-    }
-
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getItemInMainHand,
-                level -> execute(new PlayerAndDamageEventArgs((Player) event.getDamager(), event)));
+    public CriticallyFunky(DamageManager damageManager, PlayerHitPlayerTemplate playerHitPlayerTemplate,
+            ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
+        this.damageManager = damageManager;
+        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
+        this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
     }
 
     @Override
-    public void execute(PlayerAndDamageEventArgs args) {
-        // if (event.getDamager() instanceof Arrow) {
-        // Arrow arrow = (Arrow) event.getDamager();
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
+                damageManager);
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
+                damageManager);
+    }
 
-        // if (!arrow.isCritical())
-        // return;
-        // } else if (damager instanceof Player) {
-        // damager = (Player) damager;
-        // }
+    @Override
+    public void execute(PostEventTemplateResult data, int level) {
+        EntityDamageByEntityEvent event = data.getEvent();
 
-        // if (damager == null)
-        // return;
+        Player damager = data.getDamager();
 
-        // if (!manager.isCriticalHit(damager))
-        // return;
+        if (!damageManager.isCriticalHit(damager))
+            return;
 
-        // if (queue.contains(damager.getUniqueId())) {
-        // manager.addDamage(event, damageIncrease.getValueAtLevel(level),
-        // CalculationMode.ADDITIVE);
-        // queue.remove(damager.getUniqueId());
-        // }
+        if (extraDamageQueue.contains(damager.getUniqueId())) {
+            damageManager.addDamage(event, damageIncrease.getValueAtLevel(level), CalculationMode.ADDITIVE);
+            extraDamageQueue.remove(damager.getUniqueId());
+        }
 
-        // if (level != 1) {
-        // queue.add(event.getEntity().getUniqueId());
-        // }
+        if (level != 1) {
+            extraDamageQueue.add(event.getEntity().getUniqueId());
+        }
 
-        // manager.reduceDamage(event, damageReduction.getValueAtLevel(level));
-        // manager.removeExtraCriticalDamage(event);
-        // }
+        damageManager.reduceDamage(event, damageReduction.getValueAtLevel(level));
+        damageManager.removeExtraCriticalDamage(event);
     }
 
     @Override

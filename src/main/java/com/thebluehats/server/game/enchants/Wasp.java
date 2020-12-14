@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import com.thebluehats.server.game.enchants.processedevents.ProcessedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
@@ -21,7 +22,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Wasp extends CustomEnchant {
+public class Wasp implements DamageEnchant {
     private final EnchantProperty<Integer> weaknessDuration = new EnchantProperty<>(6, 11, 16);
     private final EnchantProperty<Integer> weaknessAmplifier = new EnchantProperty<>(1, 2, 3);
 
@@ -34,13 +35,14 @@ public class Wasp extends CustomEnchant {
         this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
     }
 
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        arrowHitPlayerTemplate.run(this, event, PlayerInventory::getItemInMainHand, (e, level) -> run(e, level));
+    @Override
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
     }
 
-    public void run(ProcessedEntityDamageByEntityEvent processedEvent, int level) {
-        processedEvent.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
+    @Override
+    public void execute(PostEventTemplateResult data, int level) {
+        data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
                 weaknessDuration.getValueAtLevel(level) * 20, weaknessAmplifier.getValueAtLevel(level)));
     }
 

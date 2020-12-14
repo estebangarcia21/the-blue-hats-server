@@ -3,22 +3,22 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.enchants.processedevents.ProcessedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class BeatTheSpammers extends CustomEnchant {
+public class BeatTheSpammers implements DamageEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.10f, .25f, .40f);
 
     private final DamageManager damageManager;
@@ -30,16 +30,16 @@ public class BeatTheSpammers extends CustomEnchant {
         this.playerHitPlayerTemplate = playerHitPlayerTemplate;
     }
 
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, PlayerInventory::getItemInMainHand, (e, level) -> run(e, level),
+    @Override
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
                 damageManager);
     }
 
-    public void run(ProcessedEntityDamageByEntityEvent processedEvent, int level) {
-        if (processedEvent.getDamagee().getInventory().getItemInMainHand().getType() == Material.BOW) {
-            damageManager.addDamage(processedEvent.getEvent(), damageAmount.getValueAtLevel(level),
-                    CalculationMode.ADDITIVE);
+    @Override
+    public void execute(PostEventTemplateResult data, int level) {
+        if (data.getDamagee().getInventory().getItemInMainHand().getType() == Material.BOW) {
+            damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(level), CalculationMode.ADDITIVE);
         }
     }
 

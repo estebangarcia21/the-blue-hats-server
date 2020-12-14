@@ -3,10 +3,11 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
-import com.thebluehats.server.game.enchants.args.custom.LastStandArgs;
-import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
@@ -14,33 +15,36 @@ import com.thebluehats.server.game.utils.LoreBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class LastStand extends CustomEnchant<LastStandArgs> {
+public class LastStand implements DamageEnchant {
     private final EnchantProperty<Integer> resistanceAmplifier = new EnchantProperty<>(0, 1, 2);
 
-    @Inject
-    public LastStand(@AllEventTemplates PostEventTemplate[] templates) {
-        super(templates);
-    }
+    private final ArrowHitPlayerTemplate arrowHitPlayerTemplate;
+    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings, level -> execute(
-                new LastStandArgs((Player) event.getEntity(), resistanceAmplifier.getValueAtLevel(level))));
+    @Inject
+    public LastStand(PlayerHitPlayerTemplate playerHitPlayerTemplate, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
+        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
+        this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
     }
 
     @Override
-    public void execute(LastStandArgs args) {
-        Player damaged = args.getDamaged();
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
+    }
+
+    @Override
+    public void execute(PostEventTemplateResult data, int level) {
+        Player damaged = data.getDamager();
 
         if (damaged.getHealth() < 10)
-            damaged.addPotionEffect(
-                    new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, args.getEffectAmplifier(), true));
+            damaged.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80,
+                    resistanceAmplifier.getValueAtLevel(level), true));
     }
 
     @Override

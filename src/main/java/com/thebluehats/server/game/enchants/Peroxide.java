@@ -3,43 +3,45 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.core.modules.annotations.AllEventTemplates;
-import com.thebluehats.server.game.enchants.args.common.PotionEffectArgs;
-import com.thebluehats.server.game.managers.combat.templates.PostEventTemplate;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
+import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.LoreBuilder;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Peroxide extends CustomEnchant<PotionEffectArgs> {
+public class Peroxide implements DamageEnchant {
     private final EnchantProperty<Integer> regenDuration = new EnchantProperty<>(5, 8, 8);
     private final EnchantProperty<Integer> regenAmplifier = new EnchantProperty<>(0, 0, 1);
 
-    @Inject
-    public Peroxide(@AllEventTemplates PostEventTemplate[] templates) {
-        super(templates);
-    }
+    private final ArrowHitPlayerTemplate arrowHitPlayerTemplate;
+    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        runEventTemplates(this, event.getDamager(), event.getEntity(), PlayerInventory::getLeggings,
-                level -> execute(new PotionEffectArgs((Player) event.getEntity(), regenDuration.getValueAtLevel(level),
-                        regenAmplifier.getValueAtLevel(level))));
+    @Inject
+    public Peroxide(PlayerHitPlayerTemplate playerHitPlayerTemplate, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
+        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
+        this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
     }
 
     @Override
-    public void execute(PotionEffectArgs args) {
-        args.getPlayer().addPotionEffect(
-                new PotionEffect(PotionEffectType.REGENERATION, args.getDuration() * 20, args.getAmplifier(), true));
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGEE, PlayerInventory::getLeggings);
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGEE, PlayerInventory::getLeggings);
+    }
+
+    @Override
+    public void execute(PostEventTemplateResult data, int level) {
+        data.getDamagee().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
+                regenDuration.getValueAtLevel(level) * 20, regenAmplifier.getValueAtLevel(level), true));
     }
 
     @Override
