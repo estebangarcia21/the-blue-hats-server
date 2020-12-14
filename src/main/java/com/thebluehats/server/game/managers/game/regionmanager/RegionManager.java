@@ -8,8 +8,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.thebluehats.server.game.utils.EntityValidator;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -20,7 +23,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class RegionManager {
+public class RegionManager implements EntityValidator {
     private static RegionManager instance;
 
     private final ArrayList<Region> regions = new ArrayList<>();
@@ -165,5 +168,11 @@ public class RegionManager {
 
     public Location getSpawnLocation(Player player) {
         return null;
+    }
+
+    @Override
+    public boolean validate(Entity... entities) {
+        // TODO Validate
+        return true;
     }
 }

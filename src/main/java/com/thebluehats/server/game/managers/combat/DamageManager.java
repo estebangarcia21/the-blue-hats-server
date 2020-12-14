@@ -10,6 +10,7 @@ import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.game.regionmanager.RegionManager;
+import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
-public class DamageManager {
+public class DamageManager implements EntityValidator {
     private final HashMap<UUID, EventData> eventData = new HashMap<>();
     private final ArrayList<UUID> canceledPlayers = new ArrayList<>();
     private final ArrayList<UUID> removeCriticalDamage = new ArrayList<>();
@@ -148,6 +149,10 @@ public class DamageManager {
         return false;
     }
 
+    public boolean uuidIsInCanceledEvent(UUID uuid) {
+        return canceledPlayers.contains(uuid);
+    }
+
     public void doTrueDamage(Player target, double damage) {
         if (mirror.itemHasEnchant(target.getInventory().getLeggings())) {
             target.setHealth(Math.max(0, target.getHealth() - damage));
@@ -228,6 +233,17 @@ public class DamageManager {
             damage = 1;
 
         return damage;
+    }
+
+    @Override
+    public boolean validate(Entity... entities) {
+        for (Entity entity : entities) {
+            if (uuidIsInCanceledEvent(entity.getUniqueId())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
