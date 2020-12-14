@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.MirrorReference;
 import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
+import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.game.regionmanager.RegionManager;
 import com.thebluehats.server.game.utils.EntityValidator;
@@ -35,13 +36,15 @@ public class DamageManager implements EntityValidator {
 
     private final CustomEnchantManager customEnchantManager;
     private final CombatManager combatManager;
+    private final CustomEnchantUtils customEnchantUtils;
 
     @Inject
     public DamageManager(@MirrorReference Mirror mirror, CustomEnchantManager customEnchantManager,
-            CombatManager combatManager) {
+            CombatManager combatManager, CustomEnchantUtils customEnchantUtils) {
         this.customEnchantManager = customEnchantManager;
         this.combatManager = combatManager;
         this.mirror = mirror;
+        this.customEnchantUtils = customEnchantUtils;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -154,18 +157,18 @@ public class DamageManager implements EntityValidator {
     }
 
     public void doTrueDamage(Player target, double damage) {
-        if (mirror.itemHasEnchant(target.getInventory().getLeggings())) {
+        if (customEnchantUtils.itemHasEnchant(mirror, target.getInventory().getLeggings())) {
             target.setHealth(Math.max(0, target.getHealth() - damage));
             target.damage(0);
         }
     }
 
     public void doTrueDamage(Player target, double damage, Player reflectTo) {
-        int level = mirror.getEnchantLevel(target.getInventory().getLeggings());
+        int level = customEnchantUtils.getEnchantLevel(mirror, target.getInventory().getLeggings());
 
         combatManager.combatTag(target);
 
-        if (!mirror.itemHasEnchant(target.getInventory().getLeggings())) {
+        if (!customEnchantUtils.itemHasEnchant(mirror, target.getInventory().getLeggings())) {
             if (target.getHealth() - damage < 0) {
                 safeSetPlayerHealth(target, 0);
             } else {
@@ -206,7 +209,6 @@ public class DamageManager implements EntityValidator {
                 && !player.hasPotionEffect(PotionEffectType.BLINDNESS);
     }
 
-    // TODO
     private double calculateDamage(double initialDamage, EntityDamageByEntityEvent event) {
         EventData data = eventData.get(event.getDamager().getUniqueId());
 
@@ -214,6 +216,7 @@ public class DamageManager implements EntityValidator {
                 * data.getReductionAmount() - data.getAbsoluteReductionAmount();
 
         if (removeCriticalDamage.contains(event.getDamager().getUniqueId())) {
+            // TODO FIX THIS!!
             damage *= .667;
         }
 

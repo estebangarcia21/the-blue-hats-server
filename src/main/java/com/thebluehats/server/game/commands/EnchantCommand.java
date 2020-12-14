@@ -5,6 +5,7 @@ import java.util.Map;
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
+import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -17,9 +18,12 @@ import org.bukkit.inventory.ItemStack;
 public class EnchantCommand extends GameCommand {
     private final CustomEnchantManager customEnchantManager;
 
+    private final CustomEnchantUtils customEnchantUtils;
+
     @Inject
-    public EnchantCommand(CustomEnchantManager customEnchantManager) {
+    public EnchantCommand(CustomEnchantManager customEnchantManager, CustomEnchantUtils customEnchantUtils) {
         this.customEnchantManager = customEnchantManager;
+        this.customEnchantUtils = customEnchantUtils;
     }
 
     @Override
@@ -36,9 +40,9 @@ public class EnchantCommand extends GameCommand {
 
                     return true;
                 } else {
-                    CustomEnchant<?> customEnchant = null;
+                    CustomEnchant customEnchant = null;
 
-                    for (CustomEnchant<?> enchant : customEnchantManager.getEnchants()) {
+                    for (CustomEnchant enchant : customEnchantManager.getEnchants()) {
                         if (enchant.getEnchantReferenceName().equalsIgnoreCase(args[0])) {
                             customEnchant = enchant;
                         }
@@ -76,7 +80,7 @@ public class EnchantCommand extends GameCommand {
                         return true;
                     }
 
-                    if (!customEnchant.isCompatibleWith(item.getType())) {
+                    if (!customEnchantUtils.isCompatibleWith(customEnchant, item.getType())) {
                         player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
                                 + " You can not enchant this enchant on this item!");
                         return true;
@@ -110,7 +114,7 @@ public class EnchantCommand extends GameCommand {
                         int rareTokens = 0;
                         int rareEnchantCount = 0;
 
-                        for (Map.Entry<CustomEnchant<?>, Integer> entry : customEnchantManager.getItemEnchants(item)
+                        for (Map.Entry<CustomEnchant, Integer> entry : customEnchantManager.getItemEnchants(item)
                                 .entrySet()) {
                             if (entry.getKey().isRareEnchant()) {
                                 rareTokens += entry.getValue();

@@ -8,13 +8,14 @@ import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
+import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 
 public class DamageManagerModule extends AbstractModule {
     @Provides
     @Singleton
     static DamageManager provideDamageManager(@MirrorReference Mirror mirror, CustomEnchantManager customEnchantManager,
-            CombatManager combatManager) {
-        return new DamageManager(mirror, customEnchantManager, combatManager);
+            CombatManager combatManager, CustomEnchantUtils customEnchantUtils) {
+        return new DamageManager(mirror, customEnchantManager, combatManager, customEnchantUtils);
     }
 
     @Override

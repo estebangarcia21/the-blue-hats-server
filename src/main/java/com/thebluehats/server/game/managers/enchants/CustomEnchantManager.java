@@ -1,10 +1,12 @@
 package com.thebluehats.server.game.managers.enchants;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.inject.Inject;
 
@@ -14,7 +16,6 @@ import com.thebluehats.server.game.utils.SortCustomEnchantByName;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,11 +23,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class CustomEnchantManager {
     private final ArrayList<CustomEnchant> enchants = new ArrayList<>();
 
-    private JavaPlugin plugin;
+    private final JavaPlugin plugin;
+    // TODO RESOLVE IF WE NEED THIS
+    private final CustomEnchantUtils customEnchantUtils;
 
     @Inject
-    public CustomEnchantManager(JavaPlugin plugin) {
+    public CustomEnchantManager(JavaPlugin plugin, CustomEnchantUtils customEnchantUtils) {
         this.plugin = plugin;
+        this.customEnchantUtils = customEnchantUtils;
     }
 
     public ArrayList<CustomEnchant> getEnchants() {
@@ -40,23 +44,10 @@ public class CustomEnchantManager {
         enchants.sort(new SortCustomEnchantByName());
     }
 
-    public boolean playerEnchantProcIsNotCanceled(Player player) {
-        // for (CustomEnchant enchant : getEnchants()) {
-        // if (enchant instanceof EnchantCanceler) {
-        // EnchantCanceler cancelEnchant = (EnchantCanceler) enchant;
-
-        // if (cancelEnchant.isCanceled(player))
-        // return false;
-        // }
-        // }
-
-        return true;
-    }
-
-    public void addEnchants(ItemStack item, int level, CustomEnchant<?>... enchants) {
+    public void addEnchants(ItemStack item, int level, CustomEnchant... enchants) {
         boolean itemHasAlreadyTieredUp = false;
 
-        for (CustomEnchant<?> enchant : enchants) {
+        for (CustomEnchant enchant : enchants) {
             ItemMeta meta = item.getItemMeta();
             String previousDisplayName = meta.getDisplayName();
 
@@ -253,7 +244,7 @@ public class CustomEnchantManager {
 
     }
 
-    public void removeEnchant(ItemStack item, CustomEnchant<?> enchant) {
+    public void removeEnchant(ItemStack item, CustomEnchant enchant) {
         ItemMeta meta = item.getItemMeta();
 
         List<String> lore = meta.getLore();
@@ -326,7 +317,7 @@ public class CustomEnchantManager {
         item.setItemMeta(meta);
     }
 
-    public boolean itemContainsEnchant(ItemStack item, CustomEnchant<?> enchant) {
+    public boolean itemContainsEnchant(ItemStack item, CustomEnchant enchant) {
         if (item.getItemMeta().getLore() == null || enchant == null)
             return false;
 
@@ -349,8 +340,8 @@ public class CustomEnchantManager {
         return false;
     }
 
-    public HashMap<CustomEnchant<?>, Integer> getItemEnchants(ItemStack item) {
-        HashMap<CustomEnchant<?>, Integer> enchantsToLevels = new HashMap<>();
+    public HashMap<CustomEnchant, Integer> getItemEnchants(ItemStack item) {
+        HashMap<CustomEnchant, Integer> enchantsToLevels = new HashMap<>();
 
         if (item.getType() == Material.AIR)
             return enchantsToLevels;
@@ -386,7 +377,7 @@ public class CustomEnchantManager {
 
             String name = enchantName.toString().trim();
 
-            for (CustomEnchant<?> enchant : getEnchants()) {
+            for (CustomEnchant enchant : getEnchants()) {
                 if (enchant.getName().equals(name)) {
                     enchantsToLevels.put(enchant, level);
                     break;
@@ -403,20 +394,20 @@ public class CustomEnchantManager {
 
         int tokens = 0;
 
-        for (Map.Entry<CustomEnchant<?>, Integer> entry : getItemEnchants(item).entrySet()) {
+        for (Map.Entry<CustomEnchant, Integer> entry : getItemEnchants(item).entrySet()) {
             tokens += entry.getValue();
         }
 
         return tokens;
     }
 
-    public List<CustomEnchant<?>> getRawItemEnchants(ItemStack item) {
+    public List<CustomEnchant> getRawItemEnchants(ItemStack item) {
         if (item == null)
             return new ArrayList<>();
 
-        ArrayList<CustomEnchant<?>> enchants = new ArrayList<>();
+        ArrayList<CustomEnchant> enchants = new ArrayList<>();
 
-        for (CustomEnchant<?> enchant : getEnchants()) {
+        for (CustomEnchant enchant : getEnchants()) {
             if (itemContainsEnchant(item, enchant)) {
                 enchants.add(enchant);
             }
@@ -444,11 +435,10 @@ public class CustomEnchantManager {
         return -1;
     }
 
-    // public boolean percentChance(double percent) {
-    // return Double.parseDouble(
-    // new DecimalFormat("#0.0").format(ThreadLocalRandom.current().nextDouble(0,
-    // 99))) <= percent;
-    // }
+    public boolean percentChance(double percent) {
+        return Double.parseDouble(
+                new DecimalFormat("#0.0").format(ThreadLocalRandom.current().nextDouble(0, 99))) <= percent;
+    }
 
     public ChatColor getChatColorFromPantsColor(String color) {
         switch (color.toLowerCase()) {
