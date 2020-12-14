@@ -4,9 +4,9 @@ import java.util.Comparator;
 
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 
-public class SortCustomEnchantByName implements Comparator<CustomEnchant<?>> {
+public class SortCustomEnchantByName implements Comparator<CustomEnchant> {
     @Override
-    public int compare(CustomEnchant<?> a, CustomEnchant<?> b) {
+    public int compare(CustomEnchant a, CustomEnchant b) {
         try {
             return a.getName().compareTo(b.getName());
         } catch (NullPointerException exception) {

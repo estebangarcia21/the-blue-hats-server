@@ -6,21 +6,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.thebluehats.server.game.utils.PitUtils;
+import com.thebluehats.server.game.utils.SortCustomEnchantByName;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import com.thebluehats.server.game.utils.SortCustomEnchantByName;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.inject.Inject;
-
 public class CustomEnchantManager {
-    private final ArrayList<CustomEnchant<?>> enchants = new ArrayList<>();
+    private final ArrayList<CustomEnchant> enchants = new ArrayList<>();
 
     private JavaPlugin plugin;
 
@@ -29,11 +29,11 @@ public class CustomEnchantManager {
         this.plugin = plugin;
     }
 
-    public ArrayList<CustomEnchant<?>> getEnchants() {
+    public ArrayList<CustomEnchant> getEnchants() {
         return enchants;
     }
 
-    public void registerEnchant(CustomEnchant<?> enchant) {
+    public void registerEnchant(CustomEnchant enchant) {
         plugin.getServer().getPluginManager().registerEvents(enchant, plugin);
 
         enchants.add(enchant);
@@ -62,7 +62,8 @@ public class CustomEnchantManager {
 
             int tierValue = getItemTier(item);
 
-            if (tierValue > 2) tierValue = 2;
+            if (tierValue > 2)
+                tierValue = 2;
 
             String tier = PitUtils.RomanNumerals.convertToRomanNumeral(tierValue + (itemHasAlreadyTieredUp ? 0 : 1));
 
