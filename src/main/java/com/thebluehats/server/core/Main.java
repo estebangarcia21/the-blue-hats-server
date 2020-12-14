@@ -1,16 +1,20 @@
 package com.thebluehats.server.core;
 
+import java.util.function.Consumer;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.thebluehats.server.core.modules.BowManagerModule;
 import com.thebluehats.server.core.modules.CombatManagerModule;
 import com.thebluehats.server.core.modules.CooldownTimerModule;
 import com.thebluehats.server.core.modules.CustomEnchantManagerModule;
+import com.thebluehats.server.core.modules.CustomEnchantUtilsModule;
 import com.thebluehats.server.core.modules.DamageManagerModule;
 import com.thebluehats.server.core.modules.EventTemplatesModule;
 import com.thebluehats.server.core.modules.HitCounterModule;
 import com.thebluehats.server.core.modules.MirrorModule;
 import com.thebluehats.server.core.modules.PluginModule;
+import com.thebluehats.server.core.modules.ServerApiModule;
 import com.thebluehats.server.game.commands.DuelCommand;
 import com.thebluehats.server.game.commands.EnchantCommand;
 import com.thebluehats.server.game.commands.GiveArrowCommand;
@@ -27,6 +31,7 @@ import com.thebluehats.server.game.commands.UnenchantCommand;
 import com.thebluehats.server.game.enchants.Billionaire;
 import com.thebluehats.server.game.enchants.ComboDamage;
 import com.thebluehats.server.game.enchants.ComboSwift;
+import com.thebluehats.server.game.enchants.DiamondStomp;
 import com.thebluehats.server.game.enchants.LastStand;
 import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.enchants.Peroxide;
@@ -34,12 +39,16 @@ import com.thebluehats.server.game.enchants.SprintDrain;
 import com.thebluehats.server.game.enchants.Wasp;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.game.PerkManager;
+import com.thebluehats.server.game.managers.grindingsystem.GrindingSystem;
 import com.thebluehats.server.game.perks.Vampire;
+import com.thebluehats.server.game.utils.PluginLifecycle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements PluginInformationProvider {
+    private Injector injector;
+
     @Override
     public void onEnable() {
         Bukkit.getLogger().info("\n" + "\n"
@@ -55,17 +64,39 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
                 + "  |___/\\_, | |___/\\__\\___|\\_/\\___|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|\n"
                 + "       |__/                                                     \n");
 
-        Injector injector = Guice.createInjector(new PluginModule(this), new CustomEnchantManagerModule(),
+        injector = Guice.createInjector(new PluginModule(this), new CustomEnchantManagerModule(),
                 new CombatManagerModule(), new EventTemplatesModule(), new DamageManagerModule(),
-                new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(), new MirrorModule());
+                new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(), new MirrorModule(),
+                new CustomEnchantUtilsModule(), new ServerApiModule());
 
         registerEnchants(injector);
         registerPerks(injector);
         registerCommands(injector);
+
+        updateLifecycles(injector, lifecycles -> startLifecycles(lifecycles));
     }
 
     @Override
     public void onDisable() {
+        updateLifecycles(injector, lifecycles -> endLifecycles(lifecycles));
+    }
+
+    private void updateLifecycles(Injector injector, Consumer<PluginLifecycle[]> action) {
+        PluginLifecycle grindingSystem = injector.getInstance(GrindingSystem.class);
+
+        action.accept(new PluginLifecycle[] { grindingSystem });
+    }
+
+    private void startLifecycles(PluginLifecycle[] lifecycles) {
+        for (PluginLifecycle lifecycle : lifecycles) {
+            lifecycle.onPluginStart();
+        }
+    }
+
+    private void endLifecycles(PluginLifecycle[] lifecycles) {
+        for (PluginLifecycle lifecycle : lifecycles) {
+            lifecycle.onPluginEnd();
+        }
     }
 
     private void registerEnchants(Injector injector) {
@@ -79,6 +110,7 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         customEnchantManager.registerEnchant(injector.getInstance(LastStand.class));
         customEnchantManager.registerEnchant(injector.getInstance(Mirror.class));
         customEnchantManager.registerEnchant(injector.getInstance(Billionaire.class));
+        customEnchantManager.registerEnchant(injector.getInstance(DiamondStomp.class));
     }
 
     private void registerPerks(Injector injector) {
