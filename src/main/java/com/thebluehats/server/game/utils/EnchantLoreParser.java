@@ -37,6 +37,8 @@ public class EnchantLoreParser extends LoreParserBase<String[][]> {
     }
 
     public void setSingleVariable(String levelOne, String levelTwo, String levelThree) {
+        onlyOneVariable = true;
+
         singleVariable = new String[] { levelOne, levelTwo, levelThree };
     }
 
@@ -52,10 +54,14 @@ public class EnchantLoreParser extends LoreParserBase<String[][]> {
 
         String formattedLine = line;
 
-        for (int i = 0; i < variableMatrix.length; i++) {
-            String variable = onlyOneVariable ? singleVariable[level - 1] : variableMatrix[i][level - 1];
+        if (onlyOneVariable) {
+            formattedLine = StringUtils.replace(formattedLine, "{0}", singleVariable[level - 1]);
+        } else {
+            for (int i = 0; i < variableMatrix.length; i++) {
+                String variable = onlyOneVariable ? singleVariable[level - 1] : variableMatrix[i][level - 1];
 
-            formattedLine = StringUtils.replace(formattedLine, "{" + i + "}", variable);
+                formattedLine = StringUtils.replace(formattedLine, "{" + i + "}", variable);
+            }
         }
 
         return formattedLine;
