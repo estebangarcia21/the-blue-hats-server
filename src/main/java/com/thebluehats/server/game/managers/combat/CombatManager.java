@@ -20,10 +20,12 @@ public class CombatManager implements Listener {
     private final HashMap<UUID, CombatTimerData> data = new HashMap<>();
 
     private final JavaPlugin plugin;
+    private final RegionManager regionManager;
 
     @Inject
-    public CombatManager(JavaPlugin plugin) {
+    public CombatManager(JavaPlugin plugin, RegionManager regionManager) {
         this.plugin = plugin;
+        this.regionManager = regionManager;
     }
 
     @EventHandler
@@ -57,7 +59,7 @@ public class CombatManager implements Listener {
 
     public void combatTag(Player player) {
         CombatTimerData timerData = data.get(player.getUniqueId());
-        if (RegionManager.getInstance().playerIsInRegion(player, RegionManager.RegionType.SPAWN))
+        if (regionManager.playerIsInRegion(player, RegionManager.RegionType.SPAWN))
             return;
 
         timerData.setTime(calculateCombatTime());

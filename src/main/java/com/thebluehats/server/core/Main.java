@@ -15,6 +15,7 @@ import com.thebluehats.server.core.modules.HitCounterModule;
 import com.thebluehats.server.core.modules.MirrorModule;
 import com.thebluehats.server.core.modules.PitDataRepositoryModule;
 import com.thebluehats.server.core.modules.PluginModule;
+import com.thebluehats.server.core.modules.RegionManagerModule;
 import com.thebluehats.server.core.modules.ServerApiModule;
 import com.thebluehats.server.game.commands.DuelCommand;
 import com.thebluehats.server.game.commands.EnchantCommand;
@@ -67,10 +68,11 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
                 + "  |___/\\_, | |___/\\__\\___|\\_/\\___|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|\n"
                 + "       |__/                                                     \n");
 
-        injector = Guice.createInjector(new PluginModule(this), new CustomEnchantManagerModule(),
-                new CombatManagerModule(), new EventTemplatesModule(), new DamageManagerModule(),
-                new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(), new MirrorModule(),
-                new CustomEnchantUtilsModule(), new ServerApiModule(), new PitDataRepositoryModule());
+        injector = Guice.createInjector(new PluginModule(this), new RegionManagerModule(),
+                new CustomEnchantManagerModule(), new CombatManagerModule(), new EventTemplatesModule(),
+                new DamageManagerModule(), new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(),
+                new MirrorModule(), new CustomEnchantUtilsModule(), new ServerApiModule(),
+                new PitDataRepositoryModule());
 
         registerEvents(injector);
         registerEnchants(injector);

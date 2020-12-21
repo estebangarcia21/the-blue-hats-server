@@ -29,13 +29,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class WorldSelectionManager implements Listener {
     private final String inventoryName = ChatColor.LIGHT_PURPLE + "World Selection";
     private final Inventory gui = Bukkit.createInventory(null, 9, inventoryName);
-
     private final ArrayList<UUID> mayExitGuiSelection = new ArrayList<>();
-    private JavaPlugin plugin;
+
+    private final JavaPlugin plugin;
+    private final RegionManager regionManager;
 
     @Inject
-    public WorldSelectionManager(JavaPlugin plugin) {
+    public WorldSelectionManager(JavaPlugin plugin, RegionManager regionManager) {
         this.plugin = plugin;
+        this.regionManager = regionManager;
     }
 
     public void displaySelectionMenu(Player player) {
@@ -95,7 +97,7 @@ public class WorldSelectionManager implements Listener {
 
     private void transportToWorld(HumanEntity player, String worldName) {
         World world = plugin.getServer().createWorld(new WorldCreator(worldName));
-        Location location = RegionManager.getInstance().getSpawnLocation(((Player) player));
+        Location location = regionManager.getSpawnLocation(((Player) player));
         Location spawnLocation = new Location(world, location.getX(), location.getY(), location.getZ(),
                 location.getYaw(), location.getPitch());
 

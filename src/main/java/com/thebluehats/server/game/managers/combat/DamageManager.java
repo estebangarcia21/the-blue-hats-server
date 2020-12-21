@@ -30,21 +30,22 @@ public class DamageManager implements EntityValidator {
     private final HashMap<UUID, EventData> eventData = new HashMap<>();
     private final ArrayList<UUID> canceledPlayers = new ArrayList<>();
     private final ArrayList<UUID> removeCriticalDamage = new ArrayList<>();
-
-    private final Mirror mirror;
     private final EnchantProperty<Float> mirrorReflectionValues = new EnchantProperty<>(0f, .25f, .5f);
 
+    private final Mirror mirror;
     private final CustomEnchantManager customEnchantManager;
     private final CombatManager combatManager;
     private final CustomEnchantUtils customEnchantUtils;
+    private final RegionManager regionManager;
 
     @Inject
     public DamageManager(@MirrorReference Mirror mirror, CustomEnchantManager customEnchantManager,
-            CombatManager combatManager, CustomEnchantUtils customEnchantUtils) {
+            CombatManager combatManager, CustomEnchantUtils customEnchantUtils, RegionManager regionManager) {
         this.customEnchantManager = customEnchantManager;
         this.combatManager = combatManager;
         this.mirror = mirror;
         this.customEnchantUtils = customEnchantUtils;
+        this.regionManager = regionManager;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -193,7 +194,7 @@ public class DamageManager implements EntityValidator {
     }
 
     public void safeSetPlayerHealth(Player player, double health) {
-        if (!RegionManager.getInstance().playerIsInRegion(player, RegionManager.RegionType.SPAWN)) {
+        if (!regionManager.playerIsInRegion(player, RegionManager.RegionType.SPAWN)) {
             if (health >= 0 && health <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
                 player.setHealth(health);
             }

@@ -13,13 +13,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SpawnCommand implements CommandExecutor {
-    private CombatManager manager;
-    private CooldownTimer cooldownTimer;
+    private final CombatManager manager;
+    private final CooldownTimer cooldownTimer;
+    private final RegionManager regionManager;
 
     @Inject
-    public SpawnCommand(CombatManager manager, CooldownTimer cooldownTimer) {
+    public SpawnCommand(CombatManager manager, CooldownTimer cooldownTimer, RegionManager regionManager) {
         this.manager = manager;
         this.cooldownTimer = cooldownTimer;
+        this.regionManager = regionManager;
     }
 
     @Override
@@ -28,7 +30,7 @@ public class SpawnCommand implements CommandExecutor {
             Player player = (Player) sender;
 
             if (label.equalsIgnoreCase("spawn") || label.equalsIgnoreCase("respawn")) {
-                if (RegionManager.getInstance().playerIsInRegion(player, RegionManager.RegionType.SPAWN)) {
+                if (regionManager.playerIsInRegion(player, RegionManager.RegionType.SPAWN)) {
                     player.sendMessage(ChatColor.RED + "You cannot /respawn here!");
                     return true;
                 }
@@ -36,7 +38,7 @@ public class SpawnCommand implements CommandExecutor {
                 if (!manager.playerIsInCombat(player)) {
                     if (!cooldownTimer.isOnCooldown(player)) {
                         player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-                        player.teleport(RegionManager.getInstance().getSpawnLocation(player));
+                        player.teleport(regionManager.getSpawnLocation(player));
 
                         cooldownTimer.startCooldown(player, 200);
                     } else {
