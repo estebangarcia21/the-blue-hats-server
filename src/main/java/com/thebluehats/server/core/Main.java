@@ -38,8 +38,10 @@ import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.enchants.Peroxide;
 import com.thebluehats.server.game.enchants.SprintDrain;
 import com.thebluehats.server.game.enchants.Wasp;
+import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.game.PerkManager;
+import com.thebluehats.server.game.managers.game.WorldSelectionManager;
 import com.thebluehats.server.game.managers.grindingsystem.GrindingSystem;
 import com.thebluehats.server.game.perks.Vampire;
 import com.thebluehats.server.game.utils.PluginLifecycle;
@@ -70,6 +72,7 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
                 new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(), new MirrorModule(),
                 new CustomEnchantUtilsModule(), new ServerApiModule(), new PitDataRepositoryModule());
 
+        registerEvents(injector);
         registerEnchants(injector);
         registerPerks(injector);
         registerCommands(injector);
@@ -80,6 +83,11 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
     @Override
     public void onDisable() {
         updateLifecycles(injector, lifecycles -> endLifecycles(lifecycles));
+    }
+
+    private void registerEvents(Injector injector) {
+        getServer().getPluginManager().registerEvents(injector.getInstance(CombatManager.class), this);
+        getServer().getPluginManager().registerEvents(injector.getInstance(WorldSelectionManager.class), this);
     }
 
     private void updateLifecycles(Injector injector, Consumer<PluginLifecycle[]> action) {
