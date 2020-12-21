@@ -20,14 +20,14 @@ public abstract class LoreParserBase<T> {
         for (String line : lines) {
             String formattedLine = ChatColor.GRAY.toString() + line;
 
+            formattedLine = insertVariableValuesForLine(formattedLine);
+
             for (ChatColor chatColor : ChatColor.values()) {
                 String name = chatColor.name().toLowerCase();
 
                 formattedLine = StringUtils.replace(formattedLine, "<" + name + ">", chatColor.toString());
                 formattedLine = StringUtils.replace(formattedLine, "</" + name + ">", ChatColor.GRAY.toString());
             }
-
-            formattedLine = insertVariableValuesForLine(formattedLine);
 
             parsedLore.add(formattedLine);
         }
