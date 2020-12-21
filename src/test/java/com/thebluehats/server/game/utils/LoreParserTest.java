@@ -10,7 +10,7 @@ import org.junit.Test;
 public class LoreParserTest {
     @Test
     public void BreaksLinesCorrectly() {
-        LoreParser loreParser = new LoreParser("A <br/> B");
+        LoreParser loreParser = new LoreParser("A<br/>B");
 
         ArrayList<String> expectedLore = new ArrayList<>();
         expectedLore.add(ChatColor.GRAY + "A");

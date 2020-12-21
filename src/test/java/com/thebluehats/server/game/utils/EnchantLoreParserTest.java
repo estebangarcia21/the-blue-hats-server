@@ -28,11 +28,25 @@ public class EnchantLoreParserTest {
     }
 
     @Test
+    public void CorrectlyInsertsSingleVariable() {
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("{0}");
+
+        enchantLoreParser.setSingleVariable("A", "B", "C");
+
+        ArrayList<String> expectedLore = new ArrayList<>();
+        expectedLore.add(ChatColor.GRAY + "A");
+
+        ArrayList<String> parsedLore = enchantLoreParser.parseForLevel(1);
+
+        assertEquals(expectedLore, parsedLore);
+    }
+
+    @Test
     public void AppendsLore() {
         int level = 1;
 
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser("A B C");
-        enchantLoreParser.addTextIf(level == 1, "<br/> A");
+        enchantLoreParser.addTextIf(level == 1, "<br/>A");
 
         ArrayList<String> expectedLore = new ArrayList<>();
         expectedLore.add(ChatColor.GRAY + "A B C");
