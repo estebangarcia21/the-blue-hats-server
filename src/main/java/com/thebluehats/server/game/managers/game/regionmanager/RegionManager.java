@@ -2,12 +2,15 @@ package com.thebluehats.server.game.managers.game.regionmanager;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.google.gson.Gson;
+import com.thebluehats.server.game.managers.game.regionmanager.maps.response.Map;
 import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Location;
@@ -38,6 +41,14 @@ public class RegionManager implements EntityValidator {
             instance = new RegionManager();
 
         return instance;
+    }
+
+    private void parseMapsFromJSON() {
+        Gson gson = new Gson();
+
+        URL mapsFile = getClass().getResource("/maps.json");
+
+        Map[] maps = gson.fromJson("", Map[].class);
     }
 
     private void parseMapsFromXmlConfig() {
