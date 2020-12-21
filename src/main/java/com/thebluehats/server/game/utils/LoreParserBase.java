@@ -18,7 +18,7 @@ public abstract class LoreParserBase<T> {
         String[] lines = lore.split("<br/>");
 
         for (String line : lines) {
-            String formattedLine = ChatColor.GRAY.toString() + line.trim();
+            String formattedLine = ChatColor.GRAY.toString() + line;
 
             for (ChatColor chatColor : ChatColor.values()) {
                 String name = chatColor.name().toLowerCase();
