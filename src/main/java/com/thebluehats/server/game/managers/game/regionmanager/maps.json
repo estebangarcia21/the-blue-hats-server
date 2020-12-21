@@ -1,0 +1,33 @@
+{
+    "maps": [
+        {
+            "name": "Seasons",
+            "spawn": {
+                "minBound": {
+                    "x": 0.5,
+                    "y": 85.6,
+                    "z": 11.5,
+                    "rotation": -180
+                },
+                "maxBound": {
+                    "x": 0.5,
+                    "y": 85.6,
+                    "z": 11.5,
+                    "rotation": -180
+                }
+            },
+            "mapBounds": {
+                "minBound": {
+                    "x": 0.5,
+                    "y": 85.6,
+                    "z": 11.5
+                },
+                "maxBound": {
+                    "x": 0.5,
+                    "y": 85.6,
+                    "z": 11.5
+                }
+            }
+        }
+    ]
+}
