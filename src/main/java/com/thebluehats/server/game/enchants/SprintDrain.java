@@ -9,12 +9,11 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -30,12 +29,15 @@ public class SprintDrain implements DamageEnchant {
     }
 
     @Override
+    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
     }
 
     @Override
-    public void execute(PostEventTemplateResult data, int level) {
+    public void execute(PostEventTemplateResult data) {
+        int level = data.getPrimaryLevel();
+
         data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
                 speedDuration.getValueAtLevel(level) * 20, speedAmplifier.getValueAtLevel(level)));
 
@@ -57,11 +59,18 @@ public class SprintDrain implements DamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("I", "I", "II").declareVariable("", "5", "7")
-                .write("Arrow shots grant you ").write(ChatColor.YELLOW, "Speed ")
-                .writeVariable(ChatColor.YELLOW, 0, level).next().write("(").writeVariable(1, level).write("s)")
-                .setWriteCondition(level != 1).write(" and apply ").write(ChatColor.BLUE, "Slowness I").next()
-                .write("(3s)").build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
+                "Arrow shots grant you <yellow>Speed {0}</yellow><br/>({1}s)");
+
+        enchantLoreParser.addTextIf(level != 1, " and apply <blue>Slowness I</blue><br/>(3s)");
+
+        String[][] variables = new String[2][];
+        variables[0] = new String[] {};
+        variables[1] = new String[] {};
+
+        enchantLoreParser.setVariables(variables);
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

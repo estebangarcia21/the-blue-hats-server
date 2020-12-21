@@ -11,14 +11,12 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -36,12 +34,15 @@ public class Wasp implements DamageEnchant {
     }
 
     @Override
+    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
     }
 
     @Override
-    public void execute(PostEventTemplateResult data, int level) {
+    public void execute(PostEventTemplateResult data) {
+        int level = data.getPrimaryLevel();
+
         data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
                 weaknessDuration.getValueAtLevel(level) * 20, weaknessAmplifier.getValueAtLevel(level)));
     }
@@ -63,9 +64,11 @@ public class Wasp implements DamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("II", "III", "IV").setColor(ChatColor.GRAY).write("Apply ")
-                .setColor(ChatColor.RED).write("Weakness ").writeVariable(0, level).setColor(ChatColor.GRAY)
-                .write(" (" + weaknessDuration.getValueAtLevel(level) + "s) on hit").build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("Apply <red>Weakness {0}</red> ({1}s) on hit");
+
+        enchantLoreParser.setSingleVariable("II", "III", "IV");
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

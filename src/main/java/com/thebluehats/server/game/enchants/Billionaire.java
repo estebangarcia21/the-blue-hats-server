@@ -14,14 +14,13 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.PlayerInventory;
 
 public class Billionaire implements DamageEnchant {
     private final EnchantProperty<Double> damageIncrease = new EnchantProperty<>(1.33D, 1.67D, 2D);
@@ -40,15 +39,16 @@ public class Billionaire implements DamageEnchant {
     }
 
     @Override
+    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
-                damageManager);
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, damageManager);
     }
 
     @Override
-    public void execute(PostEventTemplateResult data, int level) {
+    public void execute(PostEventTemplateResult data) {
         Player damager = data.getDamager();
         UUID key = data.getDamager().getUniqueId();
+        int level = data.getPrimaryLevel();
 
         PitDataModel playerData = pitDataRepository.findUnique(key);
         double gold = playerData.getGold();
@@ -75,10 +75,14 @@ public class Billionaire implements DamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("1.33", "1.67", "2").declareVariable("100g", "200g", "350g")
-                .setColor(ChatColor.GRAY).write("Hits with this sword deals ").setColor(ChatColor.RED)
-                .writeVariable(0, level).write("x").next().setColor(ChatColor.RED).write("damage ")
-                .setColor(ChatColor.GRAY).write("but cost ").setColor(ChatColor.GOLD).writeVariable(1, level).build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
+                "Hits with this swords deals <red>{0}x</red><br/>damage but cost <gold>{1}</gold>");
+
+        String[][] variables = new String[2][];
+        variables[0] = new String[] { "1.33", "1.67", "2" };
+        variables[1] = new String[] { "100g", "200g", "350g" };
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

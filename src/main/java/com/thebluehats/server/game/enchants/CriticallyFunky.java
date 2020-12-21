@@ -13,13 +13,12 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.PlayerInventory;
 
 public class CriticallyFunky implements DamageEnchant {
     private final EnchantProperty<Float> damageReduction = new EnchantProperty<>(0.35f, 0.35f, 0.6f);
@@ -39,18 +38,17 @@ public class CriticallyFunky implements DamageEnchant {
     }
 
     @Override
+    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
-                damageManager);
-        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
-                damageManager);
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, damageManager);
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, damageManager);
     }
 
     @Override
-    public void execute(PostEventTemplateResult data, int level) {
+    public void execute(PostEventTemplateResult data) {
         EntityDamageByEntityEvent event = data.getEvent();
-
         Player damager = data.getDamager();
+        int level = data.getPrimaryLevel();
 
         if (!damageManager.isCriticalHit(damager))
             return;
@@ -80,11 +78,18 @@ public class CriticallyFunky implements DamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("65%", "65%", "40%").declareVariable("", "14%", "30%")
-                .write("Critical hits against you deal").next().setColor(ChatColor.BLUE).writeVariable(0, level)
-                .resetColor().write(" of the damage they").next().write("normally would").setWriteCondition(level != 1)
-                .write(" and empower your").next().write("next strike for ").setColor(ChatColor.RED)
-                .writeVariable(1, level).resetColor().write(" damage").build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
+                "Critical hits against you deal<br/><blue>{0}</blue> of the damage they<br/> normally would");
+
+        enchantLoreParser.addTextIf(level != 1, " and empower your<br/>next strike for <red>{2}</red> damage");
+
+        String[][] variables = new String[2][];
+        variables[0] = new String[] { "65%", "65%", "40%" };
+        variables[1] = new String[] { "", "14%", "30%" };
+
+        enchantLoreParser.setVariables(variables);
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

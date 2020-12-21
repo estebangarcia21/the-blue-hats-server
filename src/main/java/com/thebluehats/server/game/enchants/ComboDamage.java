@@ -13,14 +13,13 @@ import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.PlayerInventory;
 
 public class ComboDamage implements DamageEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.2f, .3f, .45f);
@@ -39,21 +38,22 @@ public class ComboDamage implements DamageEnchant {
     }
 
     @Override
+    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
-                damageManager);
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, damageManager);
     }
 
     @Override
-    public void execute(PostEventTemplateResult data, int level) {
+    public void execute(PostEventTemplateResult data) {
         Player damager = data.getDamager();
         UUID playerUuid = damager.getUniqueId();
 
         hitCounter.addOne(playerUuid);
 
-        if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(level))) {
+        if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(data.getPrimaryLevel()))) {
             damager.playSound(damager.getLocation(), Sound.ENTITY_DONKEY_HURT, 1, 0.5f);
-            damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(level), CalculationMode.ADDITIVE);
+            damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(data.getPrimaryLevel()),
+                    CalculationMode.ADDITIVE);
         }
     }
 
@@ -69,9 +69,14 @@ public class ComboDamage implements DamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("fourth", "third", "third").declareVariable("+20%", "+30%", "+45%")
-                .write("Every ").setColor(ChatColor.YELLOW).writeVariable(0, level).resetColor().write(" strike deals")
-                .next().setColor(ChatColor.RED).writeVariable(1, level).resetColor().write(" damage").build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
+                "Every <yellow>{0}</yellow> strike deals<br/><red>{1}</red> damage");
+
+        String[][] variables = new String[2][];
+        variables[0] = new String[] { "fourth", "third", "third" };
+        variables[1] = new String[] { "+20%", "+30%", "+45%" };
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

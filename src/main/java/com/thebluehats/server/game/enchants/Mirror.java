@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 public class Mirror implements CustomEnchant {
@@ -22,10 +21,15 @@ public class Mirror implements CustomEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("", "25%", "50%").setWriteCondition(level == 1)
-                .write("You are immune to true damage").setWriteCondition(level != 1)
-                .write("You do not take true damage and").next().write("instead reflect ").setColor(ChatColor.YELLOW)
-                .writeVariable(0, level).resetColor().write(" of it to").next().write("your attacker").build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("");
+
+        enchantLoreParser.addTextIf(level == 1, "You are immune to true damage");
+        enchantLoreParser.addTextIf(level != 1,
+                "You do not take true damage and<br/>instead reflect <yellow>{0} of it to<br/>your attacker");
+
+        enchantLoreParser.setSingleVariable("", "25%", "50%");
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

@@ -10,12 +10,11 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -33,13 +32,16 @@ public class Peroxide implements DamageEnchant {
     }
 
     @Override
+    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGEE, PlayerInventory::getLeggings);
-        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGEE, PlayerInventory::getLeggings);
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGEE);
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGEE);
     }
 
     @Override
-    public void execute(PostEventTemplateResult data, int level) {
+    public void execute(PostEventTemplateResult data) {
+        int level = data.getPrimaryLevel();
+
         data.getDamagee().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
                 regenDuration.getValueAtLevel(level) * 20, regenAmplifier.getValueAtLevel(level), true));
     }
@@ -56,9 +58,15 @@ public class Peroxide implements DamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("Regen I", "Regen I", "Regen II").declareVariable("5", "8", "8")
-                .write("Gain ").writeVariable(ChatColor.RED, 0, level).write(" (").writeVariable(1, level).write("s)")
-                .write(" when hit").build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("Gain <red>Regen {0}</red> ({1}s) when hit");
+
+        String[][] variables = new String[2][];
+        variables[0] = new String[] { "I", "I", "II" };
+        variables[1] = new String[] { "5", "8", "8" };
+
+        enchantLoreParser.setVariables(variables);
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

@@ -11,12 +11,11 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.PlayerInventory;
 
 public class BeatTheSpammers implements DamageEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.10f, .25f, .40f);
@@ -31,15 +30,16 @@ public class BeatTheSpammers implements DamageEnchant {
     }
 
     @Override
+    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
-                damageManager);
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, damageManager);
     }
 
     @Override
-    public void execute(PostEventTemplateResult data, int level) {
+    public void execute(PostEventTemplateResult data) {
         if (data.getDamagee().getInventory().getItemInMainHand().getType() == Material.BOW) {
-            damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(level), CalculationMode.ADDITIVE);
+            damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(data.getPrimaryLevel()),
+                    CalculationMode.ADDITIVE);
         }
     }
 
@@ -55,9 +55,12 @@ public class BeatTheSpammers implements DamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("+10%", "+25%", "+40%").write("Deal ")
-                .writeVariable(ChatColor.RED, 0, level).write(" damage vs. players").next().write("holding a bow")
-                .build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
+                "Deal <red>{0}</red> damage vs. players<br/>holding a bow");
+
+        enchantLoreParser.setSingleVariable("+10%", "+25%", "+40%");
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

@@ -10,13 +10,12 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -33,18 +32,19 @@ public class LastStand implements DamageEnchant {
     }
 
     @Override
+    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
-        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
     }
 
     @Override
-    public void execute(PostEventTemplateResult data, int level) {
+    public void execute(PostEventTemplateResult data) {
         Player damaged = data.getDamager();
 
         if (damaged.getHealth() < 10)
             damaged.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80,
-                    resistanceAmplifier.getValueAtLevel(level), true));
+                    resistanceAmplifier.getValueAtLevel(data.getPrimaryLevel()), true));
     }
 
     @Override
@@ -59,9 +59,12 @@ public class LastStand implements DamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("I", "II", "III").write("Gain ").setColor(ChatColor.BLUE)
-                .write("Resistance ").writeVariable(0, level).resetColor().write(" (4").next()
-                .write("seconds) when reaching ").setColor(ChatColor.RED).write("3❤").build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
+                "Gain <blue>Resistance {0}</blue> (4<br/>seconds) when reaching 3❤");
+
+        enchantLoreParser.setSingleVariable("I", "II", "III");
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

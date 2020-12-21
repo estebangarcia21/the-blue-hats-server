@@ -11,13 +11,12 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.PlayerInventory;
 
 public class DiamondStomp implements DamageEnchant {
     private final EnchantProperty<Double> percentDamageIncrease = new EnchantProperty<>(0.7, 0.12, 0.25);
@@ -32,17 +31,17 @@ public class DiamondStomp implements DamageEnchant {
     }
 
     @Override
+    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand,
-                damageManager);
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, damageManager);
     }
 
     @Override
-    public void execute(PostEventTemplateResult data, int level) {
+    public void execute(PostEventTemplateResult data) {
         Player damaged = data.getDamagee();
 
         if (playerHasDiamondPiece(damaged)) {
-            damageManager.addDamage(data.getEvent(), percentDamageIncrease.getValueAtLevel(level),
+            damageManager.addDamage(data.getEvent(), percentDamageIncrease.getValueAtLevel(data.getPrimaryLevel()),
                     CalculationMode.ADDITIVE);
         }
     }
@@ -87,9 +86,12 @@ public class DiamondStomp implements DamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("7%", "12%", "25%").write("Deal ").setColor(ChatColor.RED).write("+")
-                .writeVariable(0, level).resetColor().write(" damage vs. players").next().write("wearing diamond armor")
-                .build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
+                "Deal <red>+{0}</red> damage vs. players<br/>wearing diamond armor");
+
+        enchantLoreParser.setSingleVariable("7%", "12%", "25%");
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

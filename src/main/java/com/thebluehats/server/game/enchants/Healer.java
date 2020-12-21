@@ -9,14 +9,13 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.PlayerInventory;
 
 public class Healer implements DamageEnchant {
     private final EnchantProperty<Integer> healAmount = new EnchantProperty<>(2, 4, 6);
@@ -29,14 +28,16 @@ public class Healer implements DamageEnchant {
     }
 
     @Override
+    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, PlayerInventory::getItemInMainHand);
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
     }
 
     @Override
-    public void execute(PostEventTemplateResult data, int level) {
+    public void execute(PostEventTemplateResult data) {
         Player damager = data.getDamager();
         Player damaged = data.getDamagee();
+        int level = data.getPrimaryLevel();
 
         damager.setHealth(Math.min(damager.getHealth() + healAmount.getValueAtLevel(level),
                 damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
@@ -56,9 +57,12 @@ public class Healer implements DamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return new LoreBuilder().declareVariable("1❤", "2❤", "3❤").write("Hitting a player ").setColor(ChatColor.GREEN)
-                .write("heals").resetColor().write(" both you and them for ").setColor(ChatColor.RED)
-                .writeVariable(0, level).build();
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
+                "Hitting a player <green>heals</green> both you adn them for <red>{0}</red>");
+
+        enchantLoreParser.setSingleVariable("1❤", "2❤", "3❤");
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override
