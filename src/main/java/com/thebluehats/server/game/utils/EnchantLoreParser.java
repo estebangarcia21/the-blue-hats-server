@@ -13,18 +13,6 @@ public class EnchantLoreParser extends LoreParserBase<String[][]> {
 
     private int level = 1;
 
-    public static void main(String[] args) {
-        String a = "1234";
-        String b = "1";
-
-        b = a;
-
-        b = "356";
-
-        System.out.println("ERPEF");
-        System.out.println(a);
-    }
-
     public EnchantLoreParser(String lore) {
         super(lore);
     }
