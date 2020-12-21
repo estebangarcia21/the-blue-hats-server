@@ -1,5 +1,7 @@
 package com.thebluehats.server.game.managers.enchants;
 
-public interface PostEventExecutor<T> {
+import org.bukkit.event.Listener;
+
+public interface PostEventExecutor<T> extends Listener {
     void execute(T data);
 }

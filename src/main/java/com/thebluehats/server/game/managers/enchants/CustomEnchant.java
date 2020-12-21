@@ -3,9 +3,8 @@ package com.thebluehats.server.game.managers.enchants;
 import java.util.ArrayList;
 
 import org.bukkit.Material;
-import org.bukkit.event.Listener;
 
-public interface CustomEnchant extends Listener {
+public interface CustomEnchant {
     String getName();
 
     String getEnchantReferenceName();
