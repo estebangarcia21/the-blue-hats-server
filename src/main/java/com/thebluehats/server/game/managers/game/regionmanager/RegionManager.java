@@ -1,13 +1,9 @@
 package com.thebluehats.server.game.managers.game.regionmanager;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import java.util.Arrays;
 
 import com.google.gson.Gson;
 import com.thebluehats.server.game.managers.game.regionmanager.maps.response.Map;
@@ -21,82 +17,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.util.Vector;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class RegionManager implements EntityValidator {
-    private static RegionManager instance;
-
-    private final ArrayList<Region> regions = new ArrayList<>();
     private final ArrayList<Map> maps = new ArrayList<>();
 
-    private RegionManager() {
-        parseMapsFromXmlConfig();
-    }
-
-    public static RegionManager getInstance() {
-        if (instance == null)
-            instance = new RegionManager();
-
-        return instance;
+    public RegionManager() {
+        parseMapsFromJSON();
     }
 
     private void parseMapsFromJSON() {
         Gson gson = new Gson();
 
-        URL mapsFile = getClass().getResource("/maps.json");
+        Reader reader = new InputStreamReader(getClass().getResourceAsStream("/maps.json"));
 
-        Map[] maps = gson.fromJson("", Map[].class);
-    }
-
-    private void parseMapsFromXmlConfig() {
-        DocumentBuilderFactory xmlFactory = DocumentBuilderFactory.newInstance();
-
-        try {
-            DocumentBuilder xmlBuilder = xmlFactory.newDocumentBuilder();
-            Document parseResult = xmlBuilder
-                    .parse(new File("src/main/java/com/thebluehats/server/game/managers/game/regionmanager/maps.xml"));
-
-            NodeList map = parseResult.getElementsByTagName("map");
-
-            for (int i = 0; i < map.getLength(); i++) {
-                Element currentMap = (Element) map.item(i);
-
-                String name = currentMap.getElementsByTagName("name").item(0).getTextContent();
-
-                NodeList spawnLocationNodeList = ((Element) map.item(0)).getElementsByTagName("spawn-location").item(0)
-                        .getChildNodes();
-                float spawnX = Float.parseFloat(spawnLocationNodeList.item(1).getTextContent());
-                float spawnY = Float.parseFloat(spawnLocationNodeList.item(3).getTextContent());
-                float spawnZ = Float.parseFloat(spawnLocationNodeList.item(5).getTextContent());
-                float rotation = Float.parseFloat(spawnLocationNodeList.item(7).getTextContent());
-
-                Vector spawnLocation = new Vector(spawnX, spawnY, spawnZ);
-                float spawnRotation = rotation;
-
-                Element bounds = (Element) currentMap.getElementsByTagName("bounds").item(0);
-
-                NodeList min = bounds.getElementsByTagName("min").item(0).getChildNodes();
-                float minX = Float.parseFloat(min.item(1).getTextContent());
-                float minY = Float.parseFloat(min.item(3).getTextContent());
-                float minZ = Float.parseFloat(min.item(5).getTextContent());
-
-                Vector minBound = new Vector(minX, minY, minZ);
-
-                NodeList max = bounds.getElementsByTagName("max").item(0).getChildNodes();
-                float maxX = Float.parseFloat(max.item(1).getTextContent());
-                float maxY = Float.parseFloat(max.item(3).getTextContent());
-                float maxZ = Float.parseFloat(max.item(5).getTextContent());
-
-                Vector maxBound = new Vector(maxX, maxY, maxZ);
-
-                maps.add(new Map(name, spawnLocation, spawnRotation, minBound, maxBound));
-            }
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
-        }
+        maps.addAll(Arrays.asList(gson.fromJson(reader, Map[].class)));
     }
 
     @EventHandler

@@ -1,27 +1,13 @@
-{
-    "maps": [
-        {
-            "name": "Seasons",
-            "spawn": {
-                "location": {
-                    "x": 0.5,
-                    "y": 85.6,
-                    "z": 11.5
-                },
-                "rotation": -180,
-                "bounds": {
-                    "minBound": {
-                        "x": 0.5,
-                        "y": 85.6,
-                        "z": 11.5
-                    },
-                    "maxBound": {
-                        "x": 0.5,
-                        "y": 85.6,
-                        "z": 11.5
-                    }
-                }
+[
+    {
+        "name": "Seasons",
+        "spawn": {
+            "location": {
+                "x": 0.5,
+                "y": 85.6,
+                "z": 11.5
             },
+            "rotation": -180,
             "bounds": {
                 "minBound": {
                     "x": 0.5,
@@ -34,6 +20,18 @@
                     "z": 11.5
                 }
             }
+        },
+        "bounds": {
+            "minBound": {
+                "x": 0.5,
+                "y": 85.6,
+                "z": 11.5
+            },
+            "maxBound": {
+                "x": 0.5,
+                "y": 85.6,
+                "z": 11.5
+            }
         }
-    ]
-}
+    }
+]
