@@ -2,7 +2,8 @@ package com.thebluehats.server.game.commands;
 
 import java.util.ArrayList;
 
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.LoreParser;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -28,6 +29,9 @@ public class GiveFreshItemCommand implements CommandExecutor {
                     ItemStack item;
                     LeatherArmorMeta freshPantsMeta = null;
 
+                    ArrayList<String> freshItemLore = new LoreParser("Kept on death<br/><br/>Used in the mystic well")
+                            .parse();
+
                     if (object.equalsIgnoreCase("Sword")) {
                         item = new ItemStack(Material.GOLDEN_SWORD, 1);
 
@@ -37,8 +41,7 @@ public class GiveFreshItemCommand implements CommandExecutor {
 
                         // meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
 
-                        meta.setLore(new LoreBuilder().write("Kept on death").next().next()
-                                .write("Used in the mystic well").build());
+                        meta.setLore(freshItemLore);
 
                         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
                         meta.setUnbreakable(true);
@@ -53,8 +56,7 @@ public class GiveFreshItemCommand implements CommandExecutor {
 
                         // meta.addEnchant(Enchantment.DURABILITY, 1, true);
 
-                        meta.setLore(new LoreBuilder().write("Kept on death").next().next()
-                                .write("Used in the mystic well").build());
+                        meta.setLore(freshItemLore);
 
                         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
                         meta.setUnbreakable(true);
@@ -138,14 +140,15 @@ public class GiveFreshItemCommand implements CommandExecutor {
 
         newMeta.setUnbreakable(true);
 
-        newMeta.setLore(new ArrayList<String>() {
-            private static final long serialVersionUID = 1L;
-            {
-                add(ChatColor.GRAY + "Kept on death");
-                add(" ");
-                add(color + "Used in the mystic well");
-                add(color + "Also, a fashion statement");
-            }
-        });
+        LoreParser loreParser = new LoreParser(
+                "Kept on death</br></br>{0}Used in the mystic well{1}</br>{0}Also, a fashion statement{1}");
+
+        String[] variables = new String[2];
+        variables[0] = "<" + color + ">";
+        variables[1] = "</" + color + ">";
+
+        loreParser.setVariables(variables);
+
+        newMeta.setLore(loreParser.parse());
     }
 }

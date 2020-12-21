@@ -1,5 +1,9 @@
 package com.thebluehats.server.game.commands;
 
+import java.util.ArrayList;
+
+import com.thebluehats.server.game.utils.LoreParser;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -8,8 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import com.thebluehats.server.game.utils.LoreBuilder;
 
 public class GiveBreadCommand implements CommandExecutor {
     @Override
@@ -21,9 +23,10 @@ public class GiveBreadCommand implements CommandExecutor {
                 ItemStack bread = new ItemStack(Material.BREAD, 64);
                 ItemMeta meta = bread.getItemMeta();
 
+                ArrayList<String> breadLore = new LoreParser("Heals <red>4❤</red></br>Grants 1❤").parse();
+
                 meta.setDisplayName(ChatColor.GOLD + "Yummy Bread");
-                meta.setLore(new LoreBuilder().write("Heals ").write(ChatColor.RED, "4❤").next().write("Grants ")
-                        .write(ChatColor.GOLD, "1❤").build());
+                meta.setLore(breadLore);
 
                 bread.setItemMeta(meta);
 

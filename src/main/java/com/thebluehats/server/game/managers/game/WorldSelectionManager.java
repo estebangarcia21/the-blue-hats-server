@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.game.regionmanager.RegionManager;
-import com.thebluehats.server.game.utils.LoreBuilder;
+import com.thebluehats.server.game.utils.LoreParser;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -114,9 +114,10 @@ public class WorldSelectionManager implements Listener {
 
         meta.setDisplayName(ChatColor.RED + "The Toxic World");
 
-        meta.setLore(new LoreBuilder().setColor(ChatColor.YELLOW).write("A world where any").next()
-                .write("enchants are allowed").next().next().resetColor()
-                .write(ChatColor.ITALIC + "No token limit on items").build());
+        ArrayList<String> toxicWorldLore = new LoreParser(
+                "A world where any<br/>enchants are allowed<br/><br/><italic>No token limit on items</italic>").parse();
+
+        meta.setLore(toxicWorldLore);
 
         gui.getItem(3).setItemMeta(meta);
 
@@ -126,10 +127,11 @@ public class WorldSelectionManager implements Listener {
 
         meta.setDisplayName(ChatColor.AQUA + "The Peaceful World");
 
-        meta.setLore(new LoreBuilder().setColor(ChatColor.WHITE).write("A world where the most toxic").next()
-                .write("enchants are removed from").next().write("existance for peaceful").next()
-                .write("gameplay and fair fights").next().next().resetColor()
-                .write(ChatColor.ITALIC + "8 tokens maximum on items").build());
+        ArrayList<String> peacefulWorldLore = new LoreParser(
+                "A world where the most toxic</br>enchants are removed from</br>existance for peaceful</br>gameplay and fair fights</br></br><italic>8 tokens maximum on items")
+                        .parse();
+
+        meta.setLore(peacefulWorldLore);
 
         gui.getItem(5).setItemMeta(meta);
     }
