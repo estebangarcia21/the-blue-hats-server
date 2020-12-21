@@ -16,6 +16,7 @@ import com.thebluehats.server.game.utils.SortCustomEnchantByName;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,7 +39,9 @@ public class CustomEnchantManager {
     }
 
     public void registerEnchant(CustomEnchant enchant) {
-        plugin.getServer().getPluginManager().registerEvents(enchant, plugin);
+        if (enchant instanceof Listener) {
+            plugin.getServer().getPluginManager().registerEvents((Listener) enchant, plugin);
+        }
 
         enchants.add(enchant);
         enchants.sort(new SortCustomEnchantByName());
