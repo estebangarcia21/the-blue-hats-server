@@ -2,29 +2,29 @@ package com.thebluehats.server.game.commands;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.game.WorldSelectionManager;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+
 import org.bukkit.entity.Player;
 
-public class SelectWorldCommand implements CommandExecutor {
-    private final WorldSelectionManager manager;
+public class SelectWorldCommand extends GameCommand {
+    private final WorldSelectionManager worldSelectionManager;
 
     @Inject
     public SelectWorldCommand(WorldSelectionManager manager) {
-        this.manager = manager;
+        this.worldSelectionManager = manager;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+    public String[] getCommandNames() {
+        return new String[] { "selectworld" };
+    }
 
-            if (label.equalsIgnoreCase("selectworld")) {
-               manager.displaySelectionMenu(player);
-            }
-        }
+    @Override
+    public String getUsageMessage(String cmd) {
+        return formatStandardUsageMessage(cmd, "Displats the world selection menu.");
+    }
 
-        return true;
+    @Override
+    public void runCommand(Player player, String commandName, String[] args) {
+        worldSelectionManager.displaySelectionMenu(player);
     }
 }

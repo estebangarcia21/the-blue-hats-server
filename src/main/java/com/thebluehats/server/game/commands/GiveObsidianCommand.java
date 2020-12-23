@@ -1,25 +1,24 @@
 package com.thebluehats.server.game.commands;
 
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class GiveObsidianCommand implements CommandExecutor {
+public class GiveObsidianCommand extends GameCommand {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+    public String[] getCommandNames() {
+        return new String[] { "giveobsidian" };
+    }
 
-            if (label.equalsIgnoreCase("giveobsidian")) {
-                ItemStack obsidian = new ItemStack(Material.OBSIDIAN, 64);
+    @Override
+    public String getUsageMessage(String cmd) {
+        return formatStandardUsageMessage(cmd, "Gives a stack of obsidian.");
+    }
 
-                player.getInventory().addItem(obsidian);
-            }
-        }
+    @Override
+    public void runCommand(Player player, String commandName, String[] args) {
+        ItemStack obsidian = new ItemStack(Material.OBSIDIAN, 64);
 
-        return true;
+        player.getInventory().addItem(obsidian);
     }
 }

@@ -2,153 +2,142 @@ package com.thebluehats.server.game.commands;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ImmutableMap;
 import com.thebluehats.server.game.utils.LoreParser;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-public class GiveFreshItemCommand implements CommandExecutor {
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+public class GiveFreshItemCommand extends GameCommand {
+    private final ImmutableMap<FreshPantsColor, FreshPantsData> pantsData = ImmutableMap
+            .<FreshPantsColor, FreshPantsData>builder()
+            .put(FreshPantsColor.RED, new FreshPantsData(0xFF5555, ChatColor.RED))
+            .put(FreshPantsColor.GREEN, new FreshPantsData(0x55FF55, ChatColor.GREEN))
+            .put(FreshPantsColor.BLUE, new FreshPantsData(0x55555FF, ChatColor.BLUE))
+            .put(FreshPantsColor.YELLOW, new FreshPantsData(0xFFFF55, ChatColor.YELLOW))
+            .put(FreshPantsColor.ORANGE, new FreshPantsData(0xFFAA00, ChatColor.GOLD))
+            .put(FreshPantsColor.DARK, new FreshPantsData(0x000000, ChatColor.DARK_PURPLE))
+            .put(FreshPantsColor.SEWER, new FreshPantsData(0x7DC383, ChatColor.DARK_AQUA))
+            .put(FreshPantsColor.AQUA, new FreshPantsData(0x55FFFF, ChatColor.DARK_AQUA)).build();
 
-            if (label.equalsIgnoreCase("givefreshitem")) {
-                if (args.length == 1) {
-                    String object = args[0];
+    private final ArrayList<String> freshPantsColors = new ArrayList<>();
+    private final ArrayList<String> handheldFreshItems = new ArrayList<>();
 
-                    ItemStack item;
-                    LeatherArmorMeta freshPantsMeta = null;
-
-                    ArrayList<String> freshItemLore = new LoreParser("Kept on death<br/><br/>Used in the mystic well")
-                            .parse();
-
-                    if (object.equalsIgnoreCase("Sword")) {
-                        item = new ItemStack(Material.GOLDEN_SWORD, 1);
-
-                        ItemMeta meta = item.getItemMeta();
-
-                        meta.setDisplayName(ChatColor.YELLOW + "Mystic Sword");
-
-                        // meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
-
-                        meta.setLore(freshItemLore);
-
-                        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
-                        meta.setUnbreakable(true);
-
-                        item.setItemMeta(meta);
-                    } else if (object.equalsIgnoreCase("Bow")) {
-                        item = new ItemStack(Material.BOW, 1);
-
-                        ItemMeta meta = item.getItemMeta();
-
-                        meta.setDisplayName(ChatColor.AQUA + "Mystic Bow");
-
-                        // meta.addEnchant(Enchantment.DURABILITY, 1, true);
-
-                        meta.setLore(freshItemLore);
-
-                        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
-                        meta.setUnbreakable(true);
-
-                        item.setItemMeta(meta);
-                    } else {
-                        item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
-                        freshPantsMeta = (LeatherArmorMeta) item.getItemMeta();
-                    }
-
-                    if (freshPantsMeta != null) {
-                        if (object.equalsIgnoreCase("Red")) {
-                            freshPantsMeta.setColor(Color.fromRGB(0xFF5555));
-
-                            addPantsLore(freshPantsMeta, "Red", ChatColor.RED);
-                        }
-
-                        if (object.equalsIgnoreCase("Green")) {
-                            freshPantsMeta.setColor(Color.fromRGB(0x55FF55));
-
-                            addPantsLore(freshPantsMeta, "Green", ChatColor.GREEN);
-                        }
-
-                        if (object.equalsIgnoreCase("Blue")) {
-                            freshPantsMeta.setColor(Color.fromRGB(0x5555FF));
-
-                            addPantsLore(freshPantsMeta, "Blue", ChatColor.BLUE);
-                        }
-
-                        if (object.equalsIgnoreCase("Yellow")) {
-                            freshPantsMeta.setColor(Color.fromRGB(0xFFFF55));
-
-                            addPantsLore(freshPantsMeta, "Yellow", ChatColor.YELLOW);
-                        }
-
-                        if (object.equalsIgnoreCase("Orange")) {
-                            freshPantsMeta.setColor(Color.fromRGB(0xFFAA00));
-
-                            addPantsLore(freshPantsMeta, "Orange", ChatColor.GOLD);
-                        }
-
-                        if (object.equalsIgnoreCase("Dark")) {
-                            freshPantsMeta.setColor(Color.fromRGB(0x000000));
-
-                            addPantsLore(freshPantsMeta, "Dark", ChatColor.DARK_PURPLE);
-                        }
-
-                        if (object.equalsIgnoreCase("Sewer")) {
-                            freshPantsMeta.setColor(Color.fromRGB(0x7DC383));
-
-                            addPantsLore(freshPantsMeta, "Sewer", ChatColor.DARK_AQUA);
-                        }
-
-                        if (object.equalsIgnoreCase("Aqua")) {
-                            freshPantsMeta.setColor(Color.fromRGB(0x55FFFF));
-
-                            addPantsLore(freshPantsMeta, "Aqua", ChatColor.AQUA);
-                        }
-
-                        if (freshPantsMeta.getLore() == null) {
-                            sender.sendMessage(ChatColor.RED + "Bruh you typed something in wrong...");
-                            return true;
-                        }
-
-                        item.setItemMeta(freshPantsMeta);
-                    }
-
-                    player.getInventory().addItem(item);
-                    player.updateInventory();
-                } else {
-                    player.sendMessage(ChatColor.DARK_PURPLE + "Usage:" + ChatColor.RED + " /givefreshitem <type>");
-                }
-            }
+    public GiveFreshItemCommand() {
+        for (FreshPantsColor freshPantsColor : FreshPantsColor.values()) {
+            freshPantsColors.add(freshPantsColor.toString());
         }
 
-        return true;
+        for (HandheldFreshItem handheldFreshItem : HandheldFreshItem.values()) {
+            handheldFreshItems.add(handheldFreshItem.toString());
+        }
     }
 
-    private void addPantsLore(LeatherArmorMeta newMeta, String name, ChatColor color) {
-        newMeta.setDisplayName(color + "Fresh " + name + " Pants");
+    private class FreshPantsData {
+        private final int pantsColor;
+        private final ChatColor textColor;
 
-        newMeta.setUnbreakable(true);
+        public FreshPantsData(int pantsColor, ChatColor textColor) {
+            this.pantsColor = pantsColor;
+            this.textColor = textColor;
+        }
+
+        public int getPantsColor() {
+            return pantsColor;
+        }
+
+        public ChatColor getTextColor() {
+            return textColor;
+        }
+    }
+
+    private enum FreshPantsColor {
+        RED, GREEN, BLUE, YELLOW, ORANGE, DARK, SEWER, AQUA
+    }
+
+    private enum HandheldFreshItem {
+        SWORD, BOW
+    }
+
+    @Override
+    public String[] getCommandNames() {
+        return new String[] { "givefreshitem" };
+    }
+
+    @Override
+    public String getUsageMessage(String cmd) {
+        return formatStandardUsageMessage(cmd,
+                "Gives a fresh item. Must be: sword, bow, or any pants color. (Ex: /givefreshitem red)", "<type>");
+    }
+
+    @Override
+    public void runCommand(Player player, String commandName, String[] args) {
+        String freshItemName = args[0].toUpperCase();
+
+        if (handheldFreshItems.contains(freshItemName)) {
+            giveFreshHandheldItem(player, HandheldFreshItem.valueOf(freshItemName));
+        } else if (freshPantsColors.contains(freshItemName)) {
+            giveFreshPants(player, FreshPantsColor.valueOf(freshItemName));
+        }
+
+        player.sendMessage(getUsageMessage(commandName));
+    }
+
+    private void giveFreshHandheldItem(Player player, HandheldFreshItem handheldFreshItem) {
+        ArrayList<String> freshItemLore = new LoreParser("Kept on death<br/><br/>Used in the mystic well").parse();
+
+        ItemStack freshItem = handheldFreshItem == HandheldFreshItem.SWORD ? new ItemStack(Material.BOW)
+                : new ItemStack(Material.GOLDEN_SWORD);
+
+        ItemMeta meta = freshItem.getItemMeta();
+
+        meta.setDisplayName(ChatColor.AQUA + "Mystic Bow");
+        meta.setLore(freshItemLore);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
+        meta.setUnbreakable(true);
+
+        freshItem.setItemMeta(meta);
+
+        player.getInventory().addItem(freshItem);
+        player.updateInventory();
+    }
+
+    private void giveFreshPants(Player player, FreshPantsColor pantsColor) {
+        ItemStack freshLeggings = new ItemStack(Material.LEATHER_LEGGINGS);
+        LeatherArmorMeta freshPantsMeta = (LeatherArmorMeta) freshLeggings.getItemMeta();
+        String pantsColorName = pantsColor.toString().toLowerCase();
+
+        FreshPantsData data = pantsData.get(pantsColor);
+
+        ChatColor textColor = data.getTextColor();
+        int color = data.getPantsColor();
+
+        freshPantsMeta.setColor(Color.fromRGB(color));
+
+        freshPantsMeta.setDisplayName(textColor + "Fresh " + pantsColorName.substring(0, 1).toUpperCase()
+                + pantsColorName.substring(1) + " Pants");
+
+        freshPantsMeta.setUnbreakable(true);
 
         LoreParser loreParser = new LoreParser(
                 "Kept on death</br></br>{0}Used in the mystic well{1}</br>{0}Also, a fashion statement{1}");
 
         String[] variables = new String[2];
-        variables[0] = "<" + color + ">";
-        variables[1] = "</" + color + ">";
+        variables[0] = "<" + textColor + ">";
+        variables[1] = "</" + textColor + ">";
 
         loreParser.setVariables(variables);
 
-        newMeta.setLore(loreParser.parse());
+        freshPantsMeta.setLore(loreParser.parse());
+
+        freshLeggings.setItemMeta(freshPantsMeta);
+
+        player.getInventory().addItem(freshLeggings);
     }
 }

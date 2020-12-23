@@ -7,17 +7,16 @@ import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class UnenchantCommand implements CommandExecutor {
-    private final CustomEnchantManager manager;
+public class UnenchantCommand extends GameCommand {
+    private final CustomEnchantManager customEnchantManager;
 
     @Inject
-    public UnenchantCommand(CustomEnchantManager manager) {
-        this.manager = manager;
+    public UnenchantCommand(CustomEnchantManager customEnchantManager) {
+        this.customEnchantManager = customEnchantManager;
     }
 
     @Override
@@ -29,54 +28,56 @@ public class UnenchantCommand implements CommandExecutor {
                 if (args.length == 0) {
                     player.sendMessage(ChatColor.DARK_PURPLE + "Usage:" + ChatColor.RED + " /unenchant <enchant>");
                 } else {
-                    CustomEnchant customEnchant = null;
-
-                    for (CustomEnchant enchant : manager.getEnchants()) {
-                        if (enchant.getEnchantReferenceName().equalsIgnoreCase(args[0])) {
-                            customEnchant = enchant;
-                        }
-                    }
-
-                    if (customEnchant == null) {
-                        player.sendMessage(
-                                ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED + " This enchant does not exist!");
-                        return true;
-                    }
-
-                    ItemStack item = player.getInventory().getItemInMainHand();
-
-                    if (item.getType() == Material.AIR) {
-                        player.sendMessage(
-                                ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED + " You are not holding anything!");
-                        return true;
-                    }
-
-                    if (args.length > 1) {
-                        player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED + " Too many arguments!");
-                        return true;
-                    }
-
-                    if (item.getType() != Material.LEATHER_LEGGINGS && item.getType() != Material.GOLDEN_SWORD
-                            && item.getType() != Material.BOW) {
-                        player.sendMessage(
-                                ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED + " You can not enchant this item!");
-                        return true;
-                    }
-
-                    if (!manager.itemContainsEnchant(item, customEnchant)) {
-                        player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
-                                + " This item does not have the specified enchant!");
-                        return true;
-                    }
-
-                    manager.removeEnchant(item, customEnchant);
-                    player.sendMessage(ChatColor.DARK_PURPLE + "Success!" + ChatColor.RED
-                            + " You unenchanted the enchant successfully!");
-                    player.updateInventory();
                 }
             }
         }
 
         return true;
+    }
+
+    @Override
+    public String[] getCommandNames() {
+        return new String[] { "unenchant" };
+    }
+
+    @Override
+    public String getUsageMessage(String cmd) {
+        return formatStandardUsageMessage(cmd, "Unenchants an enchant from the item you are holding.", "enchantName");
+    }
+
+    @Override
+    public void runCommand(Player player, String commandName, String[] args) {
+        CustomEnchant customEnchant = null;
+
+        for (CustomEnchant enchant : customEnchantManager.getEnchants()) {
+            if (enchant.getEnchantReferenceName().equalsIgnoreCase(args[0])) {
+                customEnchant = enchant;
+            }
+        }
+
+        if (customEnchant == null) {
+            player.sendMessage(formatStandardErrorMessage("This enchant does not exist!"));
+
+            return;
+        }
+
+        ItemStack item = player.getInventory().getItemInMainHand();
+
+        if (item.getType() == Material.AIR) {
+            player.sendMessage(formatStandardErrorMessage("You are not holding anything!"));
+        } else if (args.length > 1) {
+            player.sendMessage(formatStandardErrorMessage("Too many arguments"));
+        } else if (item.getType() != Material.LEATHER_LEGGINGS && item.getType() != Material.GOLDEN_SWORD
+                && item.getType() != Material.BOW) {
+            player.sendMessage(formatStandardErrorMessage("You can not unenchant this item!"));
+        } else if (!customEnchantManager.itemContainsEnchant(item, customEnchant)) {
+            player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
+                    + " This item does not have the specified enchant!");
+        } else {
+            customEnchantManager.removeEnchant(item, customEnchant);
+
+            player.sendMessage(
+                    ChatColor.DARK_PURPLE + "Success!" + ChatColor.RED + " You unenchanted the enchant successfully!");
+        }
     }
 }

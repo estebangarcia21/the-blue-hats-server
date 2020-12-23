@@ -25,7 +25,7 @@ import com.thebluehats.server.game.commands.GiveFreshItemCommand;
 import com.thebluehats.server.game.commands.GiveObsidianCommand;
 import com.thebluehats.server.game.commands.GiveProtCommand;
 import com.thebluehats.server.game.commands.MysticEnchantsCommand;
-import com.thebluehats.server.game.commands.PitAboutCommand;
+import com.thebluehats.server.game.commands.AboutCommand;
 import com.thebluehats.server.game.commands.SelectWorldCommand;
 import com.thebluehats.server.game.commands.SetGoldCommand;
 import com.thebluehats.server.game.commands.SpawnCommand;
@@ -125,7 +125,7 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         getCommand("selectworld").setExecutor(injector.getInstance(SelectWorldCommand.class));
         getCommand("setgold").setExecutor(injector.getInstance(SetGoldCommand.class));
         getCommand("unenchant").setExecutor(injector.getInstance(UnenchantCommand.class));
-        getCommand("pitabout").setExecutor(injector.getInstance(PitAboutCommand.class));
+        getCommand("pitabout").setExecutor(injector.getInstance(AboutCommand.class));
         getCommand("givefreshitem").setExecutor(injector.getInstance(GiveFreshItemCommand.class));
         getCommand("giveprot").setExecutor(injector.getInstance(GiveProtCommand.class));
         getCommand("givebread").setExecutor(injector.getInstance(GiveBreadCommand.class));

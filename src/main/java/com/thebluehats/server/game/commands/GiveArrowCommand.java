@@ -1,25 +1,24 @@
 package com.thebluehats.server.game.commands;
 
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class GiveArrowCommand implements CommandExecutor {
+public class GiveArrowCommand extends GameCommand {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+    public String[] getCommandNames() {
+        return new String[] { "givearrows" };
+    }
 
-            if (label.equalsIgnoreCase("givearrows")) {
-                ItemStack arrows = new ItemStack(Material.ARROW, 64);
+    @Override
+    public String getUsageMessage(String cmd) {
+        return formatStandardUsageMessage(cmd, "Gives a stack of arrows.");
+    }
 
-                player.getInventory().addItem(arrows);
-            }
-        }
+    @Override
+    public void runCommand(Player player, String commandName, String[] args) {
+        ItemStack arrows = new ItemStack(Material.ARROW, 64);
 
-        return true;
+        player.getInventory().addItem(arrows);
     }
 }

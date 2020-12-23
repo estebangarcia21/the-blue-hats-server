@@ -6,34 +6,33 @@ import com.thebluehats.server.game.utils.LoreParser;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class GiveBreadCommand implements CommandExecutor {
+public class GiveBreadCommand extends GameCommand {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+    public String[] getCommandNames() {
+        return new String[] { "givebread" };
+    }
 
-            if (label.equalsIgnoreCase("givebread")) {
-                ItemStack bread = new ItemStack(Material.BREAD, 64);
-                ItemMeta meta = bread.getItemMeta();
+    @Override
+    public String getUsageMessage(String cmd) {
+        return formatStandardUsageMessage(cmd, "Gives a stack of Yummy Bread.");
+    }
 
-                ArrayList<String> breadLore = new LoreParser("Heals <red>4❤</red></br>Grants 1❤").parse();
+    @Override
+    public void runCommand(Player player, String commandName, String[] args) {
+        ItemStack bread = new ItemStack(Material.BREAD, 64);
+        ItemMeta meta = bread.getItemMeta();
 
-                meta.setDisplayName(ChatColor.GOLD + "Yummy Bread");
-                meta.setLore(breadLore);
+        ArrayList<String> breadLore = new LoreParser("Heals <red>4❤</red></br>Grants 1❤").parse();
 
-                bread.setItemMeta(meta);
+        meta.setDisplayName(ChatColor.GOLD + "Yummy Bread");
+        meta.setLore(breadLore);
 
-                player.getInventory().addItem(bread);
-            }
-        }
+        bread.setItemMeta(meta);
 
-        return true;
+        player.getInventory().addItem(bread);
     }
 }

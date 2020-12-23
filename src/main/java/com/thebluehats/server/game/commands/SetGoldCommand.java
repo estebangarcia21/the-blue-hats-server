@@ -7,13 +7,10 @@ import com.thebluehats.server.api.models.PitDataModel;
 import com.thebluehats.server.api.repos.Repository;
 
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class SetGoldCommand implements CommandExecutor {
+public class SetGoldCommand extends GameCommand {
+    // TODO Update repository scope
     private final Repository<UUID, PitDataModel> pitDataRepository;
 
     @Inject
@@ -22,31 +19,23 @@ public class SetGoldCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+    public String[] getCommandNames() {
+        return new String[] { "setgold" };
+    }
 
-            if (label.equalsIgnoreCase("setgold")) {
-                if (args.length > 0) {
-                    if (args[0] != null) {
-                        if (StringUtils.isNumeric(args[0])) {
-                            double gold = Math.min(Double.parseDouble(args[0]), 1000000000);
+    @Override
+    public String getUsageMessage(String cmd) {
+        return formatStandardUsageMessage(cmd, "Sets your gold amount.", "amount");
+    }
 
-                            pitDataRepository.update(player.getUniqueId(), model -> model.setGold(gold));
-                        } else {
-                            player.sendMessage(
-                                    ChatColor.RED + "Error! " + ChatColor.DARK_PURPLE + "Usage: /setgold <amount>");
-                        }
-                    } else {
-                        player.sendMessage(
-                                ChatColor.RED + "Error! " + ChatColor.DARK_PURPLE + "Usage: /setgold <amount>");
-                    }
-                } else {
-                    player.sendMessage(ChatColor.RED + "Error! " + ChatColor.DARK_PURPLE + "Usage: /setgold <amount>");
-                }
-            }
+    @Override
+    public void runCommand(Player player, String commandName, String[] args) {
+        if (StringUtils.isNumeric(args[0])) {
+            double gold = Math.min(Double.parseDouble(args[0]), 1000000000);
+
+            pitDataRepository.update(player.getUniqueId(), model -> model.setGold(gold));
+        } else {
+            player.sendMessage(getUsageMessage(commandName));
         }
-
-        return true;
     }
 }

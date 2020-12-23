@@ -24,17 +24,17 @@ public class EnchantCommand extends GameCommand {
     }
 
     @Override
-    public String getCommandName() {
-        return "pitenchant";
+    public String[] getCommandNames() {
+        return new String[] { "pitenchant" };
     }
 
     @Override
     public String getUsageMessage(String cmd) {
-        return formatUsageMessage(cmd, "Enchants an item with a Custom Enchant.", "enchantName", "level");
+        return formatStandardUsageMessage(cmd, "Enchants an item with a Custom Enchant.", "enchantName", "level");
     }
 
     @Override
-    public void runCommand(Player player, String[] args) {
+    public void runCommand(Player player, String commandName, String[] args) {
         CustomEnchant customEnchant = null;
 
         for (CustomEnchant enchant : customEnchantManager.getEnchants()) {

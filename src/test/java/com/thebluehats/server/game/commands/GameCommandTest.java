@@ -10,19 +10,19 @@ public class GameCommandTest {
     @Test
     public void FormatsTheUsageMessageCorrectly() {
         GameCommand gameCommand = new GameCommand() {
-            public String getCommandName() {
-                return "";
+            public String[] getCommandNames() {
+                return null;
             }
 
             public String getUsageMessage(String cmd) {
                 return "";
             }
 
-            public void runCommand(Player player, String[] args) {
+            public void runCommand(Player player, String commandName, String[] args) {
             }
         };
 
-        String formattedUsageMessage = gameCommand.formatUsageMessage("give", "gives an item", "player", "item",
+        String formattedUsageMessage = gameCommand.formatStandardUsageMessage("give", "gives an item", "player", "item",
                 "amount");
 
         String expectedMessage = ChatColor.DARK_PURPLE + "/give - " + ChatColor.RED + "gives an item"
@@ -35,19 +35,19 @@ public class GameCommandTest {
     @Test
     public void FormatsTheErrorMessageCorrectly() {
         GameCommand gameCommand = new GameCommand() {
-            public String getCommandName() {
-                return "";
+            public String[] getCommandNames() {
+                return null;
             }
 
             public String getUsageMessage(String cmd) {
                 return "";
             }
 
-            public void runCommand(Player player, String[] args) {
+            public void runCommand(Player player, String commandName, String[] args) {
             }
         };
 
-        String formattedErrorMessage = gameCommand.formatErrorMessage("Something happend!");
+        String formattedErrorMessage = gameCommand.formatStandardErrorMessage("Something happend!");
 
         String expectedMessage = ChatColor.DARK_PURPLE + "Error! " + ChatColor.RED + "Something happend!";
 
