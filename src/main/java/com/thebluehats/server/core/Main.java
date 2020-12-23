@@ -1,5 +1,6 @@
 package com.thebluehats.server.core;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import com.google.inject.Guice;
@@ -50,6 +51,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements PluginInformationProvider {
+    private final ArrayList<PluginLifecycle> lifecycleListeners = new ArrayList<>();
+
     private Injector injector;
 
     @Override
@@ -73,40 +76,23 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
                 new MirrorModule(), new CustomEnchantUtilsModule(), new ServerApiModule(),
                 new PitDataRepositoryModule());
 
+        registerLifecycles();
         registerEvents();
         registerEnchants();
         registerPerks();
         registerCommands();
 
-        updateLifecycles(injector, lifecycles -> startLifecycles(lifecycles));
+        updateLifecyles(lifecycle -> lifecycle.onPluginStart());
     }
 
     @Override
     public void onDisable() {
-        updateLifecycles(injector, lifecycles -> endLifecycles(lifecycles));
+        updateLifecyles(lifecycle -> lifecycle.onPluginEnd());
     }
 
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(injector.getInstance(CombatManager.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldSelectionManager.class), this);
-    }
-
-    private void updateLifecycles(Injector injector, Consumer<PluginLifecycle[]> action) {
-        PluginLifecycle grindingSystem = injector.getInstance(GrindingSystem.class);
-
-        action.accept(new PluginLifecycle[] { grindingSystem });
-    }
-
-    private void startLifecycles(PluginLifecycle[] lifecycles) {
-        for (PluginLifecycle lifecycle : lifecycles) {
-            lifecycle.onPluginStart();
-        }
-    }
-
-    private void endLifecycles(PluginLifecycle[] lifecycles) {
-        for (PluginLifecycle lifecycle : lifecycles) {
-            lifecycle.onPluginEnd();
-        }
     }
 
     private void registerEnchants() {
@@ -145,6 +131,16 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         getCommand("givebread").setExecutor(injector.getInstance(GiveBreadCommand.class));
         getCommand("givearrows").setExecutor(injector.getInstance(GiveArrowCommand.class));
         getCommand("giveobsidian").setExecutor(injector.getInstance(GiveObsidianCommand.class));
+    }
+
+    private void registerLifecycles() {
+        lifecycleListeners.add(injector.getInstance(GrindingSystem.class));
+    }
+
+    private void updateLifecyles(Consumer<PluginLifecycle> action) {
+        for (PluginLifecycle lifecycle : lifecycleListeners) {
+            action.accept(lifecycle);
+        }
     }
 
     @Override
