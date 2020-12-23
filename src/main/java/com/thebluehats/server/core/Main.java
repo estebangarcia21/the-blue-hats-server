@@ -18,14 +18,13 @@ import com.thebluehats.server.core.modules.PitDataRepositoryModule;
 import com.thebluehats.server.core.modules.PluginModule;
 import com.thebluehats.server.core.modules.RegionManagerModule;
 import com.thebluehats.server.core.modules.ServerApiModule;
-import com.thebluehats.server.game.commands.EnchantCommand;
+import com.thebluehats.server.game.commands.AboutCommand;
 import com.thebluehats.server.game.commands.GiveArrowCommand;
 import com.thebluehats.server.game.commands.GiveBreadCommand;
 import com.thebluehats.server.game.commands.GiveFreshItemCommand;
 import com.thebluehats.server.game.commands.GiveObsidianCommand;
 import com.thebluehats.server.game.commands.GiveProtCommand;
 import com.thebluehats.server.game.commands.MysticEnchantsCommand;
-import com.thebluehats.server.game.commands.AboutCommand;
 import com.thebluehats.server.game.commands.SelectWorldCommand;
 import com.thebluehats.server.game.commands.SetGoldCommand;
 import com.thebluehats.server.game.commands.SpawnCommand;
@@ -116,21 +115,17 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
     }
 
     private void registerCommands() {
-        SpawnCommand spawnCommand = injector.getInstance(SpawnCommand.class);
-
-        getCommand("spawn").setExecutor(spawnCommand);
-        getCommand("respawn").setExecutor(spawnCommand);
-        getCommand("pitenchant").setExecutor(injector.getInstance(EnchantCommand.class));
-        getCommand("mysticenchants").setExecutor(injector.getInstance(MysticEnchantsCommand.class));
-        getCommand("selectworld").setExecutor(injector.getInstance(SelectWorldCommand.class));
-        getCommand("setgold").setExecutor(injector.getInstance(SetGoldCommand.class));
-        getCommand("unenchant").setExecutor(injector.getInstance(UnenchantCommand.class));
-        getCommand("pitabout").setExecutor(injector.getInstance(AboutCommand.class));
-        getCommand("givefreshitem").setExecutor(injector.getInstance(GiveFreshItemCommand.class));
-        getCommand("giveprot").setExecutor(injector.getInstance(GiveProtCommand.class));
-        getCommand("givebread").setExecutor(injector.getInstance(GiveBreadCommand.class));
-        getCommand("givearrows").setExecutor(injector.getInstance(GiveArrowCommand.class));
-        getCommand("giveobsidian").setExecutor(injector.getInstance(GiveObsidianCommand.class));
+        injector.getInstance(SpawnCommand.class).registerCommand(this);
+        injector.getInstance(MysticEnchantsCommand.class).registerCommand(this);
+        injector.getInstance(SelectWorldCommand.class).registerCommand(this);
+        injector.getInstance(SetGoldCommand.class).registerCommand(this);
+        injector.getInstance(UnenchantCommand.class).registerCommand(this);
+        injector.getInstance(AboutCommand.class).registerCommand(this);
+        injector.getInstance(GiveFreshItemCommand.class).registerCommand(this);
+        injector.getInstance(GiveProtCommand.class).registerCommand(this);
+        injector.getInstance(GiveBreadCommand.class).registerCommand(this);
+        injector.getInstance(GiveArrowCommand.class).registerCommand(this);
+        injector.getInstance(GiveObsidianCommand.class).registerCommand(this);
     }
 
     private void registerLifecycles() {
