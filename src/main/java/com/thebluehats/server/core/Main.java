@@ -73,10 +73,10 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
                 new MirrorModule(), new CustomEnchantUtilsModule(), new ServerApiModule(),
                 new PitDataRepositoryModule());
 
-        registerEvents(injector);
-        registerEnchants(injector);
-        registerPerks(injector);
-        registerCommands(injector);
+        registerEvents();
+        registerEnchants();
+        registerPerks();
+        registerCommands();
 
         updateLifecycles(injector, lifecycles -> startLifecycles(lifecycles));
     }
@@ -86,7 +86,7 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         updateLifecycles(injector, lifecycles -> endLifecycles(lifecycles));
     }
 
-    private void registerEvents(Injector injector) {
+    private void registerEvents() {
         getServer().getPluginManager().registerEvents(injector.getInstance(CombatManager.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldSelectionManager.class), this);
     }
@@ -109,7 +109,7 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         }
     }
 
-    private void registerEnchants(Injector injector) {
+    private void registerEnchants() {
         CustomEnchantManager customEnchantManager = injector.getInstance(CustomEnchantManager.class);
 
         customEnchantManager.registerEnchant(injector.getInstance(Wasp.class));
@@ -123,13 +123,13 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         customEnchantManager.registerEnchant(injector.getInstance(DiamondStomp.class));
     }
 
-    private void registerPerks(Injector injector) {
+    private void registerPerks() {
         PerkManager perkManager = new PerkManager();
 
         perkManager.registerPerk(injector.getInstance(Vampire.class));
     }
 
-    private void registerCommands(Injector injector) {
+    private void registerCommands() {
         SpawnCommand spawnCommand = injector.getInstance(SpawnCommand.class);
 
         getCommand("spawn").setExecutor(spawnCommand);
