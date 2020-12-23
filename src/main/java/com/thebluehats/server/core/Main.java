@@ -17,7 +17,6 @@ import com.thebluehats.server.core.modules.PitDataRepositoryModule;
 import com.thebluehats.server.core.modules.PluginModule;
 import com.thebluehats.server.core.modules.RegionManagerModule;
 import com.thebluehats.server.core.modules.ServerApiModule;
-import com.thebluehats.server.game.commands.DuelCommand;
 import com.thebluehats.server.game.commands.EnchantCommand;
 import com.thebluehats.server.game.commands.GiveArrowCommand;
 import com.thebluehats.server.game.commands.GiveBreadCommand;
@@ -142,7 +141,6 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         getCommand("unenchant").setExecutor(injector.getInstance(UnenchantCommand.class));
         getCommand("pitabout").setExecutor(injector.getInstance(PitAboutCommand.class));
         getCommand("givefreshitem").setExecutor(injector.getInstance(GiveFreshItemCommand.class));
-        getCommand("duel").setExecutor(injector.getInstance(DuelCommand.class));
         getCommand("giveprot").setExecutor(injector.getInstance(GiveProtCommand.class));
         getCommand("givebread").setExecutor(injector.getInstance(GiveBreadCommand.class));
         getCommand("givearrows").setExecutor(injector.getInstance(GiveArrowCommand.class));
