@@ -40,10 +40,10 @@ public class LastStand implements DamageEnchant {
 
     @Override
     public void execute(PostEventTemplateResult data) {
-        Player damaged = data.getDamager();
+        Player damagee = data.getDamagee();
 
-        if (damaged.getHealth() < 10)
-            damaged.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80,
+        if (damagee.getHealth() < 10)
+            damagee.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80,
                     resistanceAmplifier.getValueAtLevel(data.getPrimaryLevel()), true));
     }
 
