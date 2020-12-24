@@ -72,7 +72,7 @@ public class DiamondAllergy implements DamageEnchant {
 
     @Override
     public EnchantGroup getEnchantGroup() {
-        return null;
+        return EnchantGroup.A;
     }
 
     @Override
