@@ -54,11 +54,6 @@ public class WorldSelectionManager implements Listener {
         displaySelectionMenu(event.getPlayer());
     }
 
-    // @EventHandler
-    // public void onChunkUnload(ChunkUnloadEvent event) {
-    // event.setCancelled(true);
-    // }
-
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getView().getTitle().equals(inventoryName)) {

@@ -14,7 +14,6 @@ public class AboutCommand extends GameCommand {
         return null;
     }
 
-    // TODO Create configuration JSON file
     @Override
     public void runCommand(Player player, String commandName, String[] args) {
         String pluginName = "The Blue Hats Server";

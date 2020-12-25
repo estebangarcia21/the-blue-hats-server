@@ -14,9 +14,11 @@ import com.thebluehats.server.core.modules.DamageManagerModule;
 import com.thebluehats.server.core.modules.EventTemplatesModule;
 import com.thebluehats.server.core.modules.HitCounterModule;
 import com.thebluehats.server.core.modules.MirrorModule;
+import com.thebluehats.server.core.modules.PantsDataContainerModule;
 import com.thebluehats.server.core.modules.PitDataRepositoryModule;
 import com.thebluehats.server.core.modules.PluginModule;
 import com.thebluehats.server.core.modules.RegionManagerModule;
+import com.thebluehats.server.core.modules.RomanNumeralConverterModule;
 import com.thebluehats.server.core.modules.ServerApiModule;
 import com.thebluehats.server.game.commands.AboutCommand;
 import com.thebluehats.server.game.commands.GiveArrowCommand;
@@ -32,6 +34,7 @@ import com.thebluehats.server.game.commands.UnenchantCommand;
 import com.thebluehats.server.game.enchants.Billionaire;
 import com.thebluehats.server.game.enchants.ComboDamage;
 import com.thebluehats.server.game.enchants.ComboSwift;
+import com.thebluehats.server.game.enchants.DiamondAllergy;
 import com.thebluehats.server.game.enchants.DiamondStomp;
 import com.thebluehats.server.game.enchants.LastStand;
 import com.thebluehats.server.game.enchants.Mirror;
@@ -74,7 +77,7 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
                 new CustomEnchantManagerModule(), new CombatManagerModule(), new EventTemplatesModule(),
                 new DamageManagerModule(), new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(),
                 new MirrorModule(), new CustomEnchantUtilsModule(), new ServerApiModule(),
-                new PitDataRepositoryModule());
+                new PitDataRepositoryModule(), new RomanNumeralConverterModule(), new PantsDataContainerModule());
 
         registerLifecycles();
         registerEvents();

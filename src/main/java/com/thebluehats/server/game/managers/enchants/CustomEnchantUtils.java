@@ -2,13 +2,21 @@ package com.thebluehats.server.game.managers.enchants;
 
 import java.util.List;
 
-import com.thebluehats.server.game.utils.PitUtils;
+import com.google.inject.Inject;
+import com.thebluehats.server.game.utils.RomanNumeralConverter;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public final class CustomEnchantUtils {
+    private final RomanNumeralConverter romanNumeralConverter;
+
+    @Inject
+    public CustomEnchantUtils(RomanNumeralConverter romanNumeralConverter) {
+        this.romanNumeralConverter = romanNumeralConverter;
+    }
+
     public boolean isCompatibleWith(CustomEnchant enchant, Material material) {
         for (Material mat : enchant.getEnchantItemTypes()) {
             if (mat == material) {
@@ -38,7 +46,7 @@ public final class CustomEnchantUtils {
 
         for (int i = 2; i <= 3; i++) {
             if (lore.contains(
-                    appendRare + ChatColor.BLUE + enchantName + " " + PitUtils.RomanNumerals.convertToRomanNumeral(i)))
+                    appendRare + ChatColor.BLUE + enchantName + " " + romanNumeralConverter.convertToRomanNumeral(i)))
                 return true;
         }
 
@@ -63,8 +71,8 @@ public final class CustomEnchantUtils {
             return 1;
 
         for (int i = 2; i <= 3; i++) {
-            if (lore.contains(appendRare + ChatColor.BLUE + enchantName + " "
-                    + PitUtils.RomanNumerals.convertToRomanNumeral(i))) {
+            if (lore.contains(
+                    appendRare + ChatColor.BLUE + enchantName + " " + romanNumeralConverter.convertToRomanNumeral(i))) {
                 return i;
             }
         }

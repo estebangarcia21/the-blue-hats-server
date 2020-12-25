@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
@@ -14,62 +14,55 @@ import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-public class LastStand implements DamageEnchant {
-    private final EnchantProperty<Integer> resistanceAmplifier = new EnchantProperty<>(0, 1, 2);
+public class Chipping implements DamageEnchant {
+    private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(0.5f, 1.0f, 1.5f);
 
+    private final DamageManager damageManager;
     private final ArrowHitPlayerTemplate arrowHitPlayerTemplate;
-    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
-    public LastStand(PlayerHitPlayerTemplate playerHitPlayerTemplate, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
-        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
+    public Chipping(DamageManager damageManager, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
+        this.damageManager = damageManager;
         this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
     }
 
     @Override
-    @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
         arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
     }
 
     @Override
     public void execute(PostEventTemplateResult data) {
-        Player damagee = data.getDamagee();
+        Player damaged = data.getDamagee();
+        int level = data.getPrimaryLevel();
 
-        if (damagee.getHealth() < 10)
-            damagee.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80,
-                    resistanceAmplifier.getValueAtLevel(data.getPrimaryLevel()), true));
+        damageManager.doTrueDamage(damaged, damageAmount.getValueAtLevel(level));
     }
 
     @Override
     public String getName() {
-        return "Last Stand";
+        return "Chipping";
     }
 
     @Override
     public String getEnchantReferenceName() {
-        return "Laststand";
+        return "Chipping";
     }
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Gain <blue>Resistance {0}</blue> (4<br/>seconds) when reaching 3❤");
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("Deals <red>{0}</red> extra true damage");
 
-        enchantLoreParser.setSingleVariable("I", "II", "III");
+        enchantLoreParser.setSingleVariable("0.5❤ ", "1.0❤ ", "1.5❤ ");
 
         return enchantLoreParser.parseForLevel(level);
     }
 
     @Override
     public boolean isDisabledOnPassiveWorld() {
-        return true;
+        return false;
     }
 
     @Override
@@ -84,6 +77,6 @@ public class LastStand implements DamageEnchant {
 
     @Override
     public Material[] getEnchantItemTypes() {
-        return new Material[] { Material.LEATHER_LEGGINGS };
+        return new Material[] { Material.BOW };
     }
 }

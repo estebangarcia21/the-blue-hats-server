@@ -33,7 +33,7 @@ public class SpawnCommand extends GameCommand {
 
     @Override
     public void runCommand(Player player, String commandName, String[] args) {
-        if (regionManager.playerIsInRegion(player, RegionManager.RegionType.SPAWN)) {
+        if (regionManager.entityIsInSpawn(player)) {
             player.sendMessage(ChatColor.RED + "You cannot /respawn here!");
 
             return;
