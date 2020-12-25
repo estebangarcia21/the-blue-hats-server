@@ -77,7 +77,7 @@ public class Solitude implements DamageEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Recieve <blue>-{0}</blue> damage when only<br />one other player is within 7<br />blocks");
+                "Recieve <blue>-{0}</blue> damage when only<br/>one other player is within 7<br/>blocks");
 
         enchantLoreParser.setSingleVariable("40%", "50%", "60%");
 
