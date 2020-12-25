@@ -12,8 +12,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,6 +52,7 @@ public class WorldSelectionManager implements Listener {
         displaySelectionMenu(event.getPlayer());
     }
 
+    // TODO World configuration
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getView().getTitle().equals(inventoryName)) {
@@ -91,12 +90,9 @@ public class WorldSelectionManager implements Listener {
     }
 
     private void transportToWorld(HumanEntity player, String worldName) {
-        World world = plugin.getServer().createWorld(new WorldCreator(worldName));
-        Location location = regionManager.getSpawnLocation(((Player) player));
-        Location spawnLocation = new Location(world, location.getX(), location.getY(), location.getZ(),
-                location.getYaw(), location.getPitch());
+        Location spawnLocation = regionManager.getSpawnLocation(((Player) player));
 
-        Chunk centerChunk = location.getChunk();
+        Chunk centerChunk = spawnLocation.getChunk();
         centerChunk.load(true);
 
         player.sendMessage(ChatColor.GREEN + "You will be teleported soon...");
@@ -125,7 +121,7 @@ public class WorldSelectionManager implements Listener {
         meta.setDisplayName(ChatColor.AQUA + "The Peaceful World");
 
         ArrayList<String> peacefulWorldLore = new LoreParser(
-                "A world where the most toxic</br>enchants are removed from</br>existance for peaceful</br>gameplay and fair fights</br></br><italic>8 tokens maximum on items")
+                "A world where the most toxic<br/>enchants are removed from<br/>existance for peaceful<br/>gameplay and fair fights<br/><br/><italic>8 tokens maximum on items</italic>")
                         .parse();
 
         meta.setLore(peacefulWorldLore);
