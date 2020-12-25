@@ -1,7 +1,9 @@
 package com.thebluehats.server.game.managers.enchants;
 
+import com.thebluehats.server.game.enchants.processedevents.TemplateResult;
+
 import org.bukkit.event.Listener;
 
-public interface PostEventExecutor<T> extends Listener {
+public interface PostEventExecutor<T extends TemplateResult<?>> extends Listener {
     void execute(T data);
 }
