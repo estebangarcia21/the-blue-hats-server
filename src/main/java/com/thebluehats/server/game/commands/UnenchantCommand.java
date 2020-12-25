@@ -6,8 +6,6 @@ import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,22 +15,6 @@ public class UnenchantCommand extends GameCommand {
     @Inject
     public UnenchantCommand(CustomEnchantManager customEnchantManager) {
         this.customEnchantManager = customEnchantManager;
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-
-            if (label.equalsIgnoreCase("unenchant")) {
-                if (args.length == 0) {
-                    player.sendMessage(ChatColor.DARK_PURPLE + "Usage:" + ChatColor.RED + " /unenchant <enchant>");
-                } else {
-                }
-            }
-        }
-
-        return true;
     }
 
     @Override
