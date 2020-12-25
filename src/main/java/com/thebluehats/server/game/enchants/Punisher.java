@@ -33,7 +33,6 @@ public class Punisher implements DamageEnchant {
     @Override
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
         playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
-
     }
 
     @Override
