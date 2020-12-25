@@ -52,7 +52,7 @@ import com.thebluehats.server.game.utils.PluginLifecycle;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin implements PluginInformationProvider {
+public class Main extends JavaPlugin {
     private final ArrayList<PluginLifecycle> lifecycleListeners = new ArrayList<>();
 
     private Injector injector;
@@ -140,20 +140,5 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         for (PluginLifecycle lifecycle : lifecycleListeners) {
             action.accept(lifecycle);
         }
-    }
-
-    @Override
-    public String getPluginName() {
-        return "The Blue Hats Pit";
-    }
-
-    @Override
-    public String getVersion() {
-        return "v2.0";
-    }
-
-    @Override
-    public String getDiscord() {
-        return "Stevemmmmm#8894";
     }
 }
