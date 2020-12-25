@@ -1,7 +1,6 @@
 package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
@@ -42,14 +41,13 @@ public class ComboSwift implements DamageEnchant {
 
     @Override
     public void execute(PostEventTemplateResult data) {
-        Player player = data.getDamager();
-        UUID playerUuid = player.getUniqueId();
+        Player damager = data.getDamager();
         int level = data.getPrimaryLevel();
 
-        hitCounter.addOne(playerUuid);
+        hitCounter.addOne(damager);
 
-        if (hitCounter.hasHits(player, hitsNeeded.getValueAtLevel(level))) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedTime.getValueAtLevel(level) * 20,
+        if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(level))) {
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedTime.getValueAtLevel(level) * 20,
                     speedAmplifier.getValueAtLevel(level), true));
         }
     }

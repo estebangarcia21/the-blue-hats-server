@@ -62,7 +62,7 @@ public class CriticallyFunky implements DamageEnchant {
             extraDamageQueue.add(event.getEntity().getUniqueId());
         }
 
-        damageManager.reduceDamage(event, damageReduction.getValueAtLevel(level));
+        damageManager.reduceDamageByPercentage(event, damageReduction.getValueAtLevel(level));
         damageManager.removeExtraCriticalDamage(event);
     }
 

@@ -1,7 +1,6 @@
 package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
@@ -46,9 +45,8 @@ public class ComboDamage implements DamageEnchant {
     @Override
     public void execute(PostEventTemplateResult data) {
         Player damager = data.getDamager();
-        UUID playerUuid = damager.getUniqueId();
 
-        hitCounter.addOne(playerUuid);
+        hitCounter.addOne(damager);
 
         if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(data.getPrimaryLevel()))) {
             damager.playSound(damager.getLocation(), Sound.ENTITY_DONKEY_HURT, 1, 0.5f);

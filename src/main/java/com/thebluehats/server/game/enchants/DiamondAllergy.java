@@ -40,7 +40,7 @@ public class DiamondAllergy implements DamageEnchant {
         int level = data.getPrimaryLevel();
 
         if (damager.getInventory().getItemInMainHand().getType() == Material.DIAMOND_SWORD) {
-            damageManager.reduceDamage(event, damageReduction.getValueAtLevel(level));
+            damageManager.reduceDamageByPercentage(event, damageReduction.getValueAtLevel(level));
         }
     }
 

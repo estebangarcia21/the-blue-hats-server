@@ -7,41 +7,34 @@ import java.util.UUID;
 import com.google.inject.Inject;
 import com.thebluehats.server.core.modules.annotations.MirrorReference;
 import com.thebluehats.server.game.enchants.Mirror;
-import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.game.regionmanager.RegionManager;
 import com.thebluehats.server.game.utils.EntityValidator;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.projectiles.ProjectileSource;
 
 public class DamageManager implements EntityValidator {
     private final HashMap<UUID, EventData> eventData = new HashMap<>();
-    private final ArrayList<UUID> canceledPlayers = new ArrayList<>();
+    private final ArrayList<UUID> canceledEvents = new ArrayList<>();
     private final ArrayList<UUID> removeCriticalDamage = new ArrayList<>();
     private final EnchantProperty<Float> mirrorReflectionValues = new EnchantProperty<>(0f, .25f, .5f);
 
     private final Mirror mirror;
-    private final CustomEnchantManager customEnchantManager;
     private final CombatManager combatManager;
     private final CustomEnchantUtils customEnchantUtils;
     private final RegionManager regionManager;
 
     @Inject
-    public DamageManager(@MirrorReference Mirror mirror, CustomEnchantManager customEnchantManager,
-            CombatManager combatManager, CustomEnchantUtils customEnchantUtils, RegionManager regionManager) {
-        this.customEnchantManager = customEnchantManager;
+    public DamageManager(@MirrorReference Mirror mirror, CombatManager combatManager,
+            CustomEnchantUtils customEnchantUtils, RegionManager regionManager) {
         this.combatManager = combatManager;
         this.mirror = mirror;
         this.customEnchantUtils = customEnchantUtils;
@@ -55,14 +48,14 @@ public class DamageManager implements EntityValidator {
         if (eventData.containsKey(damagerUuid))
             return;
 
-        if (canceledPlayers.contains(damagerUuid)) {
+        if (canceledEvents.contains(damagerUuid)) {
             event.setCancelled(true);
         } else {
             event.setDamage(getDamageFromEvent(event));
         }
 
         eventData.remove(damagerUuid);
-        canceledPlayers.remove(damagerUuid);
+        canceledEvents.remove(damagerUuid);
     }
 
     public double getDamageFromEvent(EntityDamageByEntityEvent event) {
@@ -74,18 +67,19 @@ public class DamageManager implements EntityValidator {
     }
 
     public void addDamage(EntityDamageByEntityEvent event, double value, CalculationMode mode) {
-        EventData data = eventData.get(event.getDamager().getUniqueId());
+        EventData eventValues = eventData.get(event.getDamager().getUniqueId());
 
-        if (mode == CalculationMode.ADDITIVE) {
-            data.setAdditiveDamage(data.getAdditiveDamage() + value);
-        }
-
-        if (mode == CalculationMode.MULTIPLICATIVE) {
-            data.setMultiplicativeDamage(data.getMultiplicativeDamage() + value);
+        switch (mode) {
+            case ADDITIVE:
+                eventValues.setAdditiveDamage(eventValues.getAdditiveDamage() + value);
+                break;
+            case MULTIPLICATIVE:
+                eventValues.setMultiplicativeDamage(eventValues.getMultiplicativeDamage() + value);
+                break;
         }
     }
 
-    public void reduceDamage(EntityDamageByEntityEvent event, double value) {
+    public void reduceDamageByPercentage(EntityDamageByEntityEvent event, double value) {
         EventData data = eventData.get(event.getDamager().getUniqueId());
 
         if (data.getReductionAmount() == 1) {
@@ -94,6 +88,9 @@ public class DamageManager implements EntityValidator {
             return;
         }
 
+        /**
+         * Damage reduction is multiplied with eachother
+         */
         data.setReductionAmount(1 - data.getReductionAmount() * value);
     }
 
@@ -108,53 +105,15 @@ public class DamageManager implements EntityValidator {
     }
 
     public void setEventAsCanceled(EntityDamageByEntityEvent event) {
-        canceledPlayers.add(event.getDamager().getUniqueId());
+        canceledEvents.add(event.getDamager().getUniqueId());
     }
 
     public boolean eventIsNotCancelled(EntityDamageByEntityEvent event) {
-        return !canceledPlayers.contains(event.getDamager().getUniqueId());
-    }
-
-    public boolean playerIsInCanceledEvent(Player player) {
-        for (UUID uuid : canceledPlayers) {
-            Entity entity = Bukkit.getEntity(uuid);
-
-            if (entity instanceof Projectile) {
-                ProjectileSource projectileShooter = ((Projectile) entity).getShooter();
-
-                if (projectileShooter instanceof Player) {
-                    if (projectileShooter.equals(player)) {
-                        return true;
-                    }
-                }
-            }
-
-            if (entity instanceof Player) {
-                if (entity.equals(player)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public boolean arrowIsInCanceledEvent(Arrow projectile) {
-        for (UUID uuid : canceledPlayers) {
-            Entity entity = Bukkit.getEntity(uuid);
-
-            if (entity instanceof Arrow) {
-                if (entity.equals(projectile)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return !canceledEvents.contains(event.getDamager().getUniqueId());
     }
 
     public boolean uuidIsInCanceledEvent(UUID uuid) {
-        return canceledPlayers.contains(uuid);
+        return canceledEvents.contains(uuid);
     }
 
     public void doTrueDamage(Player target, double damage) {
@@ -174,21 +133,19 @@ public class DamageManager implements EntityValidator {
                 safeSetPlayerHealth(target, 0);
             } else {
                 target.damage(0);
+
                 safeSetPlayerHealth(target, target.getHealth() - damage);
             }
         } else if (level != 1) {
-            try {
-                if (reflectTo.getHealth() - (damage * mirrorReflectionValues.getValueAtLevel(level)) < 0) {
-                    safeSetPlayerHealth(target, 0);
-                } else {
-                    reflectTo.damage(0);
+            if (reflectTo.getHealth() - (damage * mirrorReflectionValues.getValueAtLevel(level)) < 0) {
+                safeSetPlayerHealth(target, 0);
+            } else {
+                reflectTo.damage(0);
 
-                    combatManager.combatTag(target);
+                combatManager.combatTag(target);
 
-                    safeSetPlayerHealth(reflectTo, Math.max(0,
-                            reflectTo.getHealth() - (damage * mirrorReflectionValues.getValueAtLevel(level))));
-                }
-            } catch (NullPointerException ignored) {
+                safeSetPlayerHealth(reflectTo,
+                        Math.max(0, reflectTo.getHealth() - (damage * mirrorReflectionValues.getValueAtLevel(level))));
             }
         }
     }
@@ -217,20 +174,7 @@ public class DamageManager implements EntityValidator {
                 * data.getReductionAmount() - data.getAbsoluteReductionAmount();
 
         if (removeCriticalDamage.contains(event.getDamager().getUniqueId())) {
-            // TODO FIX THIS!!
             damage *= .667;
-        }
-
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-
-            if (player.getInventory().getLeggings() != null) {
-                if (player.getInventory().getLeggings().getType() == Material.LEATHER_LEGGINGS) {
-                    if (!customEnchantManager.getItemEnchants(player.getInventory().getLeggings()).isEmpty()) {
-                        damage *= 0.871;
-                    }
-                }
-            }
         }
 
         if (damage <= 0)
@@ -249,44 +193,44 @@ public class DamageManager implements EntityValidator {
 
         return true;
     }
-}
 
-class EventData {
-    private double additiveDamage = 1;
-    private double multiplicativeDamage;
+    private class EventData {
+        private double additiveDamage = 1;
+        private double multiplicativeDamage;
 
-    private double reductionAmount = 1;
-    private double absoluteReductionAmount;
+        private double reductionAmount = 1;
+        private double absoluteReductionAmount;
 
-    public double getAdditiveDamage() {
-        return additiveDamage;
-    }
+        public double getAdditiveDamage() {
+            return additiveDamage;
+        }
 
-    public void setAdditiveDamage(double additiveDamage) {
-        this.additiveDamage = additiveDamage;
-    }
+        public void setAdditiveDamage(double additiveDamage) {
+            this.additiveDamage = additiveDamage;
+        }
 
-    public double getMultiplicativeDamage() {
-        return multiplicativeDamage;
-    }
+        public double getMultiplicativeDamage() {
+            return multiplicativeDamage;
+        }
 
-    public void setMultiplicativeDamage(double multiplicativeDamage) {
-        this.multiplicativeDamage = multiplicativeDamage;
-    }
+        public void setMultiplicativeDamage(double multiplicativeDamage) {
+            this.multiplicativeDamage = multiplicativeDamage;
+        }
 
-    public double getReductionAmount() {
-        return reductionAmount;
-    }
+        public double getReductionAmount() {
+            return reductionAmount;
+        }
 
-    public void setReductionAmount(double reductionAmount) {
-        this.reductionAmount = reductionAmount;
-    }
+        public void setReductionAmount(double reductionAmount) {
+            this.reductionAmount = reductionAmount;
+        }
 
-    public double getAbsoluteReductionAmount() {
-        return absoluteReductionAmount;
-    }
+        public double getAbsoluteReductionAmount() {
+            return absoluteReductionAmount;
+        }
 
-    public void setAbsoluteReductionAmount(double absoluteReductionAmount) {
-        this.absoluteReductionAmount = absoluteReductionAmount;
+        public void setAbsoluteReductionAmount(double absoluteReductionAmount) {
+            this.absoluteReductionAmount = absoluteReductionAmount;
+        }
     }
 }

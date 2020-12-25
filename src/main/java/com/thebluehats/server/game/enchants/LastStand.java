@@ -34,8 +34,8 @@ public class LastStand implements DamageEnchant {
     @Override
     @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
-        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
+        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGEE);
+        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGEE);
     }
 
     @Override
