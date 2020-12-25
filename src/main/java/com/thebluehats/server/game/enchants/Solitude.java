@@ -60,7 +60,7 @@ public class Solitude implements DamageEnchant {
         }
 
         if (players.size() <= playersNeeded.getValueAtLevel(level)) {
-            damageManager.reduceDamage(event, damageReduction.getValueAtLevel(level));
+            damageManager.reduceDamageByPercentage(event, damageReduction.getValueAtLevel(level));
         }
     }
 
