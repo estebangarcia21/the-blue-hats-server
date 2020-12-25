@@ -1,19 +1,19 @@
 package com.thebluehats.server.game.managers.game.regionmanager.maps.response;
 
 public class Bounds {
-    private final Bound minBound;
-    private final Bound maxBound;
+    private final Position minBound;
+    private final Position maxBound;
 
-    public Bounds(Bound minBound, Bound maxBound) {
+    public Bounds(Position minBound, Position maxBound) {
         this.minBound = minBound;
         this.maxBound = maxBound;
     }
 
-    public Bound getMinBound() {
+    public Position getMinBound() {
         return minBound;
     }
 
-    public Bound getMaxBound() {
+    public Position getMaxBound() {
         return maxBound;
     }
 }

@@ -194,7 +194,7 @@ public class DamageManager implements EntityValidator {
     }
 
     public void safeSetPlayerHealth(Player player, double health) {
-        if (!regionManager.playerIsInRegion(player, RegionManager.RegionType.SPAWN)) {
+        if (!regionManager.entityIsInSpawn(player)) {
             if (health >= 0 && health <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
                 player.setHealth(health);
             }

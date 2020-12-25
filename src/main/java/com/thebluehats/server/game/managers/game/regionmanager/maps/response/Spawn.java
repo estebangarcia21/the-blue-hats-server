@@ -1,17 +1,17 @@
 package com.thebluehats.server.game.managers.game.regionmanager.maps.response;
 
 public class Spawn {
-    private final Bound location;
+    private final Position location;
     private final float rotation;
     private final Bounds bounds;
 
-    public Spawn(Bound location, float rotation, Bounds bounds) {
+    public Spawn(Position location, float rotation, Bounds bounds) {
         this.location = location;
         this.rotation = rotation;
         this.bounds = bounds;
     }
 
-    public Bound getLocation() {
+    public Position getLocation() {
         return location;
     }
 
