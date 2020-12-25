@@ -48,7 +48,7 @@ public class Chipping implements DamageEnchant {
 
     @Override
     public String getEnchantReferenceName() {
-        return "chipping";
+        return "Chipping";
     }
 
     @Override
@@ -72,7 +72,6 @@ public class Chipping implements DamageEnchant {
 
     @Override
     public boolean isRareEnchant() {
-
         return false;
     }
 
