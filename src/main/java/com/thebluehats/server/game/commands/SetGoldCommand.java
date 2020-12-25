@@ -4,16 +4,17 @@ import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.api.models.PitDataModel;
-import com.thebluehats.server.api.repos.Repository;
+import com.thebluehats.server.api.repos.CRUDRepository;
+import com.thebluehats.server.core.modules.annotations.PitDataProvider;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 
 public class SetGoldCommand extends GameCommand {
-    private final Repository<UUID, PitDataModel> pitDataRepository;
+    private final CRUDRepository<PitDataModel, UUID> pitDataRepository;
 
     @Inject
-    public SetGoldCommand(Repository<UUID, PitDataModel> pitDataRepository) {
+    public SetGoldCommand(@PitDataProvider CRUDRepository<PitDataModel, UUID> pitDataRepository) {
         this.pitDataRepository = pitDataRepository;
     }
 
