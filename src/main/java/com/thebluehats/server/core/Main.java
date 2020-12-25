@@ -32,6 +32,7 @@ import com.thebluehats.server.game.commands.UnenchantCommand;
 import com.thebluehats.server.game.enchants.Billionaire;
 import com.thebluehats.server.game.enchants.ComboDamage;
 import com.thebluehats.server.game.enchants.ComboSwift;
+import com.thebluehats.server.game.enchants.DiamondAllergy;
 import com.thebluehats.server.game.enchants.DiamondStomp;
 import com.thebluehats.server.game.enchants.LastStand;
 import com.thebluehats.server.game.enchants.Mirror;
@@ -108,6 +109,7 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         customEnchantManager.registerEnchant(injector.getInstance(Billionaire.class));
         customEnchantManager.registerEnchant(injector.getInstance(DiamondStomp.class));
         customEnchantManager.registerEnchant(injector.getInstance(Punisher.class));
+        customEnchantManager.registerEnchant(injector.getInstance(DiamondAllergy.class));
     }
 
     private void registerPerks() {
