@@ -69,7 +69,7 @@ public class EnchantCommand extends GameCommand {
             return;
         }
 
-        if (customEnchantManager.itemContainsEnchant(item, customEnchant)) {
+        if (customEnchantUtils.itemHasEnchant(customEnchant, item)) {
             player.sendMessage(formatStandardErrorMessage("This item already contains that enchant!"));
 
             return;

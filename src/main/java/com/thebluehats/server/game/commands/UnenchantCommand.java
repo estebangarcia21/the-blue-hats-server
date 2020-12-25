@@ -3,6 +3,7 @@ package com.thebluehats.server.game.commands;
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
+import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,10 +12,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class UnenchantCommand extends GameCommand {
     private final CustomEnchantManager customEnchantManager;
+    private final CustomEnchantUtils customEnchantUtils;
 
     @Inject
-    public UnenchantCommand(CustomEnchantManager customEnchantManager) {
+    public UnenchantCommand(CustomEnchantManager customEnchantManager, CustomEnchantUtils customEnchantUtils) {
         this.customEnchantManager = customEnchantManager;
+        this.customEnchantUtils = customEnchantUtils;
     }
 
     @Override
@@ -52,7 +55,7 @@ public class UnenchantCommand extends GameCommand {
         } else if (item.getType() != Material.LEATHER_LEGGINGS && item.getType() != Material.GOLDEN_SWORD
                 && item.getType() != Material.BOW) {
             player.sendMessage(formatStandardErrorMessage("You can not unenchant this item!"));
-        } else if (!customEnchantManager.itemContainsEnchant(item, customEnchant)) {
+        } else if (!customEnchantUtils.itemHasEnchant(customEnchant, item)) {
             player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
                     + " This item does not have the specified enchant!");
         } else {
