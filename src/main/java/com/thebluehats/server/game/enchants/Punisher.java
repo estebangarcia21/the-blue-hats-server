@@ -86,5 +86,4 @@ public class Punisher implements DamageEnchant {
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.GOLDEN_SWORD };
     }
-
 }
