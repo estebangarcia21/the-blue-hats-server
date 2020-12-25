@@ -9,7 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public final class CustomEnchantUtils {
+public class CustomEnchantUtils {
     private final RomanNumeralConverter romanNumeralConverter;
 
     @Inject
@@ -30,24 +30,16 @@ public final class CustomEnchantUtils {
     public boolean itemHasEnchant(CustomEnchant enchant, ItemStack item) {
         if (item == null || item.getType() == Material.AIR)
             return false;
-        if (item.getItemMeta().getLore() == null)
-            return false;
-
-        String enchantName = enchant.getName();
 
         List<String> lore = item.getItemMeta().getLore();
 
-        String appendRare = "";
-        if (enchant.isRareEnchant())
-            appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
+        if (lore == null)
+            return false;
 
-        if (lore.contains(appendRare + ChatColor.BLUE + enchantName))
-            return true;
-
-        for (int i = 2; i <= 3; i++) {
-            if (lore.contains(
-                    appendRare + ChatColor.BLUE + enchantName + " " + romanNumeralConverter.convertToRomanNumeral(i)))
+        for (String line : lore) {
+            if (line.contains(enchant.getName())) {
                 return true;
+            }
         }
 
         return false;
@@ -56,24 +48,20 @@ public final class CustomEnchantUtils {
     public int getEnchantLevel(CustomEnchant enchant, ItemStack item) {
         if (item == null || item.getType() == Material.AIR)
             return 0;
-        if (item.getItemMeta().getLore() == null)
-            return 0;
-
-        String enchantName = enchant.getName();
 
         List<String> lore = item.getItemMeta().getLore();
 
-        String appendRare = "";
-        if (enchant.isRareEnchant())
-            appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
+        if (lore == null)
+            return 0;
 
-        if (lore.contains(appendRare + ChatColor.BLUE + enchantName))
-            return 1;
+        for (String line : lore) {
+            if (line.contains(enchant.getName())) {
+                String strippedLine = ChatColor.stripColor(line);
 
-        for (int i = 2; i <= 3; i++) {
-            if (lore.contains(
-                    appendRare + ChatColor.BLUE + enchantName + " " + romanNumeralConverter.convertToRomanNumeral(i))) {
-                return i;
+                String[] lineTokens = strippedLine.split(" ");
+                String numeral = lineTokens[2];
+
+                return numeral == null ? 1 : romanNumeralConverter.convertRomanNumeralToInteger(numeral);
             }
         }
 
