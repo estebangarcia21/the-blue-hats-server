@@ -59,7 +59,7 @@ public class CombatManager implements Listener {
 
     public void combatTag(Player player) {
         CombatTimerData timerData = data.get(player.getUniqueId());
-        if (regionManager.playerIsInRegion(player, RegionManager.RegionType.SPAWN))
+        if (regionManager.entityIsInSpawn(player))
             return;
 
         timerData.setTime(calculateCombatTime());

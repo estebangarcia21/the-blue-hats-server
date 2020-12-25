@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.google.gson.Gson;
+import com.thebluehats.server.game.managers.game.regionmanager.maps.response.Position;
+import com.thebluehats.server.game.managers.game.regionmanager.maps.response.Bounds;
 import com.thebluehats.server.game.managers.game.regionmanager.maps.response.Map;
+import com.thebluehats.server.game.managers.game.regionmanager.maps.response.Spawn;
 import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Location;
@@ -21,8 +24,13 @@ import org.bukkit.util.Vector;
 public class RegionManager implements EntityValidator {
     private final ArrayList<Map> maps = new ArrayList<>();
 
+    private final String ACTIVE_MAP_NAME = "Seasons";
+    private final Map activeMap;
+
     public RegionManager() {
         parseMapsFromJSON();
+
+        activeMap = maps.stream().filter(map -> map.getName().equalsIgnoreCase(ACTIVE_MAP_NAME)).findFirst().get();
     }
 
     private void parseMapsFromJSON() {
@@ -38,7 +46,7 @@ public class RegionManager implements EntityValidator {
         if (event.getEntity() instanceof Player && event.getEntity() instanceof Player) {
             Player hit = (Player) event.getEntity();
 
-            if (playerIsInRegion(hit, RegionType.SPAWN)) {
+            if (entityIsInSpawn(hit)) {
                 event.setCancelled(true);
             }
         }
@@ -47,77 +55,55 @@ public class RegionManager implements EntityValidator {
     @EventHandler
     public void onArrowShoot(EntityShootBowEvent event) {
         if (event.getProjectile() instanceof Arrow) {
-            if (((Arrow) event.getProjectile()).getShooter() instanceof Player) {
-                if (playerIsInRegion(((Player) ((Arrow) event.getProjectile()).getShooter()), RegionType.SPAWN)) {
+            Arrow arrow = (Arrow) event.getProjectile();
+
+            if (arrow.getShooter() instanceof Player) {
+                Player player = (Player) arrow.getShooter();
+
+                if (entityIsInSpawn(player)) {
                     event.setCancelled(true);
-                    ((Player) ((Arrow) event.getProjectile()).getShooter()).updateInventory();
+
+                    (player).updateInventory();
                 }
             }
         }
     }
 
-    public boolean playerIsInRegion(Player player, RegionType regionType) {
-        Location location = player.getLocation();
-
-        // for (Region region : regions) {
-        // if (region.regionType == regionType && region.map == GAME_MAP) {
-        // if (location.getY() > region.lowerBound.getY() && location.getY() <
-        // region.higherBound.getY()
-        // && location.getX() < region.lowerBound.getX() && location.getX() >
-        // region.higherBound.getX()
-        // && location.getZ() < region.lowerBound.getZ() && location.getZ() >
-        // region.higherBound.getZ()) {
-        // return true;
-        // }
-        // }
-        // }
-
-        return false;
-    }
-
-    public boolean locationIsInRegion(Location location, RegionType regionType) {
-        // for (Region region : regions) {
-        // if (region.regionType == regionType && region.map == GAME_MAP) {
-        // if (location.getY() > region.lowerBound.getY() && location.getY() <
-        // region.higherBound.getY()
-        // && location.getX() < region.lowerBound.getX() && location.getX() >
-        // region.higherBound.getX()
-        // && location.getZ() < region.lowerBound.getZ() && location.getZ() >
-        // region.higherBound.getZ()) {
-        // return true;
-        // }
-        // }
-        // }
-
-        return false;
-    }
-
-    static class Region {
-        private final Map map;
-
-        private final Vector lowerBound;
-        private final Vector higherBound;
-        private final RegionType regionType;
-
-        public Region(Map map, Vector lowerBound, Vector higherBound, RegionType regionType) {
-            this.map = map;
-            this.higherBound = higherBound;
-            this.lowerBound = lowerBound;
-            this.regionType = regionType;
-        }
-    }
-
-    public enum RegionType {
-        SPAWN, PLAYABLEAREA
-    }
-
     public Location getSpawnLocation(Player player) {
-        return null;
+        Spawn spawn = activeMap.getSpawn();
+
+        Position spawnLocation = spawn.getLocation();
+        float rotation = spawn.getRotation();
+
+        return new Location(player.getWorld(), spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(),
+                rotation, 0);
+    }
+
+    public boolean entityIsInSpawn(Entity entity) {
+        Location location = entity.getLocation();
+
+        Bounds spawnBounds = activeMap.getSpawn().getBounds();
+
+        Vector lowerBound = vectorFromBound(spawnBounds.getMinBound());
+        Vector higherBound = vectorFromBound(spawnBounds.getMaxBound());
+
+        return location.getY() > lowerBound.getY() && location.getY() < higherBound.getY()
+                && location.getX() < lowerBound.getX() && location.getX() > higherBound.getX()
+                && location.getZ() < lowerBound.getZ() && location.getZ() > higherBound.getZ();
+    }
+
+    public Vector vectorFromBound(Position bound) {
+        return new Vector(bound.getX(), bound.getY(), bound.getZ());
     }
 
     @Override
     public boolean validate(Entity... entities) {
-        // TODO Validate
+        for (Entity entity : entities) {
+            if (entityIsInSpawn(entity)) {
+                return false;
+            }
+        }
+
         return true;
     }
 }

@@ -2,7 +2,6 @@ package com.thebluehats.server.game.commands;
 
 import java.util.ArrayList;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.thebluehats.server.game.utils.LoreParser;
 import com.thebluehats.server.game.utils.PantsDataContainer;

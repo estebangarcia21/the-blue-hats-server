@@ -50,10 +50,12 @@ public class GrindingSystem implements PluginLifecycle, DataLoader {
     @Override
     public void loadData() {
         // TODO GET from API
+        serverApi.get("/players/");
     }
 
     @Override
     public void saveData() {
         // TODO POST from API
+        serverApi.get("/players/");
     }
 }
