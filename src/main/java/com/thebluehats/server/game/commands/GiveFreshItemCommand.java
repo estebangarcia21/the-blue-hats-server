@@ -3,7 +3,11 @@ package com.thebluehats.server.game.commands;
 import java.util.ArrayList;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.inject.Inject;
 import com.thebluehats.server.game.utils.LoreParser;
+import com.thebluehats.server.game.utils.PantsDataContainer;
+import com.thebluehats.server.game.utils.PantsDataContainer.FreshPantsColor;
+import com.thebluehats.server.game.utils.PantsDataContainer.PantsData;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -15,21 +19,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class GiveFreshItemCommand extends GameCommand {
-    private final ImmutableMap<FreshPantsColor, FreshPantsData> pantsData = ImmutableMap
-            .<FreshPantsColor, FreshPantsData>builder()
-            .put(FreshPantsColor.RED, new FreshPantsData(0xFF5555, ChatColor.RED))
-            .put(FreshPantsColor.GREEN, new FreshPantsData(0x55FF55, ChatColor.GREEN))
-            .put(FreshPantsColor.BLUE, new FreshPantsData(0x55555FF, ChatColor.BLUE))
-            .put(FreshPantsColor.YELLOW, new FreshPantsData(0xFFFF55, ChatColor.YELLOW))
-            .put(FreshPantsColor.ORANGE, new FreshPantsData(0xFFAA00, ChatColor.GOLD))
-            .put(FreshPantsColor.DARK, new FreshPantsData(0x000000, ChatColor.DARK_PURPLE))
-            .put(FreshPantsColor.SEWER, new FreshPantsData(0x7DC383, ChatColor.DARK_AQUA))
-            .put(FreshPantsColor.AQUA, new FreshPantsData(0x55FFFF, ChatColor.DARK_AQUA)).build();
-
     private final ArrayList<String> freshPantsColors = new ArrayList<>();
     private final ArrayList<String> handheldFreshItems = new ArrayList<>();
 
-    public GiveFreshItemCommand() {
+    private final PantsDataContainer pantsDataContainer;
+
+    @Inject
+    public GiveFreshItemCommand(PantsDataContainer pantsDataContainer) {
+        this.pantsDataContainer = pantsDataContainer;
+
         for (FreshPantsColor freshPantsColor : FreshPantsColor.values()) {
             freshPantsColors.add(freshPantsColor.toString());
         }
@@ -37,28 +35,6 @@ public class GiveFreshItemCommand extends GameCommand {
         for (HandheldFreshItem handheldFreshItem : HandheldFreshItem.values()) {
             handheldFreshItems.add(handheldFreshItem.toString());
         }
-    }
-
-    private class FreshPantsData {
-        private final int pantsColor;
-        private final ChatColor textColor;
-
-        public FreshPantsData(int pantsColor, ChatColor textColor) {
-            this.pantsColor = pantsColor;
-            this.textColor = textColor;
-        }
-
-        public int getPantsColor() {
-            return pantsColor;
-        }
-
-        public ChatColor getTextColor() {
-            return textColor;
-        }
-    }
-
-    private enum FreshPantsColor {
-        RED, GREEN, BLUE, YELLOW, ORANGE, DARK, SEWER, AQUA
     }
 
     private enum HandheldFreshItem {
@@ -113,7 +89,7 @@ public class GiveFreshItemCommand extends GameCommand {
         LeatherArmorMeta freshPantsMeta = (LeatherArmorMeta) freshLeggings.getItemMeta();
         String pantsColorName = pantsColor.toString().toLowerCase();
 
-        FreshPantsData data = pantsData.get(pantsColor);
+        PantsData data = pantsDataContainer.getData().get(pantsColor);
 
         ChatColor textColor = data.getTextColor();
         int color = data.getPantsColor();

@@ -143,7 +143,7 @@ public class EnchantCommand extends GameCommand {
             }
         }
 
-        customEnchantManager.addEnchants(item, level, customEnchant);
+        customEnchantManager.addEnchant(item, level, false, customEnchant);
 
         player.sendMessage(
                 ChatColor.DARK_PURPLE + "Success!" + ChatColor.RED + " You applied the enchantment successfully!");
