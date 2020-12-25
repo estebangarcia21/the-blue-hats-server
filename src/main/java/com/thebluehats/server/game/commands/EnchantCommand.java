@@ -44,7 +44,7 @@ public class EnchantCommand extends GameCommand {
         }
 
         if (customEnchant == null) {
-            player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED + " This enchant does not exist!");
+            player.sendMessage(formatStandardErrorMessage("This enchant does not exist!"));
 
             return;
         }
@@ -52,42 +52,37 @@ public class EnchantCommand extends GameCommand {
         ItemStack item = player.getInventory().getItemInMainHand();
 
         if (item.getType() == Material.AIR) {
-            player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED + " You are not holding anything!");
+            player.sendMessage(formatStandardErrorMessage("You are not holding anything!"));
 
             return;
         }
 
         if (args.length < 2) {
-            player.sendMessage(
-                    ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED + " You did not specify an enchantment level!");
+            player.sendMessage(formatStandardErrorMessage("You did not specify a level!"));
 
             return;
         }
 
         if (!StringUtils.isNumeric(args[1])) {
-            player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
-                    + " The enchantment level you entered is not a number!");
+            player.sendMessage(formatStandardErrorMessage("The level you entered is not a number!"));
 
             return;
         }
 
         if (customEnchantManager.itemContainsEnchant(item, customEnchant)) {
-            player.sendMessage(
-                    ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED + " This item already contains this enchantment!");
+            player.sendMessage(formatStandardErrorMessage("This item already contains that enchant!"));
 
             return;
         }
 
         if (!customEnchantUtils.isCompatibleWith(customEnchant, item.getType())) {
-            player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
-                    + " You can not enchant this enchant on this item!");
+            player.sendMessage(formatStandardErrorMessage("You can not enchant this that on this item!"));
 
             return;
         }
 
         if (Integer.parseInt(args[1]) > 3 || Integer.parseInt(args[1]) < 1) {
-            player.sendMessage(
-                    ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED + " The enchant level can only be 1, 2, or 3!");
+            player.sendMessage(formatStandardErrorMessage("The enchant level can only be 1, 2, or 3!"));
 
             return;
         }
@@ -98,8 +93,8 @@ public class EnchantCommand extends GameCommand {
             int numberOfEnchants = customEnchantManager.getItemEnchants(item).size();
 
             if (numberOfEnchants >= 3) {
-                player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
-                        + " You can only put a maximum of 3 enchants in this world!");
+                player.sendMessage(
+                        formatStandardErrorMessage("You can only have a maximum of 3 enchants in this world!"));
 
                 return;
             }
@@ -107,8 +102,7 @@ public class EnchantCommand extends GameCommand {
             int tokens = customEnchantManager.getTokensOnItem(item) + level;
 
             if (tokens > 8) {
-                player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
-                        + " You can only have a maximum of 8 tokens in this world!");
+                player.sendMessage("You can only have a miximum of 8 tokens in this world!");
 
                 return;
             }
@@ -129,15 +123,15 @@ public class EnchantCommand extends GameCommand {
             }
 
             if (rareEnchantCount > 2) {
-                player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
-                        + " You can only have 2 rare enchants on an item in this world!");
+                player.sendMessage(
+                        formatStandardErrorMessage("You can only have 2 rare enchants on an item in this world!"));
 
                 return;
             }
 
             if (rareTokens > 4) {
-                player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
-                        + " You can only have a maximum of 4 tokens for rare enchants in this world!");
+                player.sendMessage(formatStandardErrorMessage(
+                        "You can only have a maximum of 4 tokens for rare enchants in this world!"));
 
                 return;
             }
