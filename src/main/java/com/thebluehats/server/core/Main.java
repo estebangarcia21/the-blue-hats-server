@@ -12,6 +12,7 @@ import com.thebluehats.server.core.modules.CustomEnchantManagerModule;
 import com.thebluehats.server.core.modules.CustomEnchantUtilsModule;
 import com.thebluehats.server.core.modules.DamageManagerModule;
 import com.thebluehats.server.core.modules.EventTemplatesModule;
+import com.thebluehats.server.core.modules.GrindingSystemModule;
 import com.thebluehats.server.core.modules.HitCounterModule;
 import com.thebluehats.server.core.modules.MirrorModule;
 import com.thebluehats.server.core.modules.PantsDataContainerModule;
@@ -45,15 +46,15 @@ import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.game.PerkManager;
 import com.thebluehats.server.game.managers.game.WorldSelectionManager;
-import com.thebluehats.server.game.managers.grindingsystem.GrindingSystem;
+import com.thebluehats.server.game.managers.grindingsystem.PitDataDAOImpl;
 import com.thebluehats.server.game.perks.Vampire;
-import com.thebluehats.server.game.utils.PluginLifecycle;
+import com.thebluehats.server.game.utils.PluginLifecycleListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
-    private final ArrayList<PluginLifecycle> lifecycleListeners = new ArrayList<>();
+    private final ArrayList<PluginLifecycleListener> lifecycleListeners = new ArrayList<>();
 
     private Injector injector;
 
@@ -76,7 +77,8 @@ public class Main extends JavaPlugin {
                 new CustomEnchantManagerModule(), new CombatManagerModule(), new EventTemplatesModule(),
                 new DamageManagerModule(), new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(),
                 new MirrorModule(), new CustomEnchantUtilsModule(), new ServerApiModule(),
-                new PitDataRepositoryModule(), new RomanNumeralConverterModule(), new PantsDataContainerModule());
+                new PitDataRepositoryModule(), new RomanNumeralConverterModule(), new PantsDataContainerModule(),
+                new GrindingSystemModule());
 
         registerLifecycles();
         registerEvents();
@@ -133,11 +135,11 @@ public class Main extends JavaPlugin {
     }
 
     private void registerLifecycles() {
-        lifecycleListeners.add(injector.getInstance(GrindingSystem.class));
+        lifecycleListeners.add(injector.getInstance(PitDataDAOImpl.class));
     }
 
-    private void updateLifecyles(Consumer<PluginLifecycle> action) {
-        for (PluginLifecycle lifecycle : lifecycleListeners) {
+    private void updateLifecyles(Consumer<PluginLifecycleListener> action) {
+        for (PluginLifecycleListener lifecycle : lifecycleListeners) {
             action.accept(lifecycle);
         }
     }

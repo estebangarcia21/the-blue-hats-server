@@ -1,6 +1,6 @@
 package com.thebluehats.server.game.utils;
 
-public interface PluginLifecycle {
+public interface PluginLifecycleListener {
     void onPluginStart();
 
     void onPluginEnd();
