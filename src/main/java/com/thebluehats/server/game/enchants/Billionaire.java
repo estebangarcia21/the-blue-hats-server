@@ -1,11 +1,8 @@
 package com.thebluehats.server.game.enchants;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.api.models.PitDataModel;
-import com.thebluehats.server.api.repos.Repository;
 import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
@@ -14,6 +11,7 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
+import com.thebluehats.server.game.managers.grindingsystem.PitDataDAO;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
@@ -26,14 +24,14 @@ public class Billionaire implements DamageEnchant {
     private final EnchantProperty<Double> damageIncrease = new EnchantProperty<>(1.33D, 1.67D, 2D);
     private final EnchantProperty<Integer> goldNeeded = new EnchantProperty<>(100, 200, 350);
 
-    private final Repository<UUID, PitDataModel> pitDataRepository;
+    private final PitDataDAO pitData;
     private final DamageManager damageManager;
     private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
-    public Billionaire(Repository<UUID, PitDataModel> pitDataRepository, DamageManager damageManager,
+    public Billionaire(PitDataDAO pitData, DamageManager damageManager,
             PlayerHitPlayerTemplate playerHitPlayerTemplate) {
-        this.pitDataRepository = pitDataRepository;
+        this.pitData = pitData;
         this.damageManager = damageManager;
         this.playerHitPlayerTemplate = playerHitPlayerTemplate;
     }
@@ -47,16 +45,14 @@ public class Billionaire implements DamageEnchant {
     @Override
     public void execute(PostEventTemplateResult data) {
         Player damager = data.getDamager();
-        UUID key = data.getDamager().getUniqueId();
         int level = data.getPrimaryLevel();
 
-        PitDataModel playerData = pitDataRepository.findUnique(key);
-        double gold = playerData.getGold();
+        double gold = pitData.getPlayerGold(damager);
 
         if (gold < goldNeeded.getValueAtLevel(level))
             return;
 
-        pitDataRepository.update(key, model -> model.setGold(gold - goldNeeded.getValueAtLevel(level)));
+        pitData.setPlayerGold(damager, gold - goldNeeded.getValueAtLevel(level));
 
         damageManager.addDamage(data.getEvent(), damageIncrease.getValueAtLevel(level), CalculationMode.MULTIPLICATIVE);
 
