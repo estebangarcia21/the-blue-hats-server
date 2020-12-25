@@ -34,13 +34,15 @@ public class CustomEnchantManager {
     private final JavaPlugin plugin;
     private final RomanNumeralConverter romanNumeralConverter;
     private final PantsDataContainer pantsDataContainer;
+    private final CustomEnchantUtils customEnchantUtils;
 
     @Inject
     public CustomEnchantManager(JavaPlugin plugin, RomanNumeralConverter romanNumeralConverter,
-            PantsDataContainer pantsDataContainer) {
+            PantsDataContainer pantsDataContainer, CustomEnchantUtils customEnchantUtils) {
         this.plugin = plugin;
         this.romanNumeralConverter = romanNumeralConverter;
         this.pantsDataContainer = pantsDataContainer;
+        this.customEnchantUtils = customEnchantUtils;
     }
 
     public ArrayList<CustomEnchant> getEnchants() {
@@ -197,7 +199,7 @@ public class CustomEnchantManager {
     }
 
     private String formatEnchantName(String name, boolean isRare, int level) {
-        return (isRare ? ChatColor.LIGHT_PURPLE + "Rare! " : "") + ChatColor.BLUE + name
+        return (isRare ? ChatColor.LIGHT_PURPLE + "RARE! " : "") + ChatColor.BLUE + name
                 + (level != 1 ? " " + romanNumeralConverter.convertToRomanNumeral(level) : "");
     }
 
@@ -296,29 +298,6 @@ public class CustomEnchantManager {
         }
     }
 
-    public boolean itemContainsEnchant(ItemStack item, CustomEnchant enchant) {
-        if (item.getItemMeta().getLore() == null || enchant == null)
-            return false;
-
-        List<String> lore = item.getItemMeta().getLore();
-
-        String appendRare = "";
-
-        if (enchant.isRareEnchant())
-            appendRare = ChatColor.LIGHT_PURPLE + "RARE! ";
-
-        if (lore.contains(appendRare + ChatColor.BLUE + enchant.getName()))
-            return true;
-
-        for (int i = 2; i <= 3; i++) {
-            if (lore.contains(appendRare + ChatColor.BLUE + enchant.getName() + " "
-                    + romanNumeralConverter.convertToRomanNumeral(i)))
-                return true;
-        }
-
-        return false;
-    }
-
     public HashMap<CustomEnchant, Integer> getItemEnchants(ItemStack item) {
         HashMap<CustomEnchant, Integer> enchantsToLevels = new HashMap<>();
 
@@ -387,7 +366,7 @@ public class CustomEnchantManager {
         ArrayList<CustomEnchant> enchants = new ArrayList<>();
 
         for (CustomEnchant enchant : getEnchants()) {
-            if (itemContainsEnchant(item, enchant)) {
+            if (customEnchantUtils.itemHasEnchant(enchant, item)) {
                 enchants.add(enchant);
             }
         }
@@ -414,6 +393,7 @@ public class CustomEnchantManager {
         return -1;
     }
 
+    @Deprecated
     public boolean percentChance(double percent) {
         return Double.parseDouble(
                 new DecimalFormat("#0.0").format(ThreadLocalRandom.current().nextDouble(0, 99))) <= percent;
