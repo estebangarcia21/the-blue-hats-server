@@ -12,7 +12,7 @@ import com.thebluehats.server.core.modules.CustomEnchantManagerModule;
 import com.thebluehats.server.core.modules.CustomEnchantUtilsModule;
 import com.thebluehats.server.core.modules.DamageManagerModule;
 import com.thebluehats.server.core.modules.EventTemplatesModule;
-import com.thebluehats.server.core.modules.GrindingSystemModule;
+import com.thebluehats.server.core.modules.PitDataDAOModule;
 import com.thebluehats.server.core.modules.HitCounterModule;
 import com.thebluehats.server.core.modules.MirrorModule;
 import com.thebluehats.server.core.modules.PantsDataContainerModule;
@@ -78,7 +78,7 @@ public class Main extends JavaPlugin {
                 new DamageManagerModule(), new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(),
                 new MirrorModule(), new CustomEnchantUtilsModule(), new ServerApiModule(),
                 new PitDataRepositoryModule(), new RomanNumeralConverterModule(), new PantsDataContainerModule(),
-                new GrindingSystemModule());
+                new PitDataDAOModule());
 
         registerLifecycles();
         registerEvents();
