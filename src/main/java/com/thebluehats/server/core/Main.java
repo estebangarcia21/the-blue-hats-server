@@ -48,7 +48,7 @@ import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.world.PerkManager;
 import com.thebluehats.server.game.managers.world.WorldSelectionManager;
-import com.thebluehats.server.game.managers.grindingsystem.PitDataDAOImpl;
+import com.thebluehats.server.api.implementations.pitdata.PitDataDAOImpl;
 import com.thebluehats.server.game.perks.Vampire;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
 

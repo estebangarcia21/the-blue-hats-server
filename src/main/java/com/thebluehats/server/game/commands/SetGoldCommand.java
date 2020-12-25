@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.api.models.PitDataModel;
-import com.thebluehats.server.api.repos.CRUDRepository;
+import com.thebluehats.server.api.utils.CRUDRepository;
 import com.thebluehats.server.core.modules.annotations.PitDataProvider;
 
 import org.apache.commons.lang.StringUtils;

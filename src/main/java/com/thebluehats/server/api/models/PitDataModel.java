@@ -10,8 +10,8 @@ public class PitDataModel {
     private int xp;
     private double gold;
 
-    public PitDataModel(UUID playeruUuid, int prestige, int level, int xp, float gold) {
-        this.playerUuid = playeruUuid;
+    public PitDataModel(UUID playerUuid, int prestige, int level, int xp, float gold) {
+        this.playerUuid = playerUuid;
         this.prestige = prestige;
         this.level = level;
         this.xp = xp;

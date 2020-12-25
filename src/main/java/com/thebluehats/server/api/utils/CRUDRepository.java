@@ -1,4 +1,4 @@
-package com.thebluehats.server.api.repos;
+package com.thebluehats.server.api.utils;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;

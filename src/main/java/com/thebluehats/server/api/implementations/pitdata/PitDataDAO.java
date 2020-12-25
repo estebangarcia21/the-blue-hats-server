@@ -1,4 +1,4 @@
-package com.thebluehats.server.game.managers.grindingsystem;
+package com.thebluehats.server.api.implementations.pitdata;
 
 import org.bukkit.entity.Player;
 

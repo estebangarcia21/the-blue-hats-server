@@ -1,10 +1,10 @@
-package com.thebluehats.server.game.managers.grindingsystem;
+package com.thebluehats.server.api.implementations.pitdata;
 
 import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.api.models.PitDataModel;
-import com.thebluehats.server.api.repos.CRUDRepository;
+import com.thebluehats.server.api.utils.CRUDRepository;
 import com.thebluehats.server.api.utils.DataLoader;
 import com.thebluehats.server.core.modules.annotations.PitDataProvider;
 import com.thebluehats.server.core.modules.annotations.ServerApi;
