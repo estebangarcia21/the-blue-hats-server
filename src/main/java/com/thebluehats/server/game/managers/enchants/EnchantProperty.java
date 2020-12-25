@@ -1,7 +1,7 @@
 package com.thebluehats.server.game.managers.enchants;
 
 public class EnchantProperty<T> {
-    private T[] values;
+    private final T[] values;
 
     @SafeVarargs
     public EnchantProperty(T... values) {
