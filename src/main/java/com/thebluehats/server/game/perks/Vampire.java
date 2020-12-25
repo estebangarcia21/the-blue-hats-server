@@ -45,7 +45,7 @@ public class Vampire extends Perk {
                 return;
         }
 
-        if (!damageManager.playerIsInCanceledEvent(player))
+        if (!damageManager.uuidIsInCanceledEvent(player.getUniqueId()))
             return;
 
         player.setHealth(Math.min(player.getHealth() + healthValue,
