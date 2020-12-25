@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 
 public class SetGoldCommand extends GameCommand {
-    // TODO Update repository scope
     private final Repository<UUID, PitDataModel> pitDataRepository;
 
     @Inject
