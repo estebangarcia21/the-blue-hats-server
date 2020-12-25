@@ -57,7 +57,7 @@ public class DiamondAllergy implements DamageEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Recieve <blue>-{0}</blue> damage from<br />diamond weapons");
+                "Recieve <blue>-{0}</blue> damage from<br/>diamond weapons");
 
         enchantLoreParser.setSingleVariable("10%", "20%", "30%");
 

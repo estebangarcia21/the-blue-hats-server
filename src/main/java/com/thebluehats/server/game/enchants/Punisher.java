@@ -59,7 +59,7 @@ public class Punisher implements DamageEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Do <red>+{0}</red> damage vs. players<br />below 50% HP");
+                "Do <red>+{0}</red> damage vs. players<br/>below 50% HP");
 
         enchantLoreParser.setSingleVariable("7%", "12%", "18%");
 
