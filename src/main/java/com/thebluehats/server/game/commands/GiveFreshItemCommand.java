@@ -11,6 +11,8 @@ import com.thebluehats.server.game.utils.PantsDataContainer.PantsData;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -77,7 +79,7 @@ public class GiveFreshItemCommand extends GameCommand {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
         meta.setUnbreakable(true);
 
-        freshItem.setItemMeta(meta);
+        applyFlags(meta);
 
         player.getInventory().addItem(freshItem);
         player.updateInventory();
@@ -98,7 +100,7 @@ public class GiveFreshItemCommand extends GameCommand {
         freshPantsMeta.setDisplayName(textColor + "Fresh " + pantsColorName.substring(0, 1).toUpperCase()
                 + pantsColorName.substring(1) + " Pants");
 
-        freshPantsMeta.setUnbreakable(true);
+        applyFlags(freshPantsMeta);
 
         LoreParser loreParser = new LoreParser(
                 "Kept on death</br></br>{0}Used in the mystic well{1}</br>{0}Also, a fashion statement{1}");
@@ -114,5 +116,12 @@ public class GiveFreshItemCommand extends GameCommand {
         freshLeggings.setItemMeta(freshPantsMeta);
 
         player.getInventory().addItem(freshLeggings);
+    }
+
+    private void applyFlags(ItemMeta meta) {
+        meta.setUnbreakable(true);
+
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
+                new AttributeModifier("GENERIC_ARMOR_TOUGHNESS", 3, AttributeModifier.Operation.ADD_NUMBER));
     }
 }
