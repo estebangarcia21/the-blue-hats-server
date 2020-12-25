@@ -1,4 +1,5 @@
 plugins {
+    id "com.github.johnrengelman.shadow" version "6.1.0"
     id "java"
 }
 
@@ -9,31 +10,19 @@ repositories {
     mavenCentral()
 
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots" }
+    maven { url "https://repo.dmulloy2.net/nexus/repository/public/" }
 }
 
 dependencies {
-    implementation "org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT"
     implementation "com.konghq:unirest-java:3.11.04"
     implementation "com.google.inject:guice:4.1.0"
     implementation "com.google.code.gson:gson:2.8.6"
+    compileOnly "org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT"
+    compileOnly group: "com.comphenix.protocol", name: "ProtocolLib", version: "4.5.0";
     testImplementation "junit:junit:4.11"
     testImplementation "org.mockito:mockito-core:3.5.15"
     testImplementation "org.powermock:powermock-api-mockito2:2.0.0"
     testImplementation "org.powermock:powermock-module-junit4:2.0.0"
-}
-
-task productionBuild(type: Jar) {
-    manifest {
-        attributes "Implementation-Title": "The Blue Hats Server",
-                "Implementation-Version": archiveVersion,
-                "Main-Class": "com.thebluehats.server.core.Main"
-    }
-
-    archiveBaseName = project.name + "-fatJar"
-
-    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-
-    with jar
 }
 
 sourceCompatibility = 1.8
