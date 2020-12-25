@@ -40,6 +40,8 @@ import com.thebluehats.server.game.enchants.DiamondStomp;
 import com.thebluehats.server.game.enchants.LastStand;
 import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.enchants.Peroxide;
+import com.thebluehats.server.game.enchants.Punisher;
+import com.thebluehats.server.game.enchants.Solitude;
 import com.thebluehats.server.game.enchants.SprintDrain;
 import com.thebluehats.server.game.enchants.Wasp;
 import com.thebluehats.server.game.managers.combat.CombatManager;
@@ -111,7 +113,9 @@ public class Main extends JavaPlugin {
         customEnchantManager.registerEnchant(injector.getInstance(Mirror.class));
         customEnchantManager.registerEnchant(injector.getInstance(Billionaire.class));
         customEnchantManager.registerEnchant(injector.getInstance(DiamondStomp.class));
+        customEnchantManager.registerEnchant(injector.getInstance(Punisher.class));
         customEnchantManager.registerEnchant(injector.getInstance(DiamondAllergy.class));
+        customEnchantManager.registerEnchant(injector.getInstance(Solitude.class));
     }
 
     private void registerPerks() {
