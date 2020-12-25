@@ -1,4 +1,4 @@
-package com.thebluehats.server.game.managers.game.regionmanager;
+package com.thebluehats.server.game.managers.world.regionmanager;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.google.gson.Gson;
-import com.thebluehats.server.game.managers.game.regionmanager.maps.response.Position;
-import com.thebluehats.server.game.managers.game.regionmanager.maps.response.Bounds;
-import com.thebluehats.server.game.managers.game.regionmanager.maps.response.Map;
-import com.thebluehats.server.game.managers.game.regionmanager.maps.response.Spawn;
+import com.thebluehats.server.game.managers.world.regionmanager.maps.response.Position;
+import com.thebluehats.server.game.managers.world.regionmanager.maps.response.Bounds;
+import com.thebluehats.server.game.managers.world.regionmanager.maps.response.Map;
+import com.thebluehats.server.game.managers.world.regionmanager.maps.response.Spawn;
 import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Location;

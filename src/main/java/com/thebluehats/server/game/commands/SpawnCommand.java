@@ -3,7 +3,7 @@ package com.thebluehats.server.game.commands;
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.enchants.CooldownTimer;
-import com.thebluehats.server.game.managers.game.regionmanager.RegionManager;
+import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;

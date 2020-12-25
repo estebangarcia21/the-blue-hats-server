@@ -1,4 +1,4 @@
-package com.thebluehats.server.game.managers.game.regionmanager.maps.response;
+package com.thebluehats.server.game.managers.world.regionmanager.maps.response;
 
 public class Map {
     private final String name;

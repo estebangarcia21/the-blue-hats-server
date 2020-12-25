@@ -8,7 +8,7 @@ import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
-import com.thebluehats.server.game.managers.game.regionmanager.RegionManager;
+import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
 
 public class DamageManagerModule extends AbstractModule {
     @Provides

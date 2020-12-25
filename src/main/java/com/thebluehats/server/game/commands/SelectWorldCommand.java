@@ -1,7 +1,7 @@
 package com.thebluehats.server.game.commands;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.game.WorldSelectionManager;
+import com.thebluehats.server.game.managers.world.WorldSelectionManager;
 
 import org.bukkit.entity.Player;
 

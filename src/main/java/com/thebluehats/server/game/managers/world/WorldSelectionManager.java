@@ -1,10 +1,10 @@
-package com.thebluehats.server.game.managers.game;
+package com.thebluehats.server.game.managers.world;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.game.regionmanager.RegionManager;
+import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
 import com.thebluehats.server.game.utils.LoreParser;
 
 import org.bukkit.Bukkit;

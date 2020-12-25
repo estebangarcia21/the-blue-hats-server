@@ -9,7 +9,7 @@ import com.thebluehats.server.core.modules.annotations.MirrorReference;
 import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.game.regionmanager.RegionManager;
+import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
 import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Material;

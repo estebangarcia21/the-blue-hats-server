@@ -1,4 +1,4 @@
-package com.thebluehats.server.game.managers.game;
+package com.thebluehats.server.game.managers.world;
 
 import com.thebluehats.server.game.perks.Perk;
 
