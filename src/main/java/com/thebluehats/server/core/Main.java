@@ -114,7 +114,6 @@ public class Main extends JavaPlugin implements PluginInformationProvider {
         customEnchantManager.registerEnchant(injector.getInstance(Punisher.class));
         customEnchantManager.registerEnchant(injector.getInstance(DiamondAllergy.class));
         customEnchantManager.registerEnchant(injector.getInstance(Solitude.class));
-
     }
 
     private void registerPerks() {
