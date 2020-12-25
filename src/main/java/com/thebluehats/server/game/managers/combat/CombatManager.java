@@ -105,29 +105,29 @@ public class CombatManager implements DataInitializer {
             timerData.setTime(0);
         }
     }
-}
 
-class CombatTimerData {
-    private int time;
-    private int taskId;
+    private class CombatTimerData {
+        private int time;
+        private int taskId;
 
-    public int getTime() {
-        return time;
-    }
+        public int getTime() {
+            return time;
+        }
 
-    public void setTime(int time) {
-        this.time = time;
-    }
+        public void setTime(int time) {
+            this.time = time;
+        }
 
-    public int getTaskId() {
-        return taskId;
-    }
+        public int getTaskId() {
+            return taskId;
+        }
 
-    public void setTaskId(int taskId) {
-        this.taskId = taskId;
-    }
+        public void setTaskId(int taskId) {
+            this.taskId = taskId;
+        }
 
-    public boolean isInCombat() {
-        return time != 0;
+        public boolean isInCombat() {
+            return time != 0;
+        }
     }
 }

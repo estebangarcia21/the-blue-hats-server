@@ -20,7 +20,7 @@ public class CooldownTimer {
     }
 
     public void startCooldown(Player player, long ticks) {
-        CooldownTimerData data = timerData.putIfAbsent(player.getUniqueId(), new CooldownTimerData());
+        CooldownTimerData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new CooldownTimerData());
 
         data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             data.setCooldownTime(data.getCooldownTime() - 1);
@@ -34,7 +34,7 @@ public class CooldownTimer {
     }
 
     public void startCooldown(Player player, long ticks, Runnable post) {
-        CooldownTimerData data = timerData.putIfAbsent(player.getUniqueId(), new CooldownTimerData());
+        CooldownTimerData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new CooldownTimerData());
 
         data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             data.setCooldownTime(data.getCooldownTime() - 1);
@@ -52,34 +52,34 @@ public class CooldownTimer {
     public boolean isOnCooldown(Player player) {
         return timerData.get(player.getUniqueId()).isOnCooldown();
     }
-}
 
-class CooldownTimerData {
-    private long cooldownTime;
-    private int cooldownTaskId;
+    private class CooldownTimerData {
+        private long cooldownTime;
+        private int cooldownTaskId;
 
-    public CooldownTimerData() {
-        this.cooldownTime = 0;
-        this.cooldownTaskId = 0;
-    }
+        public CooldownTimerData() {
+            this.cooldownTime = 0;
+            this.cooldownTaskId = 0;
+        }
 
-    public boolean isOnCooldown() {
-        return getCooldownTime() != 0;
-    }
+        public boolean isOnCooldown() {
+            return getCooldownTime() != 0;
+        }
 
-    public long getCooldownTime() {
-        return cooldownTime;
-    }
+        public long getCooldownTime() {
+            return cooldownTime;
+        }
 
-    public void setCooldownTime(long value) {
-        cooldownTime = value;
-    }
+        public void setCooldownTime(long value) {
+            cooldownTime = value;
+        }
 
-    public int getCooldownTaskId() {
-        return cooldownTaskId;
-    }
+        public int getCooldownTaskId() {
+            return cooldownTaskId;
+        }
 
-    public void setCooldownTaskId(int value) {
-        cooldownTaskId = value;
+        public void setCooldownTaskId(int value) {
+            cooldownTaskId = value;
+        }
     }
 }

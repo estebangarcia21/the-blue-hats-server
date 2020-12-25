@@ -19,22 +19,22 @@ public class HitCounter {
         this.plugin = plugin;
     }
 
-    public void addOne(UUID playerUuid) {
-        HitCounterData data = timerData.computeIfAbsent(playerUuid, k -> new HitCounterData());
+    public void addOne(Player player) {
+        HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
 
         data.setHitResetTime(0L);
         data.setHitsWithEnchant(data.getHitsWithEnchant() + 1);
 
-        startHitResetTimer(playerUuid);
+        startHitResetTimer(player);
     }
 
-    public void add(UUID playerUuid, int amount) {
-        HitCounterData data = timerData.computeIfAbsent(playerUuid, k -> new HitCounterData());
+    public void add(Player player, int amount) {
+        HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
 
         data.setHitResetTime(0L);
         data.setHitsWithEnchant(data.getHitsWithEnchant() + amount);
 
-        startHitResetTimer(playerUuid);
+        startHitResetTimer(player);
     }
 
     public boolean hasHits(Player player, int hitAmount) {
@@ -49,8 +49,8 @@ public class HitCounter {
         return false;
     }
 
-    public void startHitResetTimer(UUID playerUuid) {
-        HitCounterData data = timerData.computeIfAbsent(playerUuid, k -> new HitCounterData());
+    public void startHitResetTimer(Player player) {
+        HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
 
         data.setHitResetTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             data.setHitResetTime(data.getHitResetTime() - 1);
@@ -62,40 +62,40 @@ public class HitCounter {
             }
         }, 0L, 20L));
     }
-}
 
-class HitCounterData {
-    private int hitsWithEnchant;
-    private long hitResetTime;
-    private int hitResetTaskId;
+    class HitCounterData {
+        private int hitsWithEnchant;
+        private long hitResetTime;
+        private int hitResetTaskId;
 
-    public HitCounterData() {
-        this.hitsWithEnchant = 0;
-        this.hitResetTime = 0;
-        this.hitResetTaskId = 0;
-    }
+        public HitCounterData() {
+            this.hitsWithEnchant = 0;
+            this.hitResetTime = 0;
+            this.hitResetTaskId = 0;
+        }
 
-    public int getHitsWithEnchant() {
-        return hitsWithEnchant;
-    }
+        public int getHitsWithEnchant() {
+            return hitsWithEnchant;
+        }
 
-    public void setHitsWithEnchant(int value) {
-        hitsWithEnchant = value;
-    }
+        public void setHitsWithEnchant(int value) {
+            hitsWithEnchant = value;
+        }
 
-    public long getHitResetTime() {
-        return hitResetTime;
-    }
+        public long getHitResetTime() {
+            return hitResetTime;
+        }
 
-    public void setHitResetTime(long value) {
-        hitResetTime = value;
-    }
+        public void setHitResetTime(long value) {
+            hitResetTime = value;
+        }
 
-    public int getHitResetTaskId() {
-        return hitResetTaskId;
-    }
+        public int getHitResetTaskId() {
+            return hitResetTaskId;
+        }
 
-    public void setHitResetTaskId(int value) {
-        hitResetTaskId = value;
+        public void setHitResetTaskId(int value) {
+            hitResetTaskId = value;
+        }
     }
 }
