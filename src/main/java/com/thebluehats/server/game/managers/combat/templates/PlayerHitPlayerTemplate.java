@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class PlayerHitPlayerTemplate extends PostEventTemplate {
+public class PlayerHitPlayerTemplate extends PostDamageEventTemplate {
     @Inject
     public PlayerHitPlayerTemplate(CustomEnchantUtils customEnchantUtils) {
         super(customEnchantUtils);

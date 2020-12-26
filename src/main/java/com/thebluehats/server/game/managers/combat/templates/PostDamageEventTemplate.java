@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public abstract class PostEventTemplate {
+public abstract class PostDamageEventTemplate {
     private static enum MaterialMatcher {
         LEGGINGS, SWORD, BOW
     }
@@ -26,7 +26,7 @@ public abstract class PostEventTemplate {
 
     protected final CustomEnchantUtils customEnchantUtils;
 
-    protected PostEventTemplate(CustomEnchantUtils customEnchantUtils) {
+    protected PostDamageEventTemplate(CustomEnchantUtils customEnchantUtils) {
         this.customEnchantUtils = customEnchantUtils;
     }
 

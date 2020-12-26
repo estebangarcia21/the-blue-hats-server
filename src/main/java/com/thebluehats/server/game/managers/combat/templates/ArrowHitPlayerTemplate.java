@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class ArrowHitPlayerTemplate extends PostEventTemplate {
+public class ArrowHitPlayerTemplate extends PostDamageEventTemplate {
     @Inject
     public ArrowHitPlayerTemplate(CustomEnchantUtils customEnchantUtils) {
         super(customEnchantUtils);
