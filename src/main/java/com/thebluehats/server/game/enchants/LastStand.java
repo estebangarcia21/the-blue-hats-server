@@ -3,7 +3,7 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
@@ -39,7 +39,7 @@ public class LastStand implements DamageEnchant {
     }
 
     @Override
-    public void execute(PostEventTemplateResult data) {
+    public void execute(PostDamageEventTemplateResult data) {
         Player damagee = data.getDamagee();
 
         if (damagee.getHealth() < 10)

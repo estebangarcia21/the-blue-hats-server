@@ -1,7 +1,7 @@
 package com.thebluehats.server.game.managers.combat.templates;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.utils.EntityValidator;
@@ -36,8 +36,8 @@ public class PlayerHitPlayerTemplate extends PostEventTemplate {
                 }
             }
 
-            enchant.execute(
-                    new PostEventTemplateResult(event, getItemMap(enchant, inventory), playerDamager, playerDamagee));
+            enchant.execute(new PostDamageEventTemplateResult(event, getItemMap(enchant, inventory), playerDamager,
+                    playerDamagee));
         }
     }
 }

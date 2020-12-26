@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
@@ -40,7 +40,7 @@ public class Wasp implements DamageEnchant {
     }
 
     @Override
-    public void execute(PostEventTemplateResult data) {
+    public void execute(PostDamageEventTemplateResult data) {
         int level = data.getPrimaryLevel();
 
         data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,

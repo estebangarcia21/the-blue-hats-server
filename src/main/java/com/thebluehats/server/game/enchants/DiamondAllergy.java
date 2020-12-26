@@ -3,7 +3,7 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
@@ -34,7 +34,7 @@ public class DiamondAllergy implements DamageEnchant {
     }
 
     @Override
-    public void execute(PostEventTemplateResult data) {
+    public void execute(PostDamageEventTemplateResult data) {
         EntityDamageByEntityEvent event = data.getEvent();
         Player damager = data.getDamager();
         int level = data.getPrimaryLevel();

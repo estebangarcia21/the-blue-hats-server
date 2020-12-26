@@ -3,7 +3,7 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
@@ -36,7 +36,7 @@ public class BeatTheSpammers implements DamageEnchant {
     }
 
     @Override
-    public void execute(PostEventTemplateResult data) {
+    public void execute(PostDamageEventTemplateResult data) {
         if (data.getDamagee().getInventory().getItemInMainHand().getType() == Material.BOW) {
             damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(data.getPrimaryLevel()),
                     CalculationMode.ADDITIVE);

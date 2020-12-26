@@ -3,7 +3,7 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
@@ -35,7 +35,7 @@ public class SprintDrain implements DamageEnchant {
     }
 
     @Override
-    public void execute(PostEventTemplateResult data) {
+    public void execute(PostDamageEventTemplateResult data) {
         int level = data.getPrimaryLevel();
 
         data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,

@@ -3,7 +3,7 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
@@ -30,7 +30,7 @@ public class Billionaire implements DamageEnchant {
 
     @Inject
     public Billionaire(PitDataDao pitData, DamageManager damageManager,
-                       PlayerHitPlayerTemplate playerHitPlayerTemplate) {
+            PlayerHitPlayerTemplate playerHitPlayerTemplate) {
         this.pitData = pitData;
         this.damageManager = damageManager;
         this.playerHitPlayerTemplate = playerHitPlayerTemplate;
@@ -43,7 +43,7 @@ public class Billionaire implements DamageEnchant {
     }
 
     @Override
-    public void execute(PostEventTemplateResult data) {
+    public void execute(PostDamageEventTemplateResult data) {
         Player damager = data.getDamager();
         int level = data.getPrimaryLevel();
 

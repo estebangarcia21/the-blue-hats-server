@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
@@ -43,7 +43,7 @@ public class Solitude implements DamageEnchant {
     }
 
     @Override
-    public void execute(PostEventTemplateResult data) {
+    public void execute(PostDamageEventTemplateResult data) {
         EntityDamageByEntityEvent event = data.getEvent();
         Player damagee = data.getDamagee();
         int level = data.getPrimaryLevel();

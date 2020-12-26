@@ -2,7 +2,7 @@ package com.thebluehats.server.game.managers.combat.templates;
 
 import javax.inject.Inject;
 
-import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.utils.EntityValidator;
@@ -40,7 +40,7 @@ public class ArrowHitPlayerTemplate extends PostEventTemplate {
                         return;
                 }
 
-                enchant.execute(new PostEventTemplateResult(event, getItemMap(enchant, inventory), playerDamager,
+                enchant.execute(new PostDamageEventTemplateResult(event, getItemMap(enchant, inventory), playerDamager,
                         playerDamagee));
             }
         }
