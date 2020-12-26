@@ -11,7 +11,7 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.api.daos.PitDataDAO;
+import com.thebluehats.server.api.daos.PitDataDao;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
@@ -24,13 +24,13 @@ public class Billionaire implements DamageEnchant {
     private final EnchantProperty<Double> damageIncrease = new EnchantProperty<>(1.33D, 1.67D, 2D);
     private final EnchantProperty<Integer> goldNeeded = new EnchantProperty<>(100, 200, 350);
 
-    private final PitDataDAO pitData;
+    private final PitDataDao pitData;
     private final DamageManager damageManager;
     private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
-    public Billionaire(PitDataDAO pitData, DamageManager damageManager,
-            PlayerHitPlayerTemplate playerHitPlayerTemplate) {
+    public Billionaire(PitDataDao pitData, DamageManager damageManager,
+                       PlayerHitPlayerTemplate playerHitPlayerTemplate) {
         this.pitData = pitData;
         this.damageManager = damageManager;
         this.playerHitPlayerTemplate = playerHitPlayerTemplate;

@@ -3,7 +3,7 @@ package com.thebluehats.server.api.implementations.pitdata;
 import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.api.daos.PitDataDAO;
+import com.thebluehats.server.api.daos.PitDataDao;
 import com.thebluehats.server.api.models.PitDataModel;
 import com.thebluehats.server.api.utils.CRUDRepository;
 import com.thebluehats.server.api.utils.DataLoader;
@@ -15,13 +15,13 @@ import org.bukkit.entity.Player;
 
 import kong.unirest.UnirestInstance;
 
-public class PitDataDAOImpl implements PitDataDAO, PluginLifecycleListener, DataLoader {
+public class PitDataDaoImpl implements PitDataDao, PluginLifecycleListener, DataLoader {
     private final CRUDRepository<PitDataModel, UUID> pitDataRepository;
     private final UnirestInstance serverApi;
 
     @Inject
-    public PitDataDAOImpl(@ServerApi UnirestInstance serverApi,
-            @PitDataProvider CRUDRepository<PitDataModel, UUID> pitDataRepository) {
+    public PitDataDaoImpl(@ServerApi UnirestInstance serverApi,
+                          @PitDataProvider CRUDRepository<PitDataModel, UUID> pitDataRepository) {
         this.pitDataRepository = pitDataRepository;
         this.serverApi = serverApi;
     }

@@ -9,17 +9,17 @@ import com.thebluehats.server.api.models.PitDataModel;
 import com.thebluehats.server.api.utils.CRUDRepository;
 import com.thebluehats.server.core.modules.annotations.PitDataProvider;
 import com.thebluehats.server.core.modules.annotations.ServerApi;
-import com.thebluehats.server.api.daos.PitDataDAO;
-import com.thebluehats.server.api.implementations.pitdata.PitDataDAOImpl;
+import com.thebluehats.server.api.daos.PitDataDao;
+import com.thebluehats.server.api.implementations.pitdata.PitDataDaoImpl;
 
 import kong.unirest.UnirestInstance;
 
 public class PitDataDAOModule extends AbstractModule {
     @Provides
     @Singleton
-    static PitDataDAO provideGrindingSystem(@ServerApi UnirestInstance serverApi,
-            @PitDataProvider CRUDRepository<PitDataModel, UUID> pitDataRepository) {
-        return new PitDataDAOImpl(serverApi, pitDataRepository);
+    static PitDataDao provideGrindingSystem(@ServerApi UnirestInstance serverApi,
+                                            @PitDataProvider CRUDRepository<PitDataModel, UUID> pitDataRepository) {
+        return new PitDataDaoImpl(serverApi, pitDataRepository);
     }
 
     @Override

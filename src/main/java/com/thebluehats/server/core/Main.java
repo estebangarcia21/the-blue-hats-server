@@ -48,7 +48,7 @@ import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.world.PerkManager;
 import com.thebluehats.server.game.managers.world.WorldSelectionManager;
-import com.thebluehats.server.api.implementations.pitdata.PitDataDAOImpl;
+import com.thebluehats.server.api.implementations.pitdata.PitDataDaoImpl;
 import com.thebluehats.server.game.perks.Vampire;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
 
@@ -139,7 +139,7 @@ public class Main extends JavaPlugin {
     }
 
     private void registerLifecycles() {
-        lifecycleListeners.add(injector.getInstance(PitDataDAOImpl.class));
+        lifecycleListeners.add(injector.getInstance(PitDataDaoImpl.class));
     }
 
     private void updateLifecyles(Consumer<PluginLifecycleListener> action) {

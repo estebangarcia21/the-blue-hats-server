@@ -2,7 +2,7 @@ package com.thebluehats.server.api.daos;
 
 import org.bukkit.entity.Player;
 
-public interface PitDataDAO {
+public interface PitDataDao {
     int getPlayerXp(Player player);
 
     void setPlayerXp(Player player, int value);
