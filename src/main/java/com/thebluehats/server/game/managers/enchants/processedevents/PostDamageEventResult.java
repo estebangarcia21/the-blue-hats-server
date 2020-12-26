@@ -6,12 +6,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class PostDamageEventTemplateResult extends TemplateResult<EntityDamageByEntityEvent> {
+public class PostDamageEventResult extends TemplateResult<EntityDamageByEntityEvent> {
     private final Player damager;
     private final Player damagee;
 
-    public PostDamageEventTemplateResult(EntityDamageByEntityEvent event, ImmutableMap<Material, Integer> levelMap,
-            Player damager, Player damagee) {
+    public PostDamageEventResult(EntityDamageByEntityEvent event, ImmutableMap<Material, Integer> levelMap,
+                                 Player damager, Player damagee) {
         super(event, levelMap);
 
         this.damager = damager;

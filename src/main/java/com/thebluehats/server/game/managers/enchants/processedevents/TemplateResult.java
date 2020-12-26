@@ -18,7 +18,7 @@ public class TemplateResult<E extends Event> {
         return event;
     }
 
-    public int getPrimaryLevel() {
+    public int getLevel() {
         return levelMap.values().asList().get(0);
     }
 
