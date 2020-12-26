@@ -7,6 +7,7 @@ import com.thebluehats.server.core.modules.*;
 import com.thebluehats.server.game.commands.*;
 import com.thebluehats.server.game.enchants.*;
 import com.thebluehats.server.game.managers.combat.CombatManager;
+import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.world.PerkManager;
@@ -64,6 +65,7 @@ public class Main extends JavaPlugin {
 
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(injector.getInstance(CombatManager.class), this);
+        getServer().getPluginManager().registerEvents(injector.getInstance(DamageManager.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldSelectionManager.class), this);
     }
 
@@ -95,6 +97,7 @@ public class Main extends JavaPlugin {
 
     private void registerCommands() {
         injector.getInstance(SpawnCommand.class).registerCommand(this);
+        injector.getInstance(EnchantCommand.class).registerCommand(this);
         injector.getInstance(MysticEnchantsCommand.class).registerCommand(this);
         injector.getInstance(SelectWorldCommand.class).registerCommand(this);
         injector.getInstance(SetGoldCommand.class).registerCommand(this);
