@@ -130,7 +130,7 @@ echo "
      update        Updates the Spigot jar to the latest version. Run this if
                    Spigot warns that the jar is out of date.
 
-     --------------------------------------------------------------------------
+     ---------     ------------------------------------------------------------
 
      SPIGOT VERSION: $SPIGOT_VERSION
      ACCEPTABLE LOGIN VERSIONS: 1.8.x - $SPIGOT_VERSION
