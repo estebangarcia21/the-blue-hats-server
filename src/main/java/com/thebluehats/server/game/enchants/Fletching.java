@@ -12,6 +12,7 @@ import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Material;
@@ -49,7 +50,11 @@ public class Fletching extends OnDamageEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return null;
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("Deal <red>+{0}</red> bow damage");
+
+        enchantLoreParser.setSingleVariable("7%", "12%", "20%");
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override
