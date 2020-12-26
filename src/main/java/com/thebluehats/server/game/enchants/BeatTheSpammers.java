@@ -1,44 +1,36 @@
 package com.thebluehats.server.game.enchants;
 
-import java.util.ArrayList;
-
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
-
 import org.bukkit.Material;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class BeatTheSpammers implements OnDamageEnchant {
+import java.util.ArrayList;
+
+public class BeatTheSpammers extends OnDamageEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.10f, .25f, .40f);
 
     private final DamageManager damageManager;
-    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
     public BeatTheSpammers(DamageManager damageManager, PlayerHitPlayerTemplate playerHitPlayerTemplate) {
+        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate });
+
         this.damageManager = damageManager;
-        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
     }
 
     @Override
-    @EventHandler
-    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, damageManager);
-    }
-
-    @Override
-    public void execute(PostDamageEventTemplateResult data) {
+    public void execute(PostDamageEventResult data) {
         if (data.getDamagee().getInventory().getItemInMainHand().getType() == Material.BOW) {
-            damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(data.getPrimaryLevel()),
+            damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(data.getLevel()),
                     CalculationMode.ADDITIVE);
         }
     }
@@ -81,5 +73,10 @@ public class BeatTheSpammers implements OnDamageEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.GOLDEN_SWORD };
+    }
+
+    @Override
+    public EnchantHolder getEnchantHolder() {
+        return EnchantHolder.DAMAGEE;
     }
 }

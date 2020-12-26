@@ -3,40 +3,36 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
+import com.thebluehats.server.game.utils.EntityValidator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Chipping implements OnDamageEnchant {
+public class Chipping extends OnDamageEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(0.5f, 1.0f, 1.5f);
 
     private final DamageManager damageManager;
-    private final ArrowHitPlayerTemplate arrowHitPlayerTemplate;
 
     @Inject
     public Chipping(DamageManager damageManager, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
+        super(new PostDamageEventTemplate[] { arrowHitPlayerTemplate }, new EntityValidator[] { damageManager });
+
         this.damageManager = damageManager;
-        this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
     }
 
     @Override
-    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
-    }
-
-    @Override
-    public void execute(PostDamageEventTemplateResult data) {
+    public void execute(PostDamageEventResult data) {
         Player damaged = data.getDamagee();
-        int level = data.getPrimaryLevel();
+        int level = data.getLevel();
 
         damageManager.doTrueDamage(damaged, damageAmount.getValueAtLevel(level));
     }
@@ -78,5 +74,10 @@ public class Chipping implements OnDamageEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.BOW };
+    }
+
+    @Override
+    public EnchantHolder getEnchantHolder() {
+        return EnchantHolder.DAMAGER;
     }
 }

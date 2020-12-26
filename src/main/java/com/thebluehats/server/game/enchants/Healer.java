@@ -1,43 +1,33 @@
 package com.thebluehats.server.game.enchants;
 
-import java.util.ArrayList;
-
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
-
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Healer implements OnDamageEnchant {
+import java.util.ArrayList;
+
+public class Healer extends OnDamageEnchant {
     private final EnchantProperty<Integer> healAmount = new EnchantProperty<>(2, 4, 6);
-
-    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
     public Healer(PlayerHitPlayerTemplate playerHitPlayerTemplate) {
-        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
+        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate });
     }
 
     @Override
-    @EventHandler
-    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
-    }
-
-    @Override
-    public void execute(PostDamageEventTemplateResult data) {
+    public void execute(PostDamageEventResult data) {
         Player damager = data.getDamager();
         Player damaged = data.getDamagee();
-        int level = data.getPrimaryLevel();
+        int level = data.getLevel();
 
         damager.setHealth(Math.min(damager.getHealth() + healAmount.getValueAtLevel(level),
                 damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
@@ -83,5 +73,10 @@ public class Healer implements OnDamageEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.GOLDEN_SWORD };
+    }
+
+    @Override
+    public EnchantHolder getEnchantHolder() {
+        return EnchantHolder.DAMAGER;
     }
 }

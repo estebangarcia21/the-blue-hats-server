@@ -1,54 +1,45 @@
 package com.thebluehats.server.game.enchants;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
-
+import com.thebluehats.server.game.utils.EntityValidator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class CriticallyFunky implements OnDamageEnchant {
+import java.util.ArrayList;
+import java.util.UUID;
+
+public class CriticallyFunky extends OnDamageEnchant {
     private final EnchantProperty<Float> damageReduction = new EnchantProperty<>(0.35f, 0.35f, 0.6f);
     private final EnchantProperty<Float> damageIncrease = new EnchantProperty<>(0f, .14f, .3f);
     private final ArrayList<UUID> extraDamageQueue = new ArrayList<>();
 
     private final DamageManager damageManager;
-    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
-    private final ArrowHitPlayerTemplate arrowHitPlayerTemplate;
 
     @Inject
     public CriticallyFunky(DamageManager damageManager, PlayerHitPlayerTemplate playerHitPlayerTemplate,
             ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
+        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate }, new EntityValidator[] { damageManager });
+
         this.damageManager = damageManager;
-        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
-        this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
     }
 
     @Override
-    @EventHandler
-    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, damageManager);
-        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, damageManager);
-    }
-
-    @Override
-    public void execute(PostDamageEventTemplateResult data) {
+    public void execute(PostDamageEventResult data) {
         EntityDamageByEntityEvent event = data.getEvent();
         Player damager = data.getDamager();
-        int level = data.getPrimaryLevel();
+        int level = data.getLevel();
 
         if (!damageManager.isCriticalHit(damager))
             return;
@@ -110,5 +101,10 @@ public class CriticallyFunky implements OnDamageEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.LEATHER_LEGGINGS };
+    }
+
+    @Override
+    public EnchantHolder getEnchantHolder() {
+        return EnchantHolder.DAMAGER;
     }
 }

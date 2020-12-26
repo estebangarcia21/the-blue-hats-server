@@ -1,51 +1,43 @@
 package com.thebluehats.server.game.enchants;
 
-import java.util.ArrayList;
-
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
+import com.thebluehats.server.api.daos.PitDataDao;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.api.daos.PitDataDao;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
-
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Billionaire implements OnDamageEnchant {
+import java.util.ArrayList;
+
+public class Billionaire extends OnDamageEnchant {
     private final EnchantProperty<Double> damageIncrease = new EnchantProperty<>(1.33D, 1.67D, 2D);
     private final EnchantProperty<Integer> goldNeeded = new EnchantProperty<>(100, 200, 350);
 
     private final PitDataDao pitData;
     private final DamageManager damageManager;
-    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
     public Billionaire(PitDataDao pitData, DamageManager damageManager,
             PlayerHitPlayerTemplate playerHitPlayerTemplate) {
+        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate });
+
         this.pitData = pitData;
         this.damageManager = damageManager;
-        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
     }
 
     @Override
-    @EventHandler
-    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER, damageManager);
-    }
-
-    @Override
-    public void execute(PostDamageEventTemplateResult data) {
+    public void execute(PostDamageEventResult data) {
         Player damager = data.getDamager();
-        int level = data.getPrimaryLevel();
+        int level = data.getLevel();
 
         double gold = pitData.getPlayerGold(damager);
 
@@ -101,5 +93,10 @@ public class Billionaire implements OnDamageEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.GOLDEN_SWORD };
+    }
+
+    @Override
+    public EnchantHolder getEnchantHolder() {
+        return EnchantHolder.DAMAGER;
     }
 }

@@ -3,9 +3,10 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -17,26 +18,18 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class SprintDrain implements OnDamageEnchant {
+public class SprintDrain extends OnDamageEnchant {
     private final EnchantProperty<Integer> speedDuration = new EnchantProperty<>(5, 5, 7);
     private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 0, 1);
 
-    private final ArrowHitPlayerTemplate arrowHitPlayerTemplate;
-
     @Inject
     public SprintDrain(ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
-        this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
+        super(new PostDamageEventTemplate[] { arrowHitPlayerTemplate });
     }
 
     @Override
-    @EventHandler
-    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
-    }
-
-    @Override
-    public void execute(PostDamageEventTemplateResult data) {
-        int level = data.getPrimaryLevel();
+    public void execute(PostDamageEventResult data) {
+        int level = data.getLevel();
 
         data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
                 speedDuration.getValueAtLevel(level) * 20, speedAmplifier.getValueAtLevel(level)));
@@ -91,5 +84,10 @@ public class SprintDrain implements OnDamageEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.BOW };
+    }
+
+    @Override
+    public EnchantHolder getEnchantHolder() {
+        return EnchantHolder.DAMAGER;
     }
 }

@@ -3,10 +3,11 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
+import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
@@ -19,32 +20,21 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class LastStand implements OnDamageEnchant {
+public class LastStand extends OnDamageEnchant {
     private final EnchantProperty<Integer> resistanceAmplifier = new EnchantProperty<>(0, 1, 2);
-
-    private final ArrowHitPlayerTemplate arrowHitPlayerTemplate;
-    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
     public LastStand(PlayerHitPlayerTemplate playerHitPlayerTemplate, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
-        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
-        this.arrowHitPlayerTemplate = arrowHitPlayerTemplate;
+        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate });
     }
 
     @Override
-    @EventHandler
-    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGEE);
-        arrowHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGEE);
-    }
-
-    @Override
-    public void execute(PostDamageEventTemplateResult data) {
+    public void execute(PostDamageEventResult data) {
         Player damagee = data.getDamagee();
 
         if (damagee.getHealth() < 10)
             damagee.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80,
-                    resistanceAmplifier.getValueAtLevel(data.getPrimaryLevel()), true));
+                    resistanceAmplifier.getValueAtLevel(data.getLevel()), true));
     }
 
     @Override
@@ -85,5 +75,10 @@ public class LastStand implements OnDamageEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.LEATHER_LEGGINGS };
+    }
+
+    @Override
+    public EnchantHolder getEnchantHolder() {
+        return EnchantHolder.DAMAGEE;
     }
 }

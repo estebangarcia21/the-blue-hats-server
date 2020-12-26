@@ -1,48 +1,40 @@
 package com.thebluehats.server.game.enchants;
 
-import java.util.ArrayList;
-
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
+import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class ComboSwift implements OnDamageEnchant {
+import java.util.ArrayList;
+
+public class ComboSwift extends OnDamageEnchant  {
     private final EnchantProperty<Integer> speedTime = new EnchantProperty<>(3, 4, 5);
     private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 1, 1);
     private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);
 
     private final HitCounter hitCounter;
-    private final PlayerHitPlayerTemplate playerHitPlayerTemplate;
 
     @Inject
     public ComboSwift(HitCounter hitCounter, PlayerHitPlayerTemplate playerHitPlayerTemplate) {
+        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate });
+
         this.hitCounter = hitCounter;
-        this.playerHitPlayerTemplate = playerHitPlayerTemplate;
     }
 
     @Override
-    @EventHandler
-    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        playerHitPlayerTemplate.run(this, event, TargetPlayer.DAMAGER);
-    }
-
-    @Override
-    public void execute(PostDamageEventTemplateResult data) {
+    public void execute(PostDamageEventResult data) {
         Player damager = data.getDamager();
-        int level = data.getPrimaryLevel();
+        int level = data.getLevel();
 
         hitCounter.addOne(damager);
 
@@ -72,6 +64,8 @@ public class ComboSwift implements OnDamageEnchant {
         variables[1] = new String[] { "I", "II", "III" };
         variables[2] = new String[] { "3", "4", "5" };
 
+        enchantLoreParser.setVariables(variables);
+
         return enchantLoreParser.parseForLevel(level);
     }
 
@@ -93,5 +87,10 @@ public class ComboSwift implements OnDamageEnchant {
     @Override
     public Material[] getEnchantItemTypes() {
         return new Material[] { Material.GOLDEN_SWORD };
+    }
+
+    @Override
+    public EnchantHolder getEnchantHolder() {
+        return EnchantHolder.DAMAGER;
     }
 }
