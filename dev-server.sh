@@ -42,7 +42,7 @@ if [[ "$1" == create ]]; then
   build_and_move_plugin
 
   echo "
-  Done! The development server was successfully bootstrapped!
+  Done! The development server was successfully created!
 
   To run the server, do ./dev-server.sh start
   Otherwise, to delete the server do ./dev-server.sh clean"
