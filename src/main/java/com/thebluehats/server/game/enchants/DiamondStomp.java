@@ -8,7 +8,7 @@ import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.DamageEnchant;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class DiamondStomp implements DamageEnchant {
+public class DiamondStomp implements OnDamageEnchant {
     private final EnchantProperty<Double> percentDamageIncrease = new EnchantProperty<>(0.7, 0.12, 0.25);
 
     private final DamageManager damageManager;

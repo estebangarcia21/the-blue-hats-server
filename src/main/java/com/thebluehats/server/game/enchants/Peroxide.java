@@ -7,7 +7,7 @@ import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageE
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.DamageEnchant;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
@@ -18,7 +18,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Peroxide implements DamageEnchant {
+public class Peroxide implements OnDamageEnchant {
     private final EnchantProperty<Integer> regenDuration = new EnchantProperty<>(5, 8, 8);
     private final EnchantProperty<Integer> regenAmplifier = new EnchantProperty<>(0, 0, 1);
 

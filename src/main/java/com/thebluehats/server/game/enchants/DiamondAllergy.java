@@ -7,7 +7,7 @@ import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageE
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.DamageEnchant;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
@@ -16,7 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class DiamondAllergy implements DamageEnchant {
+public class DiamondAllergy implements OnDamageEnchant {
     private final EnchantProperty<Float> damageReduction = new EnchantProperty<>(0.10f, 0.20f, 0.30f);
 
     private final DamageManager damageManager;

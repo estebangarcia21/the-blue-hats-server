@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
-import com.thebluehats.server.game.managers.enchants.DamageEnchant;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.entity.Arrow;
@@ -20,7 +20,7 @@ public class ArrowHitPlayerTemplate extends PostDamageEventTemplate {
     }
 
     @Override
-    public void run(DamageEnchant enchant, EntityDamageByEntityEvent event, TargetPlayer targetPlayer,
+    public void run(OnDamageEnchant enchant, EntityDamageByEntityEvent event, TargetPlayer targetPlayer,
             EntityValidator... validators) {
         Entity damager = event.getDamager();
         Entity damagee = event.getEntity();

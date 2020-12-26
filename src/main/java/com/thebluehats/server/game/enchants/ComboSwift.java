@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.DamageEnchant;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
@@ -19,7 +19,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class ComboSwift implements DamageEnchant {
+public class ComboSwift implements OnDamageEnchant {
     private final EnchantProperty<Integer> speedTime = new EnchantProperty<>(3, 4, 5);
     private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 1, 1);
     private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);

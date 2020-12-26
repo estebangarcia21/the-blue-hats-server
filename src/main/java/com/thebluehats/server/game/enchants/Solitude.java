@@ -9,7 +9,7 @@ import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.DamageEnchant;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
@@ -19,7 +19,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Solitude implements DamageEnchant {
+public class Solitude implements OnDamageEnchant {
     private final EnchantProperty<Float> damageReduction = new EnchantProperty<>(.4f, .5f, .6f);
     private final EnchantProperty<Integer> playersNeeded = new EnchantProperty<>(1, 2, 2);
 

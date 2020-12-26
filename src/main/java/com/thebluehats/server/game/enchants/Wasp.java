@@ -8,7 +8,7 @@ import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageE
 import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.DamageEnchant;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
@@ -20,7 +20,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Wasp implements DamageEnchant {
+public class Wasp implements OnDamageEnchant {
     private final EnchantProperty<Integer> weaknessDuration = new EnchantProperty<>(6, 11, 16);
     private final EnchantProperty<Integer> weaknessAmplifier = new EnchantProperty<>(1, 2, 3);
 

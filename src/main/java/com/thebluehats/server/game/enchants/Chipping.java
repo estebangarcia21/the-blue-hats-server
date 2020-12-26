@@ -7,7 +7,7 @@ import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageE
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
-import com.thebluehats.server.game.managers.enchants.DamageEnchant;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
@@ -16,7 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Chipping implements DamageEnchant {
+public class Chipping implements OnDamageEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(0.5f, 1.0f, 1.5f);
 
     private final DamageManager damageManager;

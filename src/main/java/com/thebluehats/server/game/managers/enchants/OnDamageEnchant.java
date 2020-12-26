@@ -4,6 +4,6 @@ import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageE
 
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public interface DamageEnchant extends CustomEnchant, PostEventExecutor<PostDamageEventTemplateResult> {
+public interface OnDamageEnchant extends CustomEnchant, PostEventExecutor<PostDamageEventTemplateResult> {
     void onEntityDamageEntity(EntityDamageByEntityEvent event);
 }

@@ -5,7 +5,7 @@ import java.util.function.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
-import com.thebluehats.server.game.managers.enchants.DamageEnchant;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Material;
@@ -30,7 +30,7 @@ public abstract class PostDamageEventTemplate {
         this.customEnchantUtils = customEnchantUtils;
     }
 
-    protected ImmutableMap<Material, Integer> getItemMap(DamageEnchant enchant, PlayerInventory inventory) {
+    protected ImmutableMap<Material, Integer> getItemMap(OnDamageEnchant enchant, PlayerInventory inventory) {
         Builder<Material, Integer> mapBuilder = ImmutableMap.<Material, Integer>builder();
 
         for (Material material : enchant.getEnchantItemTypes()) {
@@ -50,6 +50,6 @@ public abstract class PostDamageEventTemplate {
         return mapBuilder.build();
     }
 
-    public abstract void run(DamageEnchant enchant, EntityDamageByEntityEvent event, TargetPlayer targetPlayer,
+    public abstract void run(OnDamageEnchant enchant, EntityDamageByEntityEvent event, TargetPlayer targetPlayer,
             EntityValidator... validators);
 }
