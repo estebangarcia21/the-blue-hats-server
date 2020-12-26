@@ -27,7 +27,7 @@ build_and_move_plugin () {
   ./gradlew clean
 }
 
-if [[ "$1" == bootstrap ]]; then
+if [[ "$1" == create ]]; then
   if [[ -d $WORKING_DIRECTORY ]]; then
     echo "The development server already exists. To delete the server, run ./dev-server.sh clean"
     exit
