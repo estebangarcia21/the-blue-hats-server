@@ -2,7 +2,7 @@ package com.thebluehats.server.game.managers.combat.templates;
 
 import javax.inject.Inject;
 
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.utils.EntityValidator;
@@ -20,7 +20,7 @@ public class ArrowHitPlayerTemplate extends PostDamageEventTemplate {
     }
 
     @Override
-    public void run(OnDamageEnchant enchant, EntityDamageByEntityEvent event, TargetPlayer targetPlayer,
+    public void run(OnDamageEnchant enchant, EntityDamageByEntityEvent event, EnchantHolder targetPlayer,
             EntityValidator... validators) {
         Entity damager = event.getDamager();
         Entity damagee = event.getEntity();
@@ -32,7 +32,7 @@ public class ArrowHitPlayerTemplate extends PostDamageEventTemplate {
                 Player playerDamager = (Player) damager;
                 Player playerDamagee = (Player) damagee;
 
-                PlayerInventory inventory = targetPlayer == TargetPlayer.DAMAGER ? playerDamager.getInventory()
+                PlayerInventory inventory = targetPlayer == EnchantHolder.DAMAGER ? playerDamager.getInventory()
                         : playerDamagee.getInventory();
 
                 for (EntityValidator validator : validators) {
@@ -40,7 +40,7 @@ public class ArrowHitPlayerTemplate extends PostDamageEventTemplate {
                         return;
                 }
 
-                enchant.execute(new PostDamageEventTemplateResult(event, getItemMap(enchant, inventory), playerDamager,
+                enchant.execute(new PostDamageEventResult(event, getItemMap(enchant, inventory), playerDamager,
                         playerDamagee));
             }
         }

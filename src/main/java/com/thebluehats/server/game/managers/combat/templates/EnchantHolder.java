@@ -1,5 +1,5 @@
 package com.thebluehats.server.game.managers.combat.templates;
 
-public enum TargetPlayer {
+public enum EnchantHolder {
     DAMAGER, DAMAGEE
 }

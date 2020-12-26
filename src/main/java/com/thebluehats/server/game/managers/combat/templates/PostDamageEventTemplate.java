@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public abstract class PostDamageEventTemplate {
-    private static enum MaterialMatcher {
+    private enum MaterialMatcher {
         LEGGINGS, SWORD, BOW
     }
 
@@ -31,7 +31,7 @@ public abstract class PostDamageEventTemplate {
     }
 
     protected ImmutableMap<Material, Integer> getItemMap(OnDamageEnchant enchant, PlayerInventory inventory) {
-        Builder<Material, Integer> mapBuilder = ImmutableMap.<Material, Integer>builder();
+        Builder<Material, Integer> mapBuilder = ImmutableMap.builder();
 
         for (Material material : enchant.getEnchantItemTypes()) {
             String materialName = material.toString();
@@ -50,6 +50,6 @@ public abstract class PostDamageEventTemplate {
         return mapBuilder.build();
     }
 
-    public abstract void run(OnDamageEnchant enchant, EntityDamageByEntityEvent event, TargetPlayer targetPlayer,
+    public abstract void run(OnDamageEnchant enchant, EntityDamageByEntityEvent event, EnchantHolder targetPlayer,
             EntityValidator... validators);
 }
