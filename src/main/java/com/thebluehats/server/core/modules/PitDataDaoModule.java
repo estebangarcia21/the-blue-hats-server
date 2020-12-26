@@ -14,7 +14,7 @@ import com.thebluehats.server.api.implementations.pitdata.PitDataDaoImpl;
 
 import kong.unirest.UnirestInstance;
 
-public class PitDataDAOModule extends AbstractModule {
+public class PitDataDaoModule extends AbstractModule {
     @Provides
     @Singleton
     static PitDataDao provideGrindingSystem(@ServerApi UnirestInstance serverApi,
