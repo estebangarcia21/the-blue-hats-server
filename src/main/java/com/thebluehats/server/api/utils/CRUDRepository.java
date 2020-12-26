@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public abstract class CRUDRepository<T, K> {
+public class CrudRepository<T, K> {
     private final ArrayList<T> objects = new ArrayList<>();
     private final Function<T, K> indexer;
 
-    protected CRUDRepository(Function<T, K> indexer) {
+    public CrudRepository(Function<T, K> indexer) {
         this.indexer = indexer;
     }
 
