@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Punisher extends OnDamageEnchant {
-    private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.6f, .12f, .18f);
+    private final EnchantProperty<Float> percentDamageIncrease = new EnchantProperty<>(.6f, .12f, .18f);
 
     private final DamageManager damageManager;
 
@@ -39,7 +39,7 @@ public class Punisher extends OnDamageEnchant {
         int level = data.getLevel();
 
         if (damagee.getHealth() < damagee.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 2) {
-            damageManager.addDamage(event, damageAmount.getValueAtLevel(level), CalculationMode.ADDITIVE);
+            damageManager.addDamage(event, percentDamageIncrease.getValueAtLevel(level), CalculationMode.ADDITIVE);
         }
     }
 
