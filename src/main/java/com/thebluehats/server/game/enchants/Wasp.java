@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.BowManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;

@@ -1,7 +1,7 @@
 package com.thebluehats.server.game.managers.combat.templates;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.utils.EntityValidator;

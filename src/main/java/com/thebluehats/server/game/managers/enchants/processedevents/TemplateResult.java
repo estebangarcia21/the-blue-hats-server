@@ -1,4 +1,4 @@
-package com.thebluehats.server.game.enchants.processedevents;
+package com.thebluehats.server.game.managers.enchants.processedevents;
 
 import com.google.common.collect.ImmutableMap;
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.enchants.processedevents.PostEventTemplateResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostEventTemplateResult;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
