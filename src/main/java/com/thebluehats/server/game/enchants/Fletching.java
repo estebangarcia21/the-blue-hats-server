@@ -3,56 +3,56 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
+import com.thebluehats.server.game.managers.combat.CalculationMode;
+import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
+import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Material;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Peroxide extends OnDamageEnchant {
-    private final EnchantProperty<Integer> regenDuration = new EnchantProperty<>(5, 8, 8);
-    private final EnchantProperty<Integer> regenAmplifier = new EnchantProperty<>(0, 0, 1);
+public class Fletching extends OnDamageEnchant {
+    private final EnchantProperty<Float> percentDamageIncrease = new EnchantProperty<>(.07f, 0.12f, 0.20f);
+
+    private final DamageManager damageManager;
 
     @Inject
-    public Peroxide(PlayerHitPlayerTemplate playerHitPlayerTemplate, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate });
+    public Fletching(DamageManager damageManager, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
+        super(new PostDamageEventTemplate[] { arrowHitPlayerTemplate }, new EntityValidator[] { damageManager });
+
+        this.damageManager = damageManager;
     }
 
     @Override
     public void execute(PostDamageEventResult data) {
+        EntityDamageByEntityEvent event = data.getEvent();
         int level = data.getLevel();
 
-        data.getDamagee().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
-                regenDuration.getValueAtLevel(level) * 20, regenAmplifier.getValueAtLevel(level), true));
+        damageManager.addDamage(event, percentDamageIncrease.getValueAtLevel(level), CalculationMode.ADDITIVE);
     }
 
     @Override
     public String getName() {
-        return "Peroxide";
+        return "Fletching";
     }
 
     @Override
     public String getEnchantReferenceName() {
-        return "Peroxide";
+        return "Fletching";
     }
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("Gain <red>Regen {0}</red> ({1}s) when hit");
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("Deal <red>+{0}</red> bow damage");
 
-        String[][] variables = new String[2][];
-        variables[0] = new String[] { "I", "I", "II" };
-        variables[1] = new String[] { "5", "8", "8" };
-
-        enchantLoreParser.setVariables(variables);
+        enchantLoreParser.setSingleVariable("7%", "12%", "20%");
 
         return enchantLoreParser.parseForLevel(level);
     }
@@ -64,7 +64,7 @@ public class Peroxide extends OnDamageEnchant {
 
     @Override
     public EnchantGroup getEnchantGroup() {
-        return EnchantGroup.B;
+        return EnchantGroup.A;
     }
 
     @Override
@@ -74,11 +74,11 @@ public class Peroxide extends OnDamageEnchant {
 
     @Override
     public Material[] getEnchantItemTypes() {
-        return new Material[] { Material.LEATHER_LEGGINGS };
+        return new Material[] { Material.BOW };
     }
 
     @Override
     public EnchantHolder getEnchantHolder() {
-        return EnchantHolder.DAMAGEE;
+        return EnchantHolder.DAMAGER;
     }
 }
