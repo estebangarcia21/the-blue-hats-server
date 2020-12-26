@@ -11,7 +11,7 @@ import com.thebluehats.server.game.managers.combat.templates.TargetPlayer;
 import com.thebluehats.server.game.managers.enchants.DamageEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.api.implementations.pitdata.PitDataDAO;
+import com.thebluehats.server.api.daos.PitDataDAO;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
@@ -77,6 +77,8 @@ public class Billionaire implements DamageEnchant {
         String[][] variables = new String[2][];
         variables[0] = new String[] { "1.33", "1.67", "2" };
         variables[1] = new String[] { "100g", "200g", "350g" };
+
+        enchantLoreParser.setVariables(variables);
 
         return enchantLoreParser.parseForLevel(level);
     }

@@ -3,6 +3,7 @@ package com.thebluehats.server.api.implementations.pitdata;
 import java.util.UUID;
 
 import com.google.inject.Inject;
+import com.thebluehats.server.api.daos.PitDataDAO;
 import com.thebluehats.server.api.models.PitDataModel;
 import com.thebluehats.server.api.utils.CRUDRepository;
 import com.thebluehats.server.api.utils.DataLoader;

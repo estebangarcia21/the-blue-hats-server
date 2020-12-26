@@ -1,4 +1,4 @@
-package com.thebluehats.server.api.implementations.pitdata;
+package com.thebluehats.server.api.daos;
 
 import org.bukkit.entity.Player;
 

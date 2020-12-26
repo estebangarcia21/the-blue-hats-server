@@ -9,7 +9,7 @@ import com.thebluehats.server.api.models.PitDataModel;
 import com.thebluehats.server.api.utils.CRUDRepository;
 import com.thebluehats.server.core.modules.annotations.PitDataProvider;
 import com.thebluehats.server.core.modules.annotations.ServerApi;
-import com.thebluehats.server.api.implementations.pitdata.PitDataDAO;
+import com.thebluehats.server.api.daos.PitDataDAO;
 import com.thebluehats.server.api.implementations.pitdata.PitDataDAOImpl;
 
 import kong.unirest.UnirestInstance;
