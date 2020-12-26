@@ -16,7 +16,7 @@ build_and_move_plugin () {
   PLUGINS_DIRECTORY="$WORKING_DIRECTORY/plugins"
 
   echo "Building the latest version of The Blue Hats Server..."
-  ./gradlew clean shadowJar
+  ./gradlew delete shadowJar
 
   echo "Moving to the plugins folder..."
 
@@ -31,7 +31,7 @@ build_and_move_plugin () {
 
 if [[ "$1" == create ]]; then
   if [[ -d $WORKING_DIRECTORY ]]; then
-    echo "The development server already exists. To delete the server, run ./dev-server clean"
+    echo "The development server already exists. To delete the server, run ./dev-server delete"
     exit
   fi
 
@@ -44,10 +44,10 @@ if [[ "$1" == create ]]; then
   build_and_move_plugin
 
   echo "
-  Done! The development server was successfully created!
+       Done! The development server was successfully created!
 
-  To run the server, do ./dev-server start
-  Otherwise, to delete the server do ./dev-server clean"
+       To run the server, do ./dev-server start
+       Otherwise, to delete the server do ./dev-server delete"
   exit
 fi
 
