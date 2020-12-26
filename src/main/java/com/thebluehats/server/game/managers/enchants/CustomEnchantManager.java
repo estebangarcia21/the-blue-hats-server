@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import com.google.common.collect.ImmutableMap;
 import com.thebluehats.server.game.utils.PantsDataContainer;
+import com.thebluehats.server.game.utils.Registerer;
 import com.thebluehats.server.game.utils.RomanNumeralConverter;
 import com.thebluehats.server.game.utils.SortCustomEnchantByName;
 import com.thebluehats.server.game.utils.PantsDataContainer.FreshPantsColor;
@@ -24,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CustomEnchantManager {
+public class CustomEnchantManager implements Registerer<CustomEnchant> {
     private final ArrayList<CustomEnchant> enchants = new ArrayList<>();
     private final SortCustomEnchantByName sortCustomEnchantByName = new SortCustomEnchantByName();
 
@@ -49,7 +50,8 @@ public class CustomEnchantManager {
         return enchants;
     }
 
-    public void registerEnchant(CustomEnchant enchant) {
+    @Override
+    public void register(CustomEnchant enchant) {
         if (enchant instanceof Listener) {
             plugin.getServer().getPluginManager().registerEvents((Listener) enchant, plugin);
         }
@@ -75,7 +77,7 @@ public class CustomEnchantManager {
         for (String key : keys) {
             if (itemTypeName.contains(key)) {
                 itemKey = key;
-                properlyCasedKey = key.substring(0, 1) + key.substring(1).toLowerCase();
+                properlyCasedKey = key.charAt(0) + key.substring(1).toLowerCase();
 
                 break;
             }
@@ -85,7 +87,9 @@ public class CustomEnchantManager {
 
         boolean isFreshItem = isFreshItem(item);
 
-        if (itemKey == "LEGGINGS") {
+        if (itemKey == null || itemMeta == null) return;
+
+        if (itemKey.equals("LEGGINGS")) {
             ImmutableMap<FreshPantsColor, PantsData> pantsData = pantsDataContainer.getData();
 
             if (isFreshItem) {
@@ -99,31 +103,30 @@ public class CustomEnchantManager {
         }
 
         if (isFreshItem) {
-            if (itemKey == "LEGGINGS") {
+            if (itemKey.equals("LEGGINGS")) {
                 itemMeta.setDisplayName(textColor + "Tier I Pants");
 
                 itemMeta.setLore(finalizePantsLore(enchantName, isRareEnchant, level, description, textColor));
-
-                item.setItemMeta(itemMeta);
 
             } else {
                 itemMeta.setDisplayName(tierColors.get(1) + "Tier I " + properlyCasedKey);
 
                 itemMeta.setLore(finalizeHandheldLore(enchantName, isRareEnchant, level, description));
 
-                item.setItemMeta(itemMeta);
             }
+
+            item.setItemMeta(itemMeta);
 
             return;
         }
 
-        if (itemKey == "LEGGINGS") {
+        if (itemKey.equals("LEGGINGS")) {
             if (tierUp)
                 itemMeta.setDisplayName(upgradeTier(itemMeta.getDisplayName(), textColor));
 
             List<String> lore = itemMeta.getLore();
 
-            lore = trimPantsLoreEnding(lore);
+            trimPantsLoreEnding(lore);
 
             lore.add("");
             lore.add(formatEnchantName(enchantName, isRareEnchant, level));
@@ -133,12 +136,13 @@ public class CustomEnchantManager {
 
             itemMeta.setLore(lore);
 
-            item.setItemMeta(itemMeta);
         } else {
             if (tierUp)
                 itemMeta.setDisplayName(upgradeTier(itemMeta.getDisplayName()));
 
             List<String> lore = itemMeta.getLore();
+
+            if (lore == null) return;
 
             lore.add(formatEnchantName(enchantName, isRareEnchant, level));
             lore.addAll(description);
@@ -146,8 +150,9 @@ public class CustomEnchantManager {
 
             itemMeta.setLore(lore);
 
-            item.setItemMeta(itemMeta);
         }
+
+        item.setItemMeta(itemMeta);
     }
 
     private String upgradeTier(String displayName) {
@@ -207,13 +212,9 @@ public class CustomEnchantManager {
         return item.getItemMeta().getDisplayName().contains("Fresh");
     }
 
-    private List<String> trimPantsLoreEnding(List<String> lore) {
-        List<String> trimmedLore = lore;
-
-        trimmedLore.remove(trimmedLore.size() - 1);
-        trimmedLore.remove(trimmedLore.size() - 1);
-
-        return trimmedLore;
+    private void trimPantsLoreEnding(List<String> lore) {
+        lore.remove(lore.size() - 1);
+        lore.remove(lore.size() - 1);
     }
 
     public int getItemLives(ItemStack item) {
@@ -284,7 +285,7 @@ public class CustomEnchantManager {
 
             if (line.contains(enchant.getName())) {
                 for (int j = i - 1; j < lore.size() - i; j++) {
-                    if (lore.get(i) == "") {
+                    if (lore.get(i).equals("")) {
                         lore.remove(i);
 
                         break;
@@ -301,45 +302,13 @@ public class CustomEnchantManager {
     public HashMap<CustomEnchant, Integer> getItemEnchants(ItemStack item) {
         HashMap<CustomEnchant, Integer> enchantsToLevels = new HashMap<>();
 
-        if (item.getType() == Material.AIR)
-            return enchantsToLevels;
-        if (item.getItemMeta().getLore() == null)
-            return enchantsToLevels;
+        List<String> lore = item.getItemMeta().getLore();
 
-        for (String string : item.getItemMeta().getLore()) {
-            ArrayList<String> enchantData = new ArrayList<>(Arrays.asList(string.split(" ")));
-            StringBuilder enchantName = new StringBuilder();
-            int level = 0;
+        if (lore == null) return enchantsToLevels;
 
-            if (enchantData.size() == 0) {
-                continue;
-            }
-
-            for (int i = 0; i < enchantData.size(); i++) {
-                enchantData.set(i, ChatColor.stripColor(enchantData.get(i)));
-            }
-
-            if (enchantData.get(0).equalsIgnoreCase("RARE!")) {
-                enchantData.remove(0);
-            }
-
-            for (int i = 0; i < enchantData.size(); i++) {
-                if (romanNumeralConverter.convertRomanNumeralToInteger(enchantData.get(i)) == -1) {
-                    enchantName.append(enchantData.get(i));
-                    if (i != enchantData.size() - 1)
-                        enchantName.append(" ");
-                } else {
-                    level = romanNumeralConverter.convertRomanNumeralToInteger(enchantData.get(i));
-                }
-            }
-
-            String name = enchantName.toString().trim();
-
-            for (CustomEnchant enchant : getEnchants()) {
-                if (enchant.getName().equals(name)) {
-                    enchantsToLevels.put(enchant, level);
-                    break;
-                }
+        for (CustomEnchant enchant : enchants) {
+            if (customEnchantUtils.itemHasEnchant(enchant, item)) {
+                enchantsToLevels.put(enchant, customEnchantUtils.getEnchantLevel(enchant, item));
             }
         }
 

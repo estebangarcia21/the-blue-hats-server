@@ -1,5 +1,6 @@
 package com.thebluehats.server.game.commands;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.inject.Inject;
@@ -110,7 +111,9 @@ public class EnchantCommand extends GameCommand {
             int rareTokens = 0;
             int rareEnchantCount = 0;
 
-            for (Map.Entry<CustomEnchant, Integer> entry : customEnchantManager.getItemEnchants(item).entrySet()) {
+            HashMap<CustomEnchant, Integer> itemEnchants = customEnchantManager.getItemEnchants(item);
+
+            for (Map.Entry<CustomEnchant, Integer> entry : itemEnchants.entrySet()) {
                 if (entry.getKey().isRareEnchant()) {
                     rareTokens += entry.getValue();
                     rareEnchantCount++;

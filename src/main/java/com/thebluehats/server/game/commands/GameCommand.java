@@ -2,6 +2,7 @@ package com.thebluehats.server.game.commands;
 
 import java.util.StringJoiner;
 
+import com.thebluehats.server.game.utils.Registerer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
