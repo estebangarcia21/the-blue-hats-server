@@ -1,3 +1,5 @@
+#!/bin/bash
+
 WORKING_DIRECTORY="__dev-server"
 SERVER_TEMPLATE_URL="https://github.com/Im-Stevemmmmm/the-blue-hats-server-env"
 SPIGOT_VERSION="1.16.3"
@@ -5,7 +7,7 @@ SPIGOT_JAR="spigot-$SPIGOT_VERSION.jar"
 
 check_if_server_exists () {
   if [[ ! -d $WORKING_DIRECTORY ]]; then
-    echo "No development server found! Try bootstrapping it with ./dev-server.sh bootstrap"
+    echo "No development server found! Try creating it with ./dev-server.sh create"
     exit
   fi
 }
@@ -126,12 +128,12 @@ echo "
      clean         Deletes the development server.
 
      update        Updates the Spigot jar to the latest version. Run this if
-                   you get an outdated jar message on start.
+                   Spigot warns that the jar is out of date.
 
      --------------------------------------------------------------------------
 
      SPIGOT VERSION: $SPIGOT_VERSION
-     LOGIN VERSIONS: 1.8.x - $SPIGOT_VERSION
+     ACCEPTABLE LOGIN VERSIONS: 1.8.x - $SPIGOT_VERSION
 
      Commands are case sensitive.
     "
