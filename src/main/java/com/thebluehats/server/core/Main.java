@@ -1,59 +1,25 @@
 package com.thebluehats.server.core;
 
-import java.util.ArrayList;
-import java.util.function.Consumer;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.thebluehats.server.core.modules.BowManagerModule;
-import com.thebluehats.server.core.modules.CombatManagerModule;
-import com.thebluehats.server.core.modules.CooldownTimerModule;
-import com.thebluehats.server.core.modules.CustomEnchantManagerModule;
-import com.thebluehats.server.core.modules.CustomEnchantUtilsModule;
-import com.thebluehats.server.core.modules.DamageManagerModule;
-import com.thebluehats.server.core.modules.EventTemplatesModule;
-import com.thebluehats.server.core.modules.PitDataDAOModule;
-import com.thebluehats.server.core.modules.HitCounterModule;
-import com.thebluehats.server.core.modules.MirrorModule;
-import com.thebluehats.server.core.modules.PantsDataContainerModule;
-import com.thebluehats.server.core.modules.PitDataRepositoryModule;
-import com.thebluehats.server.core.modules.PluginModule;
-import com.thebluehats.server.core.modules.RegionManagerModule;
-import com.thebluehats.server.core.modules.RomanNumeralConverterModule;
-import com.thebluehats.server.core.modules.ServerApiModule;
-import com.thebluehats.server.game.commands.AboutCommand;
-import com.thebluehats.server.game.commands.GiveArrowCommand;
-import com.thebluehats.server.game.commands.GiveBreadCommand;
-import com.thebluehats.server.game.commands.GiveFreshItemCommand;
-import com.thebluehats.server.game.commands.GiveObsidianCommand;
-import com.thebluehats.server.game.commands.GiveProtCommand;
-import com.thebluehats.server.game.commands.MysticEnchantsCommand;
-import com.thebluehats.server.game.commands.SelectWorldCommand;
-import com.thebluehats.server.game.commands.SetGoldCommand;
-import com.thebluehats.server.game.commands.SpawnCommand;
-import com.thebluehats.server.game.commands.UnenchantCommand;
-import com.thebluehats.server.game.enchants.Billionaire;
-import com.thebluehats.server.game.enchants.ComboDamage;
-import com.thebluehats.server.game.enchants.ComboSwift;
-import com.thebluehats.server.game.enchants.DiamondAllergy;
-import com.thebluehats.server.game.enchants.DiamondStomp;
-import com.thebluehats.server.game.enchants.LastStand;
-import com.thebluehats.server.game.enchants.Mirror;
-import com.thebluehats.server.game.enchants.Peroxide;
-import com.thebluehats.server.game.enchants.Punisher;
-import com.thebluehats.server.game.enchants.Solitude;
-import com.thebluehats.server.game.enchants.SprintDrain;
-import com.thebluehats.server.game.enchants.Wasp;
+import com.thebluehats.server.api.implementations.pitdata.PitDataDaoImpl;
+import com.thebluehats.server.core.modules.*;
+import com.thebluehats.server.game.commands.*;
+import com.thebluehats.server.game.enchants.*;
 import com.thebluehats.server.game.managers.combat.CombatManager;
+import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.world.PerkManager;
 import com.thebluehats.server.game.managers.world.WorldSelectionManager;
-import com.thebluehats.server.api.implementations.pitdata.PitDataDaoImpl;
+import com.thebluehats.server.game.perks.Perk;
 import com.thebluehats.server.game.perks.Vampire;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
-
+import com.thebluehats.server.game.utils.Registerer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class Main extends JavaPlugin {
     private final ArrayList<PluginLifecycleListener> lifecycleListeners = new ArrayList<>();
@@ -80,7 +46,7 @@ public class Main extends JavaPlugin {
                 new DamageManagerModule(), new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(),
                 new MirrorModule(), new CustomEnchantUtilsModule(), new ServerApiModule(),
                 new PitDataRepositoryModule(), new RomanNumeralConverterModule(), new PantsDataContainerModule(),
-                new PitDataDAOModule());
+                new PitDataDaoModule());
 
         registerLifecycles();
         registerEvents();
@@ -88,12 +54,12 @@ public class Main extends JavaPlugin {
         registerPerks();
         registerCommands();
 
-        updateLifecyles(lifecycle -> lifecycle.onPluginStart());
+        updateLifecyles(PluginLifecycleListener::onPluginStart);
     }
 
     @Override
     public void onDisable() {
-        updateLifecyles(lifecycle -> lifecycle.onPluginEnd());
+        updateLifecyles(PluginLifecycleListener::onPluginEnd);
     }
 
     private void registerEvents() {
@@ -102,26 +68,29 @@ public class Main extends JavaPlugin {
     }
 
     private void registerEnchants() {
-        CustomEnchantManager customEnchantManager = injector.getInstance(CustomEnchantManager.class);
+        Registerer<CustomEnchant> customEnchantRegisterer = injector.getInstance(CustomEnchantManager.class);
 
-        customEnchantManager.registerEnchant(injector.getInstance(Wasp.class));
-        customEnchantManager.registerEnchant(injector.getInstance(Peroxide.class));
-        customEnchantManager.registerEnchant(injector.getInstance(SprintDrain.class));
-        customEnchantManager.registerEnchant(injector.getInstance(ComboSwift.class));
-        customEnchantManager.registerEnchant(injector.getInstance(ComboDamage.class));
-        customEnchantManager.registerEnchant(injector.getInstance(LastStand.class));
-        customEnchantManager.registerEnchant(injector.getInstance(Mirror.class));
-        customEnchantManager.registerEnchant(injector.getInstance(Billionaire.class));
-        customEnchantManager.registerEnchant(injector.getInstance(DiamondStomp.class));
-        customEnchantManager.registerEnchant(injector.getInstance(Punisher.class));
-        customEnchantManager.registerEnchant(injector.getInstance(DiamondAllergy.class));
-        customEnchantManager.registerEnchant(injector.getInstance(Solitude.class));
+        customEnchantRegisterer.register(injector.getInstance(BeatTheSpammers.class));
+        customEnchantRegisterer.register(injector.getInstance(Wasp.class));
+        customEnchantRegisterer.register(injector.getInstance(Peroxide.class));
+        customEnchantRegisterer.register(injector.getInstance(SprintDrain.class));
+        customEnchantRegisterer.register(injector.getInstance(ComboSwift.class));
+        customEnchantRegisterer.register(injector.getInstance(ComboDamage.class));
+        customEnchantRegisterer.register(injector.getInstance(Healer.class));
+        customEnchantRegisterer.register(injector.getInstance(LastStand.class));
+        customEnchantRegisterer.register(injector.getInstance(Mirror.class));
+        customEnchantRegisterer.register(injector.getInstance(Billionaire.class));
+        customEnchantRegisterer.register(injector.getInstance(DiamondStomp.class));
+        customEnchantRegisterer.register(injector.getInstance(Punisher.class));
+        customEnchantRegisterer.register(injector.getInstance(DiamondAllergy.class));
+        customEnchantRegisterer.register(injector.getInstance(Solitude.class));
+        customEnchantRegisterer.register(injector.getInstance(Assassin.class));
     }
 
     private void registerPerks() {
-        PerkManager perkManager = new PerkManager();
+        Registerer<Perk> perkRegisterer = new PerkManager();
 
-        perkManager.registerPerk(injector.getInstance(Vampire.class));
+        perkRegisterer.register(injector.getInstance(Vampire.class));
     }
 
     private void registerCommands() {
