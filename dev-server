@@ -7,7 +7,7 @@ SPIGOT_JAR="spigot-$SPIGOT_VERSION.jar"
 
 check_if_server_exists () {
   if [[ ! -d $WORKING_DIRECTORY ]]; then
-    echo "No development server found! Try creating it with ./dev-server.sh create"
+    echo "No development server found! Try creating it with ./dev-server create"
     exit
   fi
 }
@@ -31,7 +31,7 @@ build_and_move_plugin () {
 
 if [[ "$1" == create ]]; then
   if [[ -d $WORKING_DIRECTORY ]]; then
-    echo "The development server already exists. To delete the server, run ./dev-server.sh clean"
+    echo "The development server already exists. To delete the server, run ./dev-server clean"
     exit
   fi
 
@@ -46,8 +46,8 @@ if [[ "$1" == create ]]; then
   echo "
   Done! The development server was successfully created!
 
-  To run the server, do ./dev-server.sh start
-  Otherwise, to delete the server do ./dev-server.sh clean"
+  To run the server, do ./dev-server start
+  Otherwise, to delete the server do ./dev-server clean"
   exit
 fi
 
@@ -65,11 +65,11 @@ if [[ "$1" == start ]]; then
   exit
 fi
 
-if [[ "$1" == clean ]]; then
-  echo "Removing the development server..."
+if [[ "$1" == delete ]]; then
+  echo "Deleting the development server..."
   rm -rf $WORKING_DIRECTORY
 
-  echo "Done! Successfully removed the development server!"
+  echo "Done! Successfully deleted the development server!"
   exit
 fi
 
@@ -125,7 +125,7 @@ echo "
                    reload the server, run /reload in-game or execute reload in
                    the terminal to apply the changes.
 
-     clean         Deletes the development server.
+     delete        Deletes the development server.
 
      update        Updates the Spigot jar to the latest version. Run this if
                    Spigot warns that the jar is out of date.
