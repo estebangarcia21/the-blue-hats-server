@@ -30,7 +30,7 @@ public class PantsDataContainer {
     private final ImmutableMap<FreshPantsColor, PantsData> pantsData = ImmutableMap
             .<FreshPantsColor, PantsData>builder().put(FreshPantsColor.RED, new PantsData(0xFF5555, ChatColor.RED))
             .put(FreshPantsColor.GREEN, new PantsData(0x55FF55, ChatColor.GREEN))
-            .put(FreshPantsColor.BLUE, new PantsData(0x55555FF, ChatColor.BLUE))
+            .put(FreshPantsColor.BLUE, new PantsData(0x5555FF, ChatColor.BLUE))
             .put(FreshPantsColor.YELLOW, new PantsData(0xFFFF55, ChatColor.YELLOW))
             .put(FreshPantsColor.ORANGE, new PantsData(0xFFAA00, ChatColor.GOLD))
             .put(FreshPantsColor.DARK, new PantsData(0x000000, ChatColor.DARK_PURPLE))
