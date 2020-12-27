@@ -6,10 +6,10 @@ commands:
     pitenchant:
         description: Use it to enchant some weapons xD xD
         usage: /pitenchant
-    mysticenchants:
+    pitenchants:
         description: Lists the enchants
         usage: /mysticenchants
-    pitabout:
+    about:
         description: Information about this plugin
         usage: /pitabout
     givefreshitem:

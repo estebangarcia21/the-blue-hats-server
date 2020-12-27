@@ -1,6 +1,7 @@
 package com.thebluehats.server.game.commands;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.utils.LoreParser;
@@ -12,8 +13,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -50,7 +53,7 @@ public class GiveFreshItemCommand extends GameCommand {
     @Override
     public String getUsageMessage(String cmd) {
         return formatStandardUsageMessage(cmd,
-                "Gives a fresh item. Must be: sword, bow, or any pants color. (Ex: /givefreshitem red)", "<type>");
+                "Gives a fresh item. Must be: sword, bow, or any pants color. (Ex: /givefreshitem red)", "type");
     }
 
     @Override
@@ -61,16 +64,16 @@ public class GiveFreshItemCommand extends GameCommand {
             giveFreshHandheldItem(player, HandheldFreshItem.valueOf(freshItemName));
         } else if (freshPantsColors.contains(freshItemName)) {
             giveFreshPants(player, FreshPantsColor.valueOf(freshItemName));
+        } else {
+            player.sendMessage(getUsageMessage(commandName));
         }
-
-        player.sendMessage(getUsageMessage(commandName));
     }
 
     private void giveFreshHandheldItem(Player player, HandheldFreshItem handheldFreshItem) {
         ArrayList<String> freshItemLore = new LoreParser("Kept on death<br/><br/>Used in the mystic well").parse();
 
-        ItemStack freshItem = handheldFreshItem == HandheldFreshItem.SWORD ? new ItemStack(Material.BOW)
-                : new ItemStack(Material.GOLDEN_SWORD);
+        ItemStack freshItem = handheldFreshItem == HandheldFreshItem.SWORD ? new ItemStack(Material.GOLDEN_SWORD)
+                : new ItemStack(Material.BOW);
 
         ItemMeta meta = freshItem.getItemMeta();
 
@@ -80,6 +83,8 @@ public class GiveFreshItemCommand extends GameCommand {
         meta.setUnbreakable(true);
 
         applyFlags(meta);
+
+        freshItem.setItemMeta(meta);
 
         player.getInventory().addItem(freshItem);
         player.updateInventory();
@@ -103,11 +108,13 @@ public class GiveFreshItemCommand extends GameCommand {
         applyFlags(freshPantsMeta);
 
         LoreParser loreParser = new LoreParser(
-                "Kept on death</br></br>{0}Used in the mystic well{1}</br>{0}Also, a fashion statement{1}");
+                "Kept on death<br/><br/>{0}Used in the mystic well{1}<br/>{0}Also, a fashion statement{1}");
+
+        String textColorName = textColor.name().toLowerCase();
 
         String[] variables = new String[2];
-        variables[0] = "<" + textColor + ">";
-        variables[1] = "</" + textColor + ">";
+        variables[0] = "<" + textColorName + ">";
+        variables[1] = "</" + textColorName + ">";
 
         loreParser.setVariables(variables);
 
@@ -121,7 +128,7 @@ public class GiveFreshItemCommand extends GameCommand {
     private void applyFlags(ItemMeta meta) {
         meta.setUnbreakable(true);
 
-        meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
-                new AttributeModifier("GENERIC_ARMOR_TOUGHNESS", 3, AttributeModifier.Operation.ADD_NUMBER));
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(),
+                "GENERIC_ARMOR_TOUGHNESS", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
     }
 }

@@ -2,7 +2,6 @@ package com.thebluehats.server.game.commands;
 
 import java.util.StringJoiner;
 
-import com.thebluehats.server.game.utils.Registerer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,13 +19,11 @@ public abstract class GameCommand implements CommandExecutor {
                 if (label.equalsIgnoreCase(commandName)) {
                     String usageMessage = getUsageMessage(commandName);
 
-                    if (args.length == 0 && usageMessage != null) {
+                    if (args.length == 0 && usageMessage.contains("<") && usageMessage.contains(">")) {
                         player.sendMessage(usageMessage);
-
-                        return true;
+                    } else {
+                        runCommand(player, commandName, args);
                     }
-                } else {
-                    runCommand(player, commandName, args);
                 }
             }
         } else {
