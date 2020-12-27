@@ -78,5 +78,4 @@ public class Knockback extends OnDamageEnchant {
     public EnchantHolder getEnchantHolder() {
         return EnchantHolder.DAMAGER;
     }
-
 }
