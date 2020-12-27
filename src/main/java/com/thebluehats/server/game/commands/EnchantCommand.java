@@ -50,7 +50,7 @@ public class EnchantCommand extends GameCommand {
             return;
         }
 
-        ItemStack item = player.getInventory().getItemInMainHand();
+        ItemStack item = player.getInventory().getItemInHand();
 
         if (item.getType() == Material.AIR) {
             player.sendMessage(formatStandardErrorMessage("You are not holding anything!"));

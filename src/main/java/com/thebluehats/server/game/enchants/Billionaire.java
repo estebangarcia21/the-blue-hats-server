@@ -48,7 +48,7 @@ public class Billionaire extends OnDamageEnchant {
 
         damageManager.addDamage(data.getEvent(), damageIncrease.getValueAtLevel(level), CalculationMode.MULTIPLICATIVE);
 
-        damager.playSound(damager.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 0.73f);
+        damager.playSound(damager.getLocation(), Sound.ORB_PICKUP, 1, 0.73f);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class Billionaire extends OnDamageEnchant {
 
     @Override
     public Material[] getEnchantItemTypes() {
-        return new Material[] { Material.GOLDEN_SWORD };
+        return new Material[] { Material.GOLD_SWORD };
     }
 
     @Override

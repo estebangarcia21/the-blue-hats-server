@@ -31,7 +31,7 @@ public class BowManager {
     public ItemStack getBowFromArrow(Arrow arrow) {
         for (Arrow arr : data.keySet()) {
             if (arr.equals(arrow)) {
-                return data.get(arr).getItemInMainHand();
+                return data.get(arr).getItemInHand();
             }
         }
 

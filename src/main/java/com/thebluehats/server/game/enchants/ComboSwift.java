@@ -17,7 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 
-public class ComboSwift extends OnDamageEnchant  {
+public class ComboSwift extends OnDamageEnchant {
     private final EnchantProperty<Integer> speedTime = new EnchantProperty<>(3, 4, 5);
     private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 1, 1);
     private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);
@@ -86,7 +86,7 @@ public class ComboSwift extends OnDamageEnchant  {
 
     @Override
     public Material[] getEnchantItemTypes() {
-        return new Material[] { Material.GOLDEN_SWORD };
+        return new Material[] { Material.GOLD_SWORD };
     }
 
     @Override

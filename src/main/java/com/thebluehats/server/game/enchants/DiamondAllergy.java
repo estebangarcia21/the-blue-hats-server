@@ -35,7 +35,7 @@ public class DiamondAllergy extends OnDamageEnchant {
         Player damager = data.getDamager();
         int level = data.getLevel();
 
-        if (damager.getInventory().getItemInMainHand().getType() == Material.DIAMOND_SWORD) {
+        if (damager.getInventory().getItemInHand().getType() == Material.DIAMOND_SWORD) {
             damageManager.reduceDamageByPercentage(event, damageReduction.getValueAtLevel(level));
         }
     }

@@ -1,7 +1,6 @@
 package com.thebluehats.server.game.commands;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.utils.LoreParser;
@@ -12,10 +11,7 @@ import com.thebluehats.server.game.utils.PantsDataContainer.PantsData;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -71,7 +67,7 @@ public class GiveFreshItemCommand extends GameCommand {
     private void giveFreshHandheldItem(Player player, HandheldFreshItem handheldFreshItem) {
         ArrayList<String> freshItemLore = new LoreParser("Kept on death<br/><br/>Used in the mystic well").parse();
 
-        ItemStack freshItem = handheldFreshItem == HandheldFreshItem.SWORD ? new ItemStack(Material.GOLDEN_SWORD)
+        ItemStack freshItem = handheldFreshItem == HandheldFreshItem.SWORD ? new ItemStack(Material.GOLD_SWORD)
                 : new ItemStack(Material.BOW);
 
         ItemMeta meta = freshItem.getItemMeta();
@@ -79,7 +75,7 @@ public class GiveFreshItemCommand extends GameCommand {
         meta.setDisplayName(ChatColor.AQUA + "Mystic Bow");
         meta.setLore(freshItemLore);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
-        meta.setUnbreakable(true);
+        meta.spigot().setUnbreakable(true);
 
         applyFlags(meta);
 
@@ -125,9 +121,8 @@ public class GiveFreshItemCommand extends GameCommand {
     }
 
     private void applyFlags(ItemMeta meta) {
-        meta.setUnbreakable(true);
+        meta.spigot().setUnbreakable(true);
 
-        meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(),
-                "GENERIC_ARMOR_TOUGHNESS", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ENCHANTS);
     }
 }

@@ -35,7 +35,7 @@ public class GiveProtCommand extends GameCommand {
         ItemMeta swordMeta = sword.getItemMeta();
 
         swordMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-        swordMeta.setUnbreakable(true);
+        swordMeta.spigot().setUnbreakable(true);
 
         sword.setItemMeta(swordMeta);
 
@@ -46,7 +46,7 @@ public class GiveProtCommand extends GameCommand {
         ItemMeta meta = item.getItemMeta();
 
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
-        meta.setUnbreakable(true);
+        meta.spigot().setUnbreakable(true);
 
         item.setItemMeta(meta);
     }

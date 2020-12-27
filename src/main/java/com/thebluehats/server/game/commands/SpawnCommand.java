@@ -6,7 +6,6 @@ import com.thebluehats.server.game.managers.enchants.CooldownTimer;
 import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
 
 import org.bukkit.ChatColor;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 public class SpawnCommand extends GameCommand {
@@ -41,7 +40,7 @@ public class SpawnCommand extends GameCommand {
 
         if (!combatManager.playerIsInCombat(player)) {
             if (!cooldownTimer.isOnCooldown(player)) {
-                player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                player.setHealth(player.getMaxHealth());
                 player.teleport(regionManager.getSpawnLocation(player));
 
                 cooldownTimer.startCooldown(player, 200);

@@ -1,5 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
+import java.util.ArrayList;
+
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
@@ -13,11 +15,10 @@ import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import com.thebluehats.server.game.utils.EntityValidator;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
 
 public class ComboDamage extends OnDamageEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.2f, .3f, .45f);
@@ -42,7 +43,7 @@ public class ComboDamage extends OnDamageEnchant {
         hitCounter.addOne(damager);
 
         if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(data.getLevel()))) {
-            damager.playSound(damager.getLocation(), Sound.ENTITY_DONKEY_HURT, 1, 0.5f);
+            damager.playSound(damager.getLocation(), Sound.DONKEY_HIT, 1, 0.5f);
             damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(data.getLevel()),
                     CalculationMode.ADDITIVE);
         }
@@ -89,7 +90,7 @@ public class ComboDamage extends OnDamageEnchant {
 
     @Override
     public Material[] getEnchantItemTypes() {
-        return new Material[] { Material.GOLDEN_SWORD };
+        return new Material[] { Material.GOLD_SWORD };
     }
 
     @Override

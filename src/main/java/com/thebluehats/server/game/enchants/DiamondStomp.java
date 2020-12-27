@@ -102,7 +102,7 @@ public class DiamondStomp extends OnDamageEnchant {
 
     @Override
     public Material[] getEnchantItemTypes() {
-        return new Material[] { Material.GOLDEN_SWORD };
+        return new Material[] { Material.GOLD_SWORD };
     }
 
     @Override

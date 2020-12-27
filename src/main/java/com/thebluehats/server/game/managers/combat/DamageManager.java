@@ -2,6 +2,7 @@ package com.thebluehats.server.game.managers.combat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import com.google.inject.Inject;
@@ -14,13 +15,13 @@ import com.thebluehats.server.game.utils.DataInitializer;
 import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 public class DamageManager implements EntityValidator, DataInitializer {
@@ -60,6 +61,26 @@ public class DamageManager implements EntityValidator, DataInitializer {
         canceledEvents.remove(damagerUuid);
     }
 
+    @Override
+    public boolean validate(Entity... entities) {
+        for (Entity entity : entities) {
+            if (uuidIsInCanceledEvent(entity.getUniqueId())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    @EventHandler
+    public void initializeDataOnPlayerJoin(PlayerJoinEvent event) {
+        eventData.put(event.getPlayer().getUniqueId(), new EventData());
+    }
+
+    /*
+     * ----------- Utility Methods ----------
+     */
     public double getDamageFromEvent(EntityDamageByEntityEvent event) {
         return calculateDamage(event.getDamage(), event);
     }
@@ -68,6 +89,9 @@ public class DamageManager implements EntityValidator, DataInitializer {
         return calculateDamage(event.getFinalDamage(), event);
     }
 
+    /*
+     * ---------- Manipulation methods --------------
+     */
     public void addDamage(EntityDamageByEntityEvent event, double value, CalculationMode mode) {
         EventData eventValues = eventData.get(event.getDamager().getUniqueId());
 
@@ -90,32 +114,7 @@ public class DamageManager implements EntityValidator, DataInitializer {
             return;
         }
 
-        /**
-         * Damage reduction is multiplied with eachother
-         */
         data.setReductionAmount(1 - data.getReductionAmount() * value);
-    }
-
-    public void reduceAbsoluteDamage(EntityDamageByEntityEvent event, double value) {
-        EventData data = eventData.get(event.getDamager().getUniqueId());
-
-        data.setAbsoluteReductionAmount(data.getAbsoluteReductionAmount() + value);
-    }
-
-    public void removeExtraCriticalDamage(EntityDamageByEntityEvent event) {
-        removeCriticalDamage.add(event.getDamager().getUniqueId());
-    }
-
-    public void setEventAsCanceled(EntityDamageByEntityEvent event) {
-        canceledEvents.add(event.getDamager().getUniqueId());
-    }
-
-    public boolean eventIsNotCancelled(EntityDamageByEntityEvent event) {
-        return !canceledEvents.contains(event.getDamager().getUniqueId());
-    }
-
-    public boolean uuidIsInCanceledEvent(UUID uuid) {
-        return canceledEvents.contains(uuid);
     }
 
     public void doTrueDamage(Player target, double damage) {
@@ -152,12 +151,20 @@ public class DamageManager implements EntityValidator, DataInitializer {
         }
     }
 
-    public void safeSetPlayerHealth(Player player, double health) {
-        if (!regionManager.entityIsInSpawn(player)) {
-            if (health >= 0 && health <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-                player.setHealth(health);
-            }
-        }
+    public void removeExtraCriticalDamage(EntityDamageByEntityEvent event) {
+        removeCriticalDamage.add(event.getDamager().getUniqueId());
+    }
+
+    public void setEventAsCanceled(EntityDamageByEntityEvent event) {
+        canceledEvents.add(event.getDamager().getUniqueId());
+    }
+
+    public boolean eventIsNotCancelled(EntityDamageByEntityEvent event) {
+        return !canceledEvents.contains(event.getDamager().getUniqueId());
+    }
+
+    public boolean uuidIsInCanceledEvent(UUID uuid) {
+        return canceledEvents.contains(uuid);
     }
 
     public boolean isCriticalHit(Player player) {
@@ -173,7 +180,7 @@ public class DamageManager implements EntityValidator, DataInitializer {
         EventData data = eventData.get(event.getDamager().getUniqueId());
 
         double damage = initialDamage * data.getAdditiveDamage() * data.getMultiplicativeDamage()
-                * data.getReductionAmount() - data.getAbsoluteReductionAmount();
+                * data.getReductionAmount();
 
         if (removeCriticalDamage.contains(event.getDamager().getUniqueId())) {
             damage *= (2D / 3D);
@@ -182,32 +189,40 @@ public class DamageManager implements EntityValidator, DataInitializer {
         if (damage <= 0)
             damage = 1;
 
+        if (event.getEntity() instanceof Player) {
+            Player damagee = (Player) event.getEntity();
+
+            ItemStack leggings = damagee.getInventory().getLeggings();
+
+            if (leggings != null) {
+                List<String> pantsLore = leggings.getItemMeta().getLore();
+
+                if (pantsLore != null) {
+                    for (String line : pantsLore) {
+                        if (line.contains("As strong as iron")) {
+                            damage *= 0.88;
+                        }
+                    }
+                }
+            }
+
+        }
+
         return damage;
     }
 
-    @Override
-    public boolean validate(Entity... entities) {
-        for (Entity entity : entities) {
-            if (uuidIsInCanceledEvent(entity.getUniqueId())) {
-                return false;
+    private void safeSetPlayerHealth(Player player, double health) {
+        if (!regionManager.entityIsInSpawn(player)) {
+            if (health >= 0 && health <= player.getMaxHealth()) {
+                player.setHealth(health);
             }
         }
-
-        return true;
-    }
-
-    @Override
-    @EventHandler
-    public void initializeDataOnPlayerJoin(PlayerJoinEvent event) {
-        eventData.put(event.getPlayer().getUniqueId(), new EventData());
     }
 
     private final static class EventData {
         private double additiveDamage = 1;
         private double multiplicativeDamage;
-
         private double reductionAmount = 1;
-        private double absoluteReductionAmount;
 
         public double getAdditiveDamage() {
             return additiveDamage;
@@ -231,14 +246,6 @@ public class DamageManager implements EntityValidator, DataInitializer {
 
         public void setReductionAmount(double reductionAmount) {
             this.reductionAmount = reductionAmount;
-        }
-
-        public double getAbsoluteReductionAmount() {
-            return absoluteReductionAmount;
-        }
-
-        public void setAbsoluteReductionAmount(double absoluteReductionAmount) {
-            this.absoluteReductionAmount = absoluteReductionAmount;
         }
     }
 }

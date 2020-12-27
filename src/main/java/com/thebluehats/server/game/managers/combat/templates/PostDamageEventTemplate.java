@@ -22,8 +22,8 @@ public abstract class PostDamageEventTemplate {
     private static final ImmutableMap<MaterialMatcher, Function<PlayerInventory, ItemStack>> materialFunctions = ImmutableMap
             .<MaterialMatcher, Function<PlayerInventory, ItemStack>>builder()
             .put(MaterialMatcher.LEGGINGS, PlayerInventory::getLeggings)
-            .put(MaterialMatcher.SWORD, PlayerInventory::getItemInMainHand)
-            .put(MaterialMatcher.BOW, PlayerInventory::getItemInMainHand).build();
+            .put(MaterialMatcher.SWORD, PlayerInventory::getItemInHand)
+            .put(MaterialMatcher.BOW, PlayerInventory::getItemInHand).build();
 
     protected final CustomEnchantUtils customEnchantUtils;
 

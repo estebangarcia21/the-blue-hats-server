@@ -1,5 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
+import java.util.ArrayList;
+
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
@@ -9,11 +11,9 @@ import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
-import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 public class Healer extends OnDamageEnchant {
     private final EnchantProperty<Integer> healAmount = new EnchantProperty<>(2, 4, 6);
@@ -29,10 +29,8 @@ public class Healer extends OnDamageEnchant {
         Player damaged = data.getDamagee();
         int level = data.getLevel();
 
-        damager.setHealth(Math.min(damager.getHealth() + healAmount.getValueAtLevel(level),
-                damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
-        damaged.setHealth(Math.min(damaged.getHealth() + healAmount.getValueAtLevel(level),
-                damaged.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+        damager.setHealth(Math.min(damager.getHealth() + healAmount.getValueAtLevel(level), damager.getMaxHealth()));
+        damaged.setHealth(Math.min(damaged.getHealth() + healAmount.getValueAtLevel(level), damaged.getMaxHealth()));
     }
 
     @Override
@@ -72,7 +70,7 @@ public class Healer extends OnDamageEnchant {
 
     @Override
     public Material[] getEnchantItemTypes() {
-        return new Material[] { Material.GOLDEN_SWORD };
+        return new Material[] { Material.GOLD_SWORD };
     }
 
     @Override

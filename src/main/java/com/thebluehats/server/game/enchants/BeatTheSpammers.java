@@ -1,19 +1,20 @@
 package com.thebluehats.server.game.enchants;
 
+import java.util.ArrayList;
+
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
+import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
-import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
-import org.bukkit.Material;
 
-import java.util.ArrayList;
+import org.bukkit.Material;
 
 public class BeatTheSpammers extends OnDamageEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.10f, .25f, .40f);
@@ -29,7 +30,7 @@ public class BeatTheSpammers extends OnDamageEnchant {
 
     @Override
     public void execute(PostDamageEventResult data) {
-        if (data.getDamagee().getInventory().getItemInMainHand().getType() == Material.BOW) {
+        if (data.getDamagee().getInventory().getItemInHand().getType() == Material.BOW) {
             damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(data.getLevel()),
                     CalculationMode.ADDITIVE);
         }
@@ -72,7 +73,7 @@ public class BeatTheSpammers extends OnDamageEnchant {
 
     @Override
     public Material[] getEnchantItemTypes() {
-        return new Material[] { Material.GOLDEN_SWORD };
+        return new Material[] { Material.GOLD_SWORD };
     }
 
     @Override

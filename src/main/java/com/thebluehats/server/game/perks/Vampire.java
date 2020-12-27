@@ -3,7 +3,6 @@ package com.thebluehats.server.game.perks;
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,8 +47,7 @@ public class Vampire extends Perk {
         if (!damageManager.uuidIsInCanceledEvent(player.getUniqueId()))
             return;
 
-        player.setHealth(Math.min(player.getHealth() + healthValue,
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+        player.setHealth(Math.min(player.getHealth() + healthValue, player.getMaxHealth()));
     }
 
     @Override
