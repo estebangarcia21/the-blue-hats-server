@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WORKING_DIRECTORY="__dev-server"
-SERVER_TEMPLATE_URL="https://github.com/Im-Stevemmmmm/the-blue-hats-server-env"
+SERVER_TEMPLATE_URL="https://www.dropbox.com/s/3t4961vq4zczp99/the-blue-hats-dev-server.tar.gz?dl=1"
 SPIGOT_VERSION="1.16.3"
 SPIGOT_JAR="spigot-$SPIGOT_VERSION.jar"
 
@@ -16,7 +16,7 @@ build_and_move_plugin () {
   PLUGINS_DIRECTORY="$WORKING_DIRECTORY/plugins"
 
   echo "Building the latest version of The Blue Hats Server..."
-  ./gradlew delete shadowJar
+  ./gradlew shadowJar
 
   echo "Moving to the plugins folder..."
 
@@ -24,12 +24,14 @@ build_and_move_plugin () {
     mkdir $PLUGINS_DIRECTORY
   fi
 
-  mv ./build/libs/* $PLUGINS_DIRECTORY
+  PLUGIN_NAME="the-blue-hats-server-1.0-SNAPSHOT-all.jar"
 
-  ./gradlew clean
+  mv -f "build/libs/$PLUGIN_NAME" "$PLUGINS_DIRECTORY/$PLUGIN_NAME"
 }
 
 if [[ "$1" == create ]]; then
+  SERVER_TEMPLATE_TARBALL="dev-server-template.tar.gz"
+
   if [[ -d $WORKING_DIRECTORY ]]; then
     echo "The development server already exists. To delete the server, run ./dev-server delete"
     exit
@@ -37,9 +39,16 @@ if [[ "$1" == create ]]; then
 
   mkdir $WORKING_DIRECTORY
 
-  echo "Copying the server files..."
-  git clone $SERVER_TEMPLATE_URL $WORKING_DIRECTORY
-  echo "Success cloned the server files!"
+  echo "Downloading the server files..."
+
+  cd $WORKING_DIRECTORY || exit
+  curl --silent -L "$SERVER_TEMPLATE_URL" --output $SERVER_TEMPLATE_TARBALL
+
+  echo "Unzipping..."
+  tar --strip-components=1 -xf $SERVER_TEMPLATE_TARBALL
+  rm -f $SERVER_TEMPLATE_TARBALL
+
+  cd ..
 
   build_and_move_plugin
 
@@ -73,8 +82,10 @@ if [[ "$1" == delete ]]; then
   exit
 fi
 
-if [[ "$1" == build ]]; then
+if [[ "$1" == rebuild ]]; then
   build_and_move_plugin
+  echo "Finished rebuilding the jar!"
+
   exit
 fi
 
@@ -101,13 +112,13 @@ if [[ "$1" == update ]]; then
 
   cd .. || exit
 
-  rm -f $SPIGOT_JAR
+  # rm -f $SPIGOT_JAR
 
   mv "$UPDATE_PROCESS_DIRECTORY/$SPIGOT_JAR" .
 
   rm -rf $UPDATE_PROCESS_DIRECTORY
 
-  echo "Done updating!"
+  echo "Successfully updated the Spigot jar!"
   exit
 fi
 
@@ -121,9 +132,9 @@ echo "
 
      start         Starts the development server with the latest plugin build.
 
-     build         Builds the plugin and moves it to the plugins directory. To
-                   reload the server, run /reload in-game or execute reload in
-                   the terminal to apply the changes.
+     rebuild       Rebuilds the plugin and moves it to the plugins directory.
+                   To reload the server, run /reload in-game or execute reload
+                   in the terminal to apply the changes.
 
      delete        Deletes the development server.
 
