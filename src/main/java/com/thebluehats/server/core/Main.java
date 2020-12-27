@@ -87,6 +87,7 @@ public class Main extends JavaPlugin {
         customEnchantRegisterer.register(injector.getInstance(DiamondAllergy.class));
         customEnchantRegisterer.register(injector.getInstance(Solitude.class));
         customEnchantRegisterer.register(injector.getInstance(Assassin.class));
+        customEnchantRegisterer.register(injector.getInstance(Fletching.class));
     }
 
     private void registerPerks() {

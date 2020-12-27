@@ -3,31 +3,29 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
+import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
-
 import com.thebluehats.server.game.utils.EntityValidator;
+
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Punisher extends OnDamageEnchant {
-    private final EnchantProperty<Float> percentDamageIncrease = new EnchantProperty<>(.6f, .12f, .18f);
+public class Fletching extends OnDamageEnchant {
+    private final EnchantProperty<Float> percentDamageIncrease = new EnchantProperty<>(.07f, 0.12f, 0.20f);
 
     private final DamageManager damageManager;
 
     @Inject
-    public Punisher(DamageManager damageManager, PlayerHitPlayerTemplate playerHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate }, new EntityValidator[] { damageManager });
+    public Fletching(DamageManager damageManager, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
+        super(new PostDamageEventTemplate[] { arrowHitPlayerTemplate }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
     }
@@ -35,30 +33,26 @@ public class Punisher extends OnDamageEnchant {
     @Override
     public void execute(PostDamageEventResult data) {
         EntityDamageByEntityEvent event = data.getEvent();
-        Player damagee = data.getDamagee();
         int level = data.getLevel();
 
-        if (damagee.getHealth() < damagee.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 2) {
-            damageManager.addDamage(event, percentDamageIncrease.getValueAtLevel(level), CalculationMode.ADDITIVE);
-        }
+        damageManager.addDamage(event, percentDamageIncrease.getValueAtLevel(level), CalculationMode.ADDITIVE);
     }
 
     @Override
     public String getName() {
-        return "Punisher";
+        return "Fletching";
     }
 
     @Override
     public String getEnchantReferenceName() {
-        return "Punisher";
+        return "Fletching";
     }
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Do <red>+{0}</red> damage vs. players<br/>below 50% HP");
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("Deal <red>+{0}</red> bow damage");
 
-        enchantLoreParser.setSingleVariable("7%", "12%", "18%");
+        enchantLoreParser.setSingleVariable("7%", "12%", "20%");
 
         return enchantLoreParser.parseForLevel(level);
     }
@@ -80,7 +74,7 @@ public class Punisher extends OnDamageEnchant {
 
     @Override
     public Material[] getEnchantItemTypes() {
-        return new Material[] { Material.GOLDEN_SWORD };
+        return new Material[] { Material.BOW };
     }
 
     @Override
