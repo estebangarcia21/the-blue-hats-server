@@ -11,7 +11,7 @@ public class PostDamageEventResult extends TemplateResult<EntityDamageByEntityEv
     private final Player damagee;
 
     public PostDamageEventResult(EntityDamageByEntityEvent event, ImmutableMap<Material, Integer> levelMap,
-                                 Player damager, Player damagee) {
+            Player damager, Player damagee) {
         super(event, levelMap);
 
         this.damager = damager;
