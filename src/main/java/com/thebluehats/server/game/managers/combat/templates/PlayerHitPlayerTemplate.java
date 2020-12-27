@@ -36,6 +36,8 @@ public class PlayerHitPlayerTemplate extends PostDamageEventTemplate {
                 }
             }
 
+            if (!inventoryHasEnchant(inventory, enchant)) return;
+
             enchant.execute(new PostDamageEventResult(event, getItemMap(enchant, inventory), playerDamager,
                     playerDamagee));
         }

@@ -29,7 +29,7 @@ public class ArrowHitPlayerTemplate extends PostDamageEventTemplate {
             Arrow arrow = (Arrow) damager;
 
             if (arrow.getShooter() instanceof Player) {
-                Player playerDamager = (Player) damager;
+                Player playerDamager = (Player) arrow.getShooter();
                 Player playerDamagee = (Player) damagee;
 
                 PlayerInventory inventory = targetPlayer == EnchantHolder.DAMAGER ? playerDamager.getInventory()
@@ -39,6 +39,8 @@ public class ArrowHitPlayerTemplate extends PostDamageEventTemplate {
                     if (!validator.validate(damager, damagee))
                         return;
                 }
+
+                if (!inventoryHasEnchant(inventory, enchant)) return;
 
                 enchant.execute(new PostDamageEventResult(event, getItemMap(enchant, inventory), playerDamager,
                         playerDamagee));

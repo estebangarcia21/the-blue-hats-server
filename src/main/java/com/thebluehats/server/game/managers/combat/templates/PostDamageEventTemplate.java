@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
+import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
 import com.thebluehats.server.game.utils.EntityValidator;
@@ -48,6 +49,26 @@ public abstract class PostDamageEventTemplate {
         }
 
         return mapBuilder.build();
+    }
+
+    protected boolean inventoryHasEnchant(PlayerInventory inventory, CustomEnchant enchant) {
+        return customEnchantUtils.itemHasEnchant(enchant, getItemFunction(enchant).apply(inventory));
+    }
+
+    private Function<PlayerInventory, ItemStack> getItemFunction(CustomEnchant enchant) {
+        for (Material material : enchant.getEnchantItemTypes()) {
+            String materialName = material.toString();
+
+            MaterialMatcher[] materialMatchers = MaterialMatcher.values();
+
+            for (MaterialMatcher materialMatcher : materialMatchers) {
+                if (materialName.contains(materialMatcher.toString())) {
+                    return materialFunctions.get(materialMatcher);
+                }
+            }
+        }
+
+        return null;
     }
 
     public abstract void run(OnDamageEnchant enchant, EntityDamageByEntityEvent event, EnchantHolder targetPlayer,
