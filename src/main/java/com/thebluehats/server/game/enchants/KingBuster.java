@@ -87,5 +87,4 @@ public class KingBuster extends OnDamageEnchant {
     public EnchantHolder getEnchantHolder() {
         return EnchantHolder.DAMAGER;
     }
-
 }
