@@ -10,6 +10,7 @@ import com.thebluehats.server.game.enchants.Mirror;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
+import com.thebluehats.server.game.utils.DataInitializer;
 import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Material;
@@ -19,9 +20,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffectType;
 
-public class DamageManager implements EntityValidator {
+public class DamageManager implements EntityValidator, DataInitializer {
     private final HashMap<UUID, EventData> eventData = new HashMap<>();
     private final ArrayList<UUID> canceledEvents = new ArrayList<>();
     private final ArrayList<UUID> removeCriticalDamage = new ArrayList<>();
@@ -174,7 +176,7 @@ public class DamageManager implements EntityValidator {
                 * data.getReductionAmount() - data.getAbsoluteReductionAmount();
 
         if (removeCriticalDamage.contains(event.getDamager().getUniqueId())) {
-            damage *= .667;
+            damage *= (2D / 3D);
         }
 
         if (damage <= 0)
@@ -194,7 +196,13 @@ public class DamageManager implements EntityValidator {
         return true;
     }
 
-    private class EventData {
+    @Override
+    @EventHandler
+    public void initializeDataOnPlayerJoin(PlayerJoinEvent event) {
+        eventData.put(event.getPlayer().getUniqueId(), new EventData());
+    }
+
+    private final static class EventData {
         private double additiveDamage = 1;
         private double multiplicativeDamage;
 
