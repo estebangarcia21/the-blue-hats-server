@@ -1,8 +1,8 @@
 #!/bin/bash
 
 WORKING_DIRECTORY="__dev-server"
-SERVER_TEMPLATE_URL="https://www.dropbox.com/s/3t4961vq4zczp99/the-blue-hats-dev-server.tar.gz?dl=1"
-SPIGOT_VERSION="1.16.3"
+SERVER_TEMPLATE_URL="https://www.dropbox.com/s/ubzaencsai8fmtk/tbhs-dev-server.tar.gz?dl=1"
+SPIGOT_VERSION="1.8.8"
 SPIGOT_JAR="spigot-$SPIGOT_VERSION.jar"
 
 check_if_server_exists () {
@@ -29,8 +29,18 @@ build_and_move_plugin () {
   mv -f "build/libs/$PLUGIN_NAME" "$PLUGINS_DIRECTORY/$PLUGIN_NAME"
 }
 
+update_spigot_jar () {
+  cd $WORKING_DIRECTORY || exit
+
+  rm -f $SPIGOT_JAR
+
+  echo "Downloading the latest Spigot $SPIGOT_VERSION jar..."
+  curl --silent -L https://cdn.getbukkit.org/spigot/spigot-1.8.8-R0.1-SNAPSHOT-latest.jar --output $SPIGOT_JAR
+
+}
+
 if [[ "$1" == create ]]; then
-  SERVER_TEMPLATE_TARBALL="dev-server-template.tar.gz"
+  SERVER_TEMPLATE_TARBALL="tbhs-dev-server.tar.gz"
 
   if [[ -d $WORKING_DIRECTORY ]]; then
     echo "The development server already exists. To delete the server, run ./dev-server delete"
@@ -51,6 +61,8 @@ if [[ "$1" == create ]]; then
   cd ..
 
   build_and_move_plugin
+
+  update_spigot_jar
 
   echo "
        Done! The development server was successfully created!
@@ -90,35 +102,9 @@ if [[ "$1" == rebuild ]]; then
 fi
 
 if [[ "$1" == update ]]; then
-  SPIGOT_BUILD_TOOLS_JAR="SpigotBuildTools.jar"
-  UPDATE_PROCESS_DIRECTORY="__update-spigot"
+  update_spigot_jar
 
-  check_if_server_exists
-
-  cd $WORKING_DIRECTORY || exit
-
-  rm -rf $UPDATE_PROCESS_DIRECTORY
-  mkdir $UPDATE_PROCESS_DIRECTORY
-
-  cd $UPDATE_PROCESS_DIRECTORY || exit
-
-  echo "Downloading the latest Spigot build tools..."
-  curl --silent https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar --output $SPIGOT_BUILD_TOOLS_JAR
-
-  echo "Building the Spigot jar..."
-
-  export MAVEN_OPTS="-Xmx2G"
-  java -Xmx2G -jar $SPIGOT_BUILD_TOOLS_JAR --rev $SPIGOT_VERSION
-
-  cd .. || exit
-
-  # rm -f $SPIGOT_JAR
-
-  mv "$UPDATE_PROCESS_DIRECTORY/$SPIGOT_JAR" .
-
-  rm -rf $UPDATE_PROCESS_DIRECTORY
-
-  echo "Successfully updated the Spigot jar!"
+  echo "Finished updating the Spigot jar!"
   exit
 fi
 
