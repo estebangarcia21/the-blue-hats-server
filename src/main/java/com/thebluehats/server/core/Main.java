@@ -89,6 +89,7 @@ public class Main extends JavaPlugin {
         customEnchantRegisterer.register(injector.getInstance(Assassin.class));
         customEnchantRegisterer.register(injector.getInstance(Fletching.class));
         customEnchantRegisterer.register(injector.getInstance(KingBuster.class));
+        customEnchantRegisterer.register(injector.getInstance(Knockback.class));
     }
 
     private void registerPerks() {
