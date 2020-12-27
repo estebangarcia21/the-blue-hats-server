@@ -10,6 +10,8 @@ repositories {
     mavenCentral()
 
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots" }
+    maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
+
     maven { url "https://repo.dmulloy2.net/nexus/repository/public/" }
 }
 
@@ -17,7 +19,7 @@ dependencies {
     implementation "com.konghq:unirest-java:3.11.04"
     implementation "com.google.inject:guice:4.1.0"
     implementation "com.google.code.gson:gson:2.8.6"
-    implementation "org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT"
+    implementation "org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT"
     implementation "com.comphenix.protocol:ProtocolLib:4.5.0"
     testImplementation "junit:junit:4.11"
     testImplementation "org.mockito:mockito-core:3.5.15"
