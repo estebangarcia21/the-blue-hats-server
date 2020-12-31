@@ -59,7 +59,7 @@ public class CustomEnchantUtils {
                 String strippedLine = ChatColor.stripColor(line);
 
                 String[] lineTokens = strippedLine.split(" ");
-                String numeral = lineTokens[enchant.isRareEnchant() ? 2 : 1];
+                String numeral = lineTokens[lineTokens.length - 1];
 
                 return numeral == null ? 1 : romanNumeralConverter.convertRomanNumeralToInteger(numeral);
             }

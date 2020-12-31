@@ -32,7 +32,7 @@ public class LastStand extends OnDamageEnchant {
 
         if (damagee.getHealth() < 10)
             damagee.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80,
-                    resistanceAmplifier.getValueAtLevel(data.getLevel()), true));
+                    resistanceAmplifier.getValueAtLevel(data.getLevel())), true);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class LastStand extends OnDamageEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Gain <blue>Resistance {0}</blue> (4<br/>seconds) when reaching 3❤");
+                "Gain <blue>Resistance {0}</blue> (4<br/>seconds) when reaching <red>3❤</red>");
 
         enchantLoreParser.setSingleVariable("I", "II", "III");
 

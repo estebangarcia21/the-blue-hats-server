@@ -48,9 +48,6 @@ public class DamageManager implements EntityValidator, DataInitializer {
     public void onHit(EntityDamageByEntityEvent event) {
         UUID damagerUuid = event.getDamager().getUniqueId();
 
-        if (eventData.containsKey(damagerUuid))
-            return;
-
         if (canceledEvents.contains(damagerUuid)) {
             event.setCancelled(true);
         } else {
@@ -93,7 +90,7 @@ public class DamageManager implements EntityValidator, DataInitializer {
      * ---------- Manipulation methods --------------
      */
     public void addDamage(EntityDamageByEntityEvent event, double value, CalculationMode mode) {
-        EventData eventValues = eventData.get(event.getDamager().getUniqueId());
+        EventData eventValues = eventData.computeIfAbsent(event.getDamager().getUniqueId(), k -> new EventData());
 
         switch (mode) {
             case ADDITIVE:
@@ -106,7 +103,7 @@ public class DamageManager implements EntityValidator, DataInitializer {
     }
 
     public void reduceDamageByPercentage(EntityDamageByEntityEvent event, double value) {
-        EventData data = eventData.get(event.getDamager().getUniqueId());
+        EventData data = eventData.computeIfAbsent(event.getDamager().getUniqueId(), k -> new EventData());
 
         if (data.getReductionAmount() == 1) {
             data.setReductionAmount(data.getReductionAmount() - (1 - value));
@@ -177,7 +174,7 @@ public class DamageManager implements EntityValidator, DataInitializer {
     }
 
     private double calculateDamage(double initialDamage, EntityDamageByEntityEvent event) {
-        EventData data = eventData.get(event.getDamager().getUniqueId());
+       EventData data = eventData.computeIfAbsent(event.getDamager().getUniqueId(), k -> new EventData());
 
         double damage = initialDamage * data.getAdditiveDamage() * data.getMultiplicativeDamage()
                 * data.getReductionAmount();
@@ -205,7 +202,6 @@ public class DamageManager implements EntityValidator, DataInitializer {
                     }
                 }
             }
-
         }
 
         return damage;
@@ -221,7 +217,7 @@ public class DamageManager implements EntityValidator, DataInitializer {
 
     private final static class EventData {
         private double additiveDamage = 1;
-        private double multiplicativeDamage;
+        private double multiplicativeDamage = 1;
         private double reductionAmount = 1;
 
         public double getAdditiveDamage() {

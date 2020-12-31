@@ -29,9 +29,9 @@ public class Knockback extends OnDamageEnchant {
         Player damagee = data.getDamagee();
         int level = data.getLevel();
 
-        damagee.setVelocity(new Vector(damagee.getVelocity().getX() + blocksAmount.getValueAtLevel(level),
-                damagee.getVelocity().getY() + blocksAmount.getValueAtLevel(level),
-                damagee.getVelocity().getZ() + blocksAmount.getValueAtLevel(level)));
+        damagee.setVelocity(new Vector(damagee.getVelocity().getX() * blocksAmount.getValueAtLevel(level),
+                damagee.getVelocity().getY() * blocksAmount.getValueAtLevel(level),
+                damagee.getVelocity().getZ() * blocksAmount.getValueAtLevel(level)));
     }
 
     @Override

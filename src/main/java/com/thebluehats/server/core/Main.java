@@ -16,6 +16,7 @@ import com.thebluehats.server.game.perks.Perk;
 import com.thebluehats.server.game.perks.Vampire;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
 import com.thebluehats.server.game.utils.Registerer;
+import com.thebluehats.server.game.world.NoFallDamage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -67,6 +68,8 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(injector.getInstance(CombatManager.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(DamageManager.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldSelectionManager.class), this);
+
+        getServer().getPluginManager().registerEvents(injector.getInstance(NoFallDamage.class), this);
     }
 
     private void registerEnchants() {

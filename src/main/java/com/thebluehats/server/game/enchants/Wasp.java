@@ -36,7 +36,7 @@ public class Wasp extends OnDamageEnchant {
         int level = data.getLevel();
 
         data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
-                weaknessDuration.getValueAtLevel(level) * 20, weaknessAmplifier.getValueAtLevel(level)));
+                weaknessDuration.getValueAtLevel(level) * 20, weaknessAmplifier.getValueAtLevel(level)), true);
     }
 
     @EventHandler

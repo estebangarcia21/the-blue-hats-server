@@ -40,7 +40,7 @@ public class ComboSwift extends OnDamageEnchant {
 
         if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(level))) {
             damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedTime.getValueAtLevel(level) * 20,
-                    speedAmplifier.getValueAtLevel(level), true));
+                    speedAmplifier.getValueAtLevel(level)), true);
         }
     }
 
@@ -57,7 +57,7 @@ public class ComboSwift extends OnDamageEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "<Every <yellow>{0}</yellow> strike gain<br/><yellow>Speed {1}</yellow> ({2}s)");
+                "Every <yellow>{0}</yellow> strike gain<br/><yellow>Speed {1}</yellow> ({2}s)");
 
         String[][] variables = new String[3][];
         variables[0] = new String[] { "fourth", "third", "third" };
