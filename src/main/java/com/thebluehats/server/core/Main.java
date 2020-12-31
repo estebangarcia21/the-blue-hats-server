@@ -12,6 +12,7 @@ import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.world.PerkManager;
 import com.thebluehats.server.game.managers.world.WorldSelectionManager;
+import com.thebluehats.server.game.other.Bread;
 import com.thebluehats.server.game.perks.Perk;
 import com.thebluehats.server.game.perks.Vampire;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
@@ -68,6 +69,8 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(injector.getInstance(CombatManager.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(DamageManager.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldSelectionManager.class), this);
+
+        getServer().getPluginManager().registerEvents(injector.getInstance(Bread.class), this);
 
         getServer().getPluginManager().registerEvents(injector.getInstance(NoFallDamage.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(AutoRespawn.class), this);
