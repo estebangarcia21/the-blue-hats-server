@@ -19,6 +19,7 @@ import com.thebluehats.server.game.utils.Registerer;
 import com.thebluehats.server.game.world.AutoRespawn;
 import com.thebluehats.server.game.world.ClearArrows;
 import com.thebluehats.server.game.world.NoFallDamage;
+import com.thebluehats.server.game.world.PlayerJoinLeaveMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -74,6 +75,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(injector.getInstance(NoFallDamage.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(AutoRespawn.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(ClearArrows.class), this);
+        getServer().getPluginManager().registerEvents(injector.getInstance(PlayerJoinLeaveMessages.class), this);
     }
 
     private void registerEnchants() {
