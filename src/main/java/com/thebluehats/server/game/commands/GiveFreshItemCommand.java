@@ -72,7 +72,11 @@ public class GiveFreshItemCommand extends GameCommand {
 
         ItemMeta meta = freshItem.getItemMeta();
 
-        meta.setDisplayName(ChatColor.AQUA + "Mystic Bow");
+        String handheldFreshItemString = handheldFreshItem.toString().toLowerCase();
+        String handheldFreshItemName = handheldFreshItemString.substring(0, 1).toUpperCase()
+                + handheldFreshItemString.substring(1);
+
+        meta.setDisplayName(ChatColor.AQUA + "Fresh Mystic " + handheldFreshItemName);
         meta.setLore(freshItemLore);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
         meta.spigot().setUnbreakable(true);

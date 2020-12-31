@@ -87,7 +87,8 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
 
         boolean isFreshItem = isFreshItem(item);
 
-        if (itemKey == null || itemMeta == null) return;
+        if (itemKey == null || itemMeta == null)
+            return;
 
         if (itemKey.equals("LEGGINGS")) {
             ImmutableMap<FreshPantsColor, PantsData> pantsData = pantsDataContainer.getData();
@@ -142,11 +143,12 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
 
             List<String> lore = itemMeta.getLore();
 
-            if (lore == null) return;
+            if (lore == null)
+                return;
 
+            lore.add("");
             lore.add(formatEnchantName(enchantName, isRareEnchant, level));
             lore.addAll(description);
-            lore.add("");
 
             itemMeta.setLore(lore);
 
@@ -198,7 +200,6 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
         finalLore.add("");
         finalLore.add(formatEnchantName(name, isRare, level));
         finalLore.addAll(description);
-        finalLore.add("");
 
         return finalLore;
     }
@@ -275,7 +276,8 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
     }
 
     public void removeEnchant(ItemStack item, CustomEnchant enchant) {
-        List<String> lore = item.getItemMeta().getLore();
+        ItemMeta itemMeta = item.getItemMeta();
+        List<String> lore = itemMeta.getLore();
 
         if (lore == null)
             return;
@@ -284,8 +286,8 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
             String line = lore.get(i);
 
             if (line.contains(enchant.getName())) {
-                for (int j = i - 1; j < lore.size() - i; j++) {
-                    if (lore.get(i).equals("")) {
+                while (!lore.get(i).equals("")) {
+                    if (lore.size() == i + 1) {
                         lore.remove(i);
 
                         break;
@@ -294,9 +296,15 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
                     lore.remove(i);
                 }
 
+                lore.remove(i - 1);
+
                 break;
             }
         }
+
+        itemMeta.setLore(lore);
+
+        item.setItemMeta(itemMeta);
     }
 
     public HashMap<CustomEnchant, Integer> getItemEnchants(ItemStack item) {
@@ -304,7 +312,8 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
 
         List<String> lore = item.getItemMeta().getLore();
 
-        if (lore == null) return enchantsToLevels;
+        if (lore == null)
+            return enchantsToLevels;
 
         for (CustomEnchant enchant : enchants) {
             if (customEnchantUtils.itemHasEnchant(enchant, item)) {

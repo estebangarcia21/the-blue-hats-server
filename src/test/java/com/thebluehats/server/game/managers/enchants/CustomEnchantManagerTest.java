@@ -98,7 +98,6 @@ public class CustomEnchantManagerTest {
         expectedLore.add(ChatColor.LIGHT_PURPLE + "RARE! " + ChatColor.BLUE + "Image");
         expectedLore.add(ChatColor.GRAY + "A cool double");
         expectedLore.add(ChatColor.GRAY + "line enchant!");
-        expectedLore.add("");
 
         verify(itemMeta).setDisplayName(ChatColor.GREEN + "Tier I Bow");
         verify(itemMeta).setLore(expectedLore);
@@ -228,7 +227,6 @@ public class CustomEnchantManagerTest {
         itemLore.add(ChatColor.LIGHT_PURPLE + "RARE! " + ChatColor.BLUE + "Image");
         itemLore.add(ChatColor.GRAY + "A cool double");
         itemLore.add(ChatColor.GRAY + "line enchant!");
-        itemLore.add("");
 
         ArrayList<String> customEnchantDescription = new ArrayList<>();
         customEnchantDescription.add(ChatColor.GRAY + "A cool double");
@@ -244,7 +242,6 @@ public class CustomEnchantManagerTest {
         expectedLore.add(ChatColor.LIGHT_PURPLE + "RARE! " + ChatColor.BLUE + "Image II");
         expectedLore.add(ChatColor.GRAY + "A cool double");
         expectedLore.add(ChatColor.GRAY + "line enchant!");
-        expectedLore.add("");
 
         when(customEnchant.getName()).thenReturn("Image");
         when(customEnchant.isRareEnchant()).thenReturn(true);
