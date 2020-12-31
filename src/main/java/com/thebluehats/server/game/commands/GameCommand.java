@@ -19,8 +19,10 @@ public abstract class GameCommand implements CommandExecutor {
                 if (label.equalsIgnoreCase(commandName)) {
                     String usageMessage = getUsageMessage(commandName);
 
-                    if (args.length == 0 && usageMessage.contains("<") && usageMessage.contains(">")) {
-                        player.sendMessage(usageMessage);
+                    if (usageMessage != null) {
+                        if (args.length == 0 && usageMessage.contains("<") && usageMessage.contains(">")) {
+                            player.sendMessage(usageMessage);
+                        }
                     } else {
                         runCommand(player, commandName, args);
                     }

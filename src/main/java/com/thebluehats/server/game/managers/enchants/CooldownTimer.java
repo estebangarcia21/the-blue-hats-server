@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CooldownTimer {
-    private HashMap<UUID, CooldownTimerData> timerData = new HashMap<>();
+    private final HashMap<UUID, CooldownTimerData> timerData = new HashMap<>();
 
     private final JavaPlugin plugin;
 
@@ -22,27 +22,13 @@ public class CooldownTimer {
     public void startCooldown(Player player, long ticks) {
         CooldownTimerData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new CooldownTimerData());
 
-        data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-            data.setCooldownTime(data.getCooldownTime() - 1);
-
-            if (data.getCooldownTime() <= 0) {
-                data.setCooldownTime(0);
-
-                Bukkit.getServer().getScheduler().cancelTask(data.getCooldownTaskId());
-            }
-        }, 0L, 1L));
-    }
-
-    public void startCooldown(Player player, long ticks, Runnable post) {
-        CooldownTimerData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new CooldownTimerData());
+        data.setCooldownTime(ticks);
 
         data.setCooldownTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             data.setCooldownTime(data.getCooldownTime() - 1);
 
             if (data.getCooldownTime() <= 0) {
                 data.setCooldownTime(0);
-
-                post.run();
 
                 Bukkit.getServer().getScheduler().cancelTask(data.getCooldownTaskId());
             }
@@ -50,10 +36,10 @@ public class CooldownTimer {
     }
 
     public boolean isOnCooldown(Player player) {
-        return timerData.get(player.getUniqueId()).isOnCooldown();
+        return timerData.computeIfAbsent(player.getUniqueId(), k -> new CooldownTimerData()).isOnCooldown();
     }
 
-    private class CooldownTimerData {
+    private static class CooldownTimerData {
         private long cooldownTime;
         private int cooldownTaskId;
 

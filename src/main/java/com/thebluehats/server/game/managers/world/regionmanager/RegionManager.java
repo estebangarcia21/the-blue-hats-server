@@ -24,7 +24,7 @@ import org.bukkit.util.Vector;
 public class RegionManager implements EntityValidator {
     private final ArrayList<Map> maps = new ArrayList<>();
 
-    private final String ACTIVE_MAP_NAME = "Seasons";
+    private final String ACTIVE_MAP_NAME = "Genesis";
     private final Map activeMap;
 
     public RegionManager() {
