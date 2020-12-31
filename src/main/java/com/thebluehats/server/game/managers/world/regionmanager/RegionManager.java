@@ -80,8 +80,10 @@ public class RegionManager implements EntityValidator {
     }
 
     public boolean entityIsInSpawn(Entity entity) {
-        Location location = entity.getLocation();
+         return locationisInSpawn(entity.getLocation());
+    }
 
+    public boolean locationisInSpawn(Location location) {
         Bounds spawnBounds = activeMap.getSpawn().getBounds();
 
         Vector lowerBound = vectorFromBound(spawnBounds.getMinBound());

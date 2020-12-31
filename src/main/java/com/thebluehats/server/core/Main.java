@@ -16,10 +16,7 @@ import com.thebluehats.server.game.perks.Perk;
 import com.thebluehats.server.game.perks.Vampire;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
 import com.thebluehats.server.game.utils.Registerer;
-import com.thebluehats.server.game.world.AutoRespawn;
-import com.thebluehats.server.game.world.ClearArrows;
-import com.thebluehats.server.game.world.NoFallDamage;
-import com.thebluehats.server.game.world.PlayerJoinLeaveMessages;
+import com.thebluehats.server.game.world.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -76,6 +73,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(injector.getInstance(AutoRespawn.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(ClearArrows.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(PlayerJoinLeaveMessages.class), this);
+        getServer().getPluginManager().registerEvents(injector.getInstance(WorldProtection.class), this);
     }
 
     private void registerEnchants() {
