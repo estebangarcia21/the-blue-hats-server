@@ -22,6 +22,8 @@ public abstract class GameCommand implements CommandExecutor {
                     if (usageMessage != null) {
                         if (args.length == 0 && usageMessage.contains("<") && usageMessage.contains(">")) {
                             player.sendMessage(usageMessage);
+                        } else {
+                            runCommand(player, commandName, args);
                         }
                     } else {
                         runCommand(player, commandName, args);
