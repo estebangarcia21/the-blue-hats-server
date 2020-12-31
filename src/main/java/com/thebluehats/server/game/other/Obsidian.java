@@ -2,16 +2,18 @@ package com.thebluehats.server.game.other;
 
 import com.thebluehats.server.game.managers.enchants.Timer;
 import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
+import com.thebluehats.server.game.utils.PluginLifecycleListener;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import javax.inject.Inject;
 
-public class Obsidian {
+public class Obsidian implements Listener, PluginLifecycleListener {
     private final RegionManager regionManager;
     private final Timer<Block> timer;
 
@@ -27,8 +29,10 @@ public class Obsidian {
             return;
         }
 
-        if (event.getBlockPlaced().getType() == Material.OBSIDIAN) {
-            timer.start(null, 120 * 20, () -> event.getBlockPlaced().setType(Material.AIR));
+        Block block = event.getBlockPlaced();
+
+        if (block.getType() == Material.OBSIDIAN) {
+            timer.start(block, 120 * 20, () -> event.getBlockPlaced().setType(Material.AIR));
         }
     }
 
@@ -45,7 +49,11 @@ public class Obsidian {
         }
     }
 
-    public void removeObsidian() {
+    @Override
+    public void onPluginStart() { }
+
+    @Override
+    public void onPluginEnd() {
         for (Block block : timer.getKeys()) {
             block.setType(Material.AIR);
         }

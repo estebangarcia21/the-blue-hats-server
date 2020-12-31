@@ -13,6 +13,7 @@ import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.world.PerkManager;
 import com.thebluehats.server.game.managers.world.WorldSelectionManager;
 import com.thebluehats.server.game.other.Bread;
+import com.thebluehats.server.game.other.Obsidian;
 import com.thebluehats.server.game.perks.Perk;
 import com.thebluehats.server.game.perks.Vampire;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
@@ -72,11 +73,16 @@ public class Main extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(injector.getInstance(Bread.class), this);
 
+        Obsidian obsidian = injector.getInstance(Obsidian.class);
+        getServer().getPluginManager().registerEvents(obsidian, this);
+        lifecycleListeners.add(obsidian);
+
         getServer().getPluginManager().registerEvents(injector.getInstance(NoFallDamage.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(AutoRespawn.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(ClearArrows.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(PlayerJoinLeaveMessages.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldProtection.class), this);
+
     }
 
     private void registerEnchants() {
