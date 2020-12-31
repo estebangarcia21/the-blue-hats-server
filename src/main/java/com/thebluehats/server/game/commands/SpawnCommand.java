@@ -2,7 +2,7 @@ package com.thebluehats.server.game.commands;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CombatManager;
-import com.thebluehats.server.game.managers.enchants.CooldownTimer;
+import com.thebluehats.server.game.managers.enchants.Timer;
 import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
 
 import org.bukkit.ChatColor;
@@ -10,13 +10,13 @@ import org.bukkit.entity.Player;
 
 public class SpawnCommand extends GameCommand {
     private final CombatManager combatManager;
-    private final CooldownTimer cooldownTimer;
+    private final Timer<Player> timer;
     private final RegionManager regionManager;
 
     @Inject
-    public SpawnCommand(CombatManager combatManager, CooldownTimer cooldownTimer, RegionManager regionManager) {
+    public SpawnCommand(CombatManager combatManager, Timer<Player> timer, RegionManager regionManager) {
         this.combatManager = combatManager;
-        this.cooldownTimer = cooldownTimer;
+        this.timer = timer;
         this.regionManager = regionManager;
     }
 
@@ -39,11 +39,11 @@ public class SpawnCommand extends GameCommand {
         }
 
         if (!combatManager.playerIsInCombat(player)) {
-            if (!cooldownTimer.isOnCooldown(player)) {
+            if (!timer.isRunning(player)) {
                 player.setHealth(player.getMaxHealth());
                 player.teleport(regionManager.getSpawnLocation(player));
 
-                cooldownTimer.startCooldown(player, 200);
+                timer.start(player, 200);
             } else {
                 player.sendMessage(ChatColor.RED + "You may only /respawn every 10 seconds");
             }

@@ -46,7 +46,7 @@ public class Main extends JavaPlugin {
 
         injector = Guice.createInjector(new PluginModule(this), new RegionManagerModule(),
                 new CustomEnchantManagerModule(), new CombatManagerModule(), new EventTemplatesModule(),
-                new DamageManagerModule(), new BowManagerModule(), new CooldownTimerModule(), new HitCounterModule(),
+                new DamageManagerModule(), new BowManagerModule(), new TimerModule(), new HitCounterModule(),
                 new MirrorModule(), new CustomEnchantUtilsModule(), new ServerApiModule(),
                 new PitDataRepositoryModule(), new RomanNumeralConverterModule(), new PantsDataContainerModule(),
                 new PitDataDaoModule());

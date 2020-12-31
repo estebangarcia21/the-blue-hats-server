@@ -8,10 +8,10 @@ import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTempl
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
 import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
-import com.thebluehats.server.game.managers.enchants.CooldownTimer;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.enchants.Timer;
 import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
@@ -23,14 +23,14 @@ import org.bukkit.entity.Player;
 public class Assassin extends OnDamageEnchant {
     private final EnchantProperty<Integer> cooldownTime = new EnchantProperty<>(5, 4, 3);
 
-    private final CooldownTimer cooldownTimer;
+    private final Timer<Player> timer;
 
     @Inject
-    public Assassin(CooldownTimer cooldownTimer, PlayerHitPlayerTemplate playerHitPlayerTemplate,
+    public Assassin(Timer<Player> timer, PlayerHitPlayerTemplate playerHitPlayerTemplate,
             ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
         super(new PostDamageEventTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate });
 
-        this.cooldownTimer = cooldownTimer;
+        this.timer = timer;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Assassin extends OnDamageEnchant {
         Player damager = data.getDamager();
         Player damagee = data.getDamagee();
 
-        if (!cooldownTimer.isOnCooldown(damagee)) {
+        if (!timer.isRunning(damagee)) {
             Location tpLoc = damager.getLocation().subtract(damager.getEyeLocation().getDirection().normalize());
             tpLoc.setY(damager.getLocation().getY());
 
@@ -51,7 +51,7 @@ public class Assassin extends OnDamageEnchant {
             damagee.getWorld().playSound(damagee.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 2);
         }
 
-        cooldownTimer.startCooldown(damagee, cooldownTime.getValueAtLevel(data.getLevel()));
+        timer.start(damagee, cooldownTime.getValueAtLevel(data.getLevel()) * 20);
     }
 
     @Override

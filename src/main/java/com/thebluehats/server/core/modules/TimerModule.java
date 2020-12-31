@@ -2,14 +2,15 @@ package com.thebluehats.server.core.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.thebluehats.server.game.managers.enchants.CooldownTimer;
 
+import com.google.inject.TypeLiteral;
+import com.thebluehats.server.game.managers.enchants.Timer;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CooldownTimerModule extends AbstractModule {
+public class TimerModule extends AbstractModule {
     @Provides
-    static CooldownTimer provideCooldownTimer(JavaPlugin plugin) {
-        return new CooldownTimer(plugin);
+    static Timer<?> provideTimer(JavaPlugin plugin) {
+        return new Timer<>(plugin);
     }
 
     @Override
