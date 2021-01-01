@@ -3,14 +3,14 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
@@ -18,16 +18,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class LastStand extends OnDamageEnchant {
+public class LastStand extends DamageTriggeredEnchant {
     private final EnchantProperty<Integer> resistanceAmplifier = new EnchantProperty<>(0, 1, 2);
 
     @Inject
-    public LastStand(PlayerHitPlayerTemplate playerHitPlayerTemplate, ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate });
+    public LastStand(PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate, ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
+        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate });
     }
 
     @Override
-    public void execute(PostDamageEventResult data) {
+    public void execute(CastedEntityDamageByEntityEvent data) {
         Player damagee = data.getDamagee();
 
         if (damagee.getHealth() < 10)

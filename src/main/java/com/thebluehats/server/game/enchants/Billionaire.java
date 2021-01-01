@@ -4,13 +4,13 @@ import com.google.inject.Inject;
 import com.thebluehats.server.api.daos.PitDataDao;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class Billionaire extends OnDamageEnchant {
+public class Billionaire extends DamageTriggeredEnchant {
     private final EnchantProperty<Double> damageIncrease = new EnchantProperty<>(1.33D, 1.67D, 2D);
     private final EnchantProperty<Integer> goldNeeded = new EnchantProperty<>(100, 200, 350);
 
@@ -27,15 +27,15 @@ public class Billionaire extends OnDamageEnchant {
 
     @Inject
     public Billionaire(PitDataDao pitData, DamageManager damageManager,
-            PlayerHitPlayerTemplate playerHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate });
+            PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate) {
+        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate });
 
         this.pitData = pitData;
         this.damageManager = damageManager;
     }
 
     @Override
-    public void execute(PostDamageEventResult data) {
+    public void execute(CastedEntityDamageByEntityEvent data) {
         Player damager = data.getDamager();
         int level = data.getLevel();
 

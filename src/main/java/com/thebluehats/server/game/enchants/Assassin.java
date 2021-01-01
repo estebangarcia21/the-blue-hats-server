@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
 import com.thebluehats.server.game.managers.enchants.Timer;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Location;
@@ -20,21 +20,21 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-public class Assassin extends OnDamageEnchant {
+public class Assassin extends DamageTriggeredEnchant {
     private final EnchantProperty<Integer> cooldownTime = new EnchantProperty<>(5, 4, 3);
 
     private final Timer<Player> timer;
 
     @Inject
-    public Assassin(Timer<Player> timer, PlayerHitPlayerTemplate playerHitPlayerTemplate,
-            ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate });
+    public Assassin(Timer<Player> timer, PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate,
+            ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
+        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate });
 
         this.timer = timer;
     }
 
     @Override
-    public void execute(PostDamageEventResult data) {
+    public void execute(DamageEventEnchantData data) {
         Player damager = data.getDamager();
         Player damagee = data.getDamagee();
 

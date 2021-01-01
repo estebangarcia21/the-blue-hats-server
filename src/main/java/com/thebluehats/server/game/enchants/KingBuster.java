@@ -6,12 +6,12 @@ import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import com.thebluehats.server.game.utils.EntityValidator;
 
@@ -19,20 +19,20 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class KingBuster extends OnDamageEnchant {
+public class KingBuster extends DamageTriggeredEnchant {
     private final EnchantProperty<Float> percentDamageIncrease = new EnchantProperty<>(.07f, 0.13f, 0.20f);
 
     private final DamageManager damageManager;
 
     @Inject
-    protected KingBuster(DamageManager damageManager, PlayerHitPlayerTemplate playerHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate }, new EntityValidator[] { damageManager });
+    protected KingBuster(DamageManager damageManager, PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate) {
+        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
     }
 
     @Override
-    public void execute(PostDamageEventResult data) {
+    public void execute(CastedEntityDamageByEntityEvent data) {
         EntityDamageByEntityEvent event = data.getEvent();
         Player damagee = data.getDamagee();
         int level = data.getLevel();

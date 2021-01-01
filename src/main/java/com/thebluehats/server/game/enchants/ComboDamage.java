@@ -6,13 +6,13 @@ import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import com.thebluehats.server.game.utils.EntityValidator;
 
@@ -20,7 +20,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-public class ComboDamage extends OnDamageEnchant {
+public class ComboDamage extends DamageTriggeredEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.2f, .3f, .45f);
     private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);
 
@@ -29,15 +29,15 @@ public class ComboDamage extends OnDamageEnchant {
 
     @Inject
     public ComboDamage(DamageManager damageManager, HitCounter hitCounter,
-            PlayerHitPlayerTemplate playerHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate }, new EntityValidator[] { damageManager });
+            PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate) {
+        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
         this.hitCounter = hitCounter;
     }
 
     @Override
-    public void execute(PostDamageEventResult data) {
+    public void execute(CastedEntityDamageByEntityEvent data) {
         Player damager = data.getDamager();
 
         hitCounter.addOne(damager);

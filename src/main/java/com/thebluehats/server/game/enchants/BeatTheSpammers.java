@@ -6,30 +6,30 @@ import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
 
-public class BeatTheSpammers extends OnDamageEnchant {
+public class BeatTheSpammers extends DamageTriggeredEnchant {
     private final EnchantProperty<Float> damageAmount = new EnchantProperty<>(.10f, .25f, .40f);
 
     private final DamageManager damageManager;
 
     @Inject
-    public BeatTheSpammers(DamageManager damageManager, PlayerHitPlayerTemplate playerHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate });
+    public BeatTheSpammers(DamageManager damageManager, PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate) {
+        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate });
 
         this.damageManager = damageManager;
     }
 
     @Override
-    public void execute(PostDamageEventResult data) {
+    public void execute(CastedEntityDamageByEntityEvent data) {
         if (data.getDamagee().getInventory().getItemInHand().getType() == Material.BOW) {
             damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(data.getLevel()),
                     CalculationMode.ADDITIVE);

@@ -2,13 +2,13 @@ package com.thebluehats.server.game.enchants;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 
-public class ComboSwift extends OnDamageEnchant {
+public class ComboSwift extends DamageTriggeredEnchant {
     private final EnchantProperty<Integer> speedTime = new EnchantProperty<>(3, 4, 5);
     private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 1, 1);
     private final EnchantProperty<Integer> hitsNeeded = new EnchantProperty<>(4, 3, 3);
@@ -25,14 +25,14 @@ public class ComboSwift extends OnDamageEnchant {
     private final HitCounter hitCounter;
 
     @Inject
-    public ComboSwift(HitCounter hitCounter, PlayerHitPlayerTemplate playerHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate });
+    public ComboSwift(HitCounter hitCounter, PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate) {
+        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate });
 
         this.hitCounter = hitCounter;
     }
 
     @Override
-    public void execute(PostDamageEventResult data) {
+    public void execute(CastedEntityDamageByEntityEvent data) {
         Player damager = data.getDamager();
         int level = data.getLevel();
 

@@ -3,14 +3,14 @@ package com.thebluehats.server.game.enchants;
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
+import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
+import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import com.thebluehats.server.game.utils.EntityValidator;
 import org.bukkit.Material;
@@ -20,7 +20,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class CriticallyFunky extends OnDamageEnchant {
+public class CriticallyFunky extends DamageTriggeredEnchant {
     private final EnchantProperty<Float> damageReduction = new EnchantProperty<>(0.35f, 0.35f, 0.6f);
     private final EnchantProperty<Float> damageIncrease = new EnchantProperty<>(0f, .14f, .3f);
     private final ArrayList<UUID> extraDamageQueue = new ArrayList<>();
@@ -28,15 +28,15 @@ public class CriticallyFunky extends OnDamageEnchant {
     private final DamageManager damageManager;
 
     @Inject
-    public CriticallyFunky(DamageManager damageManager, PlayerHitPlayerTemplate playerHitPlayerTemplate,
-            ArrowHitPlayerTemplate arrowHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate }, new EntityValidator[] { damageManager });
+    public CriticallyFunky(DamageManager damageManager, PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate,
+            ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
+        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
     }
 
     @Override
-    public void execute(PostDamageEventResult data) {
+    public void execute(CastedEntityDamageByEntityEvent data) {
         EntityDamageByEntityEvent event = data.getEvent();
         Player damager = data.getDamager();
         int level = data.getLevel();
