@@ -1,7 +1,6 @@
 package com.thebluehats.server.game.managers.enchants;
 
 import com.thebluehats.server.game.managers.enchants.processedevents.CastedEvent;
-import com.thebluehats.server.game.managers.enchants.processedevents.TemplateResult;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;

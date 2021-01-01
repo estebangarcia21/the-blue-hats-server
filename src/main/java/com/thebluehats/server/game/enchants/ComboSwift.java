@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerifier;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
