@@ -26,7 +26,7 @@ public class GiveBreadCommand extends GameCommand {
         ItemStack bread = new ItemStack(Material.BREAD, 64);
         ItemMeta meta = bread.getItemMeta();
 
-        ArrayList<String> breadLore = new LoreParser("Heals <red>4❤</red><br/>Grants 1❤").parse();
+        ArrayList<String> breadLore = new LoreParser("Heals <red>4❤</red><br/>Grants <gold>1❤</gold>").parse();
 
         meta.setDisplayName(ChatColor.GOLD + "Yummy Bread");
         meta.setLore(breadLore);
