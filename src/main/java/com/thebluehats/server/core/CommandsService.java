@@ -14,7 +14,7 @@ public class CommandsService implements Service {
     }
 
     @Override
-    public void run(Injector injector) {
+    public void provision(Injector injector) {
         injector.getInstance(SpawnCommand.class).registerCommand(plugin);
         injector.getInstance(EnchantCommand.class).registerCommand(plugin);
         injector.getInstance(MysticEnchantsCommand.class).registerCommand(plugin);

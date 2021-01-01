@@ -29,7 +29,7 @@ public class SpigotApplication {
         injector = provisionInjector();
 
         for (Class<? extends Service> service : services) {
-            injector.getInstance(service).run(injector);
+            injector.getInstance(service).provision(injector);
         }
 
         injector.getInstance(PluginLifecycleListenerRegisterer.class).getListeners().forEach(PluginLifecycleListener::onPluginStart);
