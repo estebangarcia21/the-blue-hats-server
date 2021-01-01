@@ -52,7 +52,8 @@ public class FractionalReserve extends OnDamageEnchant {
                 "Recieve <blue>-1% damage</blue> per<br/><gold>10,000g</gold> you have (<blue>-{0}</blue><br/>max");
 
         enchantLoreParser.setSingleVariable("15%", "21%", "30%");
-        return null;
+        
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override
