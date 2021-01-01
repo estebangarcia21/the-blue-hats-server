@@ -1,23 +1,23 @@
 package com.thebluehats.server.game.managers.enchants;
 
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
 
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EntityValidator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public abstract class OnDamageEnchant implements CustomEnchant, PostEventExecutor<EntityDamageByEntityEvent, PostDamageEventResult> {
-    private final PostDamageEventTemplate[] templates;
+public abstract class DamageTriggeredEnchant implements CustomEnchant, PostEventExecutor<EntityDamageByEntityEvent, DamageEventEnchantData> {
+    private final DamageEventVerificationTemplate[] templates;
     private final EntityValidator[] validators;
 
-    protected OnDamageEnchant(PostDamageEventTemplate[] templates) {
+    protected DamageTriggeredEnchant(DamageEventVerificationTemplate[] templates) {
         this.templates = templates;
         this.validators = new EntityValidator[0];
     }
 
-    protected OnDamageEnchant(PostDamageEventTemplate[] templates, EntityValidator[] validators) {
+    protected DamageTriggeredEnchant(DamageEventVerificationTemplate[] templates, EntityValidator[] validators) {
         this.templates = templates;
         this.validators = validators;
     }
@@ -25,7 +25,7 @@ public abstract class OnDamageEnchant implements CustomEnchant, PostEventExecuto
     @Override
     @EventHandler
     public void onEvent(EntityDamageByEntityEvent event) {
-        for (PostDamageEventTemplate template : templates) {
+        for (DamageEventVerificationTemplate template : templates) {
             template.run(this, event, getEnchantHolder(), validators);
         }
     }

@@ -1,18 +1,14 @@
 package com.thebluehats.server.game.managers.enchants.processedevents;
 
-import com.google.common.collect.ImmutableMap;
-
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class PostDamageEventResult extends TemplateResult<EntityDamageByEntityEvent> {
+public class CastedEntityDamageByEntityEvent extends CastedEvent<EntityDamageByEntityEvent> {
     private final Player damager;
     private final Player damagee;
 
-    public PostDamageEventResult(EntityDamageByEntityEvent event, ImmutableMap<Material, Integer> levelMap,
-            Player damager, Player damagee) {
-        super(event, levelMap);
+    public CastedEntityDamageByEntityEvent(EntityDamageByEntityEvent event, Player damager, Player damagee) {
+        super(event);
 
         this.damager = damager;
         this.damagee = damagee;

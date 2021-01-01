@@ -29,6 +29,7 @@ public class Timer<K> {
                 data.setTime(0);
 
                 Bukkit.getServer().getScheduler().cancelTask(data.getTaskId());
+                timerData.remove(key);
             }
         }, 0L, 1L));
     }
@@ -47,6 +48,7 @@ public class Timer<K> {
                 post.run();
 
                 Bukkit.getServer().getScheduler().cancelTask(data.getTaskId());
+                timerData.remove(key);
             }
         }, 0L, 1L));
     }
@@ -55,6 +57,7 @@ public class Timer<K> {
         TimerData data = timerData.computeIfAbsent(key, k -> new TimerData());
 
         Bukkit.getServer().getScheduler().cancelTask(data.getTaskId());
+        timerData.remove(key);
     }
 
     public Set<K> getKeys() {
@@ -62,17 +65,14 @@ public class Timer<K> {
     }
 
     public boolean isRunning(K key) {
-        return timerData.computeIfAbsent(key, k -> new TimerData()).isRunning();
+        TimerData data = timerData.get(key);
+
+        return data != null && data.isRunning();
     }
 
-    protected static class TimerData {
+    private static class TimerData {
         private long cooldownTime;
         private int cooldownTaskId;
-
-        public TimerData() {
-            this.cooldownTime = 0;
-            this.cooldownTaskId = 0;
-        }
 
         public boolean isRunning() {
             return getTime() != 0;
