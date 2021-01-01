@@ -36,7 +36,6 @@ update_spigot_jar () {
 
   echo "Downloading the latest Spigot $SPIGOT_VERSION jar..."
   curl --silent -L https://cdn.getbukkit.org/spigot/spigot-1.8.8-R0.1-SNAPSHOT-latest.jar --output $SPIGOT_JAR
-
 }
 
 if [[ "$1" == create ]]; then
