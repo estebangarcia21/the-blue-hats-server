@@ -38,6 +38,14 @@ public class WorldSelectionManager implements Listener {
         this.regionManager = regionManager;
     }
 
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
+        player.teleport(regionManager.getSpawnLocation(player));
+//        displaySelectionMenu(event.getPlayer());
+    }
+
     public void displaySelectionMenu(Player player) {
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             generateGui();
@@ -47,47 +55,42 @@ public class WorldSelectionManager implements Listener {
         }, 1L);
     }
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        displaySelectionMenu(event.getPlayer());
-    }
-
     // TODO World configuration
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getView().getTitle().equals(inventoryName)) {
-            if (event.getRawSlot() == 3) {
-                mayExitGuiSelection.add(event.getWhoClicked().getUniqueId());
-
-                transportToWorld(event.getWhoClicked(), "world");
-
-                event.getWhoClicked().closeInventory();
-            }
-
-            if (event.getRawSlot() == 5) {
-                mayExitGuiSelection.add(event.getWhoClicked().getUniqueId());
-
-                transportToWorld(event.getWhoClicked(), "ThePit_0");
-
-                event.getWhoClicked().closeInventory();
-            }
-
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getView().getTitle().equals(inventoryName)) {
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                if (!mayExitGuiSelection.contains(event.getPlayer().getUniqueId())) {
-                    event.getPlayer().openInventory(gui);
-                } else {
-                    mayExitGuiSelection.remove(event.getPlayer().getUniqueId());
-                }
-            }, 1L);
-        }
-    }
+//    @EventHandler
+//    public void onInventoryClick(InventoryClickEvent event) {
+//        if (event.getView().getTitle().equals(inventoryName)) {
+//            if (event.getRawSlot() == 3) {
+//                mayExitGuiSelection.add(event.getWhoClicked().getUniqueId());
+//
+//                transportToWorld(event.getWhoClicked(), "world");
+//
+//                event.getWhoClicked().closeInventory();
+//            }
+//
+//            if (event.getRawSlot() == 5) {
+//                mayExitGuiSelection.add(event.getWhoClicked().getUniqueId());
+//
+//                transportToWorld(event.getWhoClicked(), "ThePit_0");
+//
+//                event.getWhoClicked().closeInventory();
+//            }
+//
+//            event.setCancelled(true);
+//        }
+//    }
+//
+//    @EventHandler
+//    public void onInventoryClose(InventoryCloseEvent event) {
+//        if (event.getView().getTitle().equals(inventoryName)) {
+//            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+//                if (!mayExitGuiSelection.contains(event.getPlayer().getUniqueId())) {
+//                    event.getPlayer().openInventory(gui);
+//                } else {
+//                    mayExitGuiSelection.remove(event.getPlayer().getUniqueId());
+//                }
+//            }, 1L);
+//        }
+//    }
 
     private void transportToWorld(HumanEntity player, String worldName) {
         Location spawnLocation = regionManager.getSpawnLocation(((Player) player));
