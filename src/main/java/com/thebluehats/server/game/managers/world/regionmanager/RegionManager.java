@@ -79,8 +79,17 @@ public class RegionManager implements EntityValidator {
                 rotation, 0);
     }
 
+    public boolean entityIsInPlayableArea(Entity entity) {
+        Bounds mapBounds = activeMap.getBounds();
+
+        Vector lowerBound = vectorFromBound(mapBounds.getMinBound());
+        Vector higherBound = vectorFromBound(mapBounds.getMaxBound());
+
+        return isInBounds(entity.getLocation(), lowerBound, higherBound);
+    }
+
     public boolean entityIsInSpawn(Entity entity) {
-         return locationisInSpawn(entity.getLocation());
+        return locationisInSpawn(entity.getLocation());
     }
 
     public boolean locationisInSpawn(Location location) {
@@ -89,12 +98,16 @@ public class RegionManager implements EntityValidator {
         Vector lowerBound = vectorFromBound(spawnBounds.getMinBound());
         Vector higherBound = vectorFromBound(spawnBounds.getMaxBound());
 
+        return isInBounds(location, lowerBound, higherBound);
+    }
+
+    private boolean isInBounds(Location location, Vector lowerBound, Vector higherBound) {
         return location.getY() > lowerBound.getY() && location.getY() < higherBound.getY()
                 && location.getX() < lowerBound.getX() && location.getX() > higherBound.getX()
                 && location.getZ() < lowerBound.getZ() && location.getZ() > higherBound.getZ();
     }
 
-    public Vector vectorFromBound(Position bound) {
+    private Vector vectorFromBound(Position bound) {
         return new Vector(bound.getX(), bound.getY(), bound.getZ());
     }
 
