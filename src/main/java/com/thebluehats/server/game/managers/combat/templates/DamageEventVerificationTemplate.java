@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
 import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Material;
@@ -14,7 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public abstract class PostDamageEventTemplate {
+public abstract class DamageEventVerificationTemplate {
     private enum MaterialMatcher {
         LEGGINGS, SWORD, BOW
     }
@@ -27,11 +27,11 @@ public abstract class PostDamageEventTemplate {
 
     protected final CustomEnchantUtils customEnchantUtils;
 
-    protected PostDamageEventTemplate(CustomEnchantUtils customEnchantUtils) {
+    protected DamageEventVerificationTemplate(CustomEnchantUtils customEnchantUtils) {
         this.customEnchantUtils = customEnchantUtils;
     }
 
-    protected ImmutableMap<Material, Integer> getItemMap(OnDamageEnchant enchant, PlayerInventory inventory) {
+    protected ImmutableMap<Material, Integer> getItemMap(DamageTriggeredEnchant enchant, PlayerInventory inventory) {
         Builder<Material, Integer> mapBuilder = ImmutableMap.builder();
 
         for (Material material : enchant.getEnchantItemTypes()) {
@@ -71,6 +71,6 @@ public abstract class PostDamageEventTemplate {
         return null;
     }
 
-    public abstract void run(OnDamageEnchant enchant, EntityDamageByEntityEvent event, EnchantHolder targetPlayer,
-            EntityValidator... validators);
+    public abstract void run(DamageTriggeredEnchant enchant, EntityDamageByEntityEvent event, EnchantHolder targetPlayer,
+                             EntityValidator... validators);
 }
