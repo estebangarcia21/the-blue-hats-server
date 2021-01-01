@@ -1,11 +1,59 @@
 package com.thebluehats.server.core;
 
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.thebluehats.server.api.implementations.pitdata.PitDataDaoImpl;
-import com.thebluehats.server.core.modules.*;
-import com.thebluehats.server.game.commands.*;
-import com.thebluehats.server.game.enchants.*;
+import com.thebluehats.server.core.modules.BowManagerModule;
+import com.thebluehats.server.core.modules.CombatManagerModule;
+import com.thebluehats.server.core.modules.CooldownTimerModule;
+import com.thebluehats.server.core.modules.CustomEnchantManagerModule;
+import com.thebluehats.server.core.modules.CustomEnchantUtilsModule;
+import com.thebluehats.server.core.modules.DamageManagerModule;
+import com.thebluehats.server.core.modules.EventTemplatesModule;
+import com.thebluehats.server.core.modules.HitCounterModule;
+import com.thebluehats.server.core.modules.MirrorModule;
+import com.thebluehats.server.core.modules.PantsDataContainerModule;
+import com.thebluehats.server.core.modules.PitDataDaoModule;
+import com.thebluehats.server.core.modules.PitDataRepositoryModule;
+import com.thebluehats.server.core.modules.PluginModule;
+import com.thebluehats.server.core.modules.RegionManagerModule;
+import com.thebluehats.server.core.modules.RomanNumeralConverterModule;
+import com.thebluehats.server.core.modules.ServerApiModule;
+import com.thebluehats.server.game.commands.AboutCommand;
+import com.thebluehats.server.game.commands.EnchantCommand;
+import com.thebluehats.server.game.commands.GiveArrowCommand;
+import com.thebluehats.server.game.commands.GiveBreadCommand;
+import com.thebluehats.server.game.commands.GiveFreshItemCommand;
+import com.thebluehats.server.game.commands.GiveObsidianCommand;
+import com.thebluehats.server.game.commands.GiveProtCommand;
+import com.thebluehats.server.game.commands.MysticEnchantsCommand;
+import com.thebluehats.server.game.commands.SelectWorldCommand;
+import com.thebluehats.server.game.commands.SetGoldCommand;
+import com.thebluehats.server.game.commands.SpawnCommand;
+import com.thebluehats.server.game.commands.UnenchantCommand;
+import com.thebluehats.server.game.enchants.Assassin;
+import com.thebluehats.server.game.enchants.BeatTheSpammers;
+import com.thebluehats.server.game.enchants.Billionaire;
+import com.thebluehats.server.game.enchants.ComboDamage;
+import com.thebluehats.server.game.enchants.ComboSwift;
+import com.thebluehats.server.game.enchants.DiamondAllergy;
+import com.thebluehats.server.game.enchants.DiamondStomp;
+import com.thebluehats.server.game.enchants.Fletching;
+import com.thebluehats.server.game.enchants.FractionalReserve;
+import com.thebluehats.server.game.enchants.Healer;
+import com.thebluehats.server.game.enchants.KingBuster;
+import com.thebluehats.server.game.enchants.Knockback;
+import com.thebluehats.server.game.enchants.LastStand;
+import com.thebluehats.server.game.enchants.Mirror;
+import com.thebluehats.server.game.enchants.Parasite;
+import com.thebluehats.server.game.enchants.Peroxide;
+import com.thebluehats.server.game.enchants.Punisher;
+import com.thebluehats.server.game.enchants.Solitude;
+import com.thebluehats.server.game.enchants.SprintDrain;
+import com.thebluehats.server.game.enchants.Wasp;
 import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
@@ -16,11 +64,9 @@ import com.thebluehats.server.game.perks.Perk;
 import com.thebluehats.server.game.perks.Vampire;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
 import com.thebluehats.server.game.utils.Registerer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
-import java.util.function.Consumer;
 
 public class Main extends JavaPlugin {
     private final ArrayList<PluginLifecycleListener> lifecycleListeners = new ArrayList<>();
@@ -91,6 +137,7 @@ public class Main extends JavaPlugin {
         customEnchantRegisterer.register(injector.getInstance(KingBuster.class));
         customEnchantRegisterer.register(injector.getInstance(Knockback.class));
         customEnchantRegisterer.register(injector.getInstance(Parasite.class));
+        customEnchantRegisterer.register(injector.getInstance(FractionalReserve.class));
     }
 
     private void registerPerks() {
