@@ -1,17 +1,20 @@
 package com.thebluehats.server.game.world;
 
+import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerifier;
 import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerifier;
 import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
-public class SpawnProtection {
+public class SpawnProtection implements Listener {
     private final RegionManager regionManager;
     private final PlayerHitPlayerVerifier playerHitPlayerVerifier;
     private final ArrowHitPlayerVerifier arrowHitPlayerVerifier;
 
+    @Inject
     public SpawnProtection(RegionManager regionManager, PlayerHitPlayerVerifier playerHitPlayerVerifier, ArrowHitPlayerVerifier arrowHitPlayerVerifier) {
         this.regionManager = regionManager;
         this.playerHitPlayerVerifier = playerHitPlayerVerifier;

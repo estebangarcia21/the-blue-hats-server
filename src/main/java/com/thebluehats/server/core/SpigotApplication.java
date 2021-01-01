@@ -3,34 +3,42 @@ package com.thebluehats.server.core;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.thebluehats.server.core.modules.*;
+import com.thebluehats.server.game.utils.PluginLifecycleListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 
-public class SpigotApplicationBuilder {
+public class SpigotApplication {
     private final ArrayList<Class<? extends Service>> services = new ArrayList<>();
+    private Injector injector;
 
     private final JavaPlugin plugin;
 
-    public SpigotApplicationBuilder(JavaPlugin plugin) {
+    public SpigotApplication(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public SpigotApplicationBuilder addService(Class<? extends Service> clazz) {
+    public SpigotApplication addService(Class<? extends Service> clazz) {
         services.add(clazz);
 
         return this;
     }
 
     public void runApplication() {
-        Injector injector = provisionInjector();
+        injector = provisionInjector();
 
         for (Class<? extends Service> service : services) {
             injector.getInstance(service).run(injector);
         }
 
+        injector.getInstance(PluginLifecycleListenerRegisterer.class).getListeners().forEach(PluginLifecycleListener::onPluginStart);
+
         logInitializationMessage();
+    }
+
+    public void endApplication() {
+        injector.getInstance(PluginLifecycleListenerRegisterer.class).getListeners().forEach(PluginLifecycleListener::onPluginEnd);
     }
 
     private Injector provisionInjector() {
@@ -39,7 +47,8 @@ public class SpigotApplicationBuilder {
                 new DamageManagerModule(), new BowManagerModule(), new TimerModule(), new HitCounterModule(),
                 new MirrorModule(), new CustomEnchantUtilsModule(), new ServerApiModule(),
                 new PitDataRepositoryModule(), new RomanNumeralConverterModule(), new PantsDataContainerModule(),
-                new PitDataDaoModule(), new GlobalTimerModule(), new DamageEnchantTriggersModule());
+                new PitDataDaoModule(), new GlobalTimerModule(), new DamageEnchantTriggersModule(),
+                new RegistererModule());
     }
 
     private void logInitializationMessage() {
