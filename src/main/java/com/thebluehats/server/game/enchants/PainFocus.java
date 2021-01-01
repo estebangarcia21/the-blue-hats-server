@@ -56,7 +56,7 @@ public class PainFocus extends OnDamageEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Deal <red>+{0}</red> damage per <red>❤</red><br/> you're missing");
+                "Deal <red>+{0}</red> damage per <red>❤</red><br/>you're missing");
 
         enchantLoreParser.setSingleVariable("1%", "+2%", "5%");
 
