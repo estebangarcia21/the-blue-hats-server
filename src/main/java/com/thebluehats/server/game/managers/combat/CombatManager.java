@@ -89,8 +89,8 @@ public class CombatManager implements DataInitializer {
     }
 
     private int calculateCombatTime() {
-        /**
-         * In reality, bounty time should be calulated here but it will be implemented
+        /*
+         * In reality, bounty time should be calculated here but it will be implemented
          * in the future when bounties are added to the project
          */
         return 15;
@@ -106,7 +106,11 @@ public class CombatManager implements DataInitializer {
         }
     }
 
-    private class CombatTimerData {
+    public CombatStatus getStatus(Player player) {
+        return playerIsInCombat(player) ? CombatStatus.COMBAT : CombatStatus.IDLING;
+    }
+
+    private static class CombatTimerData {
         private int time;
         private int taskId;
 

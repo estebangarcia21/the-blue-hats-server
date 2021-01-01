@@ -28,13 +28,11 @@ public class CustomEnchantUtils {
     }
 
     public boolean itemHasEnchant(CustomEnchant enchant, ItemStack item) {
-        if (item == null || item.getType() == Material.AIR)
-            return false;
+        if (item == null || item.getType() == Material.AIR) return false;
 
         List<String> lore = item.getItemMeta().getLore();
 
-        if (lore == null)
-            return false;
+        if (lore == null) return false;
 
         for (String line : lore) {
             if (line.contains(enchant.getName())) {
@@ -46,13 +44,11 @@ public class CustomEnchantUtils {
     }
 
     public int getEnchantLevel(CustomEnchant enchant, ItemStack item) {
-        if (item == null || item.getType() == Material.AIR)
-            return 0;
+        if (item == null || item.getType() == Material.AIR) return 0;
 
         List<String> lore = item.getItemMeta().getLore();
 
-        if (lore == null)
-            return 0;
+        if (lore == null) return 0;
 
         for (String line : lore) {
             if (line.contains(enchant.getName())) {
