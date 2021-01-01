@@ -16,7 +16,7 @@ public class CustomEnchantService implements Service {
 
     @Override
     public void run(Injector injector) {
-        registerer.register(injector.getInstance(BeatTheSpammers.class), injector.getInstance(Wasp.class),
+        registerer.register(new CustomEnchant[] { injector.getInstance(BeatTheSpammers.class), injector.getInstance(Wasp.class),
                 injector.getInstance(Peroxide.class), injector.getInstance(SprintDrain.class),
                 injector.getInstance(ComboSwift.class), injector.getInstance(ComboDamage.class),
                 injector.getInstance(Healer.class), injector.getInstance(LastStand.class),
@@ -26,6 +26,6 @@ public class CustomEnchantService implements Service {
                 injector.getInstance(Assassin.class), injector.getInstance(Fletching.class),
                 injector.getInstance(KingBuster.class), injector.getInstance(Knockback.class),
                 injector.getInstance(Parasite.class), injector.getInstance(FractionalReserve.class),
-                injector.getInstance(PainFocus.class), injector.getInstance(CriticallyFunky.class));
+                injector.getInstance(PainFocus.class), injector.getInstance(CriticallyFunky.class) });
     }
 }

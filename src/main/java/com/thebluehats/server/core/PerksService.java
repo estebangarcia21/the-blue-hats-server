@@ -11,6 +11,6 @@ public class PerksService implements Service {
     public void run(Injector injector) {
         Registerer<Perk> registerer = injector.getInstance(PerkManager.class);
 
-        registerer.register(injector.getInstance(Vampire.class));
+        registerer.register(new Perk[] { injector.getInstance(Vampire.class) });
     }
 }
