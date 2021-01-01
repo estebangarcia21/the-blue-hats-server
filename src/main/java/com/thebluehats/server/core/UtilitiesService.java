@@ -28,7 +28,7 @@ public class UtilitiesService implements Service {
     }
 
     @Override
-    public void run(Injector injector) {
+    public void provision(Injector injector) {
         GlobalTimer globalTimer = injector.getInstance(GlobalTimer.class);
 
         getServer().getPluginManager().registerEvents(injector.getInstance(CombatManager.class), plugin);

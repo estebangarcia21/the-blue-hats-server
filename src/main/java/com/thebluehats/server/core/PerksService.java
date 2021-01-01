@@ -8,7 +8,7 @@ import com.thebluehats.server.game.utils.Registerer;
 
 public class PerksService implements Service {
     @Override
-    public void run(Injector injector) {
+    public void provision(Injector injector) {
         Registerer<Perk> registerer = injector.getInstance(PerkManager.class);
 
         registerer.register(new Perk[] { injector.getInstance(Vampire.class) });
