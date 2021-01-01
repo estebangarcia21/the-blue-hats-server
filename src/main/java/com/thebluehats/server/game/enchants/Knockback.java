@@ -3,13 +3,14 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
+import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerifier;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
@@ -20,12 +21,12 @@ public class Knockback extends DamageTriggeredEnchant {
     private final EnchantProperty<Integer> blocksAmount = new EnchantProperty<>(3, 4, 6);
 
     @Inject
-    public Knockback(PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate });
+    public Knockback(PlayerDamageTrigger playerDamageTrigger) {
+        super(new DamageEnchantTrigger[] { playerDamageTrigger });
     }
 
     @Override
-    public void execute(CastedEntityDamageByEntityEvent data) {
+    public void execute(DamageEventEnchantData data) {
         Player damagee = data.getDamagee();
         int level = data.getLevel();
 

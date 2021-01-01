@@ -3,13 +3,13 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.ArrowDamageTrigger;
+import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
@@ -19,12 +19,12 @@ public class Parasite extends DamageTriggeredEnchant {
     private final EnchantProperty<Double> healAmount = new EnchantProperty<>(0.5D, 1.0D, 2.0D);
 
     @Inject
-    public Parasite(ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { arrowHitPlayerTemplate });
+    public Parasite(ArrowDamageTrigger arrowDamageTrigger) {
+        super(new DamageEnchantTrigger[] { arrowDamageTrigger });
     }
 
     @Override
-    public void execute(CastedEntityDamageByEntityEvent data) {
+    public void execute(DamageEventEnchantData data) {
         Player damager = data.getDamager();
         int level = data.getLevel();
 

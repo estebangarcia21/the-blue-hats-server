@@ -2,13 +2,14 @@ package com.thebluehats.server.game.enchants;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.DamageManager;
+import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerifier;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import com.thebluehats.server.game.utils.EntityValidator;
 import org.bukkit.Material;
@@ -23,14 +24,14 @@ public class DiamondAllergy extends DamageTriggeredEnchant {
     private final DamageManager damageManager;
 
     @Inject
-    public DiamondAllergy(DamageManager damageManager, PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate }, new EntityValidator[] { damageManager });
+    public DiamondAllergy(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger) {
+        super(new DamageEnchantTrigger[] { playerDamageTrigger }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
     }
 
     @Override
-    public void execute(CastedEntityDamageByEntityEvent data) {
+    public void execute(DamageEventEnchantData data) {
         EntityDamageByEntityEvent event = data.getEvent();
         Player damager = data.getDamager();
         int level = data.getLevel();

@@ -3,14 +3,11 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.*;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
@@ -22,12 +19,12 @@ public class Peroxide extends DamageTriggeredEnchant {
     private final EnchantProperty<Integer> regenAmplifier = new EnchantProperty<>(0, 0, 1);
 
     @Inject
-    public Peroxide(PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate, ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate });
+    public Peroxide(PlayerDamageTrigger playerDamageTrigger, ArrowDamageTrigger arrowDamageTrigger) {
+        super(new DamageEnchantTrigger[] { playerDamageTrigger, arrowDamageTrigger });
     }
 
     @Override
-    public void execute(CastedEntityDamageByEntityEvent data) {
+    public void execute(DamageEventEnchantData data) {
         int level = data.getLevel();
 
         data.getDamagee().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,

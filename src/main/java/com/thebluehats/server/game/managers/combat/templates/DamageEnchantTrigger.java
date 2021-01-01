@@ -1,20 +1,18 @@
 package com.thebluehats.server.game.managers.combat.templates;
 
-import java.util.function.Function;
-
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
 import com.thebluehats.server.game.utils.EntityValidator;
-
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public abstract class DamageEventVerificationTemplate {
+import java.util.function.Function;
+
+public abstract class DamageEnchantTrigger {
     private enum MaterialMatcher {
         LEGGINGS, SWORD, BOW
     }
@@ -27,12 +25,12 @@ public abstract class DamageEventVerificationTemplate {
 
     protected final CustomEnchantUtils customEnchantUtils;
 
-    protected DamageEventVerificationTemplate(CustomEnchantUtils customEnchantUtils) {
+    protected DamageEnchantTrigger(CustomEnchantUtils customEnchantUtils) {
         this.customEnchantUtils = customEnchantUtils;
     }
 
     protected ImmutableMap<Material, Integer> getItemMap(DamageTriggeredEnchant enchant, PlayerInventory inventory) {
-        Builder<Material, Integer> mapBuilder = ImmutableMap.builder();
+        ImmutableMap.Builder<Material, Integer> mapBuilder = ImmutableMap.builder();
 
         for (Material material : enchant.getEnchantItemTypes()) {
             String materialName = material.toString();

@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
-import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
+import com.thebluehats.server.game.managers.combat.templates.*;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import com.thebluehats.server.game.utils.EntityValidator;
@@ -28,15 +25,15 @@ public class Solitude extends DamageTriggeredEnchant {
     private final DamageManager damageManager;
 
     @Inject
-    public Solitude(DamageManager damageManager, PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate,
-            ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate }, new EntityValidator[] { damageManager });
+    public Solitude(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger,
+            ArrowDamageTrigger arrowDamageTrigger) {
+        super(new DamageEnchantTrigger[] { playerDamageTrigger, arrowDamageTrigger }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
     }
 
     @Override
-    public void execute(CastedEntityDamageByEntityEvent data) {
+    public void execute(DamageEventEnchantData data) {
         EntityDamageByEntityEvent event = data.getEvent();
         Player damagee = data.getDamagee();
         int level = data.getLevel();

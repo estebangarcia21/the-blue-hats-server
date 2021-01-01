@@ -3,14 +3,11 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.*;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
@@ -22,12 +19,12 @@ public class LastStand extends DamageTriggeredEnchant {
     private final EnchantProperty<Integer> resistanceAmplifier = new EnchantProperty<>(0, 1, 2);
 
     @Inject
-    public LastStand(PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate, ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate });
+    public LastStand(PlayerDamageTrigger playerDamageTrigger, ArrowDamageTrigger arrowDamageTrigger) {
+        super(new DamageEnchantTrigger[] { playerDamageTrigger, arrowDamageTrigger });
     }
 
     @Override
-    public void execute(CastedEntityDamageByEntityEvent data) {
+    public void execute(DamageEventEnchantData data) {
         Player damagee = data.getDamagee();
 
         if (damagee.getHealth() < 10)

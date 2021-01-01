@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.ArrowDamageTrigger;
+import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import com.thebluehats.server.game.utils.EntityValidator;
 
@@ -24,14 +24,14 @@ public class Fletching extends DamageTriggeredEnchant {
     private final DamageManager damageManager;
 
     @Inject
-    public Fletching(DamageManager damageManager, ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { arrowHitPlayerTemplate }, new EntityValidator[] { damageManager });
+    public Fletching(DamageManager damageManager, ArrowDamageTrigger arrowDamageTrigger) {
+        super(new DamageEnchantTrigger[] { arrowDamageTrigger }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
     }
 
     @Override
-    public void execute(CastedEntityDamageByEntityEvent data) {
+    public void execute(DamageEventEnchantData data) {
         EntityDamageByEntityEvent event = data.getEvent();
         int level = data.getLevel();
 

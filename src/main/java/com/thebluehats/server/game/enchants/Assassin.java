@@ -4,10 +4,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.*;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
@@ -26,9 +23,8 @@ public class Assassin extends DamageTriggeredEnchant {
     private final Timer<Player> timer;
 
     @Inject
-    public Assassin(Timer<Player> timer, PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate,
-            ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate });
+    public Assassin(Timer<Player> timer, PlayerDamageTrigger playerDamageTrigger, ArrowDamageTrigger arrowDamageTrigger) {
+        super(new DamageEnchantTrigger[] { playerDamageTrigger, arrowDamageTrigger });
 
         this.timer = timer;
     }

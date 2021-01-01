@@ -1,13 +1,13 @@
 package com.thebluehats.server.game.enchants;
 
 import com.thebluehats.server.game.managers.combat.BowManager;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.ArrowDamageTrigger;
+import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -25,17 +25,17 @@ public class Wasp extends DamageTriggeredEnchant {
     private final BowManager bowManager;
 
     @Inject
-    public Wasp(BowManager bowManager, ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { arrowHitPlayerTemplate });
+    public Wasp(BowManager bowManager, ArrowDamageTrigger arrowDamageTrigger) {
+        super(new DamageEnchantTrigger[] { arrowDamageTrigger });
 
         this.bowManager = bowManager;
     }
 
     @Override
-    public void execute(CastedEntityDamageByEntityEvent data) {
+    public void execute(DamageEventEnchantData data) {
         int level = data.getLevel();
 
-        data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
+        data.getDamagee().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
                 weaknessDuration.getValueAtLevel(level) * 20, weaknessAmplifier.getValueAtLevel(level)), true);
     }
 

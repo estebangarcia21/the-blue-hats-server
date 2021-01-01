@@ -3,13 +3,13 @@ package com.thebluehats.server.game.enchants;
 import java.util.ArrayList;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.ArrowDamageTrigger;
+import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 
 import org.bukkit.Material;
@@ -21,12 +21,12 @@ public class SprintDrain extends DamageTriggeredEnchant {
     private final EnchantProperty<Integer> speedAmplifier = new EnchantProperty<>(0, 0, 1);
 
     @Inject
-    public SprintDrain(ArrowHitPlayerVerificationTemplate arrowHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { arrowHitPlayerTemplate });
+    public SprintDrain(ArrowDamageTrigger arrowDamageTrigger) {
+        super(new DamageEnchantTrigger[] { arrowDamageTrigger });
     }
 
     @Override
-    public void execute(CastedEntityDamageByEntityEvent data) {
+    public void execute(DamageEventEnchantData data) {
         int level = data.getLevel();
 
         data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,

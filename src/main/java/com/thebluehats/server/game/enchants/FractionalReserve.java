@@ -1,35 +1,31 @@
 package com.thebluehats.server.game.enchants;
 
-import java.util.ArrayList;
-
 import com.google.inject.Inject;
 import com.thebluehats.server.api.daos.PitDataDao;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.ArrowHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.*;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import com.thebluehats.server.game.utils.EntityValidator;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class FractionalReserve extends OnDamageEnchant {
+import java.util.ArrayList;
+
+public class FractionalReserve extends DamageTriggeredEnchant {
     private final EnchantProperty<Double> maximumDamageReduction = new EnchantProperty<>(.15D, .21D, .30D);
 
     private final PitDataDao pitData;
     private final DamageManager damageManager;
 
     @Inject
-    public FractionalReserve(DamageManager damageManager, PlayerHitPlayerTemplate playerHitPlayerTemplate,
-            ArrowHitPlayerTemplate arrowHitPlayerTemplate, PitDataDao pitData) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate, arrowHitPlayerTemplate },
+    public FractionalReserve(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger,
+                             ArrowDamageTrigger arrowDamageTrigger, PitDataDao pitData) {
+        super(new DamageEnchantTrigger[] { playerDamageTrigger, arrowDamageTrigger },
                 new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
@@ -78,7 +74,7 @@ public class FractionalReserve extends OnDamageEnchant {
     }
 
     @Override
-    public void execute(PostDamageEventResult data) {
+    public void execute(DamageEventEnchantData data) {
         EntityDamageByEntityEvent event = data.getEvent();
         Player damagee = data.getDamagee();
         int level = data.getLevel();

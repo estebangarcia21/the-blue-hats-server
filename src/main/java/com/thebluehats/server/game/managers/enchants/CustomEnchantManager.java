@@ -51,13 +51,16 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
     }
 
     @Override
-    public void register(CustomEnchant enchant) {
-        if (enchant instanceof Listener) {
-            plugin.getServer().getPluginManager().registerEvents((Listener) enchant, plugin);
+    public void register(CustomEnchant... enchants) {
+        for (CustomEnchant enchant : enchants) {
+            if (enchant instanceof Listener) {
+                plugin.getServer().getPluginManager().registerEvents((Listener) enchant, plugin);
+            }
+
+            this.enchants.add(enchant);
         }
 
-        enchants.add(enchant);
-        enchants.sort(sortCustomEnchantByName);
+        this.enchants.sort(sortCustomEnchantByName);
     }
 
     public void addEnchant(ItemStack item, int level, boolean tierUp, CustomEnchant enchant) {

@@ -4,13 +4,14 @@ import com.google.inject.Inject;
 import com.thebluehats.server.api.daos.PitDataDao;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerificationTemplate;
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
+import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger;
+import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerVerifier;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.CastedEntityDamageByEntityEvent;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -27,15 +28,15 @@ public class Billionaire extends DamageTriggeredEnchant {
 
     @Inject
     public Billionaire(PitDataDao pitData, DamageManager damageManager,
-            PlayerHitPlayerVerificationTemplate playerHitPlayerTemplate) {
-        super(new DamageEventVerificationTemplate[] { playerHitPlayerTemplate });
+            PlayerDamageTrigger playerDamageTrigger) {
+        super(new DamageEnchantTrigger[] { playerDamageTrigger });
 
         this.pitData = pitData;
         this.damageManager = damageManager;
     }
 
     @Override
-    public void execute(CastedEntityDamageByEntityEvent data) {
+    public void execute(DamageEventEnchantData data) {
         Player damager = data.getDamager();
         int level = data.getLevel();
 

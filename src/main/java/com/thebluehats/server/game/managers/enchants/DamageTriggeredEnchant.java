@@ -1,6 +1,6 @@
 package com.thebluehats.server.game.managers.enchants;
 
-import com.thebluehats.server.game.managers.combat.templates.DamageEventVerificationTemplate;
+import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
@@ -9,24 +9,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public abstract class DamageTriggeredEnchant implements CustomEnchant, PostEventExecutor<EntityDamageByEntityEvent, DamageEventEnchantData> {
-    private final DamageEventVerificationTemplate[] templates;
+    private final DamageEnchantTrigger[] triggers;
     private final EntityValidator[] validators;
 
-    protected DamageTriggeredEnchant(DamageEventVerificationTemplate[] templates) {
-        this.templates = templates;
+    protected DamageTriggeredEnchant(DamageEnchantTrigger[] triggers) {
+        this.triggers = triggers;
         this.validators = new EntityValidator[0];
     }
 
-    protected DamageTriggeredEnchant(DamageEventVerificationTemplate[] templates, EntityValidator[] validators) {
-        this.templates = templates;
+    protected DamageTriggeredEnchant(DamageEnchantTrigger[] triggers, EntityValidator[] validators) {
+        this.triggers = triggers;
         this.validators = validators;
     }
 
     @Override
     @EventHandler
     public void onEvent(EntityDamageByEntityEvent event) {
-        for (DamageEventVerificationTemplate template : templates) {
-            template.run(this, event, getEnchantHolder(), validators);
+        for (DamageEnchantTrigger trigger : triggers) {
+            trigger.run(this, event, getEnchantHolder(), validators);
         }
     }
 

@@ -1,5 +1,5 @@
 name: TheBlueHatsPit
-main: com.thebluehats.server.core.Main
+main: com.thebluehats.server.core.TheBlueHatsServerPlugin
 version: 1.0
 api-version: 1.8.8
 commands:
