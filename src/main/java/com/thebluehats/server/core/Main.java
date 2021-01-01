@@ -10,9 +10,12 @@ import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
+import com.thebluehats.server.game.managers.enchants.GlobalTimer;
 import com.thebluehats.server.game.managers.world.PerkManager;
+import com.thebluehats.server.game.managers.world.PitScoreboard;
 import com.thebluehats.server.game.managers.world.WorldSelectionManager;
 import com.thebluehats.server.game.other.Bread;
+import com.thebluehats.server.game.other.EnderChest;
 import com.thebluehats.server.game.other.Obsidian;
 import com.thebluehats.server.game.perks.Perk;
 import com.thebluehats.server.game.perks.Vampire;
@@ -50,7 +53,7 @@ public class Main extends JavaPlugin {
                 new DamageManagerModule(), new BowManagerModule(), new TimerModule(), new HitCounterModule(),
                 new MirrorModule(), new CustomEnchantUtilsModule(), new ServerApiModule(),
                 new PitDataRepositoryModule(), new RomanNumeralConverterModule(), new PantsDataContainerModule(),
-                new PitDataDaoModule());
+                new PitDataDaoModule(), new GlobalTimerModule());
 
         registerLifecycles();
         registerEvents();
@@ -67,22 +70,31 @@ public class Main extends JavaPlugin {
     }
 
     private void registerEvents() {
+        GlobalTimer globalTimer = injector.getInstance(GlobalTimer.class);
+
         getServer().getPluginManager().registerEvents(injector.getInstance(CombatManager.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(DamageManager.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldSelectionManager.class), this);
+        getServer().getPluginManager().registerEvents(injector.getInstance(PitScoreboard.class), this);
 
         getServer().getPluginManager().registerEvents(injector.getInstance(Bread.class), this);
+        getServer().getPluginManager().registerEvents(injector.getInstance(EnderChest.class), this);
+        getServer().getPluginManager().registerEvents(injector.getInstance(AntiHunger.class), this);
 
         Obsidian obsidian = injector.getInstance(Obsidian.class);
         getServer().getPluginManager().registerEvents(obsidian, this);
-        lifecycleListeners.add(obsidian);
 
         getServer().getPluginManager().registerEvents(injector.getInstance(NoFallDamage.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(AutoRespawn.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(ClearArrows.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(PlayerJoinLeaveMessages.class), this);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldProtection.class), this);
+        getServer().getPluginManager().registerEvents(injector.getInstance(StopLiquidFlow.class), this);
 
+        globalTimer.addListener(injector.getInstance(PlayableArea.class));
+
+        lifecycleListeners.add(obsidian);
+        lifecycleListeners.add(globalTimer);
     }
 
     private void registerEnchants() {
