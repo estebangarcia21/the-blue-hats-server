@@ -62,7 +62,7 @@ public class FractionalReserve extends OnDamageEnchant {
 
     @Override
     public EnchantGroup getEnchantGroup() {
-        // Group needs to be changed to AUCTION
+        // TODO Group needs to be changed to AUCTION
         return EnchantGroup.A;
     }
 
