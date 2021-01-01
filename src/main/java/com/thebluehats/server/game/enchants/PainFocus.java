@@ -1,38 +1,37 @@
 package com.thebluehats.server.game.enchants;
 
-import java.util.ArrayList;
-
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
+import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
-import com.thebluehats.server.game.managers.combat.templates.PlayerHitPlayerTemplate;
-import com.thebluehats.server.game.managers.combat.templates.PostDamageEventTemplate;
+import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger;
+import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
-import com.thebluehats.server.game.managers.enchants.OnDamageEnchant;
-import com.thebluehats.server.game.managers.enchants.processedevents.PostDamageEventResult;
+import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import com.thebluehats.server.game.utils.EntityValidator;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class PainFocus extends OnDamageEnchant {
+import java.util.ArrayList;
+
+public class PainFocus extends DamageTriggeredEnchant {
     private final EnchantProperty<Float> damageIncreasePerHeartLost = new EnchantProperty<>(0.01f, 0.02f, 0.05f);
 
     private final DamageManager damageManager;
 
     @Inject
-    public PainFocus(DamageManager damageManager, PlayerHitPlayerTemplate playerHitPlayerTemplate) {
-        super(new PostDamageEventTemplate[] { playerHitPlayerTemplate }, new EntityValidator[] { damageManager });
+    public PainFocus(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger) {
+        super(new DamageEnchantTrigger[] { playerDamageTrigger }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
     }
 
     @Override
-    public void execute(PostDamageEventResult data) {
+    public void execute(DamageEventEnchantData data) {
         EntityDamageByEntityEvent event = data.getEvent();
         Player damager = data.getDamager();
         int level = data.getLevel();
