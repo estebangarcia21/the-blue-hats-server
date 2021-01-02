@@ -2,9 +2,8 @@ package com.thebluehats.server.core.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-
-import com.google.inject.TypeLiteral;
 import com.thebluehats.server.game.managers.enchants.Timer;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TimerModule extends AbstractModule {

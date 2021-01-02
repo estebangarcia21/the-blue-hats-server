@@ -12,11 +12,11 @@ import javax.inject.Inject;
 
 import com.google.common.collect.ImmutableMap;
 import com.thebluehats.server.game.utils.PantsDataContainer;
+import com.thebluehats.server.game.utils.PantsDataContainer.FreshPantsColor;
+import com.thebluehats.server.game.utils.PantsDataContainer.PantsData;
 import com.thebluehats.server.game.utils.Registerer;
 import com.thebluehats.server.game.utils.RomanNumeralConverter;
 import com.thebluehats.server.game.utils.SortCustomEnchantByName;
-import com.thebluehats.server.game.utils.PantsDataContainer.FreshPantsColor;
-import com.thebluehats.server.game.utils.PantsDataContainer.PantsData;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -51,7 +51,7 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
     }
 
     @Override
-    public void register(CustomEnchant... enchants) {
+    public void register(CustomEnchant[] enchants) {
         for (CustomEnchant enchant : enchants) {
             if (enchant instanceof Listener) {
                 plugin.getServer().getPluginManager().registerEvents((Listener) enchant, plugin);
