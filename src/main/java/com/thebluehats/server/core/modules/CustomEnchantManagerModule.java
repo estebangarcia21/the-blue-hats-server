@@ -21,12 +21,6 @@ public class CustomEnchantManagerModule extends AbstractModule {
         return new CustomEnchantManager(plugin, romanNumeralConverter, pantsDataContainer, customEnchantUtils);
     }
 
-    @Provides
-    @Singleton
-    static Registerer<CustomEnchant> provideCustomEnchantManagerS(CustomEnchantManager customEnchantManager) {
-        return customEnchantManager;
-    }
-
     @Override
     protected void configure() {
     }
