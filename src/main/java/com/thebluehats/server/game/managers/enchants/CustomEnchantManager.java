@@ -20,6 +20,7 @@ import com.thebluehats.server.game.utils.SortCustomEnchantByName;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -152,6 +153,8 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
             lore.add("");
             lore.add(formatEnchantName(enchantName, isRareEnchant, level));
             lore.addAll(description);
+
+            itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
 
             itemMeta.setLore(lore);
 

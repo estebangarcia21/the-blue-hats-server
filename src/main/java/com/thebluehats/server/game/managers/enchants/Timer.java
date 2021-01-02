@@ -45,10 +45,10 @@ public class Timer<K> {
             if (data.getTime() <= 0) {
                 data.setTime(0);
 
-                post.run();
-
                 Bukkit.getServer().getScheduler().cancelTask(data.getTaskId());
                 timerData.remove(key);
+
+                post.run();
             }
         }, 0L, 1L));
     }
@@ -68,6 +68,12 @@ public class Timer<K> {
         TimerData data = timerData.get(key);
 
         return data != null && data.isRunning();
+    }
+
+    public long getTime(K key) {
+        TimerData data = timerData.get(key);
+
+        return data != null ? data.getTime() : 0L;
     }
 
     private static class TimerData {

@@ -2,7 +2,6 @@ package com.thebluehats.server.core;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.enchants.GlobalTimer;
 import com.thebluehats.server.game.managers.world.PitScoreboard;
@@ -32,7 +31,6 @@ public class UtilitiesService implements Service {
     public void provision(Injector injector) {
         GlobalTimer globalTimer = injector.getInstance(GlobalTimer.class);
 
-        getServer().getPluginManager().registerEvents(injector.getInstance(CombatManager.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(DamageManager.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldSelectionManager.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(PitScoreboard.class), plugin);

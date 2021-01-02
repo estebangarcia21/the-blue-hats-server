@@ -26,6 +26,8 @@ public class CustomEnchantService implements Service {
                 injector.getInstance(Assassin.class), injector.getInstance(Fletching.class),
                 injector.getInstance(KingBuster.class), injector.getInstance(Knockback.class),
                 injector.getInstance(Parasite.class), injector.getInstance(FractionalReserve.class),
-                injector.getInstance(PainFocus.class), injector.getInstance(CriticallyFunky.class) });
+                injector.getInstance(PainFocus.class), injector.getInstance(CriticallyFunky.class),
+                injector.getInstance(BooBoo.class)
+        });
     }
 }
