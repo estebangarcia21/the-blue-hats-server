@@ -30,10 +30,9 @@ public class SprintDrain extends DamageTriggeredEnchant {
         int level = data.getLevel();
 
         data.getDamager().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
-                speedDuration.getValueAtLevel(level) * 20, speedAmplifier.getValueAtLevel(level)));
+                speedDuration.getValueAtLevel(level) * 20, speedAmplifier.getValueAtLevel(level)), true);
 
-        if (level == 1)
-            return;
+        if (level == 1) return;
 
         data.getDamagee().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
     }
@@ -56,8 +55,8 @@ public class SprintDrain extends DamageTriggeredEnchant {
         enchantLoreParser.addTextIf(level != 1, " and apply <blue>Slowness I</blue><br/>(3s)");
 
         String[][] variables = new String[2][];
-        variables[0] = new String[] {};
-        variables[1] = new String[] {};
+        variables[0] = new String[] { "I", "I", "II" };
+        variables[1] = new String[] { "", "5", "7" };
 
         enchantLoreParser.setVariables(variables);
 

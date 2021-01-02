@@ -8,6 +8,7 @@ import com.thebluehats.server.game.managers.enchants.GlobalTimer;
 import com.thebluehats.server.game.managers.world.PitScoreboard;
 import com.thebluehats.server.game.managers.world.WorldSelectionManager;
 import com.thebluehats.server.game.other.Bread;
+import com.thebluehats.server.game.other.DamageIndicator;
 import com.thebluehats.server.game.other.EnderChest;
 import com.thebluehats.server.game.other.Obsidian;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
@@ -39,6 +40,7 @@ public class UtilitiesService implements Service {
         getServer().getPluginManager().registerEvents(injector.getInstance(Bread.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(EnderChest.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(AntiHunger.class), plugin);
+        getServer().getPluginManager().registerEvents(injector.getInstance(DamageIndicator.class), plugin);
 
         Obsidian obsidian = injector.getInstance(Obsidian.class);
         getServer().getPluginManager().registerEvents(obsidian, plugin);
@@ -53,7 +55,6 @@ public class UtilitiesService implements Service {
 
         globalTimer.addListener(injector.getInstance(PlayableArea.class));
 
-        // TODO
         pluginLifecycleListenerRegisterer.register(new PluginLifecycleListener[] { obsidian, globalTimer });
     }
 }

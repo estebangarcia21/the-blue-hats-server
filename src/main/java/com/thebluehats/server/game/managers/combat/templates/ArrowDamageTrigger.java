@@ -30,7 +30,7 @@ public class ArrowDamageTrigger extends DamageEnchantTrigger {
 
         if (!arrowHitPlayerVerifier.verify(event)) return;
 
-        Player playerDamager = (Player) ((Arrow) event.getEntity()).getShooter();
+        Player playerDamager = (Player) ((Arrow) damager).getShooter();
         Player playerDamagee = (Player) damagee;
 
         PlayerInventory inventory = targetPlayer == EnchantHolder.DAMAGER ? playerDamager.getInventory() : playerDamagee.getInventory();
