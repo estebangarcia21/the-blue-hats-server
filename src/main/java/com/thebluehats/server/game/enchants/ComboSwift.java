@@ -6,7 +6,10 @@ import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder;
 import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger;
+<<<<<<< HEAD
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
+=======
+>>>>>>> 8ea66009185402a921eb7bc71768f636494ed3a5
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.HitCounter;
