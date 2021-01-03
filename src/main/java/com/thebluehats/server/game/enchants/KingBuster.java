@@ -49,7 +49,7 @@ public class KingBuster extends DamageTriggeredEnchant {
 
     @Override
     public String getEnchantReferenceName() {
-        return "King buster";
+        return "Kingbuster";
     }
 
     @Override
