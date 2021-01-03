@@ -32,7 +32,7 @@ public class Obsidian implements Listener, PluginLifecycleListener {
         Block block = event.getBlockPlaced();
 
         if (block.getType() == Material.OBSIDIAN) {
-            timer.start(block, 120 * 20, () -> event.getBlockPlaced().setType(Material.AIR));
+            timer.start(block, 120 * 20, false, () -> event.getBlockPlaced().setType(Material.AIR));
         }
     }
 

@@ -47,7 +47,7 @@ public class Assassin extends DamageTriggeredEnchant {
             damagee.getWorld().playSound(damagee.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 2);
         }
 
-        timer.start(damagee, cooldownTime.getValueAtLevel(data.getLevel()) * 20);
+        timer.start(damagee, cooldownTime.getValueAtLevel(data.getLevel()) * 20, false);
     }
 
     @Override

@@ -36,7 +36,6 @@ public class ComboStun extends DamageTriggeredEnchant {
         this.hitCounter = hitCounter;
     }
 
-
     @Override
     public void execute(DamageEventEnchantData data) {
         Player damager = data.getDamager();
@@ -46,10 +45,10 @@ public class ComboStun extends DamageTriggeredEnchant {
         hitCounter.addOne(damager);
 
         if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(level))) {
-            int duration = hitsNeeded.getValueAtLevel(level);
+            int durationTime = duration.getValueAtLevel(level);
 
-            damagee.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 8), true);
-            damagee.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, duration, -8), true);
+            damagee.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, durationTime, 8), true);
+            damagee.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, durationTime, -8), true);
             damagee.getWorld().playSound(damagee.getLocation(), Sound.ANVIL_LAND, 1, 0.1f);
 
             sendPackets(damagee);

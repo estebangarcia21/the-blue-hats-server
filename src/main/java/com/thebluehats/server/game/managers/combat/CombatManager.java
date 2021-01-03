@@ -52,14 +52,11 @@ public class CombatManager {
     }
 
     public void combatTag(Player player) {
-        if (regionManager.entityIsInSpawn(player))
-            return;
+        if (regionManager.entityIsInSpawn(player))return;
 
         UUID uuid = player.getUniqueId();
 
-        if (!timer.isRunning(uuid)) {
-            timer.start(uuid, calculateCombatTime() * 20L);
-        }
+        timer.start(uuid, calculateCombatTime() * 20L, true);
     }
 
     public long getCombatTime(Player player) {

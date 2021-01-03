@@ -30,7 +30,7 @@ public class BooBoo implements CustomEnchant, GlobalTimerListener {
         if (customEnchantUtils.itemHasEnchant(this, leggings)) {
             long ticks = secondsNeeded.getValueAtLevel(customEnchantUtils.getEnchantLevel(this, leggings)) * 20;
 
-            timer.start(player.getUniqueId(), ticks, () -> execute(player));
+            timer.start(player.getUniqueId(), ticks, false, () -> execute(player));
         }
     }
 

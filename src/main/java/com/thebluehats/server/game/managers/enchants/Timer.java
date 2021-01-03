@@ -17,10 +17,14 @@ public class Timer<K> {
         this.plugin = plugin;
     }
 
-    public void start(K key, long ticks) {
+    public void start(K key, long ticks, boolean resetTime) {
         TimerData data = timerData.computeIfAbsent(key, k -> new TimerData());
 
-        if (data.isRunning()) return;
+        if (data.isRunning()) {
+            if (resetTime) data.setTime(ticks);
+
+            return;
+        }
 
         data.setTime(ticks);
 
@@ -36,10 +40,14 @@ public class Timer<K> {
         }, 0L, 1L));
     }
 
-    public void start(K key, long ticks, Runnable post) {
+    public void start(K key, long ticks, boolean resetTime, Runnable post) {
         TimerData data = timerData.computeIfAbsent(key, k -> new TimerData());
 
-        if (data.isRunning()) return;
+        if (data.isRunning()) {
+            if (resetTime) data.setTime(ticks);
+
+            return;
+        }
 
         data.setTime(ticks);
 

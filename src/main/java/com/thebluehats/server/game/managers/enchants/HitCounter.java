@@ -63,7 +63,7 @@ public class HitCounter {
         }, 0L, 20L));
     }
 
-    class HitCounterData {
+    private static class HitCounterData {
         private int hitsWithEnchant;
         private long hitResetTime;
         private int hitResetTaskId;

@@ -43,7 +43,7 @@ public class SpawnCommand extends GameCommand {
                 player.setHealth(player.getMaxHealth());
                 player.teleport(regionManager.getSpawnLocation(player));
 
-                timer.start(player, 200);
+                timer.start(player, 200, false);
             } else {
                 player.sendMessage(ChatColor.RED + "You may only /respawn every 10 seconds");
             }
