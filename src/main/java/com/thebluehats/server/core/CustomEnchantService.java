@@ -33,7 +33,7 @@ public class CustomEnchantService implements Service {
                 injector.getInstance(Parasite.class), injector.getInstance(FractionalReserve.class),
                 injector.getInstance(PainFocus.class), injector.getInstance(CriticallyFunky.class),
                 injector.getInstance(Bruiser.class), injector.getInstance(BulletTime.class), booboo,
-                injector.getInstance(ComboHeal.class)
+                injector.getInstance(ComboHeal.class), injector.getInstance(ComboStun.class)
         });
 
         globalTimer.addListener(booboo);
