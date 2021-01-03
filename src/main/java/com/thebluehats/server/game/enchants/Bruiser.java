@@ -30,7 +30,9 @@ public class Bruiser extends DamageTriggeredEnchant {
 
     @Override
     public void execute(DamageEventEnchantData data) {
-        damageManager.addHeartDamageReduction(data.getEvent(), heartsReduced.getValueAtLevel(data.getLevel()));
+        if (data.getDamagee().isBlocking()) {
+            damageManager.addHeartDamageReduction(data.getEvent(), heartsReduced.getValueAtLevel(data.getLevel()));
+        }
     }
 
     @Override
