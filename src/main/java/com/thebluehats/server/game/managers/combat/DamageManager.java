@@ -183,9 +183,6 @@ public class DamageManager implements EntityValidator, DataInitializer {
             damage *= (2D / 3D);
         }
 
-        if (damage <= 0)
-            damage = 1;
-
         if (event.getEntity() instanceof Player) {
             Player damagee = (Player) event.getEntity();
 
@@ -204,6 +201,11 @@ public class DamageManager implements EntityValidator, DataInitializer {
             }
         }
 
+        damage -= data.getHeartReductionAmount();
+
+        if (damage <= 0)
+            damage = 1;
+
         return damage;
     }
 
@@ -215,10 +217,25 @@ public class DamageManager implements EntityValidator, DataInitializer {
         }
     }
 
+    public void addHeartDamageReduction(EntityDamageByEntityEvent event, int hearts) {
+        EventData data = eventData.computeIfAbsent(event.getDamager().getUniqueId(), k -> new EventData());
+
+        data.setHeartReductionAmount(data.getHeartReductionAmount() + hearts);
+    }
+
     private final static class EventData {
         private double additiveDamage = 1;
         private double multiplicativeDamage = 1;
         private double reductionAmount = 1;
+        private int heartReductionAmount;
+
+        public int getHeartReductionAmount() {
+            return heartReductionAmount;
+        }
+
+        public void setHeartReductionAmount(int heartReductionAmount) {
+            this.heartReductionAmount = heartReductionAmount;
+        }
 
         public double getAdditiveDamage() {
             return additiveDamage;

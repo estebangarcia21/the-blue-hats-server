@@ -5,17 +5,15 @@ import com.google.inject.Injector;
 import com.thebluehats.server.core.modules.*;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 
 public class SpigotApplication {
     private final ArrayList<Class<? extends Service>> services = new ArrayList<>();
-    private Injector injector;
 
-    private final JavaPlugin plugin;
+    private final TheBlueHatsServerPlugin plugin;
 
-    public SpigotApplication(JavaPlugin plugin) {
+    public SpigotApplication(TheBlueHatsServerPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -26,19 +24,19 @@ public class SpigotApplication {
     }
 
     public void runApplication() {
-        injector = provisionInjector();
+        Injector injector = provisionInjector();
 
         for (Class<? extends Service> service : services) {
             injector.getInstance(service).provision(injector);
         }
 
-        injector.getInstance(PluginLifecycleListenerRegisterer.class).getListeners().forEach(PluginLifecycleListener::onPluginStart);
+        plugin.getLifecycleListeners().forEach(PluginLifecycleListener::onPluginStart);
 
         logInitializationMessage();
     }
 
     public void endApplication() {
-        injector.getInstance(PluginLifecycleListenerRegisterer.class).getListeners().forEach(PluginLifecycleListener::onPluginEnd);
+        plugin.getLifecycleListeners().forEach(PluginLifecycleListener::onPluginEnd);
     }
 
     private Injector provisionInjector() {

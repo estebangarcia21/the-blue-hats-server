@@ -154,7 +154,7 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
             lore.add(formatEnchantName(enchantName, isRareEnchant, level));
             lore.addAll(description);
 
-            itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
+            itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
 
             itemMeta.setLore(lore);
 

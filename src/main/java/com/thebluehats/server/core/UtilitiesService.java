@@ -19,18 +19,18 @@ import static org.bukkit.Bukkit.getServer;
 
 public class UtilitiesService implements Service {
     private final JavaPlugin plugin;
+    private final GlobalTimer globalTimer;
     private final Registerer<PluginLifecycleListener> pluginLifecycleListenerRegisterer;
 
     @Inject
-    public UtilitiesService(JavaPlugin plugin, Registerer<PluginLifecycleListener> pluginLifecycleListenerRegisterer) {
+    public UtilitiesService(JavaPlugin plugin, GlobalTimer globalTimer, Registerer<PluginLifecycleListener> pluginLifecycleListenerRegisterer) {
         this.plugin = plugin;
+        this.globalTimer = globalTimer;
         this.pluginLifecycleListenerRegisterer = pluginLifecycleListenerRegisterer;
     }
 
     @Override
     public void provision(Injector injector) {
-        GlobalTimer globalTimer = injector.getInstance(GlobalTimer.class);
-
         getServer().getPluginManager().registerEvents(injector.getInstance(DamageManager.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldSelectionManager.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(PitScoreboard.class), plugin);

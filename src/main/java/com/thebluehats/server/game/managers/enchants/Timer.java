@@ -20,6 +20,8 @@ public class Timer<K> {
     public void start(K key, long ticks) {
         TimerData data = timerData.computeIfAbsent(key, k -> new TimerData());
 
+        if (data.isRunning()) return;
+
         data.setTime(ticks);
 
         data.setTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
@@ -36,6 +38,8 @@ public class Timer<K> {
 
     public void start(K key, long ticks, Runnable post) {
         TimerData data = timerData.computeIfAbsent(key, k -> new TimerData());
+
+        if (data.isRunning()) return;
 
         data.setTime(ticks);
 
