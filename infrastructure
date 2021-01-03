@@ -1,0 +1,24 @@
+#!/bin/bash
+
+WORKING_DIRECTORY="terraform"
+
+if [[ "$1" == init ]]; then
+    cd $WORKING_DIRECTORY || exit
+
+    terraform init
+fi
+
+if [[ "$1" == plan ]]; then
+    cd $WORKING_DIRECTORY || exit
+
+    terraform plan \
+    -var-file="aws-vars.tfvars" \
+    -out="tfplan"
+fi
+
+if [[ "$1" == apply-recent-plan ]]; then
+    cd $WORKING_DIRECTORY || exit
+
+    terraform apply \
+    tfplan
+fi
