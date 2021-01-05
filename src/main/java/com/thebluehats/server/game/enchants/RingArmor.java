@@ -12,6 +12,7 @@ import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
+import com.thebluehats.server.game.utils.EntityValidator;
 
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -23,7 +24,7 @@ public class RingArmor extends DamageTriggeredEnchant {
 
     @Inject
     public RingArmor(DamageManager damageManager, ArrowDamageTrigger arrowDamageTrigger) {
-        super(new DamageEnchantTrigger[] { arrowDamageTrigger });
+        super(new DamageEnchantTrigger[] { arrowDamageTrigger }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
     }
