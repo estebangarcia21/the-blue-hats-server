@@ -31,25 +31,25 @@ public class BulletTime extends DamageTriggeredEnchant {
         this.damageManager = damageManager;
     }
 
-
     @Override
     public void execute(DamageEventEnchantData data) {
         EntityDamageByEntityEvent event = data.getEvent();
-        Player hitPlayer = data.getDamagee();
+        Player damagee = data.getDamagee();
         Arrow arrow = (Arrow) event.getDamager();
 
-        if (data.getDamagee().isBlocking()) {
+        if (damagee.isBlocking()) {
             damageManager.setEventAsCanceled(event);
 
             arrow.setKnockbackStrength(0);
             arrow.setBounce(true);
 
-            hitPlayer.getWorld().playSound(hitPlayer.getLocation(), Sound.FIZZ, 1f, 1.5f);
+            damagee.getWorld().playSound(damagee.getLocation(), Sound.FIZZ, 1f, 1.5f);
             arrow.getWorld().playEffect(arrow.getLocation(), Effect.EXPLOSION, 0, 30);
 
             arrow.remove();
 
-            hitPlayer.setHealth(Math.min(hitPlayer.getHealth() + healingAmount.getValueAtLevel(data.getLevel()), hitPlayer.getMaxHealth()));
+            damagee.setHealth(Math.min(damagee.getHealth() + healingAmount.getValueAtLevel(data.getLevel()),
+                    damagee.getMaxHealth()));
         }
     }
 

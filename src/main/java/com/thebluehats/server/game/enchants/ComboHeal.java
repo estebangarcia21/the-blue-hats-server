@@ -32,15 +32,16 @@ public class ComboHeal extends DamageTriggeredEnchant {
 
     @Override
     public void execute(DamageEventEnchantData data) {
-        Player player = data.getDamager();
+        Player damager = data.getDamager();
 
-        hitCounter.addOne(player);
+        hitCounter.addOne(damager);
 
-        if (hitCounter.hasHits(player, 4)) {
-            EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
+        if (hitCounter.hasHits(damager, 4)) {
+            EntityPlayer nmsPlayer = ((CraftPlayer) damager).getHandle();
 
-            player.playSound(player.getLocation(), Sound.DONKEY_HIT, 1, 0.5f);
-            nmsPlayer.setAbsorptionHearts(Math.min(nmsPlayer.getAbsorptionHearts() + healingAmount.getValueAtLevel(data.getLevel()), 8));
+            damager.playSound(damager.getLocation(), Sound.DONKEY_HIT, 1, 0.5f);
+            nmsPlayer.setAbsorptionHearts(
+                    Math.min(nmsPlayer.getAbsorptionHearts() + healingAmount.getValueAtLevel(data.getLevel()), 8));
         }
     }
 
@@ -56,7 +57,8 @@ public class ComboHeal extends DamageTriggeredEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("Every <yellow>fourth</yellow> strike heals<br/><red>{0}❤</red> and grants <gold>{0}❤</gold><br/>absoprtion");
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
+                "Every <yellow>fourth</yellow> strike heals<br/><red>{0}❤</red> and grants <gold>{0}❤</gold><br/>absoprtion");
 
         enchantLoreParser.setSingleVariable("0.4", "0.8", "1.2");
 
