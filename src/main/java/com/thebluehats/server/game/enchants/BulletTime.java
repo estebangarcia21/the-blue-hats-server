@@ -9,6 +9,7 @@ import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant;
 import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
+import com.thebluehats.server.game.utils.EnchantLoreParser;
 import com.thebluehats.server.game.utils.EntityValidator;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -65,7 +66,12 @@ public class BulletTime extends DamageTriggeredEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        return null;
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("Blocking destroys arrows that hit<br/>you");
+
+        enchantLoreParser.addTextIf(level != 1, ". Destroying arrows this way heals <red>{0}❤</red>");
+        enchantLoreParser.setSingleVariable("", "1❤", "1.5❤");
+
+        return enchantLoreParser.parseForLevel(level);
     }
 
     @Override

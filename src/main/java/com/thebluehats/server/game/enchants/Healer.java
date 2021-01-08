@@ -45,7 +45,7 @@ public class Healer extends DamageTriggeredEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Hitting a player <green>heals</green> both you adn them for <red>{0}</red>");
+                "Hitting a player <green>heals</green> both you and them for <red>{0}</red>");
 
         enchantLoreParser.setSingleVariable("1❤", "2❤", "3❤");
 

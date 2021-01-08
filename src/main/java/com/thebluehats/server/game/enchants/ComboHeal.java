@@ -58,7 +58,7 @@ public class ComboHeal extends DamageTriggeredEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Every <yellow>fourth</yellow> strike heals<br/><red>{0}❤</red> and grants <gold>{0}❤</gold><br/>absoprtion");
+                "Every <yellow>fourth</yellow> strike heals<br/><red>{0}❤</red> and grants <gold>{0}❤</gold><br/>absorption");
 
         enchantLoreParser.setSingleVariable("0.4", "0.8", "1.2");
 

@@ -24,7 +24,7 @@ public class FractionalReserve extends DamageTriggeredEnchant {
 
     @Inject
     public FractionalReserve(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger,
-                             ArrowDamageTrigger arrowDamageTrigger, PitDataDao pitData) {
+            ArrowDamageTrigger arrowDamageTrigger, PitDataDao pitData) {
         super(new DamageEnchantTrigger[] { playerDamageTrigger, arrowDamageTrigger },
                 new EntityValidator[] { damageManager });
 
@@ -45,10 +45,10 @@ public class FractionalReserve extends DamageTriggeredEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Recieve <blue>-1% damage</blue> per<br/><gold>10,000g</gold> you have (<blue>-{0}</blue><br/>max");
+                "Recieve <blue>-1% damage</blue> per<br/><gold>10,000g</gold> you have (<blue>-{0}</blue><br/>max)");
 
         enchantLoreParser.setSingleVariable("15%", "21%", "30%");
-        
+
         return enchantLoreParser.parseForLevel(level);
     }
 
