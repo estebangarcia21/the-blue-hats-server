@@ -50,7 +50,7 @@ public class RingArmor extends DamageTriggeredEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Recieve <blue>-{0}%</blue> damage from<br/> arrows");
+                "Recieve <blue>-{0}%</blue> damage from<br/>arrows");
 
         enchantLoreParser.setSingleVariable("20", "40", "60");
 
