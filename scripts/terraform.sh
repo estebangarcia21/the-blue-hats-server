@@ -1,4 +1,4 @@
-WORKING_DIRECTORY="terraform"
+WORKING_DIRECTORY="../terraform"
 
 if [[ "$1" == init ]]; then
     cd $WORKING_DIRECTORY || exit
