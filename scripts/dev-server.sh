@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WORKING_DIRECTORY="__dev-server"
+WORKING_DIRECTORY="../__dev-server"
 SERVER_TEMPLATE_URL="https://www.dropbox.com/s/ubzaencsai8fmtk/tbhs-dev-server.tar.gz?dl=1"
 SPIGOT_VERSION="1.8.8"
 SPIGOT_JAR="spigot-$SPIGOT_VERSION.jar"

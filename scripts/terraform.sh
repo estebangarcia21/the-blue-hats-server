@@ -1,5 +1,3 @@
-#!/bin/bash
-
 WORKING_DIRECTORY="terraform"
 
 if [[ "$1" == init ]]; then
