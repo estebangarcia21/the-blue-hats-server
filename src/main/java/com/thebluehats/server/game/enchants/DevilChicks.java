@@ -98,7 +98,7 @@ public class DevilChicks implements CustomEnchant, Listener {
                         if (entity instanceof Player) {
                             Player player = (Player) entity;
 
-                            damageManager.doTrueDamage(player, 2.4, player);
+                            damageManager.doTrueDamage(player, 2.4, shooter);
 
                             createExplosion(player, chicken.getLocation());
                         }

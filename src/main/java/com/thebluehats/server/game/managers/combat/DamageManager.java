@@ -115,7 +115,7 @@ public class DamageManager implements EntityValidator, DataInitializer {
     }
 
     public void doTrueDamage(Player target, double damage) {
-        if (customEnchantUtils.itemHasEnchant(mirror, target.getInventory().getLeggings())) {
+        if (!customEnchantUtils.itemHasEnchant(mirror, target.getInventory().getLeggings())) {
             target.setHealth(Math.max(0, target.getHealth() - damage));
             target.damage(0);
         }

@@ -20,6 +20,7 @@ public class CustomEnchantService implements Service {
     @Override
     public void provision(Injector injector) {
         BooBoo booboo = injector.getInstance(BooBoo.class);
+        DoubleJump doubleJump = injector.getInstance(DoubleJump.class);
 
         registerer.register(
                 new CustomEnchant[] { injector.getInstance(BeatTheSpammers.class), injector.getInstance(Wasp.class),
@@ -35,10 +36,11 @@ public class CustomEnchantService implements Service {
                         injector.getInstance(PainFocus.class), injector.getInstance(CriticallyFunky.class),
                         injector.getInstance(Bruiser.class), injector.getInstance(BulletTime.class), booboo,
                         injector.getInstance(ComboHeal.class), injector.getInstance(ComboStun.class),
-                            injector.getInstance(DevilChicks.class), injector.getInstance(Perun.class),
-                        injector.getInstance(Executioner.class)
+                        injector.getInstance(DevilChicks.class), injector.getInstance(Perun.class),
+                        injector.getInstance(Executioner.class), doubleJump
                     });
 
         globalTimer.addListener(booboo);
+        globalTimer.addListener(doubleJump);
     }
 }
