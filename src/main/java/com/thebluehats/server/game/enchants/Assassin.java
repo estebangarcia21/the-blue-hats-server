@@ -23,7 +23,8 @@ public class Assassin extends DamageTriggeredEnchant {
     private final Timer<Player> timer;
 
     @Inject
-    public Assassin(Timer<Player> timer, PlayerDamageTrigger playerDamageTrigger, ArrowDamageTrigger arrowDamageTrigger) {
+    public Assassin(Timer<Player> timer, PlayerDamageTrigger playerDamageTrigger,
+            ArrowDamageTrigger arrowDamageTrigger) {
         super(new DamageEnchantTrigger[] { playerDamageTrigger, arrowDamageTrigger });
 
         this.timer = timer;
@@ -64,7 +65,7 @@ public class Assassin extends DamageTriggeredEnchant {
     public ArrayList<String> getDescription(int level) {
         // TODO Level one is only on arrow
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Sneaking teleports you behind<br/>your<br/>attacker ({0}s cooldown)");
+                "Sneaking teleports you behind<br/>your attacker ({0}s cooldown)");
 
         enchantLoreParser.setSingleVariable("5", "4", "3");
 

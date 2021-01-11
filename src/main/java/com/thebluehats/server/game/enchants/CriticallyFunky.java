@@ -25,8 +25,10 @@ public class CriticallyFunky extends DamageTriggeredEnchant {
     private final DamageManager damageManager;
 
     @Inject
-    public CriticallyFunky(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger, ArrowDamageTrigger arrowDamageTrigger) {
-        super(new DamageEnchantTrigger[] { playerDamageTrigger, arrowDamageTrigger }, new EntityValidator[] { damageManager });
+    public CriticallyFunky(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger,
+            ArrowDamageTrigger arrowDamageTrigger) {
+        super(new DamageEnchantTrigger[] { playerDamageTrigger, arrowDamageTrigger },
+                new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
     }
@@ -68,7 +70,7 @@ public class CriticallyFunky extends DamageTriggeredEnchant {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
                 "Critical hits against you deal<br/><blue>{0}</blue> of the damage they<br/> normally would");
 
-        enchantLoreParser.addTextIf(level != 1, " and empower your<br/>next strike for <red>{2}</red> damage");
+        enchantLoreParser.addTextIf(level != 1, " and empower your<br/>next strike for <red>{1}</red> damage");
 
         String[][] variables = new String[2][];
         variables[0] = new String[] { "65%", "65%", "40%" };

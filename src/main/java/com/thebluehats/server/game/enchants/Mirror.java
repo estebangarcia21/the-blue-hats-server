@@ -25,7 +25,7 @@ public class Mirror implements CustomEnchant {
 
         enchantLoreParser.addTextIf(level == 1, "You are immune to true damage");
         enchantLoreParser.addTextIf(level != 1,
-                "You do not take true damage and<br/>instead reflect <yellow>{0} of it to<br/>your attacker");
+                "You do not take true damage and<br/>instead reflect <yellow>{0}</yellow> of it to<br/>your attacker");
 
         enchantLoreParser.setSingleVariable("", "25%", "50%");
 
