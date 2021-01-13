@@ -40,7 +40,6 @@ public class Telebow implements CustomEnchant, Listener {
     public void onBowShoot(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player && event.getProjectile() instanceof Arrow) {
             Player player = (Player) event.getEntity();
-            Arrow arrow = (Arrow) event.getProjectile();
 
             ItemStack bow = player.getInventory().getItemInHand();
 
@@ -71,8 +70,10 @@ public class Telebow implements CustomEnchant, Listener {
                     return;
                 }
 
-                if (customEnchantUtils.itemHasEnchant(this, bow)) {
-                    execute(customEnchantUtils.getEnchantLevel(this, bow), shooter, projectile);
+                CustomEnchantUtils.ItemEnchantData data = customEnchantUtils.getItemEnchantData(this, bow);
+
+                if (data.itemHasEnchant()) {
+                    execute(data.getEnchantLevel(), shooter, projectile);
                 }
             }
         }
