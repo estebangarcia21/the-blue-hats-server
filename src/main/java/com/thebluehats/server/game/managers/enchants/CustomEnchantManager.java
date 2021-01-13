@@ -11,9 +11,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.inject.Inject;
 
 import com.google.common.collect.ImmutableMap;
-import com.thebluehats.server.game.utils.PantsDataContainer;
-import com.thebluehats.server.game.utils.PantsDataContainer.FreshPantsColor;
-import com.thebluehats.server.game.utils.PantsDataContainer.PantsData;
+import com.thebluehats.server.game.utils.PantsData;
+import com.thebluehats.server.game.utils.PantsData.FreshPantsColor;
+import com.thebluehats.server.game.utils.PantsData.PantsDataValue;
 import com.thebluehats.server.game.utils.Registerer;
 import com.thebluehats.server.game.utils.RomanNumeralConverter;
 import com.thebluehats.server.game.utils.SortCustomEnchantByName;
@@ -35,15 +35,15 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
 
     private final JavaPlugin plugin;
     private final RomanNumeralConverter romanNumeralConverter;
-    private final PantsDataContainer pantsDataContainer;
+    private final PantsData pantsData;
     private final CustomEnchantUtils customEnchantUtils;
 
     @Inject
     public CustomEnchantManager(JavaPlugin plugin, RomanNumeralConverter romanNumeralConverter,
-            PantsDataContainer pantsDataContainer, CustomEnchantUtils customEnchantUtils) {
+                                PantsData pantsData, CustomEnchantUtils customEnchantUtils) {
         this.plugin = plugin;
         this.romanNumeralConverter = romanNumeralConverter;
-        this.pantsDataContainer = pantsDataContainer;
+        this.pantsData = pantsData;
         this.customEnchantUtils = customEnchantUtils;
     }
 
@@ -95,7 +95,7 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
             return;
 
         if (itemKey.equals("LEGGINGS")) {
-            ImmutableMap<FreshPantsColor, PantsData> pantsData = pantsDataContainer.getData();
+            ImmutableMap<FreshPantsColor, PantsDataValue> pantsData = this.pantsData.getData();
 
             if (isFreshItem) {
                 FreshPantsColor freshPantsColor = FreshPantsColor

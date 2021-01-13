@@ -9,10 +9,10 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 
 import com.google.common.collect.ImmutableMap;
-import com.thebluehats.server.game.utils.PantsDataContainer;
+import com.thebluehats.server.game.utils.PantsData;
 import com.thebluehats.server.game.utils.RomanNumeralConverter;
-import com.thebluehats.server.game.utils.PantsDataContainer.FreshPantsColor;
-import com.thebluehats.server.game.utils.PantsDataContainer.PantsData;
+import com.thebluehats.server.game.utils.PantsData.FreshPantsColor;
+import com.thebluehats.server.game.utils.PantsData.PantsDataValue;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -25,7 +25,7 @@ public class CustomEnchantManagerTest {
     @Test
     public void RemovesAnEnchantCorrectly() {
         CustomEnchantManager customEnchantManager = new CustomEnchantManager(mock(JavaPlugin.class),
-                mock(RomanNumeralConverter.class), mock(PantsDataContainer.class), mock(CustomEnchantUtils.class));
+                mock(RomanNumeralConverter.class), mock(PantsData.class), mock(CustomEnchantUtils.class));
 
         ItemStack item = mock(ItemStack.class);
         ItemMeta itemMeta = mock(ItemMeta.class);
@@ -67,7 +67,7 @@ public class CustomEnchantManagerTest {
     @Test
     public void AddsAnEnchantToFreshHandheldItem() {
         CustomEnchantManager customEnchantManager = new CustomEnchantManager(mock(JavaPlugin.class),
-                mock(RomanNumeralConverter.class), mock(PantsDataContainer.class), mock(CustomEnchantUtils.class));
+                mock(RomanNumeralConverter.class), mock(PantsData.class), mock(CustomEnchantUtils.class));
 
         ItemStack item = mock(ItemStack.class);
         ItemMeta itemMeta = mock(ItemMeta.class);
@@ -106,10 +106,10 @@ public class CustomEnchantManagerTest {
     @Test
     public void AddsAnEnchantToFreshPants() {
         RomanNumeralConverter romanNumeralConverterMock = mock(RomanNumeralConverter.class);
-        PantsDataContainer pantsDataContainerMock = mock(PantsDataContainer.class);
+        PantsData pantsDataMock = mock(PantsData.class);
 
         CustomEnchantManager customEnchantManager = new CustomEnchantManager(mock(JavaPlugin.class),
-                romanNumeralConverterMock, pantsDataContainerMock, mock(CustomEnchantUtils.class));
+                romanNumeralConverterMock, pantsDataMock, mock(CustomEnchantUtils.class));
 
         ItemStack item = mock(ItemStack.class);
         ItemMeta itemMeta = mock(ItemMeta.class);
@@ -142,8 +142,8 @@ public class CustomEnchantManagerTest {
         when(itemMeta.getLore()).thenReturn(freshItemLore);
         when(itemMeta.getDisplayName()).thenReturn(ChatColor.BLUE + "Fresh Blue Pants");
 
-        when(pantsDataContainerMock.getData()).thenReturn(ImmutableMap.<FreshPantsColor, PantsData>builder()
-                .put(FreshPantsColor.BLUE, new PantsData(0xFFFFFF, ChatColor.BLUE)).build());
+        when(pantsDataMock.getData()).thenReturn(ImmutableMap.<FreshPantsColor, PantsDataValue>builder()
+                .put(FreshPantsColor.BLUE, new PantsDataValue(0xFFFFFF, ChatColor.BLUE)).build());
 
         when(romanNumeralConverterMock.convertToRomanNumeral(1)).thenReturn("I");
 
@@ -158,7 +158,7 @@ public class CustomEnchantManagerTest {
         RomanNumeralConverter romanNumeralConverterMock = mock(RomanNumeralConverter.class);
 
         CustomEnchantManager customEnchantManager = new CustomEnchantManager(mock(JavaPlugin.class),
-                romanNumeralConverterMock, mock(PantsDataContainer.class), mock(CustomEnchantUtils.class));
+                romanNumeralConverterMock, mock(PantsData.class), mock(CustomEnchantUtils.class));
 
         ItemStack item = mock(ItemStack.class);
         ItemMeta itemMeta = mock(ItemMeta.class);
@@ -214,7 +214,7 @@ public class CustomEnchantManagerTest {
         RomanNumeralConverter romanNumeralConverterMock = mock(RomanNumeralConverter.class);
 
         CustomEnchantManager customEnchantManager = new CustomEnchantManager(mock(JavaPlugin.class),
-                romanNumeralConverterMock, mock(PantsDataContainer.class), mock(CustomEnchantUtils.class));
+                romanNumeralConverterMock, mock(PantsData.class), mock(CustomEnchantUtils.class));
 
         ItemStack item = mock(ItemStack.class);
         ItemMeta itemMeta = mock(ItemMeta.class);
@@ -264,7 +264,7 @@ public class CustomEnchantManagerTest {
     @Test
     public void ProperlyChecksIfAnItemIsFresh() {
         CustomEnchantManager customEnchantManager = new CustomEnchantManager(mock(JavaPlugin.class),
-                mock(RomanNumeralConverter.class), mock(PantsDataContainer.class), mock(CustomEnchantUtils.class));
+                mock(RomanNumeralConverter.class), mock(PantsData.class), mock(CustomEnchantUtils.class));
 
         ItemStack item = mock(ItemStack.class);
         ItemMeta itemMeta = mock(ItemMeta.class);

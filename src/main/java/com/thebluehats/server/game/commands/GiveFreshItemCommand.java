@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import com.google.inject.Inject;
 import com.thebluehats.server.game.utils.LoreParser;
-import com.thebluehats.server.game.utils.PantsDataContainer;
-import com.thebluehats.server.game.utils.PantsDataContainer.FreshPantsColor;
-import com.thebluehats.server.game.utils.PantsDataContainer.PantsData;
+import com.thebluehats.server.game.utils.PantsData;
+import com.thebluehats.server.game.utils.PantsData.FreshPantsColor;
+import com.thebluehats.server.game.utils.PantsData.PantsDataValue;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -21,11 +21,11 @@ public class GiveFreshItemCommand extends GameCommand {
     private final ArrayList<String> freshPantsColors = new ArrayList<>();
     private final ArrayList<String> handheldFreshItems = new ArrayList<>();
 
-    private final PantsDataContainer pantsDataContainer;
+    private final PantsData pantsData;
 
     @Inject
-    public GiveFreshItemCommand(PantsDataContainer pantsDataContainer) {
-        this.pantsDataContainer = pantsDataContainer;
+    public GiveFreshItemCommand(PantsData pantsData) {
+        this.pantsData = pantsData;
 
         for (FreshPantsColor freshPantsColor : FreshPantsColor.values()) {
             freshPantsColors.add(freshPantsColor.toString());
@@ -94,7 +94,7 @@ public class GiveFreshItemCommand extends GameCommand {
         LeatherArmorMeta freshPantsMeta = (LeatherArmorMeta) freshLeggings.getItemMeta();
         String pantsColorName = pantsColor.toString().toLowerCase();
 
-        PantsData data = pantsDataContainer.getData().get(pantsColor);
+        PantsDataValue data = pantsData.getData().get(pantsColor);
 
         ChatColor textColor = data.getTextColor();
         int color = data.getPantsColor();
