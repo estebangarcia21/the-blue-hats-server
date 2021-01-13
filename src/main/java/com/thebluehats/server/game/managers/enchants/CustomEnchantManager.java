@@ -1,15 +1,5 @@
 package com.thebluehats.server.game.managers.enchants;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
-
-import javax.inject.Inject;
-
 import com.google.common.collect.ImmutableMap;
 import com.thebluehats.server.game.utils.PantsData;
 import com.thebluehats.server.game.utils.PantsData.FreshPantsColor;
@@ -17,7 +7,6 @@ import com.thebluehats.server.game.utils.PantsData.PantsDataValue;
 import com.thebluehats.server.game.utils.Registerer;
 import com.thebluehats.server.game.utils.RomanNumeralConverter;
 import com.thebluehats.server.game.utils.SortCustomEnchantByName;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -25,6 +14,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import javax.inject.Inject;
+import java.util.*;
 
 public class CustomEnchantManager implements Registerer<CustomEnchant> {
     private final ArrayList<CustomEnchant> enchants = new ArrayList<>();
@@ -375,11 +367,5 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
         }
 
         return -1;
-    }
-
-    @Deprecated
-    public boolean percentChance(double percent) {
-        return Double.parseDouble(
-                new DecimalFormat("#0.0").format(ThreadLocalRandom.current().nextDouble(0, 99))) <= percent;
     }
 }

@@ -26,7 +26,7 @@ public class GameCommandTest {
                 "amount");
 
         String expectedMessage = ChatColor.DARK_PURPLE + "/give - " + ChatColor.RED + "gives an item"
-                + ChatColor.DARK_PURPLE + " | Usage" + ChatColor.DARK_PURPLE + "/give " + ChatColor.RED
+                + ChatColor.DARK_PURPLE + " | Usage " + ChatColor.DARK_PURPLE + "/give " + ChatColor.RED
                 + "<player> <item> <amount>";
 
         assertEquals(expectedMessage, formattedUsageMessage);
