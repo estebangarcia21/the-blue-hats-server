@@ -20,7 +20,7 @@ public class SelectWorldCommand extends GameCommand {
 
     @Override
     public String getUsageMessage(String cmd) {
-        return formatStandardUsageMessage(cmd, "Displats the world selection menu.");
+        return formatStandardUsageMessage(cmd, "Displays the world selection menu.");
     }
 
     @Override
