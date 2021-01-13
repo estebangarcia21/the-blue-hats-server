@@ -22,7 +22,7 @@ public class UnenchantCommand extends GameCommand {
 
     @Override
     public String[] getCommandNames() {
-        return new String[] { "unenchant" };
+        return new String[]{"unenchant"};
     }
 
     @Override
@@ -50,19 +50,30 @@ public class UnenchantCommand extends GameCommand {
 
         if (item.getType() == Material.AIR) {
             player.sendMessage(formatStandardErrorMessage("You are not holding anything!"));
-        } else if (args.length > 1) {
-            player.sendMessage(formatStandardErrorMessage("Too many arguments"));
-        } else if (item.getType() != Material.LEATHER_LEGGINGS && item.getType() != Material.GOLD_SWORD
-                && item.getType() != Material.BOW) {
-            player.sendMessage(formatStandardErrorMessage("You can not unenchant this item!"));
-        } else if (!customEnchantUtils.itemHasEnchant(customEnchant, item)) {
-            player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED
-                    + " This item does not have the specified enchant!");
-        } else {
-            customEnchantManager.removeEnchant(item, customEnchant);
 
-            player.sendMessage(
-                    ChatColor.DARK_PURPLE + "Success!" + ChatColor.RED + " You unenchanted the enchant successfully!");
+            return;
         }
+
+        if (args.length > 1) {
+            player.sendMessage(formatStandardErrorMessage("Too many arguments"));
+
+            return;
+        }
+
+        if (item.getType() != Material.LEATHER_LEGGINGS && item.getType() != Material.GOLD_SWORD && item.getType() != Material.BOW) {
+            player.sendMessage(formatStandardErrorMessage("You can not unenchant this item!"));
+
+            return;
+        }
+
+        if (!customEnchantUtils.itemHasEnchant(customEnchant, item)) {
+            player.sendMessage(ChatColor.DARK_PURPLE + "Error!" + ChatColor.RED + " This item does not have the specified enchant!");
+
+            return;
+        }
+
+        customEnchantManager.removeEnchant(item, customEnchant);
+
+        player.sendMessage(ChatColor.DARK_PURPLE + "Success!" + ChatColor.RED + " You unenchanted the enchant successfully!");
     }
 }
