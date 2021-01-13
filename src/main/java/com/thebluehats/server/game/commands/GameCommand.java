@@ -45,7 +45,7 @@ public abstract class GameCommand implements CommandExecutor {
         }
 
         return ChatColor.DARK_PURPLE + "/" + cmd + " - " + ChatColor.RED + description + ChatColor.DARK_PURPLE
-                + " | Usage" + ChatColor.DARK_PURPLE + "/" + cmd + " " + ChatColor.RED + argsJoiner.toString();
+                + " | Usage " + ChatColor.DARK_PURPLE + "/" + cmd + " " + ChatColor.RED + argsJoiner.toString();
     }
 
     public String formatStandardErrorMessage(String error) {
