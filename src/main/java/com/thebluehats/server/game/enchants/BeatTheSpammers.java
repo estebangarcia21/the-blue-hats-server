@@ -11,6 +11,7 @@ import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
+import com.thebluehats.server.game.utils.EntityValidator;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class BeatTheSpammers extends DamageTriggeredEnchant {
 
     @Inject
     public BeatTheSpammers(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger) {
-        super(new DamageEnchantTrigger[] { playerDamageTrigger });
+        super(new DamageEnchantTrigger[] { playerDamageTrigger }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;
     }

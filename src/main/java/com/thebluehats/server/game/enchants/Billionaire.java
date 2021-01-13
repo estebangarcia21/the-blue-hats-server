@@ -12,6 +12,7 @@ import com.thebluehats.server.game.managers.enchants.EnchantGroup;
 import com.thebluehats.server.game.managers.enchants.EnchantProperty;
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
+import com.thebluehats.server.game.utils.EntityValidator;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -27,7 +28,7 @@ public class Billionaire extends DamageTriggeredEnchant {
 
     @Inject
     public Billionaire(PitDataDao pitData, DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger) {
-        super(new DamageEnchantTrigger[] { playerDamageTrigger });
+        super(new DamageEnchantTrigger[] { playerDamageTrigger }, new EntityValidator[] { damageManager });
 
         this.pitData = pitData;
         this.damageManager = damageManager;
