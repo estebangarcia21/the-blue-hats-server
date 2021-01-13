@@ -1,6 +1,7 @@
 package com.thebluehats.server.game.utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -57,7 +58,7 @@ public class EnchantLoreParser extends LoreParserBase<String[][]> {
         if (onlyOneVariable) {
             formattedLine = StringUtils.replace(formattedLine, "{0}", singleVariable[level - 1]);
         } else {
-            for (int i = 0; i < variableMatrix.length; i++) {
+            for (int i = 0; i < Objects.requireNonNull(variableMatrix).length; i++) {
                 String variable = onlyOneVariable ? singleVariable[level - 1] : variableMatrix[i][level - 1];
 
                 formattedLine = StringUtils.replace(formattedLine, "{" + i + "}", variable);

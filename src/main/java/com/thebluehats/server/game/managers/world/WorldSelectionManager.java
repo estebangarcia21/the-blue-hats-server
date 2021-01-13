@@ -37,7 +37,6 @@ public class WorldSelectionManager implements Listener {
         Player player = event.getPlayer();
 
         player.teleport(regionManager.getSpawnLocation(player));
-        // displaySelectionMenu(event.getPlayer());
     }
 
     public void displaySelectionMenu(Player player) {

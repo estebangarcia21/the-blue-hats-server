@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 
-public abstract class LoreParserBase<T> {
+public abstract class LoreParserBase<V> {
     protected final String lore;
 
     protected LoreParserBase(String lore) {
@@ -35,7 +35,7 @@ public abstract class LoreParserBase<T> {
         return parsedLore;
     }
 
-    public abstract void setVariables(T variables);
+    public abstract void setVariables(V variables);
 
     protected abstract String insertVariableValuesForLine(String line);
 }

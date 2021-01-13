@@ -53,16 +53,6 @@ public class HitCounter {
         HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
 
         timer.start(player.getUniqueId(), 3 * 20, true, () -> data.setHitsWithEnchant(0));
-
-//        data.setHitResetTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-//            data.setHitResetTime(data.getHitResetTime() - 1);
-//
-//            if (data.getHitResetTime() <= 0) {
-//                data.setHitResetTime(0);
-//
-//                Bukkit.getServer().getScheduler().cancelTask(data.getHitResetTaskId());
-//            }
-//        }, 0L, 20L));
     }
 
     private static class HitCounterData {
