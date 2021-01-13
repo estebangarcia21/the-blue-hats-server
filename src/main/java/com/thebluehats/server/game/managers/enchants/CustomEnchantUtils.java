@@ -27,6 +27,10 @@ public class CustomEnchantUtils {
         return false;
     }
 
+    public ItemEnchantData getItemEnchantData(CustomEnchant enchant, ItemStack item) {
+        return new ItemEnchantData(itemHasEnchant(enchant, item), getEnchantLevel(enchant, item));
+    }
+
     public boolean itemHasEnchant(CustomEnchant enchant, ItemStack item) {
         if (item == null || item.getType() == Material.AIR) return false;
 
@@ -62,5 +66,23 @@ public class CustomEnchantUtils {
         }
 
         return 0;
+    }
+
+     public static class ItemEnchantData {
+        private final boolean itemHasEnchant;
+        private final int enchantLevel;
+
+        private ItemEnchantData(boolean itemHasEnchant, int enchantLevel) {
+            this.itemHasEnchant = itemHasEnchant;
+            this.enchantLevel = enchantLevel;
+        }
+
+        public boolean itemHasEnchant() {
+            return itemHasEnchant;
+        }
+
+        public int getEnchantLevel() {
+            return enchantLevel;
+        }
     }
 }
