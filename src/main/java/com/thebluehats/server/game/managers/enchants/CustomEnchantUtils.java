@@ -57,7 +57,7 @@ public class CustomEnchantUtils {
                 String[] lineTokens = strippedLine.split(" ");
                 String numeral = lineTokens[lineTokens.length - 1];
 
-                return lineTokens.length == 1 ? 1 : romanNumeralConverter.convertRomanNumeralToInteger(numeral);
+                return lineTokens.length == 1 || lineTokens.length == 2 & enchant.isRareEnchant() ? 1 : romanNumeralConverter.convertRomanNumeralToInteger(numeral);
             }
         }
 

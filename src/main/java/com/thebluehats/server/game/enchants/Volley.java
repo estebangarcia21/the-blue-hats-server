@@ -56,7 +56,7 @@ public class Volley implements CustomEnchant, Listener {
             if (eventArrow.getShooter() instanceof Player) {
                 Player player = (Player) eventArrow.getShooter();
 
-                ItemStack bow = player.getInventory().getItemInHand();
+                ItemStack bow = bowManager.getBowFromArrow(eventArrow);
 
                 if (customEnchantUtils.itemHasEnchant(this, bow)) {
                     execute(customEnchantUtils.getEnchantLevel(this, bow), player, eventArrow, event.getForce());
@@ -72,7 +72,7 @@ public class Volley implements CustomEnchant, Listener {
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> volleyTasks.put(arrow,
                 Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-                    if (regionManager.entityIsInSpawn(player)) {
+                    if (!regionManager.entityIsInSpawn(player)) {
                         player.getWorld().playSound(player.getLocation(), Sound.SHOOT_ARROW, 1, 1);
                         Arrow volleyArrow = player.launchProjectile(Arrow.class);
 
@@ -87,11 +87,12 @@ public class Volley implements CustomEnchant, Listener {
 
                         if (arrowCount.get(arrow) > arrows.getValueAtLevel(level)) {
                             Bukkit.getServer().getScheduler().cancelTask(volleyTasks.get(arrow));
+
                             volleyTasks.remove(arrow);
                             arrowCount.remove(arrow);
                         }
                     }
-                }, 0L, 2)), 2L);
+                }, 0L, 1)), 2L);
     }
 
     @Override

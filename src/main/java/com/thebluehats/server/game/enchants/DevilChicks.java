@@ -57,7 +57,7 @@ public class DevilChicks implements CustomEnchant, Listener {
     // TODO Fix dead-alive bug
     public void execute(int level, Player shooter, Projectile arrow) {
         World world = shooter.getWorld();
-        UUID arrowUuid = arrow.getUniqueId();
+        final UUID arrowUuid = UUID.randomUUID();
 
         Location shooterLocation = shooter.getLocation();
         Location arrowLocation = arrow.getLocation();
