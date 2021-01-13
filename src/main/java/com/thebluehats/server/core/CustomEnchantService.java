@@ -38,7 +38,7 @@ public class CustomEnchantService implements Service {
                 injector.getInstance(ComboStun.class), injector.getInstance(DevilChicks.class),
                 injector.getInstance(Perun.class), injector.getInstance(Crush.class),
                 injector.getInstance(RingArmor.class), injector.getInstance(FancyRaider.class),
-                injector.getInstance(Executioner.class), doubleJump, });
+                injector.getInstance(Executioner.class), doubleJump, injector.getInstance(Lifesteal.class) });
 
         globalTimer.addListener(booboo);
         globalTimer.addListener(doubleJump);
