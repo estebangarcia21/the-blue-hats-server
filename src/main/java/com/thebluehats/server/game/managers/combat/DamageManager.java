@@ -37,7 +37,7 @@ public class DamageManager implements EntityValidator, DataInitializer {
 
     @Inject
     public DamageManager(@MirrorReference Mirror mirror, CombatManager combatManager,
-            CustomEnchantUtils customEnchantUtils, RegionManager regionManager) {
+                         CustomEnchantUtils customEnchantUtils, RegionManager regionManager) {
         this.combatManager = combatManager;
         this.mirror = mirror;
         this.customEnchantUtils = customEnchantUtils;
@@ -122,29 +122,25 @@ public class DamageManager implements EntityValidator, DataInitializer {
     }
 
     public void doTrueDamage(Player target, double damage, Player reflectTo) {
-        int level = customEnchantUtils.getEnchantLevel(mirror, target.getInventory().getLeggings());
+        CustomEnchantUtils.ItemEnchantData data = customEnchantUtils.getItemEnchantData(mirror, target.getInventory().getLeggings());
 
         combatManager.combatTag(target);
 
-        if (!customEnchantUtils.itemHasEnchant(mirror, target.getInventory().getLeggings())) {
-            if (target.getHealth() - damage < 0) {
-                safeSetPlayerHealth(target, 0);
-            } else {
-                target.damage(0);
+        if (data.itemHasEnchant()) {
+            int level = data.getEnchantLevel();
 
-                safeSetPlayerHealth(target, target.getHealth() - damage);
-            }
-        } else if (level != 1) {
-            if (reflectTo.getHealth() - (damage * mirrorReflectionValues.getValueAtLevel(level)) < 0) {
-                safeSetPlayerHealth(target, 0);
-            } else {
+            if (level > 1) {
+                double finalDamage = damage * mirrorReflectionValues.getValueAtLevel(level);
+
+                combatManager.combatTag(reflectTo);
                 reflectTo.damage(0);
 
-                combatManager.combatTag(target);
-
-                safeSetPlayerHealth(reflectTo,
-                        Math.max(0, reflectTo.getHealth() - (damage * mirrorReflectionValues.getValueAtLevel(level))));
+                safeSetPlayerHealth(reflectTo, Math.max(0, reflectTo.getHealth() - finalDamage));
             }
+        } else {
+            target.damage(0);
+
+            safeSetPlayerHealth(target, Math.max(0, target.getHealth() - damage));
         }
     }
 
@@ -174,7 +170,7 @@ public class DamageManager implements EntityValidator, DataInitializer {
     }
 
     private double calculateDamage(double initialDamage, EntityDamageByEntityEvent event) {
-       EventData data = eventData.computeIfAbsent(event.getDamager().getUniqueId(), k -> new EventData());
+        EventData data = eventData.computeIfAbsent(event.getDamager().getUniqueId(), k -> new EventData());
 
         double damage = initialDamage * data.getAdditiveDamage() * data.getMultiplicativeDamage()
                 * data.getReductionAmount();

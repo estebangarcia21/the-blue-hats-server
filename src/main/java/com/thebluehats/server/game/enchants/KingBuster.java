@@ -25,7 +25,7 @@ public class KingBuster extends DamageTriggeredEnchant {
     private final DamageManager damageManager;
 
     @Inject
-    protected KingBuster(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger) {
+    public KingBuster(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger) {
         super(new DamageEnchantTrigger[] { playerDamageTrigger }, new EntityValidator[] { damageManager });
 
         this.damageManager = damageManager;

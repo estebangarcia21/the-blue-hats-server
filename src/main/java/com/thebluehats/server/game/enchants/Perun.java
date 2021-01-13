@@ -61,7 +61,7 @@ public class Perun extends DamageTriggeredEnchant {
             }
 
             damager.getWorld().strikeLightningEffect(damagee.getLocation());
-            damageManager.doTrueDamage(damagee, damage);
+            damageManager.doTrueDamage(damagee, damage, damager);
         }
     }
 
@@ -84,7 +84,7 @@ public class Perun extends DamageTriggeredEnchant {
         enchantLoreParser.addTextIf(level != 3,
                 "Every <yellow>fourth</yellow> hit strikes<br/>lightning for <red>{0}❤</red><br/>" + lastMessage);
         enchantLoreParser.addTextIf(level == 3,
-                "Every <yellow>fourth</yellow> hit strikes<br/>lightning for <red>{0}❤</red> + <red>1❤</red><br/>per <aqua>diamond piece</aqua> on your<br/> victim<br/>"
+                "Every <yellow>fourth</yellow> hit strikes<br/>lightning for <red>{0}❤</red> + <red>1❤</red><br/>per <aqua>diamond piece</aqua> on your<br/>victim<br/>"
                         + lastMessage);
 
         enchantLoreParser.setSingleVariable("1.5", "2", "1");
