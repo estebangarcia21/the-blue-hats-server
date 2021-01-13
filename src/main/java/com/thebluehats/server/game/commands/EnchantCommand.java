@@ -1,18 +1,17 @@
 package com.thebluehats.server.game.commands;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.inject.Inject;
 import com.thebluehats.server.game.managers.enchants.CustomEnchant;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager;
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EnchantCommand extends GameCommand {
     private final CustomEnchantManager customEnchantManager;
@@ -26,7 +25,7 @@ public class EnchantCommand extends GameCommand {
 
     @Override
     public String[] getCommandNames() {
-        return new String[] { "pitenchant" };
+        return new String[]{"pitenchant"};
     }
 
     @Override
@@ -82,62 +81,60 @@ public class EnchantCommand extends GameCommand {
             return;
         }
 
-        if (Integer.parseInt(args[1]) > 3 || Integer.parseInt(args[1]) < 1) {
+        int level = Integer.parseInt(args[1]);
+
+        if (level > 3 || level < 1) {
             player.sendMessage(formatStandardErrorMessage("The enchant level can only be 1, 2, or 3!"));
 
             return;
         }
 
-        int level = Integer.parseInt(args[1]);
+        int numberOfEnchants = customEnchantManager.getItemEnchants(item).size();
 
-        if (player.getWorld().getName().equals("ThePit_0")) {
-            int numberOfEnchants = customEnchantManager.getItemEnchants(item).size();
+        if (numberOfEnchants >= 3) {
+            player.sendMessage(
+                    formatStandardErrorMessage("You can only have a maximum of 3 enchants in this world!"));
 
-            if (numberOfEnchants >= 3) {
-                player.sendMessage(
-                        formatStandardErrorMessage("You can only have a maximum of 3 enchants in this world!"));
+            return;
+        }
 
-                return;
-            }
+        int tokens = customEnchantManager.getTokensOnItem(item) + level;
 
-            int tokens = customEnchantManager.getTokensOnItem(item) + level;
+        if (tokens > 8) {
+            player.sendMessage("You can only have a miximum of 8 tokens in this world!");
 
-            if (tokens > 8) {
-                player.sendMessage("You can only have a miximum of 8 tokens in this world!");
+            return;
+        }
 
-                return;
-            }
+        int rareTokens = 0;
+        int rareEnchantCount = 0;
 
-            int rareTokens = 0;
-            int rareEnchantCount = 0;
+        HashMap<CustomEnchant, Integer> itemEnchants = customEnchantManager.getItemEnchants(item);
 
-            HashMap<CustomEnchant, Integer> itemEnchants = customEnchantManager.getItemEnchants(item);
-
-            for (Map.Entry<CustomEnchant, Integer> entry : itemEnchants.entrySet()) {
-                if (entry.getKey().isRareEnchant()) {
-                    rareTokens += entry.getValue();
-                    rareEnchantCount++;
-                }
-            }
-
-            if (customEnchant.isRareEnchant()) {
-                rareTokens += level;
+        for (Map.Entry<CustomEnchant, Integer> entry : itemEnchants.entrySet()) {
+            if (entry.getKey().isRareEnchant()) {
+                rareTokens += entry.getValue();
                 rareEnchantCount++;
             }
+        }
 
-            if (rareEnchantCount > 2) {
-                player.sendMessage(
-                        formatStandardErrorMessage("You can only have 2 rare enchants on an item in this world!"));
+        if (customEnchant.isRareEnchant()) {
+            rareTokens += level;
+            rareEnchantCount++;
+        }
 
-                return;
-            }
+        if (rareEnchantCount > 2) {
+            player.sendMessage(
+                    formatStandardErrorMessage("You can only have 2 rare enchants on an item in this world!"));
 
-            if (rareTokens > 4) {
-                player.sendMessage(formatStandardErrorMessage(
-                        "You can only have a maximum of 4 tokens for rare enchants in this world!"));
+            return;
+        }
 
-                return;
-            }
+        if (rareTokens > 4) {
+            player.sendMessage(formatStandardErrorMessage(
+                    "You can only have a maximum of 4 tokens for rare enchants in this world!"));
+
+            return;
         }
 
         customEnchantManager.addEnchant(item, level, false, customEnchant);
