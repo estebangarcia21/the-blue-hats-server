@@ -102,7 +102,11 @@ public class Explosive implements CustomEnchant, Listener {
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser("Arrows go {0}! ({1}s cooldown)");
 
-        enchantLoreParser.setSingleVariable("POP", "BANG", "BOOM");
+        String[][] variables = new String[2][];
+        variables[0] = new String[] { "POP", "BANG", "BOOM" };
+        variables[1] = new String[] { "5", "3", "5" };
+
+        enchantLoreParser.setVariables(variables);
 
         return enchantLoreParser.parseForLevel(level);
     }
