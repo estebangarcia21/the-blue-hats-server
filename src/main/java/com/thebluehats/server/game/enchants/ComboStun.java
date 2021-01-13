@@ -54,6 +54,7 @@ public class ComboStun extends DamageTriggeredEnchant {
             sendPackets(damagee);
         }
     }
+
     private void sendPackets(Player player) {
         IChatBaseComponent chatTitle = IChatBaseComponent.ChatSerializer.a(
                 "{\"text\": \"" + ChatColor.RED + "STUNNED!" + "\",color:" + ChatColor.GOLD.name().toLowerCase() + "}");
