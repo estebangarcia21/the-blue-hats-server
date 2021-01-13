@@ -29,27 +29,31 @@ public class MysticEnchantsCommand extends GameCommand {
     @Override
     public void runCommand(Player player, String commandName, String[] args) {
         int pages = customEnchantManager.getEnchants().size() / 9;
-        int page = 1;
+        int page;
+
+        String pageErrorNumber = ChatColor.YELLOW.toString() + ChatColor.BOLD.toString() + "Please specify a correct page number!";
 
         if (args.length == 1) {
             if (!StringUtils.isNumeric(args[0])) {
-                player.sendMessage(ChatColor.YELLOW.toString() + ChatColor.BOLD.toString()
-                        + "Please specify a correct page number!");
+                player.sendMessage(pageErrorNumber);
 
                 return;
             }
 
             page = Integer.parseInt(args[0]);
-        }
+        } else {
+            player.sendMessage(getUsageMessage(commandName));
 
-        if (page <= 0 || page > pages + 1) {
-            player.sendMessage(
-                    ChatColor.YELLOW.toString() + ChatColor.BOLD.toString() + "Please specify a correct page number!");
             return;
         }
 
-        player.sendMessage(ChatColor.YELLOW.toString() + ChatColor.BOLD.toString() + "Mystic Enchants (" + page + "/"
-                + (pages + 1) + ")");
+        if (page <= 0 || page > pages + 1) {
+            player.sendMessage(pageErrorNumber);
+
+            return;
+        }
+
+        player.sendMessage(ChatColor.YELLOW.toString() + ChatColor.BOLD.toString() + "Mystic Enchants (" + page + "/" + (pages + 1) + ")");
 
         for (int i = 0; i < 9; i++) {
             int index = i + ((page - 1) * 9);
