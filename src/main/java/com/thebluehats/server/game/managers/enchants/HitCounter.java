@@ -12,11 +12,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class HitCounter {
     private final HashMap<UUID, HitCounterData> timerData = new HashMap<>();
 
-    private final JavaPlugin plugin;
+    private final Timer<UUID> timer;
 
     @Inject
-    public HitCounter(JavaPlugin plugin) {
-        this.plugin = plugin;
+    public HitCounter(Timer<UUID> timer) {
+        this.timer = timer;
     }
 
     public void addOne(Player player) {
@@ -52,15 +52,17 @@ public class HitCounter {
     public void startHitResetTimer(Player player) {
         HitCounterData data = timerData.computeIfAbsent(player.getUniqueId(), k -> new HitCounterData());
 
-        data.setHitResetTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-            data.setHitResetTime(data.getHitResetTime() - 1);
+        timer.start(player.getUniqueId(), 3 * 20, true, () -> data.setHitsWithEnchant(0));
 
-            if (data.getHitResetTime() <= 0) {
-                data.setHitResetTime(0);
-
-                Bukkit.getServer().getScheduler().cancelTask(data.getHitResetTaskId());
-            }
-        }, 0L, 20L));
+//        data.setHitResetTaskId(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+//            data.setHitResetTime(data.getHitResetTime() - 1);
+//
+//            if (data.getHitResetTime() <= 0) {
+//                data.setHitResetTime(0);
+//
+//                Bukkit.getServer().getScheduler().cancelTask(data.getHitResetTaskId());
+//            }
+//        }, 0L, 20L));
     }
 
     private static class HitCounterData {
