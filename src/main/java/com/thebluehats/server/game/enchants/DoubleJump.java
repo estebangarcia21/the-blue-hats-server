@@ -11,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-import sun.tools.jconsole.JConsole;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -38,7 +37,8 @@ public class DoubleJump implements CustomEnchant, GlobalTimerListener, Listener 
             return;
         }
 
-        player.setAllowFlight(customEnchantUtils.itemHasEnchant(this, leggings) && !timer.isRunning(player.getUniqueId()));
+        player.setAllowFlight(
+                customEnchantUtils.itemHasEnchant(this, leggings) && !timer.isRunning(player.getUniqueId()));
     }
 
     @EventHandler
