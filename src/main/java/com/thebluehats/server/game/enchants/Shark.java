@@ -66,9 +66,10 @@ public class Shark extends DamageTriggeredEnchant {
 
     @Override
     public ArrayList<String> getDescription(int level) {
-        EnchantLoreParser enchantLoreParser = new EnchantLoreParser("");
+        EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
+                "Deal <red>+{0}</red> damage per other<br/>player below <red>6❤</red> within 12<br/>blocks");
 
-        enchantLoreParser.setSingleVariable("", "", "");
+        enchantLoreParser.setSingleVariable("2%", "4%", "7%");
 
         return enchantLoreParser.parseForLevel(level);
     }
