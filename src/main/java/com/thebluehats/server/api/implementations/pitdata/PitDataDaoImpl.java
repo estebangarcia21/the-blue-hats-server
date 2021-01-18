@@ -27,7 +27,11 @@ public class PitDataDaoImpl implements PitDataDao, PluginLifecycleListener, Data
 
     @Override
     public int getPlayerXp(Player player) {
-        return pitDataRepository.findUnique(player.getUniqueId()).getXp();
+        // TODO Next level xp
+        return serverApi.get("/api/v1/game-data/the-pit/{uuid}")
+            .routeParam("uuid", player.getUniqueId().toString())
+            .queryString("key", System.getenv("API_KEY"))
+            .asJson().getBody().getObject().getInt("xp");
     }
 
     @Override
@@ -37,17 +41,20 @@ public class PitDataDaoImpl implements PitDataDao, PluginLifecycleListener, Data
 
     @Override
     public double getPlayerGold(Player player) {
-        return pitDataRepository.findUnique(player.getUniqueId()).getGold();
+        return serverApi.get("/api/v1/game-data/the-pit/{uuid}")
+            .routeParam("uuid", player.getUniqueId().toString())
+            .queryString("key", System.getenv("API_KEY"))
+            .asJson().getBody().getObject().getDouble("gold");
     }
 
     @Override
     public void setPlayerGold(Player player, double value) {
-        serverApi.put("/game-data/the-pit/{uuid}")
-            .routeParam("uuid", player.getUniqueId().toString())
-            .queryString("key", API_KEY)
-            .header("", "")
-            .header("Content-Type", "application/json")
-            .body("{\n    \"type\": \"performance\",\n    \"data\": {\n        \"xp\": " + value + "\n    }\n}");
+//        serverApi.put("/game-data/the-pit/{uuid}")
+//            .routeParam("uuid", player.getUniqueId().toString())
+//            .queryString("key", API_KEY)
+//            .header("", "")
+//            .header("Content-Type", "application/json")
+//            .body("{\n    \"type\": \"performance\",\n    \"data\": {\n        \"xp\": " + value + "\n    }\n}");
     }
 
     @Override

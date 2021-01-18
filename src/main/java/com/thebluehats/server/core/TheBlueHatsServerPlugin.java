@@ -15,6 +15,7 @@ public class TheBlueHatsServerPlugin extends JavaPlugin implements Registerer<Pl
     @Override
     public void onEnable() {
         spigotApplication = new SpigotApplication(this)
+                .addService(APIService.class)
                 .addService(UtilitiesService.class)
                 .addService(CustomEnchantService.class)
                 .addService(PerksService.class)
