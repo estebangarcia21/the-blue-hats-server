@@ -41,6 +41,7 @@ public class CustomEnchantService implements Service {
                 injector.getInstance(PushComesToShove.class), injector.getInstance(Volley.class),
                 injector.getInstance(Explosive.class), injector.getInstance(Telebow.class),
                 injector.getInstance(Robinhood.class), injector.getInstance(MegaLongBow.class),
+                injector.getInstance(LuckyShot.class), doubleJump, injector.getInstance(BottomlessQuiver.class),
                 injector.getInstance(LuckyShot.class), doubleJump, injector.getInstance(Gamble.class), 
                 injector.getInstance(Chipping.class) });
 
