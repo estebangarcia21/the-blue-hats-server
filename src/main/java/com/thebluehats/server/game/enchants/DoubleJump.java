@@ -37,7 +37,8 @@ public class DoubleJump implements CustomEnchant, GlobalTimerListener, Listener 
             return;
         }
 
-        player.setAllowFlight(customEnchantUtils.itemHasEnchant(this, leggings) && !timer.isRunning(player.getUniqueId()));
+        player.setAllowFlight(
+                customEnchantUtils.itemHasEnchant(this, leggings) && !timer.isRunning(player.getUniqueId()));
     }
 
     @EventHandler
