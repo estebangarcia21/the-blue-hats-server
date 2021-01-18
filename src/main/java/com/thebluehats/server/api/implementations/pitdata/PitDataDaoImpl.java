@@ -1,7 +1,5 @@
 package com.thebluehats.server.api.implementations.pitdata;
 
-import java.util.UUID;
-
 import com.google.inject.Inject;
 import com.thebluehats.server.api.daos.PitDataDao;
 import com.thebluehats.server.api.models.PitDataModel;
@@ -10,18 +8,19 @@ import com.thebluehats.server.api.utils.DataLoader;
 import com.thebluehats.server.core.modules.annotations.PitDataProvider;
 import com.thebluehats.server.core.modules.annotations.ServerApi;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
-
+import kong.unirest.UnirestInstance;
 import org.bukkit.entity.Player;
 
-import kong.unirest.UnirestInstance;
+import java.util.UUID;
 
 public class PitDataDaoImpl implements PitDataDao, PluginLifecycleListener, DataLoader {
+    private final String API_KEY = System.getenv("API_KEY");
     private final CrudRepository<PitDataModel, UUID> pitDataRepository;
     private final UnirestInstance serverApi;
 
     @Inject
     public PitDataDaoImpl(@ServerApi UnirestInstance serverApi,
-            @PitDataProvider CrudRepository<PitDataModel, UUID> pitDataRepository) {
+                          @PitDataProvider CrudRepository<PitDataModel, UUID> pitDataRepository) {
         this.pitDataRepository = pitDataRepository;
         this.serverApi = serverApi;
     }
@@ -43,7 +42,12 @@ public class PitDataDaoImpl implements PitDataDao, PluginLifecycleListener, Data
 
     @Override
     public void setPlayerGold(Player player, double value) {
-        pitDataRepository.update(player.getUniqueId(), model -> model.setGold(value));
+        serverApi.put("/game-data/the-pit/{uuid}")
+            .routeParam("uuid", player.getUniqueId().toString())
+            .queryString("key", API_KEY)
+            .header("", "")
+            .header("Content-Type", "application/json")
+            .body("{\n    \"type\": \"performance\",\n    \"data\": {\n        \"xp\": " + value + "\n    }\n}");
     }
 
     @Override
