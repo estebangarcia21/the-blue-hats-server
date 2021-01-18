@@ -1,4 +1,4 @@
-package com.thebluehats.server.core;
+package com.thebluehats.server.core.services;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;

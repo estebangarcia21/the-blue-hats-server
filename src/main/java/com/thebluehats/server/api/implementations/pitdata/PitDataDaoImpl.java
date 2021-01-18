@@ -6,7 +6,7 @@ import com.thebluehats.server.api.models.PitDataModel;
 import com.thebluehats.server.api.utils.CrudRepository;
 import com.thebluehats.server.api.utils.DataLoader;
 import com.thebluehats.server.core.modules.annotations.PitDataProvider;
-import com.thebluehats.server.core.modules.annotations.ServerApi;
+import com.thebluehats.server.core.modules.annotations.ServerAPI;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
 import kong.unirest.UnirestInstance;
 import org.bukkit.entity.Player;
@@ -14,20 +14,23 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class PitDataDaoImpl implements PitDataDao, PluginLifecycleListener, DataLoader {
-    private final String API_KEY = System.getenv("API_KEY");
     private final CrudRepository<PitDataModel, UUID> pitDataRepository;
-    private final UnirestInstance serverApi;
+    private final UnirestInstance serverAPI;
 
     @Inject
-    public PitDataDaoImpl(@ServerApi UnirestInstance serverApi,
+    public PitDataDaoImpl(@ServerAPI UnirestInstance serverAPI,
                           @PitDataProvider CrudRepository<PitDataModel, UUID> pitDataRepository) {
         this.pitDataRepository = pitDataRepository;
-        this.serverApi = serverApi;
+        this.serverAPI = serverAPI;
     }
 
     @Override
     public int getPlayerXp(Player player) {
-        return pitDataRepository.findUnique(player.getUniqueId()).getXp();
+        // TODO Next level xp
+        return serverAPI.get("/api/v1/game-data/the-pit/{uuid}")
+            .routeParam("uuid", player.getUniqueId().toString())
+            .queryString("key", System.getenv("API_KEY"))
+            .asJson().getBody().getObject().getInt("xp");
     }
 
     @Override
@@ -37,17 +40,20 @@ public class PitDataDaoImpl implements PitDataDao, PluginLifecycleListener, Data
 
     @Override
     public double getPlayerGold(Player player) {
-        return pitDataRepository.findUnique(player.getUniqueId()).getGold();
+        return serverAPI.get("/api/v1/game-data/the-pit/{uuid}")
+            .routeParam("uuid", player.getUniqueId().toString())
+            .queryString("key", System.getenv("API_KEY"))
+            .asJson().getBody().getObject().getDouble("gold");
     }
 
     @Override
     public void setPlayerGold(Player player, double value) {
-        serverApi.put("/game-data/the-pit/{uuid}")
-            .routeParam("uuid", player.getUniqueId().toString())
-            .queryString("key", API_KEY)
-            .header("", "")
-            .header("Content-Type", "application/json")
-            .body("{\n    \"type\": \"performance\",\n    \"data\": {\n        \"xp\": " + value + "\n    }\n}");
+//        serverApi.put("/game-data/the-pit/{uuid}")
+//            .routeParam("uuid", player.getUniqueId().toString())
+//            .queryString("key", API_KEY)
+//            .header("", "")
+//            .header("Content-Type", "application/json")
+//            .body("{\n    \"type\": \"performance\",\n    \"data\": {\n        \"xp\": " + value + "\n    }\n}");
     }
 
     @Override

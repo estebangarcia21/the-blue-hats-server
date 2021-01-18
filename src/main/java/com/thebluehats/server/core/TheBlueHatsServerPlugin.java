@@ -1,5 +1,6 @@
 package com.thebluehats.server.core;
 
+import com.thebluehats.server.core.services.*;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
 import com.thebluehats.server.game.utils.Registerer;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +16,7 @@ public class TheBlueHatsServerPlugin extends JavaPlugin implements Registerer<Pl
     @Override
     public void onEnable() {
         spigotApplication = new SpigotApplication(this)
+                .addService(APIService.class)
                 .addService(UtilitiesService.class)
                 .addService(CustomEnchantService.class)
                 .addService(PerksService.class)
