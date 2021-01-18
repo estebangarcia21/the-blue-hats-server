@@ -14,7 +14,7 @@ public class ServerApiModule extends AbstractModule {
     @ServerApi
     static UnirestInstance provideServerApi() {
         String apiUrl = System.getenv("API_URL");
-        String defaultApiUrl = "http://localhost:3000/api";
+        String defaultApiUrl = "http://localhost:4000";
 
         if (apiUrl != null) {
             if (apiUrl.isEmpty()) {

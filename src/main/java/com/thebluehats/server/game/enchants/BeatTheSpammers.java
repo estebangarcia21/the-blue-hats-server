@@ -23,7 +23,7 @@ public class BeatTheSpammers extends DamageTriggeredEnchant {
 
     @Inject
     public BeatTheSpammers(DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger) {
-        super(new DamageEnchantTrigger[] { playerDamageTrigger }, new EntityValidator[] { damageManager });
+        super(new DamageEnchantTrigger[]{playerDamageTrigger}, new EntityValidator[]{damageManager});
 
         this.damageManager = damageManager;
     }
@@ -32,7 +32,7 @@ public class BeatTheSpammers extends DamageTriggeredEnchant {
     public void execute(DamageEventEnchantData data) {
         if (data.getDamagee().getInventory().getItemInHand().getType() == Material.BOW) {
             damageManager.addDamage(data.getEvent(), damageAmount.getValueAtLevel(data.getLevel()),
-                    CalculationMode.ADDITIVE);
+                CalculationMode.ADDITIVE);
         }
     }
 
@@ -49,7 +49,7 @@ public class BeatTheSpammers extends DamageTriggeredEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Deal <red>{0}</red> damage vs. players<br/>holding a bow");
+            "Deal <red>{0}</red> damage vs. players<br/>holding a bow");
 
         enchantLoreParser.setSingleVariable("+10%", "+25%", "+40%");
 
@@ -73,7 +73,7 @@ public class BeatTheSpammers extends DamageTriggeredEnchant {
 
     @Override
     public Material[] getEnchantItemTypes() {
-        return new Material[] { Material.GOLD_SWORD };
+        return new Material[]{Material.GOLD_SWORD};
     }
 
     @Override
