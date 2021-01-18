@@ -3,6 +3,7 @@ package com.thebluehats.server.core;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.thebluehats.server.core.modules.*;
+import com.thebluehats.server.core.services.Service;
 import com.thebluehats.server.game.utils.PluginLifecycleListener;
 import org.bukkit.Bukkit;
 
