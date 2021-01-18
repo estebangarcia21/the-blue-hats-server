@@ -11,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-import sun.tools.jconsole.JConsole;
 
 import java.util.ArrayList;
 import java.util.UUID;
