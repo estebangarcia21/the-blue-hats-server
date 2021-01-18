@@ -21,7 +21,7 @@ public class CustomEnchantService implements Service {
     public void provision(Injector injector) {
         BooBoo booboo = injector.getInstance(BooBoo.class);
         DoubleJump doubleJump = injector.getInstance(DoubleJump.class);
-      
+
         registerer.register(new CustomEnchant[] { injector.getInstance(BeatTheSpammers.class),
                 injector.getInstance(Wasp.class), injector.getInstance(Peroxide.class),
                 injector.getInstance(SprintDrain.class), injector.getInstance(ComboSwift.class),
