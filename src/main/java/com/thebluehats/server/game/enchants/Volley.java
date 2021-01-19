@@ -1,10 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
 import com.thebluehats.server.game.managers.combat.BowManager;
-import com.thebluehats.server.game.managers.enchants.CustomEnchant;
-import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils;
-import com.thebluehats.server.game.managers.enchants.EnchantGroup;
-import com.thebluehats.server.game.managers.enchants.EnchantProperty;
+import com.thebluehats.server.game.managers.enchants.*;
 import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
 import com.thebluehats.server.game.utils.EnchantLoreParser;
 import org.bukkit.Bukkit;
@@ -57,9 +54,10 @@ public class Volley implements CustomEnchant, Listener {
                 Player player = (Player) eventArrow.getShooter();
 
                 ItemStack bow = bowManager.getBowFromArrow(eventArrow);
+                CustomEnchantUtils.ItemEnchantData data = customEnchantUtils.getItemEnchantData(this, bow);
 
-                if (customEnchantUtils.itemHasEnchant(this, bow)) {
-                    execute(customEnchantUtils.getEnchantLevel(this, bow), player, eventArrow, event.getForce());
+                if (data.itemHasEnchant()) {
+                    execute(data.getEnchantLevel(), player, eventArrow, event.getForce());
                 }
             }
         }
