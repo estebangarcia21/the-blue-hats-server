@@ -1,8 +1,9 @@
 package com.thebluehats.server.game.managers.world;
 
-import com.thebluehats.server.api.daos.PitDataDao;
+import com.thebluehats.server.api.daos.PerformanceStatsService;
 import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.combat.CombatStatus;
+import com.thebluehats.server.game.managers.enchants.GlobalTimerListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,33 +18,29 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class PitScoreboard implements Listener {
+public class PitScoreboard implements Listener, GlobalTimerListener {
     private final CombatManager combatManager;
-    private final PitDataDao pitDataDao;
+    private final PerformanceStatsService performanceStatsService;
 
     @Inject
-    public PitScoreboard(CombatManager combatManager, PitDataDao pitDataDao) {
+    public PitScoreboard(CombatManager combatManager, PerformanceStatsService performanceStatsService) {
         this.combatManager = combatManager;
-        this.pitDataDao = pitDataDao;
+        this.performanceStatsService = performanceStatsService;
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        setScoreboard(event.getPlayer());
+        buildScoreboard(event.getPlayer());
     }
 
-    public void updateScoreboard(Player player) {
-
-    }
-
-    private void setScoreboard(Player player) {
+    public void buildScoreboard(Player player) {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         Board optimizedBoard = new Board(scoreboard);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yy");
         Date date = new Date();
 
-        DecimalFormat decimalFormat = new DecimalFormat("#00.00");
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
         optimizedBoard.title(ChatColor.YELLOW.toString() + ChatColor.BOLD + "THE BLUE HATS PIT");
         optimizedBoard.line(appendColors(ChatColor.GRAY + simpleDateFormat.format(date) + " " + ChatColor.DARK_GRAY + "mega69L"));
@@ -54,7 +51,7 @@ public class PitScoreboard implements Listener {
         optimizedBoard.line(formatLine("XP", ChatColor.AQUA, "MAXED!", false));
         optimizedBoard.line("  ");
 
-        optimizedBoard.line(formatLine("Gold", ChatColor.GOLD, decimalFormat.format(pitDataDao.getPlayerGold(player)), false));
+        optimizedBoard.line(formatLine("Gold", ChatColor.GOLD, decimalFormat.format(performanceStatsService.getPlayerGold(player)), false));
         optimizedBoard.line("   ");
 
         optimizedBoard.line(formatLine("Status", null, formatStatus(player), false));
@@ -110,6 +107,18 @@ public class PitScoreboard implements Listener {
         CombatStatus combatStatus = combatManager.getStatus(player);
         String formattedStatus = combatStatus.getFormattedStatus();
 
-        return combatStatus == CombatStatus.COMBAT ? formattedStatus + " " + ChatColor.RESET + ChatColor.GRAY + combatManager.getCombatTime(player) : formattedStatus;
+        return combatStatus == CombatStatus.COMBAT ?
+            formattedStatus + " " + ChatColor.RESET + ChatColor.GRAY + "(" + combatManager.getCombatTime(player) + ")" :
+            formattedStatus;
+    }
+
+    @Override
+    public void onTick(Player player) {
+        buildScoreboard(player);
+    }
+
+    @Override
+    public long getTickDelay() {
+        return 20L;
     }
 }
