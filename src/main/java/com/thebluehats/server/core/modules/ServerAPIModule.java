@@ -8,7 +8,7 @@ import com.thebluehats.server.core.modules.annotations.ServerAPI;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestInstance;
 
-public class ServerApiModule extends AbstractModule {
+public class ServerAPIModule extends AbstractModule {
     @Provides
     @Singleton
     @ServerAPI
@@ -26,6 +26,7 @@ public class ServerApiModule extends AbstractModule {
 
         UnirestInstance instance = Unirest.spawnInstance();
         instance.config().defaultBaseUrl(apiUrl);
+        instance.config().setDefaultHeader("x-api-key", System.getenv("API_KEY"));
 
         return instance;
     }
