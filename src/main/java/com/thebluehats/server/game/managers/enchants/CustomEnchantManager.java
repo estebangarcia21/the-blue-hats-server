@@ -17,6 +17,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.inject.Inject;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CustomEnchantManager implements Registerer<CustomEnchant> {
     private final ArrayList<CustomEnchant> enchants = new ArrayList<>();
@@ -83,8 +85,7 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
 
         boolean isFreshItem = isFreshItem(item);
 
-        if (itemKey == null || itemMeta == null)
-            return;
+        if (itemKey == null || itemMeta == null) return;
 
         if (itemKey.equals("LEGGINGS")) {
             ImmutableMap<FreshPantsColor, PantsDataValue> pantsData = this.pantsData.getData();
@@ -104,12 +105,11 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
                 itemMeta.setDisplayName(textColor + "Tier I Pants");
 
                 itemMeta.setLore(finalizePantsLore(enchantName, isRareEnchant, level, description, textColor));
-
             } else {
                 itemMeta.setDisplayName(tierColors.get(1) + "Tier I " + properlyCasedKey);
+                itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
 
                 itemMeta.setLore(finalizeHandheldLore(enchantName, isRareEnchant, level, description));
-
             }
 
             item.setItemMeta(itemMeta);
@@ -134,13 +134,11 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
             itemMeta.setLore(lore);
 
         } else {
-            if (tierUp)
-                itemMeta.setDisplayName(upgradeTier(itemMeta.getDisplayName()));
+            if (tierUp) itemMeta.setDisplayName(upgradeTier(itemMeta.getDisplayName()));
 
             List<String> lore = itemMeta.getLore();
 
-            if (lore == null)
-                return;
+            if (lore == null) return;
 
             lore.add("");
             lore.add(formatEnchantName(enchantName, isRareEnchant, level));
@@ -149,7 +147,6 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
             itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
 
             itemMeta.setLore(lore);
-
         }
 
         item.setItemMeta(itemMeta);
@@ -208,7 +205,10 @@ public class CustomEnchantManager implements Registerer<CustomEnchant> {
     }
 
     public boolean isFreshItem(ItemStack item) {
-        return item.getItemMeta().getDisplayName().contains("Fresh");
+        Pattern p = Pattern.compile("(Mystic Bow|Mystic Sword|Fresh)");
+        Matcher m = p.matcher(item.getItemMeta().getDisplayName());
+
+        return m.find();
     }
 
     private void trimPantsLoreEnding(List<String> lore) {
