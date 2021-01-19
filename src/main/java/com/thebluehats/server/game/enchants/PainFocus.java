@@ -36,7 +36,7 @@ public class PainFocus extends DamageTriggeredEnchant {
         Player damager = data.getDamager();
         int level = data.getLevel();
 
-        int heartsLost = (int) (damager.getMaxHealth() - damager.getHealth()) / 2;
+        int heartsLost = (int) ((damager.getMaxHealth() - damager.getHealth()) / 2);
 
         damageManager.addDamage(event, damageIncreasePerHeartLost.getValueAtLevel(level) * heartsLost,
                 CalculationMode.ADDITIVE);
