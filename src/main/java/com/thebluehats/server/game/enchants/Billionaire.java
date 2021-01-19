@@ -1,7 +1,7 @@
 package com.thebluehats.server.game.enchants;
 
 import com.google.inject.Inject;
-import com.thebluehats.server.api.daos.PitDataDao;
+import com.thebluehats.server.api.daos.PerformanceStatsService;
 import com.thebluehats.server.game.managers.combat.CalculationMode;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger;
@@ -23,11 +23,11 @@ public class Billionaire extends DamageTriggeredEnchant {
     private final EnchantProperty<Double> damageIncrease = new EnchantProperty<>(1.33D, 1.67D, 2D);
     private final EnchantProperty<Integer> goldNeeded = new EnchantProperty<>(100, 200, 350);
 
-    private final PitDataDao pitData;
+    private final PerformanceStatsService pitData;
     private final DamageManager damageManager;
 
     @Inject
-    public Billionaire(PitDataDao pitData, DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger) {
+    public Billionaire(PerformanceStatsService pitData, DamageManager damageManager, PlayerDamageTrigger playerDamageTrigger) {
         super(new DamageEnchantTrigger[] { playerDamageTrigger }, new EntityValidator[] { damageManager });
 
         this.pitData = pitData;
