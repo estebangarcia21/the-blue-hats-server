@@ -11,10 +11,11 @@ import com.thebluehats.server.game.managers.world.regionmanager.RegionManager;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class CombatManager {
+public class CombatManager implements Listener {
     private final RegionManager regionManager;
     private final Timer<UUID> timer;
     private final PlayerHitPlayerVerifier playerHitPlayerVerifier;
@@ -34,6 +35,8 @@ public class CombatManager {
         if (playerHitPlayerVerifier.verify(event)) {
             combatTag((Player) event.getDamager());
             combatTag((Player) event.getEntity());
+
+            return;
         }
 
         if (arrowHitPlayerVerifier.verify(event)) {
@@ -60,7 +63,7 @@ public class CombatManager {
     }
 
     public long getCombatTime(Player player) {
-        return timer.getTime(player.getUniqueId());
+        return timer.getTime(player.getUniqueId()) / 20;
     }
 
     private int calculateCombatTime() {

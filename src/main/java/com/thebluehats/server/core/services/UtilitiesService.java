@@ -2,6 +2,8 @@ package com.thebluehats.server.core.services;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.thebluehats.server.game.managers.combat.BowManager;
+import com.thebluehats.server.game.managers.combat.CombatManager;
 import com.thebluehats.server.game.managers.combat.DamageManager;
 import com.thebluehats.server.game.managers.enchants.GlobalTimer;
 import com.thebluehats.server.game.managers.world.PitScoreboard;
@@ -32,13 +34,17 @@ public class UtilitiesService implements Service {
     @Override
     public void provision(Injector injector) {
         getServer().getPluginManager().registerEvents(injector.getInstance(DamageManager.class), plugin);
+        getServer().getPluginManager().registerEvents(injector.getInstance(CombatManager.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(WorldSelectionManager.class), plugin);
-        getServer().getPluginManager().registerEvents(injector.getInstance(PitScoreboard.class), plugin);
+
+        PitScoreboard pitScoreboard = injector.getInstance(PitScoreboard.class);
+        getServer().getPluginManager().registerEvents(pitScoreboard, plugin);
 
         getServer().getPluginManager().registerEvents(injector.getInstance(Bread.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(EnderChest.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(AntiHunger.class), plugin);
         getServer().getPluginManager().registerEvents(injector.getInstance(DamageIndicator.class), plugin);
+        getServer().getPluginManager().registerEvents(injector.getInstance(BowManager.class), plugin);
 
         Obsidian obsidian = injector.getInstance(Obsidian.class);
         getServer().getPluginManager().registerEvents(obsidian, plugin);
@@ -52,6 +58,7 @@ public class UtilitiesService implements Service {
         getServer().getPluginManager().registerEvents(injector.getInstance(SpawnProtection.class), plugin);
 
         globalTimer.addListener(injector.getInstance(PlayableArea.class));
+        globalTimer.addListener(pitScoreboard);
 
         pluginLifecycleListenerRegisterer.register(new PluginLifecycleListener[] { obsidian, globalTimer });
     }
