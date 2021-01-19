@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class GlobalTimer implements PluginLifecycleListener {
     private final ArrayList<GlobalTimerListener> listeners = new ArrayList<>();
+    private final ArrayList<Long> times = new ArrayList<>();
 
     private final JavaPlugin plugin;
 
@@ -24,13 +25,39 @@ public class GlobalTimer implements PluginLifecycleListener {
 
     @Override
     public void onPluginStart() {
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                for (GlobalTimerListener listener : listeners) {
-                    listener.onTick(player);
-                }
+        for (GlobalTimerListener globalTimerListener : listeners) {
+            long tickDelay = globalTimerListener.getTickDelay();
+
+            if (!times.contains(tickDelay)) {
+                times.add(tickDelay);
+
+                Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        for (GlobalTimerListener listener : listeners) {
+                            if (listener.getTickDelay() == tickDelay) {
+                                listener.onTick(player);
+                            }
+                        }
+                    }
+                }, 0L, tickDelay);
             }
-        }, 0L, 1L);
+        }
+//
+//        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+//            for (Player player : Bukkit.getOnlinePlayers()) {
+//                for (GlobalTimerListener listener : listeners) {
+//                    listener.onTick(player);
+//                }
+//            }
+//        }, 0L, 1L);
+//
+//        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+//            for (Player player : Bukkit.getOnlinePlayers()) {
+//                for (GlobalTimerListener listener : listeners) {
+//                    listener.onTick(player);
+//                }
+//            }
+//        }, 0L, 20L);
     }
 
     @Override

@@ -22,7 +22,6 @@ public class BooBoo implements CustomEnchant, GlobalTimerListener {
         this.timer = timer;
     }
 
-    // TODO Optimize Boo-boo
     @Override
     public void onTick(Player player) {
         ItemStack leggings = player.getInventory().getLeggings();
@@ -34,6 +33,11 @@ public class BooBoo implements CustomEnchant, GlobalTimerListener {
 
             timer.start(player.getUniqueId(), ticks, false, () -> execute(player));
         }
+    }
+
+    @Override
+    public long getTickDelay() {
+        return 1L;
     }
 
     public void execute(Player player) {

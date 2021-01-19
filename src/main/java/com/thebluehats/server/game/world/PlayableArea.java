@@ -27,4 +27,9 @@ public class PlayableArea implements GlobalTimerListener {
             player.sendMessage(ChatColor.RED + "Congratulations! You went out of the map!");
         }
     }
+
+    @Override
+    public long getTickDelay() {
+        return 1L;
+    }
 }

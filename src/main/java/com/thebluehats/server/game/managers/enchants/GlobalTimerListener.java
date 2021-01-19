@@ -4,4 +4,6 @@ import org.bukkit.entity.Player;
 
 public interface GlobalTimerListener {
     void onTick(Player player);
+
+    long getTickDelay();
 }

@@ -41,6 +41,11 @@ public class DoubleJump implements CustomEnchant, GlobalTimerListener, Listener 
                 customEnchantUtils.itemHasEnchant(this, leggings) && !timer.isRunning(player.getUniqueId()));
     }
 
+    @Override
+    public long getTickDelay() {
+        return 1L;
+    }
+
     @EventHandler
     public void onFlightAttempt(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
