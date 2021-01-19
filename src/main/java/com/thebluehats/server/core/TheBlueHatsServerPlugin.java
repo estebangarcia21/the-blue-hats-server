@@ -11,23 +11,24 @@ import java.util.Arrays;
 public class TheBlueHatsServerPlugin extends JavaPlugin implements Registerer<PluginLifecycleListener> {
     private final ArrayList<PluginLifecycleListener> lifecycleListeners = new ArrayList<>();
 
-    private SpigotApplication spigotApplication;
+    private Application app;
 
     @Override
     public void onEnable() {
-        spigotApplication = new SpigotApplication(this)
+        app = new ApplicationBuilder(this)
                 .addService(APIService.class)
                 .addService(UtilitiesService.class)
                 .addService(CustomEnchantService.class)
                 .addService(PerksService.class)
-                .addService(CommandsService.class);
+                .addService(CommandsService.class)
+                .build();
 
-        spigotApplication.runApplication();
+        app.start();
     }
 
     @Override
     public void onDisable() {
-        spigotApplication.endApplication();
+        app.stop();
     }
 
     @Override
