@@ -1,21 +1,16 @@
 package com.thebluehats.server.game.commands;
 
-import java.util.UUID;
-
 import com.google.inject.Inject;
-import com.thebluehats.server.api.models.PitDataModel;
-import com.thebluehats.server.api.utils.CrudRepository;
-import com.thebluehats.server.core.modules.annotations.PitDataProvider;
-
+import com.thebluehats.server.api.daos.PerformanceStatsService;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 
 public class SetGoldCommand extends GameCommand {
-    private final CrudRepository<PitDataModel, UUID> pitDataRepository;
+    private final PerformanceStatsService performanceStatsService;
 
     @Inject
-    public SetGoldCommand(@PitDataProvider CrudRepository<PitDataModel, UUID> pitDataRepository) {
-        this.pitDataRepository = pitDataRepository;
+    public SetGoldCommand(PerformanceStatsService performanceStatsService) {
+        this.performanceStatsService = performanceStatsService;
     }
 
     @Override
@@ -33,7 +28,7 @@ public class SetGoldCommand extends GameCommand {
         if (StringUtils.isNumeric(args[0])) {
             double gold = Math.min(Double.parseDouble(args[0]), 1000000000);
 
-            pitDataRepository.update(player.getUniqueId(), model -> model.setGold(gold));
+            performanceStatsService.setPlayerGold(player, gold);
         } else {
             player.sendMessage(getUsageMessage(commandName));
         }
