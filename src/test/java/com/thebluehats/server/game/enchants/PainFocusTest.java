@@ -7,7 +7,10 @@ import com.thebluehats.server.game.managers.enchants.processedevents.DamageEvent
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.junit.Test;
+import org.powermock.api.mockito.PowerMockito;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Mockito.*;
 
 public class PainFocusTest {
@@ -17,13 +20,10 @@ public class PainFocusTest {
         PainFocus painFocus = new PainFocus(damageManager, mock(PlayerDamageTrigger.class));
 
         Player damager = mock(Player.class);
-        doReturn(20.0).when(damager).getMaxHealth();
-//        when(damager.getMaxHealth()).thenReturn(20.0);
+        when(damager.getMaxHealth()).thenReturn(20.0);
         when(damager.getHealth()).thenReturn(20.0);
 
         Player damagee = mock(Player.class);
-        when(damagee.getMaxHealth()).thenReturn(20.0);
-        when(damagee.getHealth()).thenReturn(20.0);
 
         EntityDamageByEntityEvent event = mock(EntityDamageByEntityEvent.class);
 
@@ -36,6 +36,6 @@ public class PainFocusTest {
 
         painFocus.execute(data);
 
-        verify(damageManager).addDamage(event, 0.25D, CalculationMode.ADDITIVE);
+        verify(damageManager).addDamage(any(), anyDouble(), any());
     }
 }

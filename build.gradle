@@ -19,8 +19,10 @@ dependencies {
     implementation "com.google.inject:guice:4.1.0"
     implementation "com.google.code.gson:gson:2.8.6"
     implementation "org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT"
-    testImplementation "junit:junit:4.11"
-    testImplementation "org.mockito:mockito-core:3.5.15"
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.powermock:powermock-api-mockito:1.6.4"
+    testImplementation "org.powermock:powermock-module-junit4-rule:1.6.4"
+    testImplementation "org.powermock:powermock-module-junit4:1.6.4"
 }
 
 sourceCompatibility = 1.8
@@ -28,11 +30,4 @@ targetCompatibility = 1.8
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
-}
-
-tasks.withType(Test) {
-    jvmArgs([
-        "--add-opens=java.base/java.lang=ALL-UNNAMED",
-        "--add-opens=java.logging/java.util.logging=ALL-UNNAMED",
-    ])
 }
