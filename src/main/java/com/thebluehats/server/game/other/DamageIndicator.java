@@ -22,7 +22,8 @@ public class DamageIndicator implements Listener {
     private final DamageManager damageManager;
 
     @Inject
-    public DamageIndicator(DamageManager damageManager, PlayerHitPlayerVerifier playerHitPlayerVerifier, ArrowHitPlayerVerifier arrowHitPlayerVerifier) {
+    public DamageIndicator(DamageManager damageManager, PlayerHitPlayerVerifier playerHitPlayerVerifier,
+            ArrowHitPlayerVerifier arrowHitPlayerVerifier) {
         this.damageManager = damageManager;
         this.playerHitPlayerVerifier = playerHitPlayerVerifier;
         this.arrowHitPlayerVerifier = arrowHitPlayerVerifier;
@@ -41,15 +42,16 @@ public class DamageIndicator implements Listener {
     }
 
     private void displayIndicator(Player damager, Player damaged, double damageTaken) {
-        PacketPlayOutChat packet = new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a("{\"text\":\"" +
-                buildIndicator(damaged, damageTaken) + "\"}"), (byte) 2);
+        PacketPlayOutChat packet = new PacketPlayOutChat(
+                IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + buildIndicator(damaged, damageTaken) + "\"}"),
+                (byte) 2);
 
         ((CraftPlayer) damager).getHandle().playerConnection.sendPacket(packet);
     }
 
     private String buildIndicator(Player damaged, double damageTaken) {
         int health = (int) damaged.getHealth() / 2;
-        int maxHealth  = (int) damaged.getMaxHealth() / 2;
+        int maxHealth = (int) damaged.getMaxHealth() / 2;
         int absorptionHearts = (int) ((CraftPlayer) damaged).getHandle().getAbsorptionHearts() / 2;
 
         int roundedDamageTaken = (int) damageTaken;
@@ -75,7 +77,8 @@ public class DamageIndicator implements Listener {
             indicatorString.append(ChatColor.YELLOW.toString()).append("❤");
         }
 
-        indicatorString.append(ChatColor.RED.toString()).append(" ").append(new DecimalFormat("###0.000").format(damageTaken / 2)).append("HP");
+        indicatorString.append(ChatColor.RED.toString()).append(" ")
+                .append(new DecimalFormat("###0.000").format(damageTaken)).append("HP");
 
         return indicatorString.toString();
     }

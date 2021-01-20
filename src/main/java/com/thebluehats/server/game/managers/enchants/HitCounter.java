@@ -5,9 +5,7 @@ import java.util.UUID;
 
 import com.google.inject.Inject;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class HitCounter {
     private final HashMap<UUID, HitCounterData> timerData = new HashMap<>();

@@ -37,7 +37,7 @@ public class DamageManager implements EntityValidator, DataInitializer {
 
     @Inject
     public DamageManager(@MirrorReference Mirror mirror, CombatManager combatManager,
-                         CustomEnchantUtils customEnchantUtils, RegionManager regionManager) {
+            CustomEnchantUtils customEnchantUtils, RegionManager regionManager) {
         this.combatManager = combatManager;
         this.mirror = mirror;
         this.customEnchantUtils = customEnchantUtils;
@@ -106,12 +106,12 @@ public class DamageManager implements EntityValidator, DataInitializer {
         EventData data = eventData.computeIfAbsent(event.getDamager().getUniqueId(), k -> new EventData());
 
         if (data.getReductionAmount() == 1) {
-            data.setReductionAmount(data.getReductionAmount() - (1 - value));
+            data.setReductionAmount(data.getReductionAmount() + value);
 
             return;
         }
 
-        data.setReductionAmount(1 - data.getReductionAmount() * value);
+        data.setReductionAmount(data.getReductionAmount() + value);
     }
 
     public void doTrueDamage(Player target, double damage) {
@@ -122,7 +122,8 @@ public class DamageManager implements EntityValidator, DataInitializer {
     }
 
     public void doTrueDamage(Player target, double damage, Player reflectTo) {
-        CustomEnchantUtils.ItemEnchantData data = customEnchantUtils.getItemEnchantData(mirror, target.getInventory().getLeggings());
+        CustomEnchantUtils.ItemEnchantData data = customEnchantUtils.getItemEnchantData(mirror,
+                target.getInventory().getLeggings());
 
         combatManager.combatTag(target);
 
@@ -172,8 +173,9 @@ public class DamageManager implements EntityValidator, DataInitializer {
     private double calculateDamage(double initialDamage, EntityDamageByEntityEvent event) {
         EventData data = eventData.computeIfAbsent(event.getDamager().getUniqueId(), k -> new EventData());
 
-        double damage = initialDamage * data.getAdditiveDamage() * data.getMultiplicativeDamage()
-                * data.getReductionAmount();
+        double damageCoefficient = data.getAdditiveDamage() - data.getReductionAmount();
+
+        double damage = (initialDamage * damageCoefficient) + (initialDamage * data.getMultiplicativeDamage());
 
         if (removeCriticalDamage.contains(event.getDamager().getUniqueId())) {
             damage *= (2D / 3D);
@@ -221,8 +223,8 @@ public class DamageManager implements EntityValidator, DataInitializer {
 
     private final static class EventData {
         private double additiveDamage = 1;
-        private double multiplicativeDamage = 1;
-        private double reductionAmount = 1;
+        private double multiplicativeDamage = 0;
+        private double reductionAmount = 0;
         private int heartReductionAmount;
 
         public int getHeartReductionAmount() {

@@ -69,7 +69,7 @@ public class FancyRaider extends DamageTriggeredEnchant {
     @Override
     public ArrayList<String> getDescription(int level) {
         EnchantLoreParser enchantLoreParser = new EnchantLoreParser(
-                "Deal <red>+</red> damage vs. players<br/>wearing leather armor");
+                "Deal <red>+{0}%</red> damage vs. players<br/>wearing leather armor");
 
         enchantLoreParser.setSingleVariable("5%", "9%", "15%");
 
