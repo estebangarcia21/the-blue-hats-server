@@ -10,7 +10,7 @@ class TimerModule : AbstractModule() {
 
     companion object {
         @Provides
-        fun provideTimer(plugin: JavaPlugin?): Timer<*> {
+        fun provideTimer(plugin: JavaPlugin): Timer<*> {
             return Timer<Any>(plugin)
         }
     }

@@ -14,8 +14,8 @@ class PitScoreboardModule : AbstractModule() {
         @Provides
         @Singleton
         fun providePitScoreboard(
-            combatManager: CombatManager?,
-            performanceStatsService: PerformanceStatsService?
+            combatManager: CombatManager,
+            performanceStatsService: PerformanceStatsService
         ): PitScoreboard {
             return PitScoreboard(combatManager, performanceStatsService)
         }

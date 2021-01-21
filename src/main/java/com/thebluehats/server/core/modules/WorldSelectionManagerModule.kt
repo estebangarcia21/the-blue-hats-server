@@ -13,7 +13,7 @@ class WorldSelectionManagerModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
-        fun provideWorldSelectionManager(plugin: JavaPlugin?, regionManager: RegionManager?): WorldSelectionManager {
+        fun provideWorldSelectionManager(plugin: JavaPlugin, regionManager: RegionManager): WorldSelectionManager {
             return WorldSelectionManager(plugin, regionManager)
         }
     }
