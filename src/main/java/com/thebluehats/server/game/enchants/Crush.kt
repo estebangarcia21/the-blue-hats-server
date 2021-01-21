@@ -1,7 +1,6 @@
 package com.thebluehats.server.game.enchants
 
 import com.google.inject.Inject
-import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder
 import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant
@@ -17,13 +16,23 @@ import org.bukkit.potion.PotionEffectType
 import java.util.*
 
 class Crush @Inject constructor(private val timer: Timer<Player>, playerDamageTrigger: PlayerDamageTrigger) :
-    DamageTriggeredEnchant(arrayOf<DamageEnchantTrigger>(playerDamageTrigger)) {
+    DamageTriggeredEnchant(arrayOf(playerDamageTrigger)) {
     private val weaknessAmplifier = EnchantProperty(4, 5, 6)
     private val weaknessDuration = EnchantProperty(4, 8, 10)
+
+    override val name = "Crush"
+    override val enchantReferenceName = "Crush"
+    override val isDisabledOnPassiveWorld = false
+    override val enchantGroup = EnchantGroup.A
+    override val isRareEnchant = false
+    override val enchantItemTypes = arrayOf(Material.GOLD_SWORD)
+    override val enchantHolder = EnchantHolder.DAMAGER
+
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager
         val damagee = data.damagee
         val level = data.level
+
         if (!timer.isRunning(damager)) {
             damagee.player.addPotionEffect(
                 PotionEffect(
@@ -32,45 +41,21 @@ class Crush @Inject constructor(private val timer: Timer<Player>, playerDamageTr
                 ), true
             )
         }
+
         timer.start(damager, 40, false)
-    }
-
-    override fun getName(): String {
-        return "Crush"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Crush"
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser(
             "Strikes apply <red>Weakness {0}</red><br/>(lasts, {1}s, 2s cooldown)"
         )
-        val variables: Array<Array<String>> = arrayOfNulls(2)
-        variables[0] = arrayOf("V", "VI", "VII")
-        variables[1] = arrayOf("0.2", "0.4", "0.5")
-        enchantLoreParser.setVariables(variables)
+
+        val vars = varMatrix()
+        vars add Var(0, "V", "VI", "VII")
+        vars add Var(1, "0.2", "0.4", "0.5")
+
+        enchantLoreParser.setVariables(vars)
+
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.A
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return false
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.GOLD_SWORD)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGER
     }
 }

@@ -1,7 +1,6 @@
 package com.thebluehats.server.game.enchants
 
 import com.google.inject.Inject
-import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder
 import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant
@@ -16,10 +15,19 @@ import org.bukkit.potion.PotionEffectType
 import java.util.*
 
 class ComboSwift @Inject constructor(private val hitCounter: HitCounter, playerDamageTrigger: PlayerDamageTrigger) :
-    DamageTriggeredEnchant(arrayOf<DamageEnchantTrigger>(playerDamageTrigger)) {
+    DamageTriggeredEnchant(arrayOf(playerDamageTrigger)) {
     private val speedTime = EnchantProperty(3, 4, 5)
     private val speedAmplifier = EnchantProperty(0, 1, 1)
     private val hitsNeeded = EnchantProperty(4, 3, 3)
+
+    override val name: String get() = "Combo: Swift"
+    override val enchantReferenceName: String get() = "Combostun"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = false
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.GOLD_SWORD)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
+
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager
         val level = data.level
@@ -34,43 +42,18 @@ class ComboSwift @Inject constructor(private val hitCounter: HitCounter, playerD
         }
     }
 
-    override fun getName(): String {
-        return "Combo: Swift"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Comboswift"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser(
             "Every <yellow>{0}</yellow> strike gain<br/><yellow>Speed {1}</yellow> ({2}s)"
         )
-        val variables: Array<Array<String>> = arrayOfNulls(3)
-        variables[0] = arrayOf("fourth", "third", "third")
-        variables[1] = arrayOf("I", "II", "III")
-        variables[2] = arrayOf("3", "4", "5")
-        enchantLoreParser.setVariables(variables)
+
+        val vars = varMatrix()
+        vars add Var(0, "fourth", "third", "third")
+        vars add Var(1, "I", "II", "III")
+        vars add Var(2, "3", "4", "5")
+
+        enchantLoreParser.setVariables(vars)
+
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return false
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.GOLD_SWORD)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGER
     }
 }

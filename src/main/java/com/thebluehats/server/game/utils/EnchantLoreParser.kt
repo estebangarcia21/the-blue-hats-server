@@ -3,7 +3,7 @@ package com.thebluehats.server.game.utils
 import org.apache.commons.lang.StringUtils
 import java.util.*
 
-class EnchantLoreParser(lore: String?) : LoreParserBase<Array<Array<String>?>>(lore) {
+class EnchantLoreParser(lore: String = "") : LoreParserBase<Array<Array<String>?>>(lore) {
     private val appensions = ArrayList<String>()
 
     private var variableMatrix: Array<Array<String>?>? = null

@@ -20,15 +20,23 @@ class Executioner @Inject constructor(
     private val damageManager: DamageManager,
     playerDamageTrigger: PlayerDamageTrigger
 ) : DamageTriggeredEnchant(
-    arrayOf<DamageEnchantTrigger>(playerDamageTrigger), arrayOf<EntityValidator>(
-        damageManager
-    )
+    arrayOf(playerDamageTrigger), arrayOf(damageManager)
 ) {
     private val heartsToDie = EnchantProperty(3, 4, 4)
+
+    override val name: String get() = "Executioner"
+    override val enchantReferenceName: String get() = "Executioner"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.GOLD_SWORD)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
+
     override fun execute(data: DamageEventEnchantData) {
         val damagee = data.damagee
         val level = data.level
         val damager = data.damager
+
         if (damagee.health - damageManager.getFinalDamageFromEvent(data.event) / 2 <= heartsToDie.getValueAtLevel(level) && damagee.health > 0) {
             damagee.sendMessage(
                 ChatColor.RED.toString() + ChatColor.BOLD + "EXECUTED!" + ChatColor.GRAY + " by " //                    + PermissionsManager.getInstance().getPlayerRank((Player) args[1]).getNameColor()
@@ -36,6 +44,7 @@ class Executioner @Inject constructor(
                         + damagee.name + ChatColor.GRAY + " (insta-kill below " + ChatColor.RED
                         + heartsToDie.getValueAtLevel(level) / 2 + "❤" + ChatColor.GRAY + ")"
             )
+
             damagee.world.playSound(damagee.location, Sound.VILLAGER_DEATH, 1f, 0.5f)
 
             // TODO Add name color in message
@@ -46,37 +55,11 @@ class Executioner @Inject constructor(
         }
     }
 
-    override fun getName(): String {
-        return "Executioner"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Executioner"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("Hitting an enemy below <red>{0}</red> instantly kills them")
+
         enchantLoreParser.setSingleVariable("1.5❤", "2❤", "2❤")
-        return null
-    }
 
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return false
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.GOLD_SWORD)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGER
+        return enchantLoreParser.parseForLevel(level)
     }
 }

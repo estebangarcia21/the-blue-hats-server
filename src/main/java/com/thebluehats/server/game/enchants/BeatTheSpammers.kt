@@ -23,13 +23,13 @@ class BeatTheSpammers @Inject constructor(
 ) {
     private val damageAmount = EnchantProperty(.10f, .25f, .40f)
 
-    override val name = "Beat the Spammers"
-    override val enchantReferenceName = "Beatthespammers"
-    override val isDisabledOnPassiveWorld = false
-    override val enchantGroup = EnchantGroup.A
-    override val isRareEnchant = false
-    override val enchantItemTypes = arrayOf(Material.BOW)
-    override val enchantHolder = EnchantHolder.DAMAGER
+    override val name: String get() = "Beat the Spammers"
+    override val enchantReferenceName: String get() = "Beatthespamemrs"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.A
+    override val isRareEnchant: Boolean get() = false
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.BOW)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
 
     override fun execute(data: DamageEventEnchantData) {
         if (data.damagee.inventory.itemInHand.type == Material.BOW) {

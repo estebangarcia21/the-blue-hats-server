@@ -25,13 +25,13 @@ class Billionaire @Inject constructor(
     private val damageIncrease = EnchantProperty(1.33, 1.67, 2.0)
     private val goldNeeded = EnchantProperty(100, 200, 350)
 
-    override val name = "Billionaire"
-    override val enchantReferenceName = "Billionaire"
-    override val isDisabledOnPassiveWorld = true
-    override val isRareEnchant = true
-    override val enchantGroup = EnchantGroup.B
-    override val enchantItemTypes = arrayOf(Material.GOLD_SWORD)
-    override val enchantHolder = EnchantHolder.DAMAGER
+    override val name: String get() = "Billionaire"
+    override val enchantReferenceName: String get() = "Billionaire"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.GOLD_SWORD)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
 
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager

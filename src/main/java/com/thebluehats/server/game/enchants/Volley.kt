@@ -28,6 +28,7 @@ class Volley @Inject constructor(
     private val arrows = EnchantProperty(2, 3, 4)
     private val volleyTasks = HashMap<Arrow, Int>()
     private val arrowCount = HashMap<Arrow, Int>()
+
     @EventHandler
     fun onBowShoot(event: EntityShootBowEvent) {
         if (event.projectile is Arrow) {
@@ -81,7 +82,9 @@ class Volley @Inject constructor(
 
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("Shoot <white>{0}</white> arrows at once")
+
         enchantLoreParser.setSingleVariable("3", "4", "5")
+
         return enchantLoreParser.parseForLevel(level)
     }
 

@@ -21,6 +21,14 @@ class Assassin @Inject constructor(
 ) : DamageTriggeredEnchant(arrayOf(playerDamageTrigger, arrowDamageTrigger)) {
     private val cooldownTime = EnchantProperty(5, 4, 3)
 
+    override val name: String get() = "Assassin"
+    override val enchantReferenceName: String get() = "Assassin"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.A
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.LEATHER_LEGGINGS)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
+
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager
         val damagee = data.damagee
@@ -41,14 +49,6 @@ class Assassin @Inject constructor(
         timer.start(damagee, (cooldownTime.getValueAtLevel(data.level) * 20).toLong(), false)
     }
 
-    override fun getName(): String {
-        return "Assassin"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Assassin"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         // TODO Level one is only on arrow
         val enchantLoreParser = EnchantLoreParser(
@@ -58,26 +58,5 @@ class Assassin @Inject constructor(
         enchantLoreParser.setSingleVariable("5", "4", "3")
 
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        // TODO Determine group
-        return EnchantGroup.A
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.LEATHER_LEGGINGS)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGEE
     }
 }

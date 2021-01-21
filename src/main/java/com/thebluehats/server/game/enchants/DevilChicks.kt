@@ -28,14 +28,25 @@ class DevilChicks @Inject constructor(
 ) : CustomEnchant, Listener {
     private val amountOfChicks = EnchantProperty(1, 2, 3)
     private val devilchickAnimations = HashMap<UUID, Int>()
+
+    override val name: String get() = "Devil Chicks"
+    override val enchantReferenceName: String get() = "Devilchicks"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.BOW)
+
     @EventHandler
     fun onArrowLand(event: ProjectileHitEvent) {
         val projectile = event.entity
         if (projectile.shooter is Player) {
             val shooter = event.entity.shooter as Player
             val bow = shooter.inventory.itemInHand
-            if (customEnchantUtils.itemHasEnchant(this, bow)) {
-                execute(customEnchantUtils.getEnchantLevel(this, bow), shooter, projectile)
+
+            val data = customEnchantUtils.getItemEnchantData(this, bow)
+
+            if (data.itemHasEnchant()) {
+                execute(data.enchantLevel, shooter, projectile)
             }
         }
     }
@@ -54,37 +65,41 @@ class DevilChicks @Inject constructor(
         val pitch = AtomicDouble(0.6)
         val animationIndex = AtomicInteger()
         val chickens = arrayOfNulls<Chicken>(chickenAmount)
-        for (i in chickens.indices) {
+
+        chickens.indices.forEach { i ->
             val direction = Vector()
             direction.x = arrowLocation.x + (Math.random() - Math.random()) * blastRadius
             direction.y = arrowLocation.y
             direction.z = arrowLocation.z + (Math.random() - Math.random()) * blastRadius
+
             val chicken = world.spawnEntity(direction.toLocation(arrowLocation.world), EntityType.CHICKEN) as Chicken
             chicken.setBaby()
             chickens[i] = chicken
         }
+
         val taskId = Bukkit.getServer().scheduler.scheduleSyncRepeatingTask(plugin, {
             if (animationIndex.get() == 10) {
                 Bukkit.getServer().scheduler.cancelTask(devilchickAnimations[arrowUuid]!!)
                 devilchickAnimations.remove(arrowUuid)
                 world.playSound(shooterLocation, Sound.CHICKEN_HURT, 1f, 2f)
-                for (chicken in chickens) {
-                    for (entity in chicken!!.getNearbyEntities(1.0, 1.0, 1.0)) {
-                        if (entity is Player) {
-                            val player = entity
-                            damageManager.doTrueDamage(player, 2.4, shooter)
-                            createExplosion(player, chicken.location)
-                        }
+
+                chickens.forEach { chicken -> chicken!!.getNearbyEntities(1.0, 1.0, 1.0).forEach { entity ->
+                    if (entity is Player) {
+                        damageManager.doTrueDamage(entity, 2.4, shooter)
+                        createExplosion(entity, chicken.location)
                     }
+
                     world.playSound(arrowLocation, Sound.EXPLODE, volume, 1.6f)
                     world.playEffect(chicken.location, Effect.EXPLOSION_LARGE, Effect.EXPLOSION_LARGE.data, 100)
                     chicken.remove()
-                }
+                } }
             }
+
             world.playSound(shooterLocation, Sound.NOTE_SNARE_DRUM, volume, pitch.get().toFloat())
             pitch.addAndGet(pitchIncrement)
             animationIndex.incrementAndGet()
         }, 0L, 1L)
+
         devilchickAnimations[arrowUuid] = taskId
     }
 
@@ -93,35 +108,13 @@ class DevilChicks @Inject constructor(
         target.velocity = explosion
     }
 
-    override fun getName(): String {
-        return "Devil Chicks"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Devilchicks"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("Arrows ")
+
         enchantLoreParser.addTextIf(level == 1, "spawn with explosive chicken.")
         enchantLoreParser.addTextIf(level == 2, "spawn many explosive chickens.")
         enchantLoreParser.addTextIf(level == 3, "spawn too many explosive chickens.")
+
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.BOW)
     }
 }
