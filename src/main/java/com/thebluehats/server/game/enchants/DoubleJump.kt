@@ -18,65 +18,55 @@ class DoubleJump @Inject constructor(
     private val timer: Timer<UUID>
 ) : CustomEnchant, GlobalTimerListener, Listener {
     private val cooldownTime = EnchantProperty(20, 10, 5)
+
+    override val name: String get() = "Double-jump"
+    override val enchantReferenceName: String get() = "Doublejump"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.LEATHER_LEGGINGS)
+
+    override val tickDelay: Long get() = 1L
+
     override fun onTick(player: Player) {
         val leggings = player.inventory.leggings
         if (player.gameMode != GameMode.SURVIVAL && player.gameMode != GameMode.ADVENTURE) {
             player.allowFlight = true
             return
         }
-        player.allowFlight = customEnchantUtils.itemHasEnchant(this, leggings) && !timer.isRunning(player.uniqueId)
-    }
 
-    override fun getTickDelay(): Long {
-        return 1L
+        player.allowFlight = customEnchantUtils.itemHasEnchant(this, leggings) && !timer.isRunning(player.uniqueId)
     }
 
     @EventHandler
     fun onFlightAttempt(event: PlayerToggleFlightEvent) {
         val player = event.player
+
         if (event.player.gameMode == GameMode.SURVIVAL) event.isCancelled = true
-        val leggings = player.inventory.leggings
-        if (customEnchantUtils.itemHasEnchant(this, leggings)) {
-            execute(player, customEnchantUtils.getEnchantLevel(this, leggings))
+
+        val data = customEnchantUtils.getItemEnchantData(this, player.inventory.leggings)
+
+        if (data.itemHasEnchant()) {
+            execute(player, data.enchantLevel)
         }
     }
 
     fun execute(player: Player, level: Int) {
         val playerUuid = player.uniqueId
         val normalizedVelocity = player.eyeLocation.direction.normalize()
+
         if (!timer.isRunning(playerUuid)) {
             player.velocity = Vector(normalizedVelocity.x * 3, 1.5, normalizedVelocity.z * 3)
         }
+
         timer.start(playerUuid, (cooldownTime.getValueAtLevel(level) * 20).toLong(), false)
-    }
-
-    override fun getName(): String {
-        return "Double-jump"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Doublejump"
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("You can double-jump. ({0}<br/>cooldown)")
+
         enchantLoreParser.setSingleVariable("20s", "10s", "5s")
+
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.LEATHER_LEGGINGS)
     }
 }

@@ -22,9 +22,18 @@ import org.bukkit.potion.PotionEffectType
 import java.util.*
 
 class ComboStun @Inject constructor(private val hitCounter: HitCounter, playerDamageTrigger: PlayerDamageTrigger) :
-    DamageTriggeredEnchant(arrayOf<DamageEnchantTrigger>(playerDamageTrigger)) {
+    DamageTriggeredEnchant(arrayOf(playerDamageTrigger)) {
     private val duration = EnchantProperty(10, 16, 30)
     private val hitsNeeded = EnchantProperty(5, 4, 4)
+
+    override val name: String get() = "Combo: Stun"
+    override val enchantReferenceName: String get() = "Combostun"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.GOLD_SWORD)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
+
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager
         val damagee = data.damagee
@@ -32,9 +41,11 @@ class ComboStun @Inject constructor(private val hitCounter: HitCounter, playerDa
         hitCounter.addOne(damager)
         if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(level))) {
             val durationTime = duration.getValueAtLevel(level)
+
             damagee.addPotionEffect(PotionEffect(PotionEffectType.SLOW, durationTime, 8), true)
             damagee.addPotionEffect(PotionEffect(PotionEffectType.JUMP, durationTime, -8), true)
             damagee.world.playSound(damagee.location, Sound.ANVIL_LAND, 1f, 0.1f)
+
             sendPackets(damagee)
         }
     }
@@ -43,56 +54,34 @@ class ComboStun @Inject constructor(private val hitCounter: HitCounter, playerDa
         val chatTitle = IChatBaseComponent.ChatSerializer.a(
             "{\"text\": \"" + ChatColor.RED + "STUNNED!" + "\",color:" + ChatColor.GOLD.name.toLowerCase() + "}"
         )
+
         val title = PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, chatTitle)
         val length = PacketPlayOutTitle(0, 60, 0)
         val chatSubTitle = IChatBaseComponent.ChatSerializer.a(
             "{\"text\": \"" + ChatColor.YELLOW
                     + "You cannot move!" + "\",color:" + ChatColor.GOLD.name.toLowerCase() + "}"
         )
+
         val subTitle = PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, chatSubTitle)
         val subTitleLength = PacketPlayOutTitle(0, 60, 0)
         val playerConnection = (player as CraftPlayer).handle.playerConnection
+
         playerConnection.sendPacket(title)
         playerConnection.sendPacket(length)
         playerConnection.sendPacket(subTitle)
         playerConnection.sendPacket(subTitleLength)
     }
 
-    override fun getName(): String {
-        return "Combo: Stun"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Combostun"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser =
             EnchantLoreParser("Every <yellow>{0}</yellow> strike on an enemy<br/>stuns them for {1} seconds")
-        val variables: Array<Array<String>> = arrayOfNulls(2)
-        variables[0] = arrayOf("fifth", "fourth", "fourth")
-        variables[1] = arrayOf("0.5", "0.8", "1.5")
-        enchantLoreParser.setVariables(variables)
+
+        val vars = varMatrix()
+        vars add Var(0, "fifth", "fourth", "fourth")
+        vars add Var(1, "0.5", "0.8", "1.5")
+
+        enchantLoreParser.setVariables(vars)
+
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.GOLD_SWORD)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGER
     }
 }
