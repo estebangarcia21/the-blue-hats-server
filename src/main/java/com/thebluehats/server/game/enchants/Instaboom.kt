@@ -3,7 +3,6 @@ package com.thebluehats.server.game.enchants
 import com.thebluehats.server.game.managers.combat.DamageManager
 import com.thebluehats.server.game.managers.enchants.CustomEnchant
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils
-import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant
 import com.thebluehats.server.game.managers.enchants.EnchantGroup
 import org.bukkit.Location
 import org.bukkit.Material
@@ -13,7 +12,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.util.Vector
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 class Instaboom @Inject constructor(private val damageManager: DamageManager, private val customEnchantUtils:

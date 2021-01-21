@@ -1,55 +1,52 @@
 package com.thebluehats.server.game.enchants
 
-import com.thebluehats.server.game.managers.combat.BowManager
-import com.thebluehats.server.game.managers.combat.templates.ArrowDamageTrigger
+import com.google.inject.Inject
 import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder
+import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant
 import com.thebluehats.server.game.managers.enchants.EnchantGroup
 import com.thebluehats.server.game.managers.enchants.EnchantProperty
+import com.thebluehats.server.game.managers.enchants.Timer
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
 import org.bukkit.Material
-import org.bukkit.event.EventHandler
-import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.*
-import javax.inject.Inject
 
-class Wasp @Inject constructor(private val bowManager: BowManager, arrowDamageTrigger: ArrowDamageTrigger) : DamageTriggeredEnchant(arrayOf<DamageEnchantTrigger>(arrowDamageTrigger)) {
-    private val weaknessDuration = EnchantProperty(6, 11, 16)
-    private val weaknessAmplifier = EnchantProperty(1, 2, 3)
-
+class SpeedyHit @Inject constructor(private val timer: Timer<UUID>, playerDamageTrigger: PlayerDamageTrigger) :
+    DamageTriggeredEnchant(arrayOf<DamageEnchantTrigger>(playerDamageTrigger)) {
+    private val speedDuration = EnchantProperty(5, 7, 9)
+    private val cooldownTime = EnchantProperty(3, 2, 1)
     override fun execute(data: DamageEventEnchantData) {
+        val damager = data.damager
+        val playerUuid = damager.uniqueId
         val level = data.level
-
-        data.damagee.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS,
-                weaknessDuration.getValueAtLevel(level) * 20, weaknessAmplifier.getValueAtLevel(level)), true)
-    }
-
-    @EventHandler
-    fun onArrowShootEvent(event: EntityShootBowEvent?) {
-        bowManager.onArrowShoot(event)
+        if (!timer.isRunning(playerUuid)) {
+            damager.addPotionEffect(
+                PotionEffect(PotionEffectType.SPEED, speedDuration.getValueAtLevel(level) * 20, 0, true)
+            )
+        }
+        timer.start(playerUuid, (cooldownTime.getValueAtLevel(level) * 20).toLong(), false)
     }
 
     override fun getName(): String {
-        return "Wasp"
+        return "Speedy Hit"
     }
 
     override fun getEnchantReferenceName(): String {
-        return "Wasp"
+        return "Speedyhit"
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
-        val enchantLoreParser = EnchantLoreParser("Apply <red>Weakness {0}</red> ({1}s) on hit")
-
-        val variables: Array<Array<String>?> = arrayOfNulls(2)
-        variables[0] = arrayOf("II", "III", "IV")
-        variables[1] = arrayOf("6", "11", "16")
-
+        val enchantLoreParser = EnchantLoreParser(
+            "Gain Speed I for <yellow>{0}s</yellow> on hit({1}s<br/>cooldown)"
+        )
+        val variables: Array<Array<String>> = arrayOfNulls(2)
+        variables[0] = arrayOf("5", "7", "9")
+        variables[1] = arrayOf("3", "2", "1")
         enchantLoreParser.setVariables(variables)
-
         return enchantLoreParser.parseForLevel(level)
     }
 
@@ -58,15 +55,16 @@ class Wasp @Inject constructor(private val bowManager: BowManager, arrowDamageTr
     }
 
     override fun getEnchantGroup(): EnchantGroup {
+        // TODO Determine EnchantGroup
         return EnchantGroup.B
     }
 
     override fun isRareEnchant(): Boolean {
-        return false
+        return true
     }
 
     override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.BOW)
+        return arrayOf(Material.GOLD_SWORD)
     }
 
     override fun getEnchantHolder(): EnchantHolder {
