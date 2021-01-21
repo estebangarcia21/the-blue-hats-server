@@ -46,11 +46,11 @@ public class Gamble extends DamageTriggeredEnchant {
         if (randomValue >= chance) {
             damageManager.doTrueDamage(damagee, damage, damager);
 
-            damagee.playSound(damager.getLocation(), Sound.NOTE_PLING, 1, 3f);
+            damager.playSound(damager.getLocation(), Sound.NOTE_PLING, 1, 3f);
         } else {
             damageManager.doTrueDamage(damager, damage, damagee);
 
-            damager.playSound(damager.getLocation(), Sound.NOTE_PLING, 1, 1.5f);
+            damagee.playSound(damager.getLocation(), Sound.NOTE_PLING, 1, 1.5f);
         }
     }
 
