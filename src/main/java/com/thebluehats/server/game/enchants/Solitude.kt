@@ -10,7 +10,6 @@ import com.thebluehats.server.game.managers.enchants.EnchantGroup
 import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
-import com.thebluehats.server.game.utils.EntityValidator
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import java.util.*
@@ -19,12 +18,21 @@ class Solitude @Inject constructor(
     private val damageManager: DamageManager, playerDamageTrigger: PlayerDamageTrigger,
     arrowDamageTrigger: ArrowDamageTrigger
 ) : DamageTriggeredEnchant(
-    arrayOf(playerDamageTrigger, arrowDamageTrigger), arrayOf<EntityValidator>(
+    arrayOf(playerDamageTrigger, arrowDamageTrigger), arrayOf(
         damageManager
     )
 ) {
     private val damageReduction = EnchantProperty(.4f, .5f, .6f)
     private val playersNeeded = EnchantProperty(1, 2, 2)
+
+    override val name: String get() = "Solitude"
+    override val enchantReferenceName: String get() = "Solitude"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.LEATHER_LEGGINGS)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGEE
+
     override fun execute(data: DamageEventEnchantData) {
         val event = data.event
         val damagee = data.damagee
@@ -43,39 +51,11 @@ class Solitude @Inject constructor(
         }
     }
 
-    override fun getName(): String {
-        return "Solitude"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Solitude"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser(
             "Recieve <blue>-{0}</blue> damage when only<br/>one other player is within 7<br/>blocks"
         )
         enchantLoreParser.setSingleVariable("40%", "50%", "60%")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.LEATHER_LEGGINGS)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGEE
     }
 }
