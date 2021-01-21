@@ -17,9 +17,7 @@ import java.util.*
 
 class Sharp @Inject constructor(private val damageManager: DamageManager, playerDamageTrigger: PlayerDamageTrigger) :
     DamageTriggeredEnchant(
-        arrayOf<DamageEnchantTrigger>(playerDamageTrigger), arrayOf(
-            damageManager
-        )
+        arrayOf(playerDamageTrigger), arrayOf(damageManager)
     ) {
     private val percentDamageIncrease = EnchantProperty(0.04f, 0.07f, 0.12f)
 

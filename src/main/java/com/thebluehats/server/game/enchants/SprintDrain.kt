@@ -9,6 +9,9 @@ import com.thebluehats.server.game.managers.enchants.EnchantGroup
 import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
+import com.thebluehats.server.game.utils.Var
+import com.thebluehats.server.game.utils.add
+import com.thebluehats.server.game.utils.varMatrix
 import org.bukkit.Material
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -44,10 +47,13 @@ class SprintDrain @Inject constructor(arrowDamageTrigger: ArrowDamageTrigger) :
             "Arrow shots grant you <yellow>Speed {0}</yellow><br/>({1}s)"
         )
         enchantLoreParser.addTextIf(level != 1, " and apply <blue>Slowness I</blue><br/>(3s)")
+
         val variables = varMatrix()
         variables add Var(0, "I", "I", "II")
         variables add Var(1, "", "5", "7")
+
         enchantLoreParser.setVariables(variables)
+
         return enchantLoreParser.parseForLevel(level)
     }
 }

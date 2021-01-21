@@ -8,7 +8,7 @@ import com.thebluehats.server.game.managers.enchants.EnchantGroup
 import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
-import com.thebluehats.server.game.utils.addHealth
+import com.thebluehats.server.game.utils.PlayerHealth.Utils.addHealth
 import org.bukkit.Material
 import java.util.*
 
