@@ -21,10 +21,11 @@ class CustomEnchantManager @Inject constructor(
     private val plugin: JavaPlugin, private val romanNumeralConverter: RomanNumeralConverter,
     private val pantsData: PantsData, private val customEnchantUtils: CustomEnchantUtils
 ) : Registerer<CustomEnchant> {
-    private val enchants = ArrayList<CustomEnchant>()
     private val sortCustomEnchantByName = SortCustomEnchantByName()
     private val tierColors = ImmutableMap.builder<Int, ChatColor>()
         .put(1, ChatColor.GREEN).put(2, ChatColor.YELLOW).put(3, ChatColor.RED).build()
+    
+    val enchants = ArrayList<CustomEnchant>()
 
     override fun register(objects: Array<CustomEnchant>) {
         for (enchant in objects) {

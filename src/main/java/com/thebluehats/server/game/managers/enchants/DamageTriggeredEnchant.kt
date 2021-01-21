@@ -10,14 +10,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 abstract class DamageTriggeredEnchant : CustomEnchant,
     PostEventExecutor<EntityDamageByEntityEvent, DamageEventEnchantData> {
     private val triggers: Array<DamageEnchantTrigger>
-    private val validators: Array<EntityValidator?>
+    private val validators: Array<EntityValidator>
 
     protected constructor(triggers: Array<DamageEnchantTrigger>) {
         this.triggers = triggers
-        this.validators = arrayOfNulls(0)
+        this.validators = emptyArray()
     }
 
-    protected constructor(triggers: Array<DamageEnchantTrigger>, validators: Array<EntityValidator?>) {
+    protected constructor(triggers: Array<DamageEnchantTrigger>, validators: Array<EntityValidator>) {
         this.triggers = triggers
         this.validators = validators;
     }
@@ -30,12 +30,4 @@ abstract class DamageTriggeredEnchant : CustomEnchant,
     }
 
     abstract val enchantHolder: EnchantHolder
-
-    protected infix fun Array<Array<String>?>.add(variable: Var) {
-        this[variable.index] = arrayOf(variable.one, variable.two, variable.three)
-    }
-
-    protected fun varMatrix(): Array<Array<String>?> = arrayOfNulls(2)
-
-    protected class Var(val index: Int, val one: String, val two: String, val three: String)
 }

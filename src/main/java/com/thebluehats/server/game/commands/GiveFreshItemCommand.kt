@@ -25,7 +25,7 @@ class GiveFreshItemCommand @Inject constructor(private val pantsData: PantsData)
     override val commandNames: Array<String>
         get() = arrayOf("givefreshitem")
 
-    override fun getUsageMessage(cmd: String?): String? {
+    override fun getUsageMessage(cmd: String?): String {
         return formatStandardUsageMessage(
             cmd!!,
             "Gives a fresh item. Must be: sword, bow, or any pants color. (Ex: /givefreshitem red)", "type"
@@ -69,20 +69,23 @@ class GiveFreshItemCommand @Inject constructor(private val pantsData: PantsData)
         val data = pantsData.data[pantsColor]
         val textColor = data!!.textColor
         val color = data.pantsColor
+
         freshPantsMeta.color = Color.fromRGB(color)
         freshPantsMeta.displayName = (textColor.toString() + "Fresh " + pantsColorName.substring(0, 1).toUpperCase()
                 + pantsColorName.substring(1) + " Pants")
         applyFlags(freshPantsMeta)
+
         val loreParser = LoreParser(
             "Kept on death<br/><br/>{0}Used in the mystic well{1}<br/>{0}Also, a fashion statement{1}"
         )
+
         val textColorName = textColor.name.toLowerCase()
-        val variables = arrayOfNulls<String>(2)
-        variables[0] = "<$textColorName>"
-        variables[1] = "</$textColorName>"
-        loreParser.setVariables(variables)
+
+        loreParser.setVariables(arrayOf("<$textColorName>", "</$textColorName>"))
+
         freshPantsMeta.lore = loreParser.parse()
         freshLeggings.itemMeta = freshPantsMeta
+
         player.inventory.addItem(freshLeggings)
     }
 

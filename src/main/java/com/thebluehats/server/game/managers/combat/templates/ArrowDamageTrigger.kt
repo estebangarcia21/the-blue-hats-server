@@ -24,7 +24,7 @@ class ArrowDamageTrigger @Inject constructor(
         val playerDamagee = damagee as Player
         val inventory = if (targetPlayer == EnchantHolder.DAMAGER) playerDamager.inventory else playerDamagee.inventory
         for (validator in validators) {
-            if (!validator.validate(arrayOf(damager, damagee))) return
+            if (!validator.validate(damager, damagee)) return
         }
         if (!inventoryHasEnchant(inventory, enchant)) return
         enchant.execute(DamageEventEnchantData(event, playerDamager, playerDamagee, getItemMap(enchant, inventory)))

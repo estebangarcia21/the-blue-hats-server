@@ -12,9 +12,10 @@ class PlayerDamageTrigger @Inject constructor(
     customEnchantUtils: CustomEnchantUtils,
     private val playerHitPlayerVerifier: PlayerHitPlayerVerifier
 ) : DamageEnchantTrigger(customEnchantUtils) {
+
     override fun run(
         enchant: DamageTriggeredEnchant, event: EntityDamageByEntityEvent, targetPlayer: EnchantHolder,
-        vararg validators: Array<EntityValidator?>
+        validators: Array<EntityValidator>
     ) {
         val damager = event.damager
         val damagee = event.entity
