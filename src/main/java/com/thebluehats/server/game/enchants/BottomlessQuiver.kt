@@ -17,7 +17,7 @@ class BottomlessQuiver @Inject constructor(arrowDamageTrigger: ArrowDamageTrigge
     private val arrowAmount = EnchantProperty(1, 3, 8)
 
     override val name: String get() = "Bottomless Quiver"
-    override val enchantReferenceName: String get() = "Bottomlessquiver"
+    override val enchantReferenceName: String get() = "bottomless-quiver"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = true

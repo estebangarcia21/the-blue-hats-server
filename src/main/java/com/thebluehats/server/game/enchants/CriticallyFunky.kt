@@ -11,6 +11,9 @@ import com.thebluehats.server.game.managers.enchants.EnchantGroup
 import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
+import com.thebluehats.server.game.utils.Var
+import com.thebluehats.server.game.utils.add
+import com.thebluehats.server.game.utils.varMatrix
 import org.bukkit.Material
 import java.util.*
 
@@ -25,7 +28,7 @@ class CriticallyFunky @Inject constructor(
     private val extraDamageQueue = ArrayList<UUID>()
 
     override val name: String get() = "Critically Funky"
-    override val enchantReferenceName: String get() = "Critfunky"
+    override val enchantReferenceName: String get() = "crit-funky"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

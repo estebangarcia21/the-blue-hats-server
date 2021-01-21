@@ -25,7 +25,7 @@ class Executioner @Inject constructor(
     private val heartsToDie = EnchantProperty(3, 4, 4)
 
     override val name: String get() = "Executioner"
-    override val enchantReferenceName: String get() = "Executioner"
+    override val enchantReferenceName: String get() = "executioner"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

@@ -5,6 +5,9 @@ import com.thebluehats.server.game.managers.enchants.*
 import com.thebluehats.server.game.managers.enchants.Timer
 import com.thebluehats.server.game.managers.world.regionmanager.RegionManager
 import com.thebluehats.server.game.utils.EnchantLoreParser
+import com.thebluehats.server.game.utils.Var
+import com.thebluehats.server.game.utils.add
+import com.thebluehats.server.game.utils.varMatrix
 import org.bukkit.Effect
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -30,37 +33,45 @@ class Explosive @Inject constructor(
         Effect.EXPLOSION_HUGE, Effect.EXPLOSION_HUGE
     )
 
+    override val name: String get() = "Explosive"
+    override val enchantReferenceName: String get() = "explosive"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.BOW)
+
     @EventHandler
     fun onArrowLand(event: ProjectileHitEvent) {
         if (event.entity is Arrow) {
             val arrow = event.entity as Arrow
+
             if (event.entity.shooter is Player) {
                 val bow = bowManager.getBowFromArrow(arrow)
-                if (customEnchantUtils.itemHasEnchant(this, bow)) {
-                    execute(customEnchantUtils.getEnchantLevel(this, bow), arrow.shooter as Player, arrow)
+
+                val data = customEnchantUtils.getItemEnchantData(this, bow)
+
+                if (data.itemHasEnchant()) {
+                    execute(data.enchantLevel, arrow.shooter as Player, arrow)
                 }
             }
         }
     }
 
     fun execute(level: Int, shooter: Player, arrow: Arrow) {
+        val range = explosionRange.getValueAtLevel(level)
         val playerUuid = shooter.uniqueId
+
         if (!timer.isRunning(playerUuid)) {
-            for (entity in arrow.getNearbyEntities(
-                explosionRange.getValueAtLevel(level),
-                explosionRange.getValueAtLevel(level), explosionRange.getValueAtLevel(level)
-            )) {
-                if (entity is Player) {
-                    val player = entity
-                    if (regionManager.entityIsInSpawn(player)) continue
-                    if (player !== shooter) {
-                        val force = player.location.toVector().subtract(arrow.location.toVector())
-                            .normalize().multiply(1.25)
-                        force.setY(.85f)
-                        player.velocity = force
-                    }
-                }
+            arrow.getNearbyEntities(range, range, range).forEach { e ->
+                if (e !is Player || regionManager.entityIsInSpawn(e)) return@forEach
+                if (e !== shooter) return@forEach
+
+                val force = e.location.toVector().subtract(arrow.location.toVector()).normalize().multiply(1.25)
+                force.setY(.85f)
+
+                e.velocity = force
             }
+
             arrow.world.playSound(
                 arrow.location, Sound.EXPLODE, 0.75f,
                 explosionPitch.getValueAtLevel(level)
@@ -70,39 +81,20 @@ class Explosive @Inject constructor(
                 explosionParticle.getValueAtLevel(level).data, 100
             )
         }
-        timer.start(playerUuid, (cooldownTime.getValueAtLevel(level) * 20).toLong(), true)
-    }
 
-    override fun getName(): String {
-        return "Explosive"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Explosive"
+        timer.start(playerUuid, (cooldownTime.getValueAtLevel(level) * 20).toLong(), false)
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("Arrows go {0}! ({1}s cooldown)")
-        val variables: Array<Array<String>> = arrayOfNulls(2)
-        variables[0] = arrayOf("POP", "BANG", "BOOM")
-        variables[1] = arrayOf("5", "3", "5")
-        enchantLoreParser.setVariables(variables)
+
+        val vars = varMatrix()
+
+        vars add Var(0, "POP", "BANG", "BOOM")
+        vars add Var(1, "5", "3", "5")
+
+        enchantLoreParser.setVariables(vars)
+
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.BOW)
     }
 }

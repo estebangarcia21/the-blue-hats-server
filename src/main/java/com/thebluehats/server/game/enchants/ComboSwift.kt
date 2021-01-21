@@ -9,6 +9,9 @@ import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.HitCounter
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
+import com.thebluehats.server.game.utils.Var
+import com.thebluehats.server.game.utils.add
+import com.thebluehats.server.game.utils.varMatrix
 import org.bukkit.Material
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -21,7 +24,7 @@ class ComboSwift @Inject constructor(private val hitCounter: HitCounter, playerD
     private val hitsNeeded = EnchantProperty(4, 3, 3)
 
     override val name: String get() = "Combo: Swift"
-    override val enchantReferenceName: String get() = "Combostun"
+    override val enchantReferenceName: String get() = "combo-stun"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false
@@ -31,7 +34,9 @@ class ComboSwift @Inject constructor(private val hitCounter: HitCounter, playerD
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager
         val level = data.level
+
         hitCounter.addOne(damager)
+
         if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(level))) {
             damager.addPotionEffect(
                 PotionEffect(

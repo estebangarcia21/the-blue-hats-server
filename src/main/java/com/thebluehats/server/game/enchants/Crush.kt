@@ -9,6 +9,9 @@ import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.Timer
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
+import com.thebluehats.server.game.utils.Var
+import com.thebluehats.server.game.utils.add
+import com.thebluehats.server.game.utils.varMatrix
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
@@ -21,7 +24,7 @@ class Crush @Inject constructor(private val timer: Timer<Player>, playerDamageTr
     private val weaknessDuration = EnchantProperty(4, 8, 10)
 
     override val name = "Crush"
-    override val enchantReferenceName = "Crush"
+    override val enchantReferenceName = "crush"
     override val isDisabledOnPassiveWorld = false
     override val enchantGroup = EnchantGroup.A
     override val isRareEnchant = false

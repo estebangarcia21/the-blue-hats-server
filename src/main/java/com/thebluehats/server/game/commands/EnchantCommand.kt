@@ -16,17 +16,19 @@ class EnchantCommand @Inject constructor(
     override val commandNames: Array<String>
         get() = arrayOf("pitenchant")
 
-    override fun getUsageMessage(cmd: String?): String? {
+    override fun getUsageMessage(cmd: String?): String {
         return formatStandardUsageMessage(cmd!!, "Enchants an item with a Custom Enchant.", "enchantName", "level")
     }
 
     override fun runCommand(player: Player, cmd: String?, args: Array<String>) {
         var customEnchant: CustomEnchant? = null
+
         for (enchant in customEnchantManager.enchants) {
             if (enchant.enchantReferenceName.equals(args[0], ignoreCase = true)) {
                 customEnchant = enchant
             }
         }
+
         if (customEnchant == null) {
             player.sendMessage(formatStandardErrorMessage("This enchant does not exist!"))
             return

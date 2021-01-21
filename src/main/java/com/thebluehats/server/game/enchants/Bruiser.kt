@@ -23,7 +23,7 @@ class Bruiser @Inject constructor(
     private val heartsReduced = EnchantProperty(1, 2, 4)
 
     override val name: String get() = "Bruiser"
-    override val enchantReferenceName: String get() = "Bruiser"
+    override val enchantReferenceName: String get() = "bruiser"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false
