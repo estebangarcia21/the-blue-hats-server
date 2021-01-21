@@ -29,6 +29,13 @@ class Volley @Inject constructor(
     private val volleyTasks = HashMap<Arrow, Int>()
     private val arrowCount = HashMap<Arrow, Int>()
 
+    override val name = "Volley"
+    override val enchantReferenceName = "Volley"
+    override val isDisabledOnPassiveWorld = false
+    override val enchantGroup = EnchantGroup.A
+    override val isRareEnchant = true
+    override val enchantItemTypes = arrayOf(Material.BOW)
+
     @EventHandler
     fun onBowShoot(event: EntityShootBowEvent) {
         if (event.projectile is Arrow) {
@@ -72,35 +79,11 @@ class Volley @Inject constructor(
         }, 2L)
     }
 
-    override fun getName(): String {
-        return "Volley"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Volley"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("Shoot <white>{0}</white> arrows at once")
 
         enchantLoreParser.setSingleVariable("3", "4", "5")
 
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.BOW)
     }
 }
