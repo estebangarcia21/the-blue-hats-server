@@ -17,11 +17,20 @@ import java.util.*
 
 class Sharp @Inject constructor(private val damageManager: DamageManager, playerDamageTrigger: PlayerDamageTrigger) :
     DamageTriggeredEnchant(
-        arrayOf<DamageEnchantTrigger>(playerDamageTrigger), arrayOf<EntityValidator>(
+        arrayOf<DamageEnchantTrigger>(playerDamageTrigger), arrayOf(
             damageManager
         )
     ) {
     private val percentDamageIncrease = EnchantProperty(0.04f, 0.07f, 0.12f)
+
+    override val name: String get() = "Sharp"
+    override val enchantReferenceName: String get() = "Sharp"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.A
+    override val isRareEnchant: Boolean get() = false
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.GOLD_SWORD)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
+
     override fun execute(data: DamageEventEnchantData) {
         val event = data.event
         val level = data.level
@@ -32,38 +41,9 @@ class Sharp @Inject constructor(private val damageManager: DamageManager, player
         )
     }
 
-    override fun getName(): String {
-        return "Sharp"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Sharp"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("Deal <red>+{0}</red> melee damage")
         enchantLoreParser.setSingleVariable("4%", "7%", "12%")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        // TODO Determine EnchantGroup
-        return EnchantGroup.A
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return false
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.GOLD_SWORD)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGER
     }
 }
