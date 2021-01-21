@@ -19,6 +19,15 @@ class SpeedyHit @Inject constructor(private val timer: Timer<UUID>, playerDamage
     DamageTriggeredEnchant(arrayOf<DamageEnchantTrigger>(playerDamageTrigger)) {
     private val speedDuration = EnchantProperty(5, 7, 9)
     private val cooldownTime = EnchantProperty(3, 2, 1)
+
+    override val name: String get() = "Speedy Hit"
+    override val enchantReferenceName: String get() = "Speedyhit"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.A
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.GOLD_SWORD)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
+
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager
         val playerUuid = damager.uniqueId
@@ -31,43 +40,14 @@ class SpeedyHit @Inject constructor(private val timer: Timer<UUID>, playerDamage
         timer.start(playerUuid, (cooldownTime.getValueAtLevel(level) * 20).toLong(), false)
     }
 
-    override fun getName(): String {
-        return "Speedy Hit"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Speedyhit"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser(
             "Gain Speed I for <yellow>{0}s</yellow> on hit({1}s<br/>cooldown)"
         )
-        val variables: Array<Array<String>> = arrayOfNulls(2)
-        variables[0] = arrayOf("5", "7", "9")
-        variables[1] = arrayOf("3", "2", "1")
+        val variables = varMatrix()
+        variables add Var( 0,"5", "7", "9")
+        variables add Var( 1,"3", "2", "1")
         enchantLoreParser.setVariables(variables)
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        // TODO Determine EnchantGroup
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.GOLD_SWORD)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGER
     }
 }
