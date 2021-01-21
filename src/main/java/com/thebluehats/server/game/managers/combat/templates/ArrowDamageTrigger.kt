@@ -15,7 +15,7 @@ class ArrowDamageTrigger @Inject constructor(
 ) : DamageEnchantTrigger(customEnchantUtils) {
     override fun run(
         enchant: DamageTriggeredEnchant, event: EntityDamageByEntityEvent, targetPlayer: EnchantHolder,
-        vararg validators: Array<EntityValidator?>
+        validators: Array<EntityValidator>
     ) {
         val damager = event.damager
         val damagee = event.entity
@@ -24,7 +24,7 @@ class ArrowDamageTrigger @Inject constructor(
         val playerDamagee = damagee as Player
         val inventory = if (targetPlayer == EnchantHolder.DAMAGER) playerDamager.inventory else playerDamagee.inventory
         for (validator in validators) {
-            if (!validator.validate(damager, damagee)) return
+            if (!validator.validate(arrayOf(damager, damagee))) return
         }
         if (!inventoryHasEnchant(inventory, enchant)) return
         enchant.execute(DamageEventEnchantData(event, playerDamager, playerDamagee, getItemMap(enchant, inventory)))

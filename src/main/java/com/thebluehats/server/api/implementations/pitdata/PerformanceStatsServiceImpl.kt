@@ -8,6 +8,7 @@ import org.bukkit.entity.Player
 
 class PerformanceStatsServiceImpl @Inject constructor(@param:ServerAPI private val serverAPI: UnirestInstance) :
     PerformanceStatsService {
+
     override fun getPlayerXp(player: Player): Int {
         return serverAPI["/api/v1/game-data/the-pit/{uuid}"]
             .routeParam("uuid", player.uniqueId.toString())
