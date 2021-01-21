@@ -1,7 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    java
     id("com.github.johnrengelman.shadow") version "6.1.0"
     kotlin("jvm") version "1.4.21"
 }
@@ -32,4 +31,5 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:4.4.0.RC2")
     testImplementation("io.kotest:kotest-assertions-core:4.4.0.RC2")
     testImplementation("io.kotest:kotest-property:4.4.0.RC2")
+    testImplementation("io.mockk:mockk:1.10.5")
 }
