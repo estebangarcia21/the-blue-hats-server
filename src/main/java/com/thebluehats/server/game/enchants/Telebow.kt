@@ -26,6 +26,14 @@ class Telebow @Inject constructor(
 ) : CustomEnchant, Listener {
     private val cooldownTimes = EnchantProperty(90, 45, 20)
     private val crouchingPlayers = ArrayList<UUID>()
+
+    override val name: String get() = "Telebow"
+    override val enchantReferenceName: String get() = "Telebow"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.A
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.BOW)
+
     @EventHandler
     fun onBowShoot(event: EntityShootBowEvent) {
         if (event.entity is Player && event.projectile is Arrow) {
@@ -77,19 +85,11 @@ class Telebow @Inject constructor(
         val packet = PacketPlayOutChat(
             IChatBaseComponent.ChatSerializer.a(
                 "{\"text\":\""
-                        + ChatColor.RED + "Telebow Cooldown: " + timer.getTime(player.uniqueId) / 20 + "(s)" + "\"}"
+                    + ChatColor.RED + "Telebow Cooldown: " + timer.getTime(player.uniqueId) / 20 + "(s)" + "\"}"
             ),
             2.toByte()
         )
         (player as CraftPlayer).handle.playerConnection.sendPacket(packet)
-    }
-
-    override fun getName(): String {
-        return "Telebow"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Telebow"
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
@@ -97,21 +97,5 @@ class Telebow @Inject constructor(
             EnchantLoreParser("Sneak to shoot a teleportation<br/>arrow ({0} cooldown, -3 per bow<br/>hit)")
         enchantLoreParser.setSingleVariable("90s", "45s", "20s")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.BOW)
     }
 }
