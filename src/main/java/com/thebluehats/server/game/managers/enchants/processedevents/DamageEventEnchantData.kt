@@ -9,8 +9,8 @@ class DamageEventEnchantData(
     event: EntityDamageByEntityEvent,
     damager: Player,
     damagee: Player,
-    val levelMap: ImmutableMap<Material, Int>
+    private val levelMap: HashMap<Material, Int>
 ) : CastedEntityDamageByEntityEvent(event, damager, damagee) {
     val level: Int
-        get() = levelMap.values.asList()[0]
+        get() = levelMap.values.indexOf(0)
 }
