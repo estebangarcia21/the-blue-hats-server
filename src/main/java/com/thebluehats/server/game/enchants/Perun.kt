@@ -21,12 +21,21 @@ class Perun @Inject constructor(
     private val hitCounter: HitCounter,
     playerDamageTrigger: PlayerDamageTrigger
 ) : DamageTriggeredEnchant(
-    arrayOf<DamageEnchantTrigger>(playerDamageTrigger), arrayOf<EntityValidator>(
+    arrayOf(playerDamageTrigger), arrayOf(
         damageManager
     )
 ) {
     private val perunDamage = EnchantProperty(3, 4, 2)
     private val hitsNeeded = EnchantProperty(5, 4, 4)
+
+    override val name: String get() = "Perun"
+    override val enchantReferenceName: String get() = "Perun"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.GOLD_SWORD)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
+
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager
         val damagee = data.damagee
@@ -45,47 +54,24 @@ class Perun @Inject constructor(
         }
     }
 
-    override fun getName(): String {
-        return "Combo: Perun's Wrath"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Perun"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("")
         val lastMessage = ChatColor.ITALIC.toString() + "Lightning deals true damage"
         enchantLoreParser.addTextIf(
-            level != 3,
-            "Every <yellow>fourth</yellow> hit strikes<br/>lightning for <red>{0}❤</red><br/>$lastMessage"
+            level == 2,
+            "Every <yellow>fifth</yellow> hit strikes<br/><yellow>lightning</yellow> for <red>{0}❤</red><br/>$lastMessage"
+        )
+        enchantLoreParser.addTextIf(
+            level == 2,
+            "Every <yellow>fourth</yellow> hit strikes<br/><yellow>lightning</yellow> for <red>{0}❤</red><br/>$lastMessage"
         )
         enchantLoreParser.addTextIf(
             level == 3,
-            "Every <yellow>fourth</yellow> hit strikes<br/>lightning for <red>{0}❤</red> + <red>1❤</red><br/>per <aqua>diamond piece</aqua> on your<br/>victim<br/>"
+            "Every <yellow>fourth</yellow> hit strikes<br/><yellow>lightning</yellow> for <red>{0}❤</red> + " +
+                "<red>1❤</red><br/>per <aqua>diamond piece</aqua> on your<br/>victim.<br/>"
                     + lastMessage
         )
         enchantLoreParser.setSingleVariable("1.5", "2", "1")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.GOLD_SWORD)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGER
     }
 }
