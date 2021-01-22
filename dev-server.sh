@@ -5,14 +5,14 @@ SERVER_TEMPLATE_URL="https://www.dropbox.com/s/ubzaencsai8fmtk/tbhs-dev-server.t
 SPIGOT_VERSION="1.8.8"
 SPIGOT_JAR="spigot-$SPIGOT_VERSION.jar"
 
-check_if_server_exists () {
+check_if_server_exists() {
   if [[ ! -d $WORKING_DIRECTORY ]]; then
     echo "No development server found! Try creating it with ./dev-server create"
     exit
   fi
 }
 
-build_and_move_plugin () {
+build_and_move_plugin() {
   PLUGINS_DIRECTORY="$WORKING_DIRECTORY/plugins"
 
   echo "Building the latest version of The Blue Hats Server..."
@@ -29,7 +29,7 @@ build_and_move_plugin () {
   mv -f "build/libs/$PLUGIN_NAME" "$PLUGINS_DIRECTORY/$PLUGIN_NAME"
 }
 
-update_spigot_jar () {
+update_spigot_jar() {
   cd $WORKING_DIRECTORY || exit
 
   rm -f $SPIGOT_JAR
