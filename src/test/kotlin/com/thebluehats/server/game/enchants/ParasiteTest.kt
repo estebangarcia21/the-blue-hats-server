@@ -13,20 +13,20 @@ class ParasiteTest : DescribeSpec({
         it("adds health to the damager on arrow hit") {
             val parasite = Parasite(mockk())
 
-            val mp = mockk<Player> {
-                every { maxHealth } returnsMany listOf(20.0)
-                every { health } returnsMany listOf(5.0)
-                every { health = any() } returnsMany listOf(Unit)
+            val damagerMock = mockk<Player> {
+                every { maxHealth } returns 20.0
+                every { health } returns 5.0
+                every { health = any() } returns Unit
             }
 
             val data = mockk<DamageEventEnchantData> {
-                every { level } returnsMany listOf (3)
-                every { damager } returnsMany listOf (mp)
+                every { level } returns 3
+                every { damager } returns damagerMock
             }
 
             parasite.execute(data)
 
-            verify { mp.health = 7.0 }
+            verify { damagerMock.health = 7.0 }
         }
     }
 })
