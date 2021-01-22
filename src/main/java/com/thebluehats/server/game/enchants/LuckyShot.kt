@@ -24,6 +24,14 @@ class LuckyShot @Inject constructor(
 ) : CustomEnchant, Listener {
     private val percentChance = EnchantProperty(0.02f, 0.05f, 0.1f)
     private val random = Random()
+
+    override val name: String get() = "Lucky Shot"
+    override val enchantReferenceName: String get() = "Luckyshot"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.BOW)
+
     @EventHandler
     fun onArrowHit(event: EntityDamageByEntityEvent) {
         if (arrowHitPlayerVerifier.verify(event)) {
@@ -40,33 +48,9 @@ class LuckyShot @Inject constructor(
         }
     }
 
-    override fun getName(): String {
-        return "Lucky Shot"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Luckyshot"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("<yellow>{0}</yellow> chance for a shot to deal<br/>quadruple damage")
         enchantLoreParser.setSingleVariable("2%", "5%", "10%")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.BOW)
     }
 }
