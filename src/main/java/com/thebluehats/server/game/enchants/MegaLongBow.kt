@@ -19,6 +19,14 @@ class MegaLongBow @Inject constructor(
     private val timer: Timer<UUID>
 ) : CustomEnchant, Listener {
     private val amplifier = EnchantProperty(1, 2, 3)
+
+    override val name: String get() = "Mega Longbow"
+    override val enchantReferenceName: String get() = "Mlb"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.BOW)
+
     @EventHandler
     fun onArrowShoot(event: EntityShootBowEvent) {
         if (event.entity is Player && event.projectile is Arrow) {
@@ -41,35 +49,11 @@ class MegaLongBow @Inject constructor(
         timer.start(playerUuid, 20, false)
     }
 
-    override fun getName(): String {
-        return "Mega Longbow"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Mlb"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser(
             "One shot per second, this bow is<br/>automatically fully drawn and<br/>grants <green>Jump Boost {0}</green> (2s)"
         )
         enchantLoreParser.setSingleVariable("II", "III", "IV")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.BOW)
     }
 }
