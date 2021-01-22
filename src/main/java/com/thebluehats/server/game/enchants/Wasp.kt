@@ -7,6 +7,9 @@ import com.thebluehats.server.game.managers.enchants.EnchantGroup
 import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
+import com.thebluehats.server.game.utils.Var
+import com.thebluehats.server.game.utils.add
+import com.thebluehats.server.game.utils.varMatrix
 import org.bukkit.Material
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -40,11 +43,11 @@ class Wasp @Inject constructor(arrowDamageTrigger: ArrowDamageTrigger) :
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("Apply <red>Weakness {0}</red> ({1}s) on hit")
 
-        val vars = varMatrix()
-        vars add Var(0, "II", "III", "IV")
-        vars add Var(1, "6", "11", "16")
+        val variables = varMatrix()
+        variables add Var(0, "II", "III", "IV")
+        variables add Var(1, "6", "11", "16")
 
-        enchantLoreParser.setVariables(vars)
+        enchantLoreParser.setVariables(variables )
 
         return enchantLoreParser.parseForLevel(level)
     }

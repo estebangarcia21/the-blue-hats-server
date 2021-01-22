@@ -32,6 +32,14 @@ class Robinhood @Inject constructor(
     private val damageReduction = EnchantProperty(.4f, .5f, .6f)
     private val arrowTasks = HashMap<Arrow, Int>()
     private val ROBINHOOD_RANGE = 8.0
+
+    override val name: String get() = "Robinhood"
+    override val enchantReferenceName: String get() = "Robinhood"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.BOW)
+
     @EventHandler
     fun onShoot(event: EntityShootBowEvent) {
         if (event.entity is Player) {
@@ -127,35 +135,11 @@ class Robinhood @Inject constructor(
         }, 0L, 3L)
     }
 
-    override fun getName(): String {
-        return "Robinhood"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Robinhood"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("")
         enchantLoreParser.addTextIf(level == 1, "Your charged shots are homing but<br/>deal <red>{0}</red> damage")
         enchantLoreParser.addTextIf(level != 1, "All your shots are homing but<br/>deal <red>{0}</red> damage")
         enchantLoreParser.setSingleVariable("40%", "50%", "60%")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.BOW)
     }
 }

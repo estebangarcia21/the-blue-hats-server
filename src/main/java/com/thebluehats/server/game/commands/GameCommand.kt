@@ -15,20 +15,22 @@ abstract class GameCommand : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (sender !is Player) return false
 
-        commandNames.forEach { c ->
-            if (!label.equals(c, ignoreCase = true)) return@forEach
+        run loop@ {
+            commandNames.forEach { cmd ->
+                if (!label.equals(cmd, ignoreCase = true)) return@forEach
+                val usageMessage = getUsageMessage(cmd)
 
-            val usageMessage = getUsageMessage(c)
+                if (usageMessage != null) {
+                    if (args.isEmpty() && cmdRegex.matcher(usageMessage).find()) {
+                        sender.sendMessage(usageMessage)
 
-            if (usageMessage != null) {
-                if (args.isEmpty() && cmdRegex.matcher(usageMessage).find()) {
-                    sender.sendMessage(usageMessage)
-
-                    return@forEach
+                        return@forEach
+                    }
                 }
-            }
 
-            runCommand(sender, c, args)
+                runCommand(sender, cmd, args)
+                return@loop
+            }
         }
 
         return true
@@ -36,9 +38,9 @@ abstract class GameCommand : CommandExecutor {
 
     fun formatStandardUsageMessage(cmd: String, description: String, vararg args: String): String {
         val argsJoiner = StringJoiner(" ")
-        for (arg in args) {
-            argsJoiner.add("<$arg>")
-        }
+
+        args.forEach { arg -> argsJoiner.add("<$arg>")}
+
         return (ChatColor.DARK_PURPLE.toString() + "/" + cmd + " - " + ChatColor.RED + description + ChatColor.DARK_PURPLE
             + " | Usage " + ChatColor.DARK_PURPLE + "/" + cmd + " " + ChatColor.RED + argsJoiner.toString())
     }
@@ -48,9 +50,7 @@ abstract class GameCommand : CommandExecutor {
     }
 
     fun registerCommand(javaPlugin: JavaPlugin) {
-        for (commandName in commandNames) {
-            javaPlugin.getCommand(commandName).executor = this
-        }
+        commandNames.forEach { cmd -> javaPlugin.getCommand(cmd).executor = this }
     }
 
     abstract val commandNames: Array<String>

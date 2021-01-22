@@ -16,19 +16,22 @@ abstract class DamageEnchantTrigger protected constructor(protected val customEn
         LEGGINGS, SWORD, BOW
     }
 
-    protected fun getItemMap(enchant: DamageTriggeredEnchant, inventory: PlayerInventory): ImmutableMap<Material, Int> {
-        val mapBuilder = ImmutableMap.builder<Material, Int>()
+    protected fun getItemMap(enchant: DamageTriggeredEnchant, inventory: PlayerInventory): HashMap<Material, Int> {
+        val map = hashMapOf<Material, Int>()
+
         for (material in enchant.enchantItemTypes) {
             val materialName = material.toString()
             val materialMatchers = MaterialMatcher.values()
             for (materialMatcher in materialMatchers) {
                 if (materialName.contains(materialMatcher.toString())) {
                     val getItem = materialFunctions[materialMatcher]!!
-                    mapBuilder.put(material, customEnchantUtils.getEnchantLevel(enchant, getItem.apply(inventory)))
+
+                    map[material] = customEnchantUtils.getEnchantLevel(enchant, getItem.apply(inventory))
                 }
             }
         }
-        return mapBuilder.build()
+
+        return map
     }
 
     protected fun inventoryHasEnchant(inventory: PlayerInventory, enchant: CustomEnchant): Boolean {

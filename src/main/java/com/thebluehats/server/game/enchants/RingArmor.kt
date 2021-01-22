@@ -16,23 +16,24 @@ import java.util.*
 
 class RingArmor @Inject constructor(private val damageManager: DamageManager, arrowDamageTrigger: ArrowDamageTrigger) :
     DamageTriggeredEnchant(
-        arrayOf<DamageEnchantTrigger>(arrowDamageTrigger), arrayOf<EntityValidator>(
+        arrayOf(arrowDamageTrigger), arrayOf(
             damageManager
         )
     ) {
     private val damageReductionAmount = EnchantProperty(.20f, .40f, .60f)
+
+    override val name: String get() = "Ring Armor"
+    override val enchantReferenceName: String get() = "Ringarmor"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = false
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.LEATHER_LEGGINGS)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGEE
+
     override fun execute(data: DamageEventEnchantData) {
         val event = data.event
         val level = data.level
         damageManager.reduceDamageByPercentage(event, damageReductionAmount.getValueAtLevel(level).toDouble())
-    }
-
-    override fun getName(): String {
-        return "Ring Armor"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Ringarmor"
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
@@ -41,25 +42,5 @@ class RingArmor @Inject constructor(private val damageManager: DamageManager, ar
         )
         enchantLoreParser.setSingleVariable("20", "40", "60")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.A
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return false
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.LEATHER_LEGGINGS)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGEE
     }
 }

@@ -23,13 +23,19 @@ repositories {
 }
 
 dependencies {
+    val kotestVersion = "4.2.0"
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.konghq:unirest-java:3.11.04")
     implementation("com.google.inject:guice:4.1.0")
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT")
-    testImplementation("io.kotest:kotest-runner-junit5:4.4.0.RC2")
-    testImplementation("io.kotest:kotest-assertions-core:4.4.0.RC2")
-    testImplementation("io.kotest:kotest-property:4.4.0.RC2")
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation("io.kotest:kotest-property:$kotestVersion")
     testImplementation("io.mockk:mockk:1.10.5")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
