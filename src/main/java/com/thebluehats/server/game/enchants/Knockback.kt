@@ -1,7 +1,6 @@
 package com.thebluehats.server.game.enchants
 
 import com.google.inject.Inject
-import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder
 import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant
@@ -14,8 +13,17 @@ import org.bukkit.util.Vector
 import java.util.*
 
 class Knockback @Inject constructor(playerDamageTrigger: PlayerDamageTrigger) :
-    DamageTriggeredEnchant(arrayOf<DamageEnchantTrigger>(playerDamageTrigger)) {
+    DamageTriggeredEnchant(arrayOf(playerDamageTrigger)) {
     private val blocksAmount = EnchantProperty(3, 4, 6)
+
+    override val name: String get() = "Knockback"
+    override val enchantReferenceName: String get() = "Knockback"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.GOLD_SWORD)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
+
     override fun execute(data: DamageEventEnchantData) {
         val damagee = data.damagee
         val level = data.level
@@ -25,40 +33,11 @@ class Knockback @Inject constructor(playerDamageTrigger: PlayerDamageTrigger) :
             damagee.velocity.z * blocksAmount.getValueAtLevel(level)
         )
     }
-
-    override fun getName(): String {
-        return "Knockback"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Knockback"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser(
             "Increases knockback taken by<br/>enemies by <white>{0} blocks</white>"
         )
         enchantLoreParser.setSingleVariable("3", "6", "9")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.C
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.GOLD_SWORD)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGER
     }
 }
