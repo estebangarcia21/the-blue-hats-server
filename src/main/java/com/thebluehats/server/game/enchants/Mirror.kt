@@ -7,13 +7,13 @@ import org.bukkit.Material
 import java.util.*
 
 class Mirror : CustomEnchant {
-    override fun getName(): String {
-        return "Mirror"
-    }
 
-    override fun getEnchantReferenceName(): String {
-        return "Mirror"
-    }
+    override val name: String get() = "Mirror"
+    override val enchantReferenceName: String get() = "Mirror"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = false
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.LEATHER_LEGGINGS)
 
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("")
@@ -24,21 +24,5 @@ class Mirror : CustomEnchant {
         )
         enchantLoreParser.setSingleVariable("", "25%", "50%")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return false
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.LEATHER_LEGGINGS)
     }
 }
