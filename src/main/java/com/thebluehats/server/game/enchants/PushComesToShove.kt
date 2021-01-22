@@ -9,6 +9,9 @@ import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.HitCounter
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
+import com.thebluehats.server.game.utils.Var
+import com.thebluehats.server.game.utils.add
+import com.thebluehats.server.game.utils.varMatrix
 import org.bukkit.Material
 import org.bukkit.entity.Arrow
 import java.util.*
@@ -45,9 +48,12 @@ class PushComesToShove @Inject constructor(private val hitCounter: HitCounter, a
         enchantLoreParser.addTextIf(level != 1, " and deals <red>{1}</red><br/>extra damage")
 
         val variables = varMatrix()
+
         variables add Var(0,"Punch", "Punch V", "Punch VII")
         variables add Var(1,"", "+0.5❤", "+1❤")
+
         enchantLoreParser.setVariables(variables)
+
         return enchantLoreParser.parseForLevel(level)
     }
 }
