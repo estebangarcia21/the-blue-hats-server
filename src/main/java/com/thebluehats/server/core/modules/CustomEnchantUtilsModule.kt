@@ -12,7 +12,7 @@ class CustomEnchantUtilsModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
-        fun provideCustomEnchantUtils(romanNumeralConverter: RomanNumeralConverter?): CustomEnchantUtils {
+        fun provideCustomEnchantUtils(romanNumeralConverter: RomanNumeralConverter): CustomEnchantUtils {
             return CustomEnchantUtils(romanNumeralConverter)
         }
     }

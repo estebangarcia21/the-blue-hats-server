@@ -21,7 +21,7 @@ class DiamondAllergy @Inject constructor(
     private val damageReduction = EnchantProperty(0.10f, 0.20f, 0.30f)
 
     override val name: String get() = "Diamond Allergy"
-    override val enchantReferenceName: String get() = "Diamondallergy"
+    override val enchantReferenceName: String get() = "diamond-allergy"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = false

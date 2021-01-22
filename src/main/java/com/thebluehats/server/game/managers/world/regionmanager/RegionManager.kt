@@ -66,6 +66,7 @@ class RegionManager : EntityValidator {
         val mapBounds = activeMap.bounds
         val lowerBound = vectorFromBound(mapBounds.minBound)
         val higherBound = vectorFromBound(mapBounds.maxBound)
+        
         return isInBounds(entity.location, lowerBound, higherBound)
     }
 
@@ -77,6 +78,7 @@ class RegionManager : EntityValidator {
         val spawnBounds = activeMap.spawn.bounds
         val lowerBound = vectorFromBound(spawnBounds.minBound)
         val higherBound = vectorFromBound(spawnBounds.maxBound)
+
         return isInBounds(location, lowerBound, higherBound)
     }
 
@@ -88,7 +90,7 @@ class RegionManager : EntityValidator {
         return Vector(bound.x, bound.y, bound.z)
     }
 
-    override fun validate(vararg entities: Array<Entity>): Boolean {
+    override fun validate(vararg entities: Entity): Boolean {
         for (entity in entities) {
             if (entityIsInSpawn(entity)) {
                 return false

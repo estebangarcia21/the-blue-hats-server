@@ -25,7 +25,7 @@ class EnchantLoreParser(lore: String = "") : LoreParserBase<Array<Array<String>?
             finalLore += appension
         }
 
-        return parseLore(finalLore!!)
+        return parseLore(finalLore)
     }
 
     fun setSingleVariable(levelOne: String, levelTwo: String, levelThree: String) {
@@ -40,14 +40,16 @@ class EnchantLoreParser(lore: String = "") : LoreParserBase<Array<Array<String>?
     override fun insertVariableValuesForLine(line: String): String {
         if (variableMatrix == null && singleVariable == null) return line
         var formattedLine = line
+
         if (onlyOneVariable) {
             formattedLine = StringUtils.replace(formattedLine, "{0}", singleVariable!![level - 1])
         } else {
-            for (i in 0 until Objects.requireNonNull(variableMatrix).length) {
-                val variable = if (onlyOneVariable) singleVariable!![level - 1] else variableMatrix!![i][level - 1]
+            for (i in variableMatrix?.indices!!) {
+                val variable = if (onlyOneVariable) singleVariable!![level - 1] else variableMatrix!![i]?.get(level - 1)
                 formattedLine = StringUtils.replace(formattedLine, "{$i}", variable)
             }
         }
+
         return formattedLine
     }
 }

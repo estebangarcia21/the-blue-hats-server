@@ -20,7 +20,7 @@ class DoubleJump @Inject constructor(
     private val cooldownTime = EnchantProperty(20, 10, 5)
 
     override val name: String get() = "Double-jump"
-    override val enchantReferenceName: String get() = "Doublejump"
+    override val enchantReferenceName: String get() = "double-jump"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

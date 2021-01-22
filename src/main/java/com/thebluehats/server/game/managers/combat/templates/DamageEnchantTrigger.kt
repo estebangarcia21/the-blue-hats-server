@@ -49,7 +49,7 @@ abstract class DamageEnchantTrigger protected constructor(protected val customEn
     }
 
     abstract fun run(
-        enchant: DamageTriggeredEnchant, event: EntityDamageByEntityEvent, targetPlayer: EnchantHolder, validators: Array<EntityValidator?>
+        enchant: DamageTriggeredEnchant, event: EntityDamageByEntityEvent, targetPlayer: EnchantHolder, validators: Array<EntityValidator>
     )
 
     companion object {

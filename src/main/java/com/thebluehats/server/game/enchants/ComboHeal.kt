@@ -19,7 +19,7 @@ class ComboHeal @Inject constructor(private val hitCounter: HitCounter, playerDa
     private val healingAmount = EnchantProperty(.80f, 1.6f, 2.4f)
 
     override val name: String get() = "Combo: Heal"
-    override val enchantReferenceName: String get() = "Comboheal"
+    override val enchantReferenceName: String get() = "combo-heal"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

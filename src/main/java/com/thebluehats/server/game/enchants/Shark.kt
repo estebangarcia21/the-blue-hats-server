@@ -16,9 +16,7 @@ import java.util.*
 
 class Shark @Inject constructor(private val damageManager: DamageManager, playerDamageTrigger: PlayerDamageTrigger) :
     DamageTriggeredEnchant(
-        arrayOf(playerDamageTrigger), arrayOf(
-            damageManager
-        )
+        arrayOf(playerDamageTrigger), arrayOf(damageManager)
     ) {
     private val percentDamageIncrease = EnchantProperty(0.02f, 0.04f, 0.07f)
 

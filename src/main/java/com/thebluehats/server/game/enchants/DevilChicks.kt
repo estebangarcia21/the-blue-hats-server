@@ -30,7 +30,7 @@ class DevilChicks @Inject constructor(
     private val devilchickAnimations = HashMap<UUID, Int>()
 
     override val name: String get() = "Devil Chicks"
-    override val enchantReferenceName: String get() = "Devilchicks"
+    override val enchantReferenceName: String get() = "devil-chicks"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

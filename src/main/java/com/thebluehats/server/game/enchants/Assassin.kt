@@ -22,7 +22,7 @@ class Assassin @Inject constructor(
     private val cooldownTime = EnchantProperty(5, 4, 3)
 
     override val name: String get() = "Assassin"
-    override val enchantReferenceName: String get() = "Assassin"
+    override val enchantReferenceName: String get() = "assassin"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = true

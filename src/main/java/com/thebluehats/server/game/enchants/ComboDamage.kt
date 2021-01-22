@@ -11,6 +11,9 @@ import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.HitCounter
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
+import com.thebluehats.server.game.utils.Var
+import com.thebluehats.server.game.utils.add
+import com.thebluehats.server.game.utils.varMatrix
 import org.bukkit.Material
 import org.bukkit.Sound
 import java.util.*
@@ -25,7 +28,7 @@ class ComboDamage @Inject constructor(
     private val hitsNeeded = EnchantProperty(4, 3, 3)
 
     override val name: String get () = "Combo: Damage"
-    override val enchantReferenceName: String get() = "Combodamage"
+    override val enchantReferenceName: String get() = "combo-damage"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = false
@@ -53,7 +56,6 @@ class ComboDamage @Inject constructor(
         )
 
         val vars = varMatrix()
-
         vars add Var(0, "fourth", "third", "third")
         vars add Var(1, "+20%", "+30%", "+45%")
 

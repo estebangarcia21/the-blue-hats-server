@@ -7,28 +7,30 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
+import java.util.regex.Pattern
 
 abstract class GameCommand : CommandExecutor {
+    private val cmdRegex = Pattern.compile("[<>]")
+
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-        if (sender is Player) {
-            val player = sender
-            for (commandName in commandNames) {
-                if (label.equals(commandName, ignoreCase = true)) {
-                    val usageMessage = getUsageMessage(commandName)
-                    if (usageMessage != null) {
-                        if (args.isEmpty() && usageMessage.contains("<") && usageMessage.contains(">")) {
-                            player.sendMessage(usageMessage)
-                        } else {
-                            runCommand(player, commandName, args)
-                        }
-                    } else {
-                        runCommand(player, commandName, args)
-                    }
+        if (sender !is Player) return false
+
+        commandNames.forEach { c ->
+            if (!label.equals(c, ignoreCase = true)) return@forEach
+
+            val usageMessage = getUsageMessage(c)
+
+            if (usageMessage != null) {
+                if (args.isEmpty() && cmdRegex.matcher(usageMessage).find()) {
+                    sender.sendMessage(usageMessage)
+
+                    return@forEach
                 }
             }
-        } else {
-            sender.sendMessage("Only players may run this command.")
+
+            runCommand(sender, c, args)
         }
+
         return true
     }
 
@@ -38,7 +40,7 @@ abstract class GameCommand : CommandExecutor {
             argsJoiner.add("<$arg>")
         }
         return (ChatColor.DARK_PURPLE.toString() + "/" + cmd + " - " + ChatColor.RED + description + ChatColor.DARK_PURPLE
-                + " | Usage " + ChatColor.DARK_PURPLE + "/" + cmd + " " + ChatColor.RED + argsJoiner.toString())
+            + " | Usage " + ChatColor.DARK_PURPLE + "/" + cmd + " " + ChatColor.RED + argsJoiner.toString())
     }
 
     fun formatStandardErrorMessage(error: String): String {

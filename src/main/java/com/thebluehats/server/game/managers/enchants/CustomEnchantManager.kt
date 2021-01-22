@@ -15,24 +15,26 @@ import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 import java.util.regex.Pattern
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class CustomEnchantManager @Inject constructor(
     private val plugin: JavaPlugin, private val romanNumeralConverter: RomanNumeralConverter,
     private val pantsData: PantsData, private val customEnchantUtils: CustomEnchantUtils
-) : Registerer<CustomEnchant?> {
-    val enchants = ArrayList<CustomEnchant>()
+) : Registerer<CustomEnchant> {
     private val sortCustomEnchantByName = SortCustomEnchantByName()
     private val tierColors = ImmutableMap.builder<Int, ChatColor>()
         .put(1, ChatColor.GREEN).put(2, ChatColor.YELLOW).put(3, ChatColor.RED).build()
+    
+    val enchants = ArrayList<CustomEnchant>()
 
-    override fun register(enchants: Array<CustomEnchant>) {
-        for (enchant in enchants) {
+    override fun register(objects: Array<CustomEnchant>) {
+        for (enchant in objects) {
             if (enchant is Listener) {
                 plugin.server.pluginManager.registerEvents(enchant as Listener, plugin)
             }
             this.enchants.add(enchant)
         }
-        this.enchants.sort(sortCustomEnchantByName)
+        this.enchants.sortWith(sortCustomEnchantByName)
     }
 
     fun addEnchant(item: ItemStack, level: Int, tierUp: Boolean, enchant: CustomEnchant) {
@@ -79,10 +81,10 @@ class CustomEnchantManager @Inject constructor(
         if (itemKey == "LEGGINGS") {
             if (tierUp) itemMeta.displayName = upgradeTier(itemMeta.displayName, textColor)
             val lore = itemMeta.lore
-            trimPantsLoreEnding(lore)
+            trimPantsLoreEnding(lore as ArrayList<String>)
             lore.add("")
             lore.add(formatEnchantName(enchantName, isRareEnchant, level))
-            lore.addAll(description!!)
+            lore.addAll(description)
             lore.add("")
             lore.add(textColor + "As strong as iron")
             itemMeta.lore = lore
@@ -91,7 +93,7 @@ class CustomEnchantManager @Inject constructor(
             val lore = itemMeta.lore ?: return
             lore.add("")
             lore.add(formatEnchantName(enchantName, isRareEnchant, level))
-            lore.addAll(description!!)
+            lore.addAll(description)
             itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 2, false)
             itemMeta.lore = lore
         }
@@ -108,7 +110,7 @@ class CustomEnchantManager @Inject constructor(
         val itemName = ChatColor.stripColor(displayNameTokens[2])
         val nextTier = tier + 1
         return (tierColors[nextTier].toString() + "Tier " + romanNumeralConverter.convertToRomanNumeral(nextTier) + " "
-                + itemName)
+            + itemName)
     }
 
     private fun upgradeTier(displayName: String, textColor: String?): String {
@@ -123,34 +125,37 @@ class CustomEnchantManager @Inject constructor(
     }
 
     private fun finalizePantsLore(
-        name: String?, isRare: Boolean, level: Int, description: ArrayList<String?>?,
-        textColor: String?
+        name: String, isRare: Boolean, level: Int, description: ArrayList<String>, textColor: String?
     ): ArrayList<String?> {
         val finalLore = ArrayList<String?>()
+
         finalLore.add(ChatColor.GRAY.toString() + "Lives: " + ChatColor.GREEN + "69" + ChatColor.GRAY + "/420")
         finalLore.add("")
         finalLore.add(formatEnchantName(name, isRare, level))
-        finalLore.addAll(description!!)
+        finalLore.addAll(description)
         finalLore.add("")
         finalLore.add(textColor + "As strong as iron")
+
         return finalLore
     }
 
     private fun finalizeHandheldLore(
         name: String?, isRare: Boolean, level: Int,
-        description: ArrayList<String?>?
-    ): ArrayList<String?> {
-        val finalLore = ArrayList<String?>()
+        description: ArrayList<String>
+    ): ArrayList<String> {
+        val finalLore = ArrayList<String>()
+
         finalLore.add(ChatColor.GRAY.toString() + "Lives: " + ChatColor.GREEN + "69" + ChatColor.GRAY + "/420")
         finalLore.add("")
         finalLore.add(formatEnchantName(name, isRare, level))
-        finalLore.addAll(description!!)
+        finalLore.addAll(description)
+
         return finalLore
     }
 
     private fun formatEnchantName(name: String?, isRare: Boolean, level: Int): String {
         return ((if (isRare) ChatColor.LIGHT_PURPLE.toString() + "RARE! " else "") + ChatColor.BLUE + name
-                + if (level != 1) " " + romanNumeralConverter.convertToRomanNumeral(level) else "")
+            + if (level != 1) " " + romanNumeralConverter.convertToRomanNumeral(level) else "")
     }
 
     fun isFreshItem(item: ItemStack): Boolean {
@@ -159,9 +164,8 @@ class CustomEnchantManager @Inject constructor(
         return m.find()
     }
 
-    private fun trimPantsLoreEnding(lore: List<String?>) {
-        lore.removeAt(lore.size - 1)
-        lore.removeAt(lore.size - 1)
+    private fun trimPantsLoreEnding(lore: ArrayList<String>) {
+        for (i in 0..2) lore.removeAt(lore.size - 1)
     }
 
     fun getItemLives(item: ItemStack): Int {
@@ -188,7 +192,7 @@ class CustomEnchantManager @Inject constructor(
         val lore = item.itemMeta.lore
         lore[0] =
             (ChatColor.GRAY.toString() + "Lives: " + (if (value > 3) ChatColor.GREEN else ChatColor.RED) + value + ChatColor.GRAY
-                    + "/" + getMaximumItemLives(item))
+                + "/" + getMaximumItemLives(item))
         val meta = item.itemMeta
         meta.lore = lore
         item.itemMeta = meta
@@ -201,7 +205,7 @@ class CustomEnchantManager @Inject constructor(
         val lore = item.itemMeta.lore
         lore[0] =
             (ChatColor.GRAY.toString() + "Lives: " + (if (value > 3) ChatColor.GREEN else ChatColor.RED) + lives + ChatColor.GRAY
-                    + "/" + value)
+                + "/" + value)
         val meta = item.itemMeta
         meta.lore = lore
         item.itemMeta = meta
@@ -262,7 +266,7 @@ class CustomEnchantManager @Inject constructor(
     fun getItemTier(item: ItemStack): Int {
         val meta = item.itemMeta
         val tokens = ArrayList(
-            Arrays.asList(*ChatColor.stripColor(meta.displayName).split(" ").toTypedArray())
+            listOf(*ChatColor.stripColor(meta.displayName).split(" ").toTypedArray())
         )
         if (tokens.contains("I")) {
             return 1

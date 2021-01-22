@@ -17,6 +17,15 @@ import java.util.*
 class LastStand @Inject constructor(playerDamageTrigger: PlayerDamageTrigger, arrowDamageTrigger: ArrowDamageTrigger) :
     DamageTriggeredEnchant(arrayOf(playerDamageTrigger, arrowDamageTrigger)) {
     private val resistanceAmplifier = EnchantProperty(0, 1, 2)
+
+    override val name: String get() = "Last Stand"
+    override val enchantReferenceName: String get() = "Laststand"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = false
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.LEATHER_LEGGINGS)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGEE
+
     override fun execute(data: DamageEventEnchantData) {
         val damagee = data.damagee
         if (damagee.health < 10) damagee.addPotionEffect(
@@ -26,40 +35,11 @@ class LastStand @Inject constructor(playerDamageTrigger: PlayerDamageTrigger, ar
             ), true
         )
     }
-
-    override fun getName(): String {
-        return "Last Stand"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Laststand"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser(
             "Gain <blue>Resistance {0}</blue> (4<br/>seconds) when reaching <red>3❤</red>"
         )
         enchantLoreParser.setSingleVariable("I", "II", "III")
         return enchantLoreParser.parseForLevel(level)
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return true
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return false
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.LEATHER_LEGGINGS)
-    }
-
-    override fun getEnchantHolder(): EnchantHolder {
-        return EnchantHolder.DAMAGEE
     }
 }

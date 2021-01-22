@@ -23,7 +23,7 @@ class DiamondStomp @Inject constructor(
     private val percentDamageIncrease = EnchantProperty(0.7, 0.12, 0.25)
 
     override val name: String get() = "Diamond Stomp"
-    override val enchantReferenceName: String get() = "Diamondstomp"
+    override val enchantReferenceName: String get() = "diamond-stomp"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = false

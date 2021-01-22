@@ -46,7 +46,7 @@ class CustomEnchantUtils @Inject constructor(private val romanNumeralConverter: 
         return 0
     }
 
-    class ItemEnchantData private constructor(private val itemHasEnchant: Boolean, val enchantLevel: Int) {
+    class ItemEnchantData constructor(private val itemHasEnchant: Boolean, val enchantLevel: Int) {
         fun itemHasEnchant(): Boolean {
             return itemHasEnchant
         }

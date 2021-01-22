@@ -15,18 +15,13 @@ class ServerAPIModule : AbstractModule() {
         @Singleton
         @ServerAPI
         fun provideServerApi(): UnirestInstance {
-            var apiUrl = System.getenv("API_URL")
+            val apiUrl = System.getenv("API_URL")
             val defaultApiUrl = "http://localhost:4000"
-            if (apiUrl != null) {
-                if (apiUrl.isEmpty) {
-                    apiUrl = defaultApiUrl
-                }
-            } else {
-                apiUrl = defaultApiUrl
-            }
+
             val instance = Unirest.spawnInstance()
-            instance.config().defaultBaseUrl(apiUrl)
+            instance.config().defaultBaseUrl(if (apiUrl.isNullOrEmpty()) defaultApiUrl else apiUrl)
             instance.config().setDefaultHeader("x-api-key", System.getenv("API_KEY"))
+
             return instance
         }
     }

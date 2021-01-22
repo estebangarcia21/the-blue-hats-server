@@ -1,7 +1,6 @@
 package com.thebluehats.server.game.enchants
 
 import com.google.inject.Inject
-import com.thebluehats.server.game.managers.combat.templates.DamageEnchantTrigger
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder
 import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant
@@ -10,6 +9,9 @@ import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.HitCounter
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
+import com.thebluehats.server.game.utils.Var
+import com.thebluehats.server.game.utils.add
+import com.thebluehats.server.game.utils.varMatrix
 import net.minecraft.server.v1_8_R3.IChatBaseComponent
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle
 import org.bukkit.ChatColor
@@ -27,7 +29,7 @@ class ComboStun @Inject constructor(private val hitCounter: HitCounter, playerDa
     private val hitsNeeded = EnchantProperty(5, 4, 4)
 
     override val name: String get() = "Combo: Stun"
-    override val enchantReferenceName: String get() = "Combostun"
+    override val enchantReferenceName: String get() = "combo-stun"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

@@ -13,7 +13,7 @@ class BooBoo @Inject constructor(private val customEnchantUtils: CustomEnchantUt
     private val secondsNeeded = EnchantProperty(5, 4, 3)
 
     override val name: String get() = "Boo-boo"
-    override val enchantReferenceName: String get() = "Booboo"
+    override val enchantReferenceName: String get() = "booboo"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

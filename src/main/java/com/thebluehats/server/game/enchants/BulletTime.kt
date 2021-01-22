@@ -24,7 +24,7 @@ class BulletTime @Inject constructor(
     private val healingAmount = EnchantProperty(0, 2, 3)
 
     override val name: String get() = "Bullet Time"
-    override val enchantReferenceName: String get() = "Bullettime"
+    override val enchantReferenceName: String get() = "bullet-time"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

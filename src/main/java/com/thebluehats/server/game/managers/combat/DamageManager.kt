@@ -41,13 +41,8 @@ class DamageManager @Inject constructor(
         canceledEvents.remove(damagerUuid)
     }
 
-    override fun validate(vararg entities: Array<Entity>): Boolean {
-        for (entity in entities) {
-            if (uuidIsInCanceledEvent(entity.uniqueId)) {
-                return false
-            }
-        }
-        return true
+    override fun validate(vararg entities: Entity): Boolean {
+        return entities.any { e -> uuidIsInCanceledEvent(e.uniqueId) }
     }
 
     @EventHandler
@@ -135,7 +130,7 @@ class DamageManager @Inject constructor(
     }
 
     private fun calculateDamage(initialDamage: Double, event: EntityDamageByEntityEvent): Double {
-        val data = eventData.computeIfAbsent(event.damager.uniqueId) { k: UUID? -> EventData() }
+        val data = eventData.computeIfAbsent(event.damager.uniqueId) { EventData() }
         var damage = (initialDamage * data.additiveDamage * data.multiplicativeDamage
                 * data.reductionAmount)
         if (removeCriticalDamage.contains(event.damager.uniqueId)) {

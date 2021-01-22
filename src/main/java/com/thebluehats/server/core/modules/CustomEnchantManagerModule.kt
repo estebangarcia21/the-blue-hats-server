@@ -16,9 +16,9 @@ class CustomEnchantManagerModule : AbstractModule() {
         @Provides
         @Singleton
         fun provideCustomEnchantManager(
-            plugin: JavaPlugin?,
-            romanNumeralConverter: RomanNumeralConverter?, pantsData: PantsData?,
-            customEnchantUtils: CustomEnchantUtils?
+            plugin: JavaPlugin,
+            romanNumeralConverter: RomanNumeralConverter, pantsData: PantsData,
+            customEnchantUtils: CustomEnchantUtils
         ): CustomEnchantManager {
             return CustomEnchantManager(plugin, romanNumeralConverter, pantsData, customEnchantUtils)
         }

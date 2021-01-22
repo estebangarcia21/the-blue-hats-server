@@ -17,6 +17,13 @@ import javax.inject.Inject
 
 class Instaboom @Inject constructor(private val damageManager: DamageManager, private val customEnchantUtils:
 CustomEnchantUtils) : CustomEnchant, Listener {
+    override val name: String get() = "Instaboom"
+    override val enchantReferenceName: String get() = "instaboom"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.BOW)
+
     @EventHandler
     fun onBlockPlace(event: BlockPlaceEvent) {
         val data = customEnchantUtils.getItemEnchantData(this, event.player.inventory.leggings)
@@ -46,31 +53,7 @@ CustomEnchantUtils) : CustomEnchant, Listener {
         )
     }
 
-    override fun getName(): String {
-        return "Instaboom"
-    }
-
-    override fun getEnchantReferenceName(): String {
-        return "Instaboom"
-    }
-
     override fun getDescription(level: Int): ArrayList<String> {
         TODO("Not yet implemented")
-    }
-
-    override fun isDisabledOnPassiveWorld(): Boolean {
-        return false
-    }
-
-    override fun getEnchantGroup(): EnchantGroup {
-        return EnchantGroup.B
-    }
-
-    override fun isRareEnchant(): Boolean {
-        return true
-    }
-
-    override fun getEnchantItemTypes(): Array<Material> {
-        return arrayOf(Material.BOW)
     }
 }

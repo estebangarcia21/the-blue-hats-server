@@ -19,7 +19,7 @@ constructor(private val damageManager: DamageManager, arrowDamageTrigger: ArrowD
     private val damageAmount = EnchantProperty(0.5f, 1.0f, 1.5f)
 
     override val name: String get() = "Chipping"
-    override val enchantReferenceName: String get() = "Chipping"
+    override val enchantReferenceName: String get() = "chipping"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

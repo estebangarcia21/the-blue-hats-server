@@ -11,7 +11,7 @@ class HitCounterModule : AbstractModule() {
 
     companion object {
         @Provides
-        fun provideHitCounter(timer: Timer<UUID?>?): HitCounter {
+        fun provideHitCounter(timer: Timer<UUID>): HitCounter {
             return HitCounter(timer)
         }
     }
