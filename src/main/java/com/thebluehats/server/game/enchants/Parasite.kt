@@ -25,7 +25,7 @@ class Parasite @Inject constructor(arrowDamageTrigger: ArrowDamageTrigger) :
     override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
 
     override fun execute(data: DamageEventEnchantData) {
-//        data.damager addHealth healAmount.getValueAtLevel(data.level)
+        data.damager addHealth healAmount.getValueAtLevel(data.level)
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
