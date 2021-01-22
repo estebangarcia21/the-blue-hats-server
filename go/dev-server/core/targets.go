@@ -1,7 +1,6 @@
 package core
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"os/exec"
@@ -17,7 +16,6 @@ var (
 	serverTemplateURL = "https://www.dropbox.com/s/ubzaencsai8fmtk/tbhs-dev-server.tar.gz?dl=1"
 )
 
-// RunTarget executes the specified target
 func RunTarget(target string, workingDir string) {
 	if t, ok := targets[target]; ok {
 		os.Chdir(workingDir)
@@ -73,20 +71,22 @@ func (s start) exec() {
 	os.Chdir(vars.DevServerLocation)
 
 	fmt.Println("Starting the server...")
+	subProcess := exec.Command("java", "-jar", "-Xms2g", "-Xmx4g", "-XX:+UseG1GC", "spigot-1.8.8.jar", "nogui")
 
-	cmd := exec.Command("java", "-jar", "-Xms2g", "-Xmx4g", "-XX:+UseG1GC", "spigot-1.8.8.jar", "nogui")
-	c := make(chan struct{})
-
-	go run(cmd, c)
-
-	c <- struct{}{}
-	cmd.Start()
-
-	<-c
-
-	if err := cmd.Wait(); err != nil {
+	stdin, err := subProcess.StdinPipe()
+	if err != nil {
 		fmt.Println(err)
 	}
+	defer stdin.Close()
+
+	subProcess.Stdout = os.Stdout
+	subProcess.Stderr = os.Stderr
+
+	if err = subProcess.Start(); err != nil {
+		fmt.Println("An error occured: ", err)
+	}
+
+	subProcess.Wait()
 }
 
 func (d delete) exec() {
@@ -94,21 +94,4 @@ func (d delete) exec() {
 	os.RemoveAll(vars.DevServerLocation)
 
 	fmt.Println("Successfully removed.")
-}
-
-func run(cmd *exec.Cmd, c chan struct{}) {
-	defer func() { c <- struct{}{} }()
-
-	stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		panic(err)
-	}
-
-	<-c
-
-	scanner := bufio.NewScanner(stdout)
-	for scanner.Scan() {
-		m := scanner.Text()
-		fmt.Println(m)
-	}
 }
