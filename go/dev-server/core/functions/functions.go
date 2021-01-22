@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	pluginsDirectory = vars.WorkingDirectory + "/plugins"
+	pluginsDirectory = vars.DevServerLocation + "/plugins"
 )
 
 // BuildServerJar buils the server jar through the gradle wrapper
@@ -17,24 +17,20 @@ func BuildServerJar() {
 	fmt.Println("Building the latest version of The Blue Hats Server...")
 	utils.ExecSafeCmd("./gradlew", "shadowJar")
 
-	fmt.Println("Moving to plugins folder...")
-	if _, err := os.Stat(pluginsDirectory); os.IsNotExist(err) {
-		os.Mkdir(pluginsDirectory, 0755)
-	}
+	fmt.Println("Moving to the plugins folder...")
+	os.RemoveAll(pluginsDirectory)
 
-	utils.ExecSafeCmd("mv", "-v", "build/libs/*", pluginsDirectory)
-
-	fmt.Println(`
-   	Done! The development server was successfully created!
-
-	To run the server, do ./dev-server start
-	Otherwise, to delete the server do ./dev-server delete"
-	`)
+	utils.ExecSafeCmd("mv", "build/libs", vars.DevServerLocation)
+	utils.ExecSafeCmd("mv", dsl("/libs"), dsl("/plugins"))
 }
 
 // UpdateSpigotJar updates the spigot jar by downloading it from Spigot's website
 func UpdateSpigotJar() {
-	os.Chdir(vars.WorkingDirectory)
+	os.Chdir(vars.DevServerLocation)
 	fmt.Println("Updating the spigot jar...")
 	utils.Curl("https://cdn.getbukkit.org/spigot/spigot-1.8.8-R0.1-SNAPSHOT-latest.jar", "spigot-1.8.8.jar").Run()
+}
+
+func dsl(dir string) string {
+	return vars.DevServerLocation + dir
 }

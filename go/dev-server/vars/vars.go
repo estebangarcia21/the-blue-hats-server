@@ -1,6 +1,6 @@
 package vars
 
 var (
-	// WorkingDirectory is the directory name of the development server
-	WorkingDirectory = "__dev-server"
+	// DevServerLocation is the directory of the development server
+	DevServerLocation = "__dev-server"
 )

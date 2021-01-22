@@ -10,7 +10,7 @@ import (
 func main() {
 	args := os.Args
 
-	if len(args) != 2 {
+	if len(args) < 2 {
 		fmt.Println(`
      THE BLUE HATS DEVELOPMENT SERVER by Stevemmmmm
 
@@ -37,5 +37,5 @@ func main() {
 
 	target := os.Args[1]
 
-	core.RunTarget(target)
+	core.RunTarget(target, core.ParseFlags()[0])
 }
