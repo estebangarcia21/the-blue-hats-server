@@ -3,7 +3,6 @@ package functions
 import (
 	"fmt"
 	"os"
-	"os/exec"
 
 	"dev-server/core/utils"
 	"dev-server/vars"
@@ -16,14 +15,14 @@ var (
 // BuildServerJar buils the server jar through the gradle wrapper
 func BuildServerJar() {
 	fmt.Println("Building the latest version of The Blue Hats Server...")
-	utils.HandleCmd(exec.Command("./gradlew", "shadowJar"))
+	utils.ExecSafeCmd("./gradlew", "shadowJar")
 
 	fmt.Println("Moving to plugins folder...")
 	if _, err := os.Stat(pluginsDirectory); os.IsNotExist(err) {
 		os.Mkdir(pluginsDirectory, 0755)
 	}
 
-	utils.HandleCmd(exec.Command("mv", "-v", "build/libs/*", pluginsDirectory))
+	utils.ExecSafeCmd("mv", "-v", "build/libs/*", pluginsDirectory)
 
 	fmt.Println(`
    	Done! The development server was successfully created!

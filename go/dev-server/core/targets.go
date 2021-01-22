@@ -3,7 +3,6 @@ package core
 import (
 	"fmt"
 	"os"
-	"os/exec"
 
 	"dev-server/core/utils"
 	"dev-server/vars"
@@ -48,11 +47,11 @@ func (n new) exec() {
 	utils.HandleCmd(utils.Curl(serverTemplateURL, serverTarball))
 
 	fmt.Println("Unzipping...")
-	utils.HandleCmd(exec.Command("tar", "--strip-components=1", "-xf", serverTarball))
+	utils.ExecSafeCmd("tar", "--strip-components=1", "-xf", serverTarball)
 	os.Remove(serverTarball)
 
 	fmt.Println("Building the server jar...")
-	utils.HandleCmd(exec.Command("../gradlew", "shadowJar"))
+	utils.ExecSafeCmd("../gradlew", "shadowJar")
 }
 
 func (s start) exec() {
