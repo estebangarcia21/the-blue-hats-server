@@ -12,8 +12,12 @@ import com.thebluehats.server.game.managers.enchants.HitCounter
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
 import com.thebluehats.server.game.utils.EntityValidator
+import com.thebluehats.server.game.utils.armor
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.PlayerInventory
 import java.util.*
 
 class Perun @Inject constructor(
@@ -41,14 +45,19 @@ class Perun @Inject constructor(
         val damagee = data.damagee
         val level = data.level
         var damage = perunDamage.getValueAtLevel(level)
+
         hitCounter.addOne(damager)
+
+
         if (hitCounter.hasHits(damager, hitsNeeded.getValueAtLevel(level))) {
             if (level == 3) {
-                if (damagee.inventory.boots != null) if (damagee.inventory.boots.type == Material.DIAMOND_BOOTS) damage += 2
-                if (damagee.inventory.chestplate != null) if (damagee.inventory.chestplate.type == Material.DIAMOND_CHESTPLATE) damage += 2
-                if (damagee.inventory.leggings != null) if (damagee.inventory.leggings.type == Material.DIAMOND_LEGGINGS) damage += 2
-                if (damagee.inventory.helmet != null) if (damagee.inventory.helmet.type == Material.DIAMOND_HELMET) damage += 2
+                damagee.inventory.armor.forEach { a ->
+                    if (a == null) return@forEach
+
+                    damage += if (a.type.name.split("_")[0].equals("diamond", ignoreCase = true)) 2 else 0
+                }
             }
+
             damager.world.strikeLightningEffect(damagee.location)
             damageManager.doTrueDamage(damagee, damage.toDouble(), damager)
         }
@@ -58,7 +67,7 @@ class Perun @Inject constructor(
         val enchantLoreParser = EnchantLoreParser("")
         val lastMessage = ChatColor.ITALIC.toString() + "Lightning deals true damage"
         enchantLoreParser.addTextIf(
-            level == 2,
+            level == 1,
             "Every <yellow>fifth</yellow> hit strikes<br/><yellow>lightning</yellow> for <red>{0}❤</red><br/>$lastMessage"
         )
         enchantLoreParser.addTextIf(

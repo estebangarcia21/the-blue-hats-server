@@ -11,13 +11,14 @@ import com.thebluehats.server.game.managers.enchants.EnchantProperty
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
 import org.bukkit.Material
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import java.util.*
 
 class Fletching @Inject constructor(private val damageManager: DamageManager, arrowDamageTrigger: ArrowDamageTrigger) :
     DamageTriggeredEnchant(
         arrayOf(arrowDamageTrigger), arrayOf(damageManager)
     ) {
-    private val percentDamageIncrease = EnchantProperty(.07f, 0.12f, 0.20f)
+    private val percentDamageIncrease = EnchantProperty(.07, 0.12, 0.20)
 
     override val name: String get() = "Fletching"
     override val enchantReferenceName: String get() = "fletching"
@@ -30,7 +31,7 @@ class Fletching @Inject constructor(private val damageManager: DamageManager, ar
     override fun execute(data: DamageEventEnchantData) {
         damageManager.addDamage(
             data.event,
-            percentDamageIncrease.getValueAtLevel(data.level).toDouble(),
+            percentDamageIncrease.getValueAtLevel(data.level),
             CalculationMode.ADDITIVE
         )
     }
