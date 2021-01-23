@@ -16,7 +16,7 @@ class WaspTest : DescribeSpec({
             val effect = PotionEffect(PotionEffectType.WEAKNESS, 16 * 20, 3)
 
             val damageeMock = mockk<Player> {
-                every { addPotionEffect(effect, true) } returns false
+                every { addPotionEffect(effect, true) } returns true
             }
 
             val data = mockk<DamageEventEnchantData> {
