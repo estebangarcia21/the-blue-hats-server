@@ -32,13 +32,16 @@ class SprintDrain @Inject constructor(arrowDamageTrigger: ArrowDamageTrigger) :
 
     override fun execute(data: DamageEventEnchantData) {
         val level = data.level
+
         data.damager.addPotionEffect(
             PotionEffect(
                 PotionEffectType.SPEED,
                 speedDuration.getValueAtLevel(level) * 20, speedAmplifier.getValueAtLevel(level)
             ), true
         )
+
         if (level == 1) return
+
         data.damagee.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 60, 0))
     }
 
