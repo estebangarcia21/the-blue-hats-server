@@ -22,32 +22,32 @@ class Peroxide @Inject constructor(playerDamageTrigger: PlayerDamageTrigger, arr
     private val regenDuration = EnchantProperty(5, 8, 8)
     private val regenAmplifier = EnchantProperty(0, 0, 1)
 
-    override val name = "Peroxide"
-    override val enchantReferenceName = "Peroxide"
-    override val isDisabledOnPassiveWorld = true
-    override val isRareEnchant = false
-    override val enchantGroup = EnchantGroup.B
-    override val enchantItemTypes = arrayOf(Material.LEATHER_LEGGINGS)
-    override val enchantHolder = EnchantHolder.DAMAGEE
+    override val name: String get() = "Peroxide"
+    override val enchantReferenceName: String get() = "Peroxide"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.B
+    override val isRareEnchant: Boolean get() = false
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.LEATHER_LEGGINGS)
+    override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGEE
 
     override fun execute(data: DamageEventEnchantData) {
         val level = data.level
-        data.damagee.player.addPotionEffect(
+        data.damagee.addPotionEffect(
             PotionEffect(
                 PotionEffectType.REGENERATION,
-                regenDuration.getValueAtLevel(level) * 20, regenAmplifier.getValueAtLevel(level), true
-            )
+                regenDuration.getValueAtLevel(level) * 20, regenAmplifier.getValueAtLevel(level)
+            ), true
         )
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser("Gain <red>Regen {0}</red> ({1}s) when hit")
 
-        val vars = varMatrix()
-        vars add Var(0, "I", "I", "II")
-        vars add Var(1, "5", "8", "8")
+        val variables = varMatrix()
+        variables add Var(0, "I", "I", "II")
+        variables add Var(1, "5", "8", "8")
 
-        enchantLoreParser.setVariables(vars)
+        enchantLoreParser.setVariables(variables)
 
         return enchantLoreParser.parseForLevel(level)
     }
