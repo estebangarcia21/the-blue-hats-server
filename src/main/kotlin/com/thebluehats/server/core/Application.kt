@@ -7,12 +7,13 @@ import java.util.function.Consumer
 
 class Application @Inject constructor(private val plugin: TheBlueHatsServerPlugin) {
     fun start() {
-        plugin.lifecycleListeners.forEach(Consumer { obj: PluginLifecycleListener -> obj.onPluginStart() })
+        plugin.lifecycleListeners.forEach { l -> l.onPluginStart() }
+
         logInitializationMessage()
     }
 
     fun stop() {
-        plugin.lifecycleListeners.forEach(Consumer { obj: PluginLifecycleListener -> obj.onPluginEnd() })
+        plugin.lifecycleListeners.forEach { l -> l.onPluginEnd() }
     }
 
     private fun logInitializationMessage() {
