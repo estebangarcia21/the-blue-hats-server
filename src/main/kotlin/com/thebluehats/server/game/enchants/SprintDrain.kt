@@ -23,7 +23,7 @@ class SprintDrain @Inject constructor(arrowDamageTrigger: ArrowDamageTrigger) :
     private val speedAmplifier = EnchantProperty(0, 0, 1)
 
     override val name: String get() = "Sprint Drain"
-    override val enchantReferenceName: String get() = "Sprintdrain"
+    override val enchantReferenceName: String get() = "sprint-drain"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = false
@@ -42,13 +42,14 @@ class SprintDrain @Inject constructor(arrowDamageTrigger: ArrowDamageTrigger) :
 
         if (level == 1) return
 
-        data.damagee.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 60, 0))
+        data.damagee.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 60, 0), true)
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser(
             "Arrow shots grant you <yellow>Speed {0}</yellow><br/>({1}s)"
         )
+
         enchantLoreParser.addTextIf(level != 1, " and apply <blue>Slowness I</blue><br/>(3s)")
 
         val variables = varMatrix()

@@ -14,10 +14,10 @@ class SprintDrainTest : DescribeSpec({
         it ("gives the damager speed one") {
             val sprintDrain = SprintDrain(mockk())
 
-            val effect = PotionEffect(PotionEffectType.SPEED, 5 * 20, 0)
+            val speedEffect = PotionEffect(PotionEffectType.SPEED, 5 * 20, 0)
 
             val damagerMock = mockk<Player> {
-                every { addPotionEffect(effect, true) } returns true
+                every { addPotionEffect(speedEffect, true) } returns true
             }
 
             val data = mockk<DamageEventEnchantData> {
@@ -27,12 +27,33 @@ class SprintDrainTest : DescribeSpec({
 
             sprintDrain.execute(data)
 
-            verify { damagerMock.addPotionEffect(effect, true) }
+            verify { damagerMock.addPotionEffect(speedEffect, true) }
         }
 
         describe("level 2 or greater") {
             it("gives the damager speed and gives the damagee slowness") {
+                val sprintDrain = SprintDrain(mockk())
 
+                val speedEffect = PotionEffect(PotionEffectType.SPEED, 7 * 20, 1)
+                val slownessEffect = PotionEffect(PotionEffectType.SLOW, 60, 0)
+
+                val damagerMock = mockk<Player> {
+                    every { addPotionEffect(speedEffect, true) } returns true
+                }
+                val damageeMock = mockk<Player> {
+                    every { addPotionEffect(slownessEffect, true) } returns true
+                }
+
+                val data = mockk<DamageEventEnchantData> {
+                    every { level } returns 3
+                    every { damager } returns damagerMock
+                    every { damagee } returns damageeMock
+                }
+
+                sprintDrain.execute(data)
+
+                verify { damagerMock.addPotionEffect(speedEffect, true) }
+                verify { damageeMock.addPotionEffect(slownessEffect, true) }
             }
         }
     }
