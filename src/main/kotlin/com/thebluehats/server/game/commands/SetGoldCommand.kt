@@ -9,13 +9,13 @@ class SetGoldCommand @Inject constructor(private val performanceStatsService: Pe
     override val commandNames: Array<String>
         get() = arrayOf("setgold")
 
-    override fun getUsageMessage(cmd: String?): String? {
+    override fun getUsageMessage(cmd: String?): String {
         return formatStandardUsageMessage(cmd!!, "Sets your gold amount.", "amount")
     }
 
     override fun runCommand(player: Player, cmd: String?, args: Array<String>) {
         if (StringUtils.isNumeric(args[0])) {
-            val gold = Math.min(args[0].toDouble(), 1000000000.0)
+            val gold = args[0].toDouble().coerceAtMost(1000000000.0)
             performanceStatsService.setPlayerGold(player, gold)
         } else {
             player.sendMessage(getUsageMessage(cmd))

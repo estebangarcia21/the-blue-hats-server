@@ -28,8 +28,7 @@ abstract class GameCommand : CommandExecutor {
                     }
                 }
 
-                runCommand(sender, cmd, args)
-                return@loop
+                return@loop runCommand(sender, cmd, args)
             }
         }
 
@@ -39,7 +38,7 @@ abstract class GameCommand : CommandExecutor {
     fun formatStandardUsageMessage(cmd: String, description: String, vararg args: String): String {
         val argsJoiner = StringJoiner(" ")
 
-        args.forEach { arg -> argsJoiner.add("<$arg>")}
+        args.forEach { arg -> argsJoiner.add("<$arg>") }
 
         return (ChatColor.DARK_PURPLE.toString() + "/" + cmd + " - " + ChatColor.RED + description + ChatColor.DARK_PURPLE
             + " | Usage " + ChatColor.DARK_PURPLE + "/" + cmd + " " + ChatColor.RED + argsJoiner.toString())

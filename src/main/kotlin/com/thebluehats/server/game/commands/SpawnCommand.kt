@@ -13,7 +13,7 @@ class SpawnCommand @Inject constructor(
     private val regionManager: RegionManager
 ) : GameCommand() {
     override val commandNames: Array<String>
-        get() = arrayOf("spawn")
+        get() = arrayOf("respawn", "spawn")
 
     override fun getUsageMessage(cmd: String?): String? {
         return null
