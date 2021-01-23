@@ -26,6 +26,7 @@ class CombatManager @Inject constructor(
             combatTag(event.entity as Player)
             return
         }
+
         if (arrowHitPlayerVerifier.verify(event)) {
             combatTag((event.damager as Arrow).shooter as Player)
             combatTag(event.entity as Player)

@@ -29,8 +29,7 @@ class ApplicationBuilder(private val plugin: TheBlueHatsServerPlugin) {
             PluginModule(plugin), RegionManagerModule(),
             CustomEnchantManagerModule(), CombatManagerModule(), EventVerifiersModule(),
             DamageManagerModule(), BowManagerModule(), TimerModule(), HitCounterModule(),
-            MirrorModule(), CustomEnchantUtilsModule(), ServerAPIModule(),
-            RomanNumeralConverterModule(), PantsDataContainerModule(),
+            MirrorModule(), CustomEnchantUtilsModule(), ServerAPIModule(), PantsDataContainerModule(),
             PerformanceStatsServiceModule(), GlobalTimerModule(), DamageEnchantTriggersModule(),
             RegistererModule(), PitScoreboardModule()
         )

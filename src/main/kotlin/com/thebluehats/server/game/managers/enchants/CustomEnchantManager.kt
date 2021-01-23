@@ -1,11 +1,8 @@
 package com.thebluehats.server.game.managers.enchants
 
 import com.google.common.collect.ImmutableMap
-import com.thebluehats.server.game.utils.PantsData
+import com.thebluehats.server.game.utils.*
 import com.thebluehats.server.game.utils.PantsData.FreshPantsColor
-import com.thebluehats.server.game.utils.Registerer
-import com.thebluehats.server.game.utils.RomanNumeralConverter
-import com.thebluehats.server.game.utils.SortCustomEnchantByName
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -18,8 +15,8 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 class CustomEnchantManager @Inject constructor(
-    private val plugin: JavaPlugin, private val romanNumeralConverter: RomanNumeralConverter,
-    private val pantsData: PantsData, private val customEnchantUtils: CustomEnchantUtils
+    private val plugin: JavaPlugin, private val pantsData: PantsData,
+    private val customEnchantUtils: CustomEnchantUtils
 ) : Registerer<CustomEnchant> {
     private val sortCustomEnchantByName = SortCustomEnchantByName()
     private val tierColors = ImmutableMap.builder<Int, ChatColor>()
@@ -102,26 +99,18 @@ class CustomEnchantManager @Inject constructor(
 
     private fun upgradeTier(displayName: String): String {
         val displayNameTokens = displayName.split(" ").toTypedArray()
-        val tier = romanNumeralConverter.convertRomanNumeralToInteger(
-            ChatColor.stripColor(
-                displayNameTokens[1]
-            )
-        )
+        val tier = ChatColor.stripColor(displayNameTokens[1]).numeralToInteger()
+
         val itemName = ChatColor.stripColor(displayNameTokens[2])
         val nextTier = tier + 1
-        return (tierColors[nextTier].toString() + "Tier " + romanNumeralConverter.convertToRomanNumeral(nextTier) + " "
-            + itemName)
+        return (tierColors[nextTier].toString() + "Tier " + nextTier.toRomanNumeral() + " " + itemName)
     }
 
     private fun upgradeTier(displayName: String, textColor: String?): String {
         val displayNameTokens = displayName.split(" ").toTypedArray()
-        val tier = romanNumeralConverter.convertRomanNumeralToInteger(
-            ChatColor.stripColor(
-                displayNameTokens[1]
-            )
-        )
+        val tier = ChatColor.stripColor(displayNameTokens[1]).numeralToInteger()
         val itemName = ChatColor.stripColor(displayNameTokens[2])
-        return textColor + "Tier " + romanNumeralConverter.convertToRomanNumeral(tier + 1) + " " + itemName
+        return textColor + "Tier " + (tier + 1).toRomanNumeral() + " " + itemName
     }
 
     private fun finalizePantsLore(
@@ -155,7 +144,7 @@ class CustomEnchantManager @Inject constructor(
 
     private fun formatEnchantName(name: String?, isRare: Boolean, level: Int): String {
         return ((if (isRare) ChatColor.LIGHT_PURPLE.toString() + "RARE! " else "") + ChatColor.BLUE + name
-            + if (level != 1) " " + romanNumeralConverter.convertToRomanNumeral(level) else "")
+            + if (level != 1) " " + level.toRomanNumeral() else "")
     }
 
     fun isFreshItem(item: ItemStack): Boolean {

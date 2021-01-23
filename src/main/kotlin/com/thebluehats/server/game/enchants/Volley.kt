@@ -29,12 +29,12 @@ class Volley @Inject constructor(
     private val volleyTasks = HashMap<Arrow, Int>()
     private val arrowCount = HashMap<Arrow, Int>()
 
-    override val name = "Volley"
-    override val enchantReferenceName = "Volley"
-    override val isDisabledOnPassiveWorld = false
-    override val enchantGroup = EnchantGroup.A
-    override val isRareEnchant = true
-    override val enchantItemTypes = arrayOf(Material.BOW)
+    override val name: String get() = "Volley"
+    override val enchantReferenceName: String get() = "Volley"
+    override val isDisabledOnPassiveWorld: Boolean get() = false
+    override val enchantGroup: EnchantGroup get() = EnchantGroup.A
+    override val isRareEnchant: Boolean get() = true
+    override val enchantItemTypes: Array<Material> get() = arrayOf(Material.BOW)
 
     @EventHandler
     fun onBowShoot(event: EntityShootBowEvent) {
@@ -49,6 +49,7 @@ class Volley @Inject constructor(
                 val player = eventArrow.shooter as Player
                 val bow = bowManager.getBowFromArrow(eventArrow)
                 val data = customEnchantUtils.getItemEnchantData(this, bow)
+
                 if (data.itemHasEnchant()) {
                     execute(data.enchantLevel, player, eventArrow, event.force)
                 }
@@ -59,16 +60,20 @@ class Volley @Inject constructor(
     fun execute(level: Int, player: Player, arrow: Arrow, force: Float) {
         val item = player.inventory.itemInHand
         val originalVelocity = arrow.velocity
+
         Bukkit.getServer().scheduler.scheduleSyncDelayedTask(plugin, {
             volleyTasks[arrow] = Bukkit.getServer().scheduler.scheduleSyncRepeatingTask(plugin, {
                 if (!regionManager.entityIsInSpawn(player)) {
                     player.world.playSound(player.location, Sound.SHOOT_ARROW, 1f, 1f)
                     val volleyArrow = player.launchProjectile(Arrow::class.java)
+
                     volleyArrow.velocity = player.eyeLocation.direction.normalize().multiply(originalVelocity.length())
                     val event = EntityShootBowEvent(player, item, volleyArrow, force)
+
                     plugin.server.pluginManager.callEvent(event)
                     bowManager.registerArrow(volleyArrow, player)
                     arrowCount[arrow] = arrowCount.getOrDefault(arrow, 1) + 1
+
                     if (arrowCount[arrow]!! > arrows.getValueAtLevel(level)) {
                         Bukkit.getServer().scheduler.cancelTask(volleyTasks[arrow]!!)
                         volleyTasks.remove(arrow)

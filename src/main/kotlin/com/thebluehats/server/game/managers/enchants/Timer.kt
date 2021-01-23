@@ -7,43 +7,33 @@ import java.util.*
 
 class Timer<K> @Inject constructor(private val plugin: JavaPlugin) {
     private val timerData = HashMap<K, TimerData>()
-    fun start(key: K, ticks: Long, resetTime: Boolean) {
-        val data = timerData.computeIfAbsent(key, { k: K -> TimerData() })
-        if (data.isRunning) {
-            if (resetTime) data.time = ticks
-            return
-        }
-        data.time = ticks
-        data.taskId = Bukkit.getServer().scheduler.scheduleSyncRepeatingTask(plugin, {
-            data.time = data.time - 1
-            if (data.time <= 0) {
-                data.time = 0
-                Bukkit.getServer().scheduler.cancelTask(data.taskId)
-                timerData.remove(key)
-            }
-        }, 0L, 1L)
-    }
 
-    fun start(key: K, ticks: Long, resetTime: Boolean, post: Runnable) {
-        val data = timerData.computeIfAbsent(key, { k: K -> TimerData() })
+    fun start(key: K, time: Long, resetTime: Boolean = false, seconds: Boolean = false, post: Runnable? = null) {
+        val data = timerData.computeIfAbsent(key, { TimerData() })
+
         if (data.isRunning) {
-            if (resetTime) data.time = ticks
+            if (resetTime) data.time = if (seconds) time * 20 else time
+
             return
         }
-        data.time = ticks
+
+        data.time = time
+
         data.taskId = Bukkit.getServer().scheduler.scheduleSyncRepeatingTask(plugin, {
             data.time = data.time - 1
+
             if (data.time <= 0) {
                 data.time = 0
                 Bukkit.getServer().scheduler.cancelTask(data.taskId)
                 timerData.remove(key)
-                post.run()
+
+                post?.run()
             }
         }, 0L, 1L)
     }
 
     fun cancel(key: K) {
-        val data = timerData.computeIfAbsent(key, { k: K -> TimerData() })
+        val data = timerData.computeIfAbsent(key, { TimerData() })
         Bukkit.getServer().scheduler.cancelTask(data.taskId)
         timerData.remove(key)
     }

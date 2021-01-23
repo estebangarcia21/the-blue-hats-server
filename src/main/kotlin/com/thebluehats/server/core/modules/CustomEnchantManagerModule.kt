@@ -6,7 +6,6 @@ import com.google.inject.Singleton
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager
 import com.thebluehats.server.game.managers.enchants.CustomEnchantUtils
 import com.thebluehats.server.game.utils.PantsData
-import com.thebluehats.server.game.utils.RomanNumeralConverter
 import org.bukkit.plugin.java.JavaPlugin
 
 class CustomEnchantManagerModule : AbstractModule() {
@@ -17,10 +16,10 @@ class CustomEnchantManagerModule : AbstractModule() {
         @Singleton
         fun provideCustomEnchantManager(
             plugin: JavaPlugin,
-            romanNumeralConverter: RomanNumeralConverter, pantsData: PantsData,
+            pantsData: PantsData,
             customEnchantUtils: CustomEnchantUtils
         ): CustomEnchantManager {
-            return CustomEnchantManager(plugin, romanNumeralConverter, pantsData, customEnchantUtils)
+            return CustomEnchantManager(plugin, pantsData, customEnchantUtils)
         }
     }
 }

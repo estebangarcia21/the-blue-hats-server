@@ -22,8 +22,10 @@ class SpawnCommand @Inject constructor(
     override fun runCommand(player: Player, cmd: String?, args: Array<String>) {
         if (regionManager.entityIsInSpawn(player)) {
             player.sendMessage(ChatColor.RED.toString() + "You cannot /respawn here!")
+
             return
         }
+
         if (!combatManager.playerIsInCombat(player)) {
             if (!timer.isRunning(player)) {
                 player.health = player.maxHealth

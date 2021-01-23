@@ -13,3 +13,5 @@ class EnchantProperty<T> @SafeVarargs constructor(vararg values: T) {
         this.values = values
     }
 }
+
+infix fun <T> EnchantProperty<T>.at(level: Int): T = getValueAtLevel(level)

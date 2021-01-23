@@ -33,27 +33,32 @@ class MegaLongBow @Inject constructor(
             val player = event.entity as Player
             val arrow = event.projectile as Arrow
             val bow = player.inventory.itemInHand
-            if (customEnchantUtils.itemHasEnchant(this, bow)) {
-                execute(player, arrow, customEnchantUtils.getEnchantLevel(this, bow))
-            }
+
+            val data = customEnchantUtils.getItemEnchantData(this, bow)
+
+            if (data.itemHasEnchant()) execute(player, arrow, data.enchantLevel)
         }
     }
 
     fun execute(player: Player, arrow: Arrow, level: Int) {
         val playerUuid = player.uniqueId
+
         if (!timer.isRunning(playerUuid)) {
             arrow.isCritical = true
-            arrow.velocity = player.location.direction.multiply(2.90)
+            arrow.velocity = player.location.direction.multiply(2.9)
             player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 40, amplifier.getValueAtLevel(level)), true)
         }
-        timer.start(playerUuid, 20, false)
+
+        timer.start(playerUuid, 20)
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser(
             "One shot per second, this bow is<br/>automatically fully drawn and<br/>grants <green>Jump Boost {0}</green> (2s)"
         )
+
         enchantLoreParser.setSingleVariable("II", "III", "IV")
+
         return enchantLoreParser.parseForLevel(level)
     }
 }

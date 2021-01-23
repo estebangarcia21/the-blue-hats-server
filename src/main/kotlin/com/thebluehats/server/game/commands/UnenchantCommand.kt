@@ -15,7 +15,7 @@ class UnenchantCommand @Inject constructor(
     override val commandNames: Array<String>
         get() = arrayOf("unenchant")
 
-    override fun getUsageMessage(cmd: String?): String? {
+    override fun getUsageMessage(cmd: String?): String {
         return formatStandardUsageMessage(cmd!!, "Unenchants an enchant from the item you are holding.", "enchantName")
     }
 
