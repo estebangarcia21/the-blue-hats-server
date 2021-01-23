@@ -18,7 +18,7 @@ class SpeedyHitTest : DescribeSpec( {
 
             val timerMock: Timer<UUID> = mockk {
                 every { isRunning(uuid) } returns false
-                every { start(uuid, 1, false) } returns Unit
+                every { start(uuid, 1, seconds = true) } returns Unit
             }
 
             val speedyHit = SpeedyHit(timerMock, mockk())
