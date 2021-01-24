@@ -17,7 +17,7 @@ class AssassinTest : DescribeSpec({
     describe("assassin") {
         it("teleports the player behind the player who damages them") {
             val timerMock = mockk<Timer<Player>> {
-                every { start(any(), any(), any()) } returns Unit
+                every { start(any(), any(), any(), any(), any()) } returns Unit
                 every { isRunning(any()) } returns false
             }
 
@@ -60,7 +60,7 @@ class AssassinTest : DescribeSpec({
 
         it("teleports the player to the player who damages them if there is no room behind them") {
             val timerMock = mockk<Timer<Player>> {
-                every { start(any(), any(), any()) } returns Unit
+                every { start(any(), any(), any(), any(), any()) } returns Unit
                 every { isRunning(any()) } returns false
             }
 

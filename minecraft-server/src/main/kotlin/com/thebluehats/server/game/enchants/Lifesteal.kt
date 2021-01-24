@@ -8,9 +8,11 @@ import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant
 import com.thebluehats.server.game.managers.enchants.EnchantGroup
 import com.thebluehats.server.game.managers.enchants.EnchantProperty
+import com.thebluehats.server.game.managers.enchants.at
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
 import com.thebluehats.server.game.utils.EntityValidator
+import com.thebluehats.server.game.utils.PlayerHealth.Utils.addHealth
 import org.bukkit.Material
 import java.util.*
 
@@ -22,7 +24,7 @@ class Lifesteal @Inject constructor(
         damageManager
     )
 ) {
-    private val healPercentage = EnchantProperty(0.04f, 0.08f, 0.013f)
+    private val healPercentage = EnchantProperty(0.04, 0.08, 0.13)
 
     override val name: String get() = "Lifesteal"
     override val enchantReferenceName: String get() = "Lifesteal"
@@ -36,14 +38,8 @@ class Lifesteal @Inject constructor(
         val event = data.event
         val damager = data.damager
         val level = data.level
-        damager.health = Math.min(
-            Math.min(
-                damager.health + damageManager.getDamageFromEvent(event) * healPercentage.getValueAtLevel(
-                    level
-                ), 3.0
-            ),
-            damager.maxHealth
-        )
+
+        damager addHealth (damageManager.getDamageFromEvent(event) * (healPercentage at level)).coerceAtMost(3.0)
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
