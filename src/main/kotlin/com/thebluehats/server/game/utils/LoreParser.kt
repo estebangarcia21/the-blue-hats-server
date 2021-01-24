@@ -3,14 +3,14 @@ package com.thebluehats.server.game.utils
 import org.apache.commons.lang.StringUtils
 import java.util.*
 
-class LoreParser(lore: String) : LoreParserBase<Array<String>?>(lore) {
+class LoreParser(lore: String) : LoreParserBase(lore) {
     private var variables: Array<String>? = null
 
     fun parse(): ArrayList<String> {
         return parseLore(lore)
     }
 
-    override fun setVariables(variables: Array<String>?) {
+    fun setVariables(variables: Array<String>) {
         this.variables = variables
     }
 
@@ -18,7 +18,7 @@ class LoreParser(lore: String) : LoreParserBase<Array<String>?>(lore) {
         if (variables == null) return line
         var formattedLine = line
 
-        for (i in variables!!.indices) {
+        variables!!.indices.forEach { i ->
             formattedLine = StringUtils.replace(formattedLine, "{$i}", variables!![i])
         }
 

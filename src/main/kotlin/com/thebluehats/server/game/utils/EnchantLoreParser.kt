@@ -3,8 +3,8 @@ package com.thebluehats.server.game.utils
 import org.apache.commons.lang.StringUtils
 import java.util.*
 
-class EnchantLoreParser(lore: String = "") : LoreParserBase<Array<Array<String>?>>(lore) {
-    private val appensions = ArrayList<String>()
+class EnchantLoreParser(lore: String = "") : LoreParserBase(lore) {
+    private val extraStrings = ArrayList<String>()
 
     private var variableMatrix: Array<Array<String>?>? = null
     private var singleVariable: Array<String>? = null
@@ -14,18 +14,16 @@ class EnchantLoreParser(lore: String = "") : LoreParserBase<Array<Array<String>?
 
     fun addTextIf(condition: Boolean, text: String) {
         if (!condition) return
-        appensions.add(text)
+        extraStrings.add(text)
     }
 
     fun parseForLevel(level: Int): ArrayList<String> {
         this.level = level
-        var finalLore = lore
+        val finalLore = StringBuilder(lore)
+        
+        extraStrings.forEach { a -> finalLore.append(a) }
 
-        for (appension in appensions) {
-            finalLore += appension
-        }
-
-        return parseLore(finalLore)
+        return parseLore(finalLore.toString())
     }
 
     fun setSingleVariable(levelOne: String, levelTwo: String, levelThree: String) {
@@ -33,18 +31,19 @@ class EnchantLoreParser(lore: String = "") : LoreParserBase<Array<Array<String>?
         singleVariable = arrayOf(levelOne, levelTwo, levelThree)
     }
 
-    override fun setVariables(variables: Array<Array<String>?>) {
+    fun setVariables(variables: Array<Array<String>?>) {
         variableMatrix = variables
     }
 
     override fun insertVariableValuesForLine(line: String): String {
         if (variableMatrix == null && singleVariable == null) return line
+
         var formattedLine = line
 
         if (onlyOneVariable) {
             formattedLine = StringUtils.replace(formattedLine, "{0}", singleVariable!![level - 1])
         } else {
-            for (i in variableMatrix?.indices!!) {
+            variableMatrix?.indices!!.forEach { i ->
                 val variable = if (onlyOneVariable) singleVariable!![level - 1] else variableMatrix!![i]?.get(level - 1)
                 formattedLine = StringUtils.replace(formattedLine, "{$i}", variable)
             }
