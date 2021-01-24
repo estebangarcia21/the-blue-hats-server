@@ -3,9 +3,7 @@ package com.thebluehats.server.game.enchants
 import com.thebluehats.server.game.managers.combat.templates.ArrowDamageTrigger
 import com.thebluehats.server.game.managers.combat.templates.EnchantHolder
 import com.thebluehats.server.game.managers.combat.templates.PlayerDamageTrigger
-import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant
-import com.thebluehats.server.game.managers.enchants.EnchantGroup
-import com.thebluehats.server.game.managers.enchants.EnchantProperty
+import com.thebluehats.server.game.managers.enchants.*
 import com.thebluehats.server.game.managers.enchants.Timer
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
@@ -19,7 +17,7 @@ class Assassin @Inject constructor(
     private val timer: Timer<Player>, playerDamageTrigger: PlayerDamageTrigger,
     arrowDamageTrigger: ArrowDamageTrigger
 ) : DamageTriggeredEnchant(arrayOf(playerDamageTrigger, arrowDamageTrigger)) {
-    private val cooldownTime = EnchantProperty(5, 4, 3)
+    private val cooldownTime = EnchantProperty(5L, 4L, 3L)
 
     override val name: String get() = "Assassin"
     override val enchantReferenceName: String get() = "assassin"
@@ -32,6 +30,7 @@ class Assassin @Inject constructor(
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager
         val damagee = data.damagee
+        val level = data.level
 
         if (!timer.isRunning(damagee)) {
             val tpLoc = damager.location.subtract(damager.eyeLocation.direction.normalize())
@@ -46,7 +45,7 @@ class Assassin @Inject constructor(
             damagee.world.playSound(damagee.location, Sound.ENDERMAN_TELEPORT, 1f, 2f)
         }
 
-        timer.start(damagee, (cooldownTime.getValueAtLevel(data.level) * 20).toLong(), false)
+        timer.start(damagee, cooldownTime at level, seconds = true)
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
