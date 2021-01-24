@@ -12,8 +12,8 @@ class ServerAPIModule : AbstractModule() {
 
     companion object {
         @Provides
-        @Singleton
         @ServerAPI
+        @Singleton
         fun provideServerApi(): UnirestInstance {
             val apiUrl = System.getenv("API_URL")
             val defaultApiUrl = "http://localhost:4000"
