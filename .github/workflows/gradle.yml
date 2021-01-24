@@ -20,6 +20,6 @@ jobs:
     - name: CD to working directory
       run: cd minecraft-server
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: chmod +x ./gradlew
     - name: Build with Gradle
       run: ./gradlew build
