@@ -1,9 +1,13 @@
 package core
 
 import (
+	"bufio"
 	"fmt"
+	"io"
+	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"dev-server/core/functions"
 	"dev-server/core/utils"
@@ -29,7 +33,6 @@ type target interface {
 	exec()
 }
 
-// Targets
 type new struct{}
 type start struct{}
 type delete struct{}
@@ -71,22 +74,17 @@ func (s start) exec() {
 	os.Chdir(vars.DevServerLocation)
 
 	fmt.Println("Starting the server...")
-	subProcess := exec.Command("java", "-jar", "-Xms2g", "-Xmx4g", "-XX:+UseG1GC", "spigot-1.8.8.jar", "nogui")
+	cmd := exec.Command("java", "-jar", "-Xms2g", "-Xmx4g", "-XX:+UseG1GC", "spigot-1.8.8.jar", "nogui")
 
-	stdin, err := subProcess.StdinPipe()
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer stdin.Close()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	stdin, _ := cmd.StdinPipe()
 
-	subProcess.Stdout = os.Stdout
-	subProcess.Stderr = os.Stderr
+	cmd.Start()
 
-	if err = subProcess.Start(); err != nil {
-		fmt.Println("An error occured: ", err)
-	}
+	readStdin(&stdin)
 
-	subProcess.Wait()
+	cmd.Wait()
 }
 
 func (d delete) exec() {
@@ -94,4 +92,34 @@ func (d delete) exec() {
 	os.RemoveAll(vars.DevServerLocation)
 
 	fmt.Println("Successfully removed.")
+}
+
+func readStdin(buffer *io.WriteCloser) {
+	input := make(chan string)
+
+	go func(in chan string) {
+		reader := bufio.NewReader(os.Stdin)
+
+		for {
+			s, err := reader.ReadString('\n')
+			if err != nil {
+				close(in)
+				log.Println("An error occured with the input string.", err)
+			}
+
+			in <- s
+		}
+	}(input)
+exit:
+	for {
+		select {
+		case in := <-input:
+			in = strings.TrimSpace(in)
+			(*buffer).Write([]byte(in + "\n"))
+
+			if in == "stop" {
+				break exit
+			}
+		}
+	}
 }
