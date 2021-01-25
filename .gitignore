@@ -4,6 +4,8 @@ terraform/tfplan
 terraform/.terraform
 terraform/.terraform.lock.hcl
 
+.idea
+
 # Development
 minecraft-server/__dev-server
 

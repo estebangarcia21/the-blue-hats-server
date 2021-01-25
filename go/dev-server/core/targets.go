@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -41,15 +40,15 @@ type deleteTarget struct{}
 type updateTarget struct{}
 
 func (n newTarget) exec() {
-	if _, err := os.Stat(vars.DevServerLocation); !os.IsNotExist(err) {
+	if _, err := os.Stat(vars.ServerLocation); !os.IsNotExist(err) {
 		fmt.Println("The development server already exists.")
 		return
 	}
 
 	serverTarball := "tbhs-dev-server.tar.gz"
 
-	_ = os.Mkdir(vars.DevServerLocation, 0755)
-	_ = os.Chdir(vars.DevServerLocation)
+	_ = os.Mkdir(vars.ServerLocation, 0755)
+	_ = os.Chdir(vars.ServerLocation)
 
 	fmt.Println("Downloading the server files...")
 	utils.HandleCmd(utils.Curl(serverTemplateURL, serverTarball))
@@ -66,15 +65,15 @@ func (n newTarget) exec() {
 	fmt.Println(`
     Done! The development server was successfully created!
 
-    To run the server, do ./dev-server startTarget
-    Otherwise, to deleteTarget the server do ./dev-server deleteTarget
+    To run the server, do ./dev-server start
+    Otherwise, to delete the server do ./dev-server target 
 	`)
 }
 
 func (s startTarget) exec() {
 	functions.BuildServerJar()
 
-	_ = os.Chdir(vars.DevServerLocation)
+	_ = os.Chdir(vars.ServerLocation)
 
 	fmt.Println("Starting the server...")
 	cmd := exec.Command("java", "-jar", "-Xms2g", "-Xmx4g", "-XX:+UseG1GC", "spigot-1.8.8.jar", "nogui")
@@ -83,16 +82,20 @@ func (s startTarget) exec() {
 	cmd.Stderr = os.Stderr
 	stdin, _ := cmd.StdinPipe()
 
+	c := make(chan struct{})
+
 	_ = cmd.Start()
 
 	readStdin(&stdin)
 
 	_ = cmd.Wait()
+
+	c <- struct{}{}
 }
 
 func (d deleteTarget) exec() {
 	fmt.Println("Removing the development server...")
-	_ = os.RemoveAll(vars.DevServerLocation)
+	_ = os.RemoveAll(vars.ServerLocation)
 
 	fmt.Println("Successfully removed.")
 }
@@ -109,9 +112,10 @@ func readStdin(buffer *io.WriteCloser) {
 
 		for {
 			s, err := reader.ReadString('\n')
+
 			if err != nil {
 				close(in)
-				log.Println("An error occurred with the input string.", err)
+				fmt.Println("An error occurred with the input string.", err)
 			}
 
 			in <- s
