@@ -7,9 +7,9 @@ import com.thebluehats.server.core.services.Service
 import java.util.*
 
 class ApplicationBuilder(private val plugin: TheBlueHatsServerPlugin) {
-    private val services = ArrayList<Class<out Service?>>()
+    private val services = ArrayList<Class<out Service>>()
 
-    fun addService(clazz: Class<out Service?>): ApplicationBuilder {
+    fun addService(clazz: Class<out Service>): ApplicationBuilder {
         services.add(clazz)
         return this
     }
@@ -18,7 +18,7 @@ class ApplicationBuilder(private val plugin: TheBlueHatsServerPlugin) {
         val injector = provisionInjector()
 
         for (service in services) {
-            injector.getInstance(service)!!.provision(injector)
+            injector.getInstance(service).provision(injector)
         }
 
         return injector.getInstance(Application::class.java)

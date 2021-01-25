@@ -7,7 +7,6 @@ import org.bukkit.Material
 import java.util.*
 
 class Mirror : CustomEnchant {
-
     override val name: String get() = "Mirror"
     override val enchantReferenceName: String get() = "Mirror"
     override val isDisabledOnPassiveWorld: Boolean get() = false
