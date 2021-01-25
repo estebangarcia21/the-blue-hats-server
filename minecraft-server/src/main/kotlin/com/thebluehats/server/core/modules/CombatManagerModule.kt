@@ -16,6 +16,7 @@ class CombatManagerModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun provideCombatManager(
             regionManager: RegionManager,
             timer: Timer<UUID>,

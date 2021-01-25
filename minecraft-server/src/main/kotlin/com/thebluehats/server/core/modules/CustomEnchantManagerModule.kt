@@ -14,6 +14,7 @@ class CustomEnchantManagerModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun provideCustomEnchantManager(
             plugin: JavaPlugin,
             pantsData: PantsData,

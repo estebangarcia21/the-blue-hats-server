@@ -13,12 +13,14 @@ class EventVerifiersModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun providePlayerHitPlayerVerifier(customEnchantUtils: CustomEnchantUtils?): PlayerHitPlayerVerifier {
             return PlayerHitPlayerVerifier()
         }
 
         @Provides
         @Singleton
+        @JvmStatic
         fun provideArrowHitPlayerVerifier(customEnchantUtils: CustomEnchantUtils?): ArrowHitPlayerVerifier {
             return ArrowHitPlayerVerifier()
         }

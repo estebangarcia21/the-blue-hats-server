@@ -16,6 +16,7 @@ class DamageManagerModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun provideDamageManager(
             @MirrorReference mirror: Mirror, combatManager: CombatManager,
             customEnchantUtils: CustomEnchantUtils, regionManager: RegionManager

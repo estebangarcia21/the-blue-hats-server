@@ -13,6 +13,7 @@ class PitScoreboardModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun providePitScoreboard(
             combatManager: CombatManager,
             performanceStatsService: PerformanceStatsService

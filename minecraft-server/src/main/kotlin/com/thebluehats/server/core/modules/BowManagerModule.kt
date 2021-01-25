@@ -11,6 +11,7 @@ class BowManagerModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun provideBowManager(): BowManager {
             return BowManager()
         }

@@ -1,6 +1,7 @@
 package com.thebluehats.server.core.modules
 
 import com.google.inject.AbstractModule
+import com.google.inject.Inject
 import com.google.inject.Provides
 import com.google.inject.Singleton
 import com.thebluehats.server.core.TheBlueHatsServerPlugin
@@ -15,12 +16,14 @@ class RegistererModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun provideCustomEnchantManager(customEnchantManager: CustomEnchantManager): Registerer<CustomEnchant> {
             return customEnchantManager
         }
 
         @Provides
         @Singleton
+        @JvmStatic
         fun providePluginLifecycleListenerRegisterer(theBlueHatsServerPlugin: TheBlueHatsServerPlugin): Registerer<PluginLifecycleListener> {
             return theBlueHatsServerPlugin
         }

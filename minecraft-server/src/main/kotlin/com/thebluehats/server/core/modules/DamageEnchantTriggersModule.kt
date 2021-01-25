@@ -15,6 +15,7 @@ class DamageEnchantTriggersModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun providePlayerDamageTrigger(
             customEnchantUtils: CustomEnchantUtils,
             playerHitPlayerVerifier: PlayerHitPlayerVerifier
@@ -24,6 +25,7 @@ class DamageEnchantTriggersModule : AbstractModule() {
 
         @Provides
         @Singleton
+        @JvmStatic
         fun provideArrowDamageTrigger(
             customEnchantUtils: CustomEnchantUtils,
             arrowHitPlayerVerifier: ArrowHitPlayerVerifier

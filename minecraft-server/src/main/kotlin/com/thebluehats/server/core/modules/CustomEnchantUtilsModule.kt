@@ -11,6 +11,7 @@ class CustomEnchantUtilsModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun provideCustomEnchantUtils(): CustomEnchantUtils {
             return CustomEnchantUtils()
         }

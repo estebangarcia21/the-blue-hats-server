@@ -10,6 +10,7 @@ class TimerModule : AbstractModule() {
 
     companion object {
         @Provides
+        @JvmStatic
         fun provideTimer(plugin: JavaPlugin): Timer<*> {
             return Timer<Any>(plugin)
         }

@@ -11,6 +11,7 @@ class HitCounterModule : AbstractModule() {
 
     companion object {
         @Provides
+        @JvmStatic
         fun provideHitCounter(timer: Timer<UUID>): HitCounter {
             return HitCounter(timer)
         }

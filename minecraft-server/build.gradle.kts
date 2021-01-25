@@ -1,14 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "6.1.0"
     kotlin("jvm") version "1.4.21"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
-
-val compileKotlin: KotlinCompile by tasks
-
-compileKotlin.kotlinOptions.suppressWarnings = true
-compileKotlin.kotlinOptions.jvmTarget = "1.8"
 
 group = "com.thebluehats.server"
 version = "1.0-SNAPSHOT"
@@ -39,4 +34,8 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
 }

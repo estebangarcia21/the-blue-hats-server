@@ -11,6 +11,7 @@ class PantsDataContainerModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun providePantsData(): PantsData {
             return PantsData()
         }

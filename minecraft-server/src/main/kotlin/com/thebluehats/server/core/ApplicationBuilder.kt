@@ -26,10 +26,10 @@ class ApplicationBuilder(private val plugin: TheBlueHatsServerPlugin) {
 
     private fun provisionInjector(): Injector {
         return Guice.createInjector(
-            PluginModule(plugin), RegionManagerModule(),
+            PluginModule(plugin), ServerAPIModule(), RegionManagerModule(),
             CustomEnchantManagerModule(), CombatManagerModule(), EventVerifiersModule(),
             DamageManagerModule(), BowManagerModule(), TimerModule(), HitCounterModule(),
-            MirrorModule(), CustomEnchantUtilsModule(), ServerAPIModule(), PantsDataContainerModule(),
+            MirrorModule(), CustomEnchantUtilsModule(), PantsDataContainerModule(),
             PerformanceStatsServiceModule(), GlobalTimerModule(), DamageEnchantTriggersModule(),
             RegistererModule(), PitScoreboardModule()
         )

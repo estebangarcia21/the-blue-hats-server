@@ -11,6 +11,7 @@ class RegionManagerModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun provideRegionManager(): RegionManager {
             return RegionManager()
         }

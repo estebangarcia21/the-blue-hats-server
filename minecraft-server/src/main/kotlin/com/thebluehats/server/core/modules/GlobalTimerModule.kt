@@ -12,6 +12,7 @@ class GlobalTimerModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun provideGlobalTimer(plugin: JavaPlugin): GlobalTimer {
             return GlobalTimer(plugin)
         }

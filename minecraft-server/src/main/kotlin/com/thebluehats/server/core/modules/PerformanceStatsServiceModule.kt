@@ -14,6 +14,7 @@ class PerformanceStatsServiceModule : AbstractModule() {
     companion object {
         @Provides
         @Singleton
+        @JvmStatic
         fun provideGrindingSystem(@ServerAPI serverAPI: UnirestInstance?): PerformanceStatsService {
             return PerformanceStatsServiceImpl(serverAPI!!)
         }

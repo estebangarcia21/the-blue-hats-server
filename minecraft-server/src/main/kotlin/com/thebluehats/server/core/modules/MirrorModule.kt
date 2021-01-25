@@ -13,6 +13,7 @@ class MirrorModule : AbstractModule() {
         @Provides
         @Singleton
         @MirrorReference
+        @JvmStatic
         fun provideMirror(): Mirror {
             return Mirror()
         }
