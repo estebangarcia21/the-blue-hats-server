@@ -2,15 +2,14 @@ package core
 
 import (
 	"bufio"
+	"dev-server/core/functions"
+	"dev-server/core/utils"
+	"dev-server/vars"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"strings"
-
-	"dev-server/core/functions"
-	"dev-server/core/utils"
-	"dev-server/vars"
 )
 
 var (
@@ -86,7 +85,7 @@ func (s startTarget) exec() {
 
 	_ = cmd.Start()
 
-	readStdin(&stdin)
+	redirectStdin(&stdin, c)
 
 	_ = cmd.Wait()
 
@@ -104,7 +103,7 @@ func (u updateTarget) exec() {
 	functions.UpdateSpigotJar()
 }
 
-func readStdin(buffer *io.WriteCloser) {
+func redirectStdin(buffer *io.WriteCloser, c chan struct{}) {
 	input := make(chan string)
 
 	go func(in chan string) {
@@ -112,25 +111,23 @@ func readStdin(buffer *io.WriteCloser) {
 
 		for {
 			s, err := reader.ReadString('\n')
-
 			if err != nil {
-				close(in)
 				fmt.Println("An error occurred with the input string.", err)
 			}
 
-			in <- s
+			in <- strings.TrimSpace(s)
 		}
 	}(input)
-exit:
-	for {
-		select {
-		case in := <-input:
-			in = strings.TrimSpace(in)
-			_, _ = (*buffer).Write([]byte(in + "\n"))
 
-			if in == "stop" {
-				break exit
+	go func(cin chan struct{}) {
+		for {
+			select {
+			case <-cin:
+				break
+
+			case in := <-input:
+				_, _ = (*buffer).Write([]byte(in + "\n"))
 			}
 		}
-	}
+	}(c)
 }
