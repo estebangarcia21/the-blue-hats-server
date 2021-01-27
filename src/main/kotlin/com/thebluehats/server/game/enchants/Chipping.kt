@@ -7,6 +7,7 @@ import com.thebluehats.server.game.managers.combat.templates.EnchantHolder
 import com.thebluehats.server.game.managers.enchants.DamageTriggeredEnchant
 import com.thebluehats.server.game.managers.enchants.EnchantGroup
 import com.thebluehats.server.game.managers.enchants.EnchantProperty
+import com.thebluehats.server.game.managers.enchants.at
 import com.thebluehats.server.game.managers.enchants.processedevents.DamageEventEnchantData
 import com.thebluehats.server.game.utils.EnchantLoreParser
 import java.util.*
@@ -16,7 +17,7 @@ class Chipping
 @Inject
 constructor(private val damageManager: DamageManager, arrowDamageTrigger: ArrowDamageTrigger) :
         DamageTriggeredEnchant(arrayOf(arrowDamageTrigger), arrayOf(damageManager)) {
-    private val damageAmount = EnchantProperty(0.5f, 1.0f, 1.5f)
+    private val damageAmount = EnchantProperty(1.0, 2.0, 3.0)
 
     override val name: String get() = "Chipping"
     override val enchantReferenceName: String get() = "chipping"
@@ -27,9 +28,10 @@ constructor(private val damageManager: DamageManager, arrowDamageTrigger: ArrowD
     override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
 
     override fun execute(data: DamageEventEnchantData) {
-        val damaged = data.damagee
+        val damagee = data.damagee
+        val damager = data.damager
         val level = data.level
-        damageManager.doTrueDamage(damaged, damageAmount.getValueAtLevel(level).toDouble())
+        damageManager.doTrueDamage(damagee, damageAmount at level, damager)
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
