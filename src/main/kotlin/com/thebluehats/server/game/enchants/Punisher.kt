@@ -24,7 +24,7 @@ class Punisher @Inject constructor(private val damageManager: DamageManager, pla
     private val percentDamageIncrease = EnchantProperty(.6f, .12f, .18f)
 
     override val name: String get() = "Punisher"
-    override val enchantReferenceName: String get() = "Punisher"
+    override val enchantReferenceName: String get() = "punisher"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

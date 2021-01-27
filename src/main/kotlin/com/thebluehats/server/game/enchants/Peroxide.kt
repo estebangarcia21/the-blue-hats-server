@@ -23,7 +23,7 @@ class Peroxide @Inject constructor(playerDamageTrigger: PlayerDamageTrigger, arr
     private val regenAmplifier = EnchantProperty(0, 0, 1)
 
     override val name: String get() = "Peroxide"
-    override val enchantReferenceName: String get() = "Peroxide"
+    override val enchantReferenceName: String get() = "peroxide"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

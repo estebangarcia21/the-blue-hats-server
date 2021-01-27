@@ -19,7 +19,7 @@ class LastStand @Inject constructor(playerDamageTrigger: PlayerDamageTrigger, ar
     private val resistanceAmplifier = EnchantProperty(0, 1, 2)
 
     override val name: String get() = "Last Stand"
-    override val enchantReferenceName: String get() = "Laststand"
+    override val enchantReferenceName: String get() = "last-stand"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

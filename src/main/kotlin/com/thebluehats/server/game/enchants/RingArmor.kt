@@ -23,7 +23,7 @@ class RingArmor @Inject constructor(private val damageManager: DamageManager, ar
     private val damageReductionAmount = EnchantProperty(.20, .40, .60)
 
     override val name: String get() = "Ring Armor"
-    override val enchantReferenceName: String get() = "Ringarmor"
+    override val enchantReferenceName: String get() = "ring-armor"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

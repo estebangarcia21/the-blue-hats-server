@@ -34,7 +34,7 @@ class Robinhood @Inject constructor(
     private val ROBINHOOD_RANGE = 8.0
 
     override val name: String get() = "Robinhood"
-    override val enchantReferenceName: String get() = "Robinhood"
+    override val enchantReferenceName: String get() = "robinhood"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

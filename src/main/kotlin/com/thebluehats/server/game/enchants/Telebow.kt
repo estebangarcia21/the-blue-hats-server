@@ -28,7 +28,7 @@ class Telebow @Inject constructor(
     private val crouchingPlayers = ArrayList<UUID>()
 
     override val name: String get() = "Telebow"
-    override val enchantReferenceName: String get() = "Telebow"
+    override val enchantReferenceName: String get() = "telebow"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = true
@@ -51,16 +51,19 @@ class Telebow @Inject constructor(
     fun onArrowHit(event: ProjectileHitEvent) {
         if (event.entity is Arrow) {
             val projectile = event.entity as Arrow
+
             if (projectile.shooter is Player) {
                 val shooter = event.entity.shooter as Player
                 val shooterUuid = shooter.uniqueId
                 val bow = shooter.inventory.itemInHand
+
                 if (timer.isRunning(shooter.uniqueId)) {
                     sendCooldownMessage(shooter)
                     crouchingPlayers.remove(shooterUuid)
                     return
                 }
                 val data = customEnchantUtils.getItemEnchantData(this, bow)
+
                 if (data.itemHasEnchant()) {
                     execute(data.enchantLevel, shooter, projectile)
                 }
@@ -70,6 +73,7 @@ class Telebow @Inject constructor(
 
     fun execute(level: Int, player: Player, arrow: Arrow) {
         val playerUuid = player.uniqueId
+
         if (!timer.isRunning(playerUuid) && !regionManager.entityIsInSpawn(arrow) && crouchingPlayers.contains(
                 playerUuid
             )

@@ -26,7 +26,7 @@ class LuckyShot @Inject constructor(
     private val random = Random()
 
     override val name: String get() = "Lucky Shot"
-    override val enchantReferenceName: String get() = "Luckyshot"
+    override val enchantReferenceName: String get() = "lucky-shot"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

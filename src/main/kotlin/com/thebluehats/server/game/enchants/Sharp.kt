@@ -20,7 +20,7 @@ class Sharp @Inject constructor(private val damageManager: DamageManager, player
     private val percentDamageIncrease = EnchantProperty(0.04, 0.07, 0.12)
 
     override val name: String get() = "Sharp"
-    override val enchantReferenceName: String get() = "Sharp"
+    override val enchantReferenceName: String get() = "sharp"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = false

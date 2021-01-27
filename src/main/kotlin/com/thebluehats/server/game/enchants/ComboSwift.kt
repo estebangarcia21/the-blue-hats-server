@@ -24,7 +24,7 @@ class ComboSwift @Inject constructor(private val hitCounter: HitCounter, playerD
     private val hitsNeeded = EnchantProperty(4, 3, 3)
 
     override val name: String get() = "Combo: Swift"
-    override val enchantReferenceName: String get() = "combo-stun"
+    override val enchantReferenceName: String get() = "combo-swift"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

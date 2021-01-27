@@ -18,7 +18,7 @@ class Healer @Inject constructor(playerDamageTrigger: PlayerDamageTrigger) :
 
     override val enchantHolder: EnchantHolder get() = EnchantHolder.DAMAGER
     override val name: String get() = "Healer"
-    override val enchantReferenceName: String get() = "Healer"
+    override val enchantReferenceName: String get() = "healer"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

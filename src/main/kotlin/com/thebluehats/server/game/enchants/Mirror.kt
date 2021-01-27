@@ -8,7 +8,7 @@ import java.util.*
 
 class Mirror : CustomEnchant {
     override val name: String get() = "Mirror"
-    override val enchantReferenceName: String get() = "Mirror"
+    override val enchantReferenceName: String get() = "mirror"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

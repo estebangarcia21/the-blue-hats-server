@@ -17,7 +17,7 @@ class Knockback @Inject constructor(playerDamageTrigger: PlayerDamageTrigger) :
     private val blocksAmount = EnchantProperty(3, 4, 6)
 
     override val name: String get() = "Knockback"
-    override val enchantReferenceName: String get() = "Knockback"
+    override val enchantReferenceName: String get() = "knockback"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

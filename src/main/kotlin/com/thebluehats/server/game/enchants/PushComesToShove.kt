@@ -23,7 +23,7 @@ class PushComesToShove @Inject constructor(private val hitCounter: HitCounter, a
     private val damageAmount = EnchantProperty(0f, 1f, 2f)
 
     override val name: String get() = "Push Comes to Shove"
-    override val enchantReferenceName: String get() = "Pcts"
+    override val enchantReferenceName: String get() = "pcts"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

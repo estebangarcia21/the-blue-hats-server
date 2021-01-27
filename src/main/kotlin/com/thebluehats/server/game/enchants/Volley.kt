@@ -30,7 +30,7 @@ class Volley @Inject constructor(
     private val arrowCount = HashMap<Arrow, Int>()
 
     override val name: String get() = "Volley"
-    override val enchantReferenceName: String get() = "Volley"
+    override val enchantReferenceName: String get() = "volley"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = true

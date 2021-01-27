@@ -17,7 +17,7 @@ class Parasite @Inject constructor(arrowDamageTrigger: ArrowDamageTrigger) :
     private val healAmount = EnchantProperty(0.5, 1.0, 2.0)
 
     override val name: String get() = "Parasite"
-    override val enchantReferenceName: String get() = "Parasite"
+    override val enchantReferenceName: String get() = "parasite"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

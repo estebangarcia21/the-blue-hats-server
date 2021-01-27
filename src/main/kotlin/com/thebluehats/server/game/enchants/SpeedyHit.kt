@@ -21,7 +21,7 @@ class SpeedyHit @Inject constructor(private val timer: Timer<UUID>, playerDamage
     private val cooldownTime = EnchantProperty(3L, 2L, 1L)
 
     override val name: String get() = "Speedy Hit"
-    override val enchantReferenceName: String get() = "speed-hit"
+    override val enchantReferenceName: String get() = "speedy-hit"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = true

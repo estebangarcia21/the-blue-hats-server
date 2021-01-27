@@ -22,7 +22,7 @@ class Wasp @Inject constructor(arrowDamageTrigger: ArrowDamageTrigger) :
     private val weaknessAmplifier = EnchantProperty(1, 2, 3)
 
     override val name: String get() = "Wasp"
-    override val enchantReferenceName: String get() = "Wasp"
+    override val enchantReferenceName: String get() = "wasp"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.A
     override val isRareEnchant: Boolean get() = false

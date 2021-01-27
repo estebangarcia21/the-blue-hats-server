@@ -21,7 +21,7 @@ class Shark @Inject constructor(private val damageManager: DamageManager, player
     private val percentDamageIncrease = EnchantProperty(0.02f, 0.04f, 0.07f)
 
     override val name: String get() = "Shark"
-    override val enchantReferenceName: String get() = "Shark"
+    override val enchantReferenceName: String get() = "shark"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

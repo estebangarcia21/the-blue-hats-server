@@ -33,7 +33,7 @@ class Perun @Inject constructor(
     private val hitsNeeded = EnchantProperty(5, 4, 4)
 
     override val name: String get() = "Perun"
-    override val enchantReferenceName: String get() = "Perun"
+    override val enchantReferenceName: String get() = "perun"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

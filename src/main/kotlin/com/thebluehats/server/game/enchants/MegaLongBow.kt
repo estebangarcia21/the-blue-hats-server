@@ -21,7 +21,7 @@ class MegaLongBow @Inject constructor(
     private val amplifier = EnchantProperty(1, 2, 3)
 
     override val name: String get() = "Mega Longbow"
-    override val enchantReferenceName: String get() = "Mlb"
+    override val enchantReferenceName: String get() = "mlb"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

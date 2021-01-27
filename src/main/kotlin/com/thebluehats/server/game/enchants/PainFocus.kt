@@ -26,7 +26,7 @@ class PainFocus @Inject constructor(
     private val damageIncreasePerHeartLost = EnchantProperty(0.01f, 0.02f, 0.05f)
 
     override val name: String get() = "Pain Focus"
-    override val enchantReferenceName: String get() = "Painfocus"
+    override val enchantReferenceName: String get() = "pain-focus"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

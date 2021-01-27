@@ -27,7 +27,7 @@ class Lifesteal @Inject constructor(
     private val healPercentage = EnchantProperty(0.04, 0.08, 0.13)
 
     override val name: String get() = "Lifesteal"
-    override val enchantReferenceName: String get() = "Lifesteal"
+    override val enchantReferenceName: String get() = "lifesteal"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = false

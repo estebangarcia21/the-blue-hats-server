@@ -21,7 +21,7 @@ class Gamble @Inject constructor(private val damageManager: DamageManager, playe
     private val random = Random()
 
     override val name: String get() = "Gamble"
-    override val enchantReferenceName: String get() = "Gamble"
+    override val enchantReferenceName: String get() = "gamble"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

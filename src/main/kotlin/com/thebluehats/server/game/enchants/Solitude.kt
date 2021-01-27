@@ -26,7 +26,7 @@ class Solitude @Inject constructor(
     private val playersNeeded = EnchantProperty(1, 2, 2)
 
     override val name: String get() = "Solitude"
-    override val enchantReferenceName: String get() = "Solitude"
+    override val enchantReferenceName: String get() = "solitude"
     override val isDisabledOnPassiveWorld: Boolean get() = false
     override val enchantGroup: EnchantGroup get() = EnchantGroup.B
     override val isRareEnchant: Boolean get() = true

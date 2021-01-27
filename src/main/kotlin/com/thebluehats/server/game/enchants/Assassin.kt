@@ -14,7 +14,7 @@ import java.util.*
 import javax.inject.Inject
 
 class Assassin @Inject constructor(
-    private val timer: Timer<Player>, playerDamageTrigger: PlayerDamageTrigger,
+    private val timer: Timer<UUID>, playerDamageTrigger: PlayerDamageTrigger,
     arrowDamageTrigger: ArrowDamageTrigger
 ) : DamageTriggeredEnchant(arrayOf(playerDamageTrigger, arrowDamageTrigger)) {
     private val cooldownTime = EnchantProperty(5L, 4L, 3L)
@@ -29,10 +29,13 @@ class Assassin @Inject constructor(
 
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager
+        val playerUuid = damager.uniqueId
         val damagee = data.damagee
         val level = data.level
 
-        if (!timer.isRunning(damagee)) {
+        if(!damagee.isSneaking) return
+
+        if (!timer.isRunning(playerUuid)) {
             val tpLoc = damager.location.subtract(damager.eyeLocation.direction.normalize())
             tpLoc.y = damager.location.y
 
