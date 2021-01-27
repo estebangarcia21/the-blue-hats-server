@@ -20,7 +20,7 @@ class RingArmor @Inject constructor(private val damageManager: DamageManager, ar
             damageManager
         )
     ) {
-    private val damageReductionAmount = EnchantProperty(.20f, .40f, .60f)
+    private val damageReductionAmount = EnchantProperty(.20, .40, .60)
 
     override val name: String get() = "Ring Armor"
     override val enchantReferenceName: String get() = "Ringarmor"
@@ -33,7 +33,7 @@ class RingArmor @Inject constructor(private val damageManager: DamageManager, ar
     override fun execute(data: DamageEventEnchantData) {
         val event = data.event
         val level = data.level
-        damageManager.reduceDamageByPercentage(event, damageReductionAmount.getValueAtLevel(level).toDouble())
+        damageManager.reduceDamageByPercentage(event, damageReductionAmount.getValueAtLevel(level))
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
