@@ -2,9 +2,11 @@ package com.thebluehats.server.core.services
 
 import com.google.inject.Inject
 import com.google.inject.Injector
+import com.thebluehats.server.game.events.GameEventManager
 import com.thebluehats.server.game.managers.combat.BowManager
 import com.thebluehats.server.game.managers.combat.CombatManager
 import com.thebluehats.server.game.managers.combat.DamageManager
+import com.thebluehats.server.game.managers.enchants.GlobalPlayerTimer
 import com.thebluehats.server.game.managers.enchants.GlobalTimer
 import com.thebluehats.server.game.managers.world.PitScoreboard
 import com.thebluehats.server.game.managers.world.WorldSelectionManager
@@ -21,7 +23,9 @@ import org.bukkit.plugin.java.JavaPlugin
 class UtilitiesService @Inject constructor(
     private val plugin: JavaPlugin,
     private val globalTimer: GlobalTimer,
-    private val pluginLifecycleListenerRegisterer: Registerer<PluginLifecycleListener>
+    private val playerTimer: GlobalPlayerTimer,
+    private val pluginLifecycleListenerRegisterer: Registerer<PluginLifecycleListener>,
+    private val gameEventManager: GameEventManager
 ) : Service {
     override fun provision(injector: Injector) {
         Bukkit.getServer().pluginManager.registerEvents(injector.getInstance(DamageManager::class.java), plugin)
@@ -55,8 +59,11 @@ class UtilitiesService @Inject constructor(
         Bukkit.getServer().pluginManager.registerEvents(injector.getInstance(WorldProtection::class.java), plugin)
         Bukkit.getServer().pluginManager.registerEvents(injector.getInstance(StopLiquidFlow::class.java), plugin)
         Bukkit.getServer().pluginManager.registerEvents(injector.getInstance(SpawnProtection::class.java), plugin)
-        globalTimer.addListener(injector.getInstance(PlayableArea::class.java))
-        globalTimer.addListener(pitScoreboard)
-        pluginLifecycleListenerRegisterer.register(arrayOf(obsidian, globalTimer))
+
+        playerTimer.addListener(injector.getInstance(PlayableArea::class.java))
+        playerTimer.addListener(pitScoreboard)
+
+        globalTimer.addListener(gameEventManager)
+        pluginLifecycleListenerRegisterer.register(obsidian, globalTimer, playerTimer)
     }
 }

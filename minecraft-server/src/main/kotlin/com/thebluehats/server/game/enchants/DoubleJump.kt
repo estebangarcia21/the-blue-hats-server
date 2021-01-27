@@ -16,7 +16,7 @@ import java.util.*
 class DoubleJump @Inject constructor(
     private val customEnchantUtils: CustomEnchantUtils,
     private val timer: Timer<UUID>
-) : CustomEnchant, GlobalTimerListener, Listener {
+) : CustomEnchant, GlobalPlayerTimerListener, Listener {
     private val cooldownTime = EnchantProperty(20, 10, 5)
 
     override val name: String get() = "Double-jump"
@@ -28,7 +28,7 @@ class DoubleJump @Inject constructor(
 
     override val tickDelay: Long get() = 1L
 
-    override fun onTick(player: Player) {
+    override fun onTimeStep(player: Player) {
         val leggings = player.inventory.leggings
         if (player.gameMode != GameMode.SURVIVAL && player.gameMode != GameMode.ADVENTURE) {
             player.allowFlight = true

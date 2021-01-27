@@ -5,6 +5,8 @@ import com.google.inject.Inject
 import com.google.inject.Provides
 import com.google.inject.Singleton
 import com.thebluehats.server.core.TheBlueHatsServerPlugin
+import com.thebluehats.server.game.events.GameEvent
+import com.thebluehats.server.game.events.GameEventManager
 import com.thebluehats.server.game.managers.enchants.CustomEnchant
 import com.thebluehats.server.game.managers.enchants.CustomEnchantManager
 import com.thebluehats.server.game.utils.PluginLifecycleListener
@@ -26,6 +28,14 @@ class RegistererModule : AbstractModule() {
         @JvmStatic
         fun providePluginLifecycleListenerRegisterer(theBlueHatsServerPlugin: TheBlueHatsServerPlugin): Registerer<PluginLifecycleListener> {
             return theBlueHatsServerPlugin
+        }
+
+        @Provides
+        @Singleton
+        @JvmStatic
+        fun provideGameEventRegisterer(gameEventManager: GameEventManager):
+            Registerer<GameEvent> {
+            return gameEventManager
         }
     }
 }

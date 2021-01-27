@@ -7,7 +7,7 @@ import java.util.*
 class PerkManager : Registerer<Perk> {
     private val perks = ArrayList<Perk>()
 
-    override fun register(objects: Array<Perk>) {
+    override fun register(vararg objects: Perk) {
         this.perks.addAll(listOf(*objects))
     }
 }

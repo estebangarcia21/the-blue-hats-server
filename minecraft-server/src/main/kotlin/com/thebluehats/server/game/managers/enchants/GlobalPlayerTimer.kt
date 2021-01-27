@@ -1,16 +1,15 @@
 package com.thebluehats.server.game.managers.enchants
 
-import com.thebluehats.server.game.utils.PluginLifecycleListener
+import com.google.inject.Inject
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
-import java.util.*
-import javax.inject.Inject
+import java.util.ArrayList
 
-open class GlobalTimer @Inject constructor(private val plugin: JavaPlugin) : PluginLifecycleListener {
-    private val listeners = ArrayList<GlobalTimerListener>()
+class GlobalPlayerTimer @Inject constructor(private val plugin: JavaPlugin) : GlobalTimer(plugin) {
+    private val listeners = ArrayList<GlobalPlayerTimerListener>()
     private val times = ArrayList<Long>()
 
-    fun addListener(listener: GlobalTimerListener) {
+    fun addListener(listener: GlobalPlayerTimerListener) {
         listeners.add(listener)
     }
 
@@ -22,13 +21,13 @@ open class GlobalTimer @Inject constructor(private val plugin: JavaPlugin) : Plu
                 times.add(tickDelay)
 
                 Bukkit.getServer().scheduler.scheduleSyncRepeatingTask(plugin, {
-                    if (listener.tickDelay == tickDelay) {
-                        listener.onTimeStep()
+                    Bukkit.getOnlinePlayers().forEach { player ->
+                        if (listener.tickDelay == tickDelay) {
+                            listener.onTimeStep(player)
+                        }
                     }
                 }, 0L, tickDelay)
             }
         }
     }
-
-    override fun onPluginEnd() {}
 }

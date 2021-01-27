@@ -15,6 +15,7 @@ class TheBlueHatsServerPlugin : JavaPlugin(), Registerer<PluginLifecycleListener
             .addService(APIService::class.java)
             .addService(UtilitiesService::class.java)
             .addService(CustomEnchantService::class.java)
+            .addService(EventsService::class.java)
             .addService(PerksService::class.java)
             .addService(CommandsService::class.java)
             .build()
@@ -26,7 +27,7 @@ class TheBlueHatsServerPlugin : JavaPlugin(), Registerer<PluginLifecycleListener
         app!!.stop()
     }
 
-    override fun register(objects: Array<PluginLifecycleListener>) {
+    override fun register(vararg objects: PluginLifecycleListener) {
         lifecycleListeners.addAll(objects)
     }
 }

@@ -24,13 +24,15 @@ class CustomEnchantManager @Inject constructor(
     
     val enchants = ArrayList<CustomEnchant>()
 
-    override fun register(objects: Array<CustomEnchant>) {
-        for (enchant in objects) {
+    override fun register(vararg objects: CustomEnchant) {
+        objects.forEach { enchant ->
             if (enchant is Listener) {
                 plugin.server.pluginManager.registerEvents(enchant as Listener, plugin)
             }
+
             this.enchants.add(enchant)
         }
+
         this.enchants.sortWith(sortCustomEnchantByName)
     }
 

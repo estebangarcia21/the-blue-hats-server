@@ -1,5 +1,5 @@
 package com.thebluehats.server.game.utils
 
 interface Registerer<T> {
-    fun register(objects: Array<T>)
+    fun register(vararg objects: T)
 }

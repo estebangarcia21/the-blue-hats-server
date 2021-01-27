@@ -9,7 +9,7 @@ import org.bukkit.entity.Player
 import java.util.*
 
 class BooBoo @Inject constructor(private val customEnchantUtils: CustomEnchantUtils, private val timer: Timer<UUID>) :
-    CustomEnchant, GlobalTimerListener {
+    CustomEnchant, GlobalPlayerTimerListener {
     private val secondsNeeded = EnchantProperty(5, 4, 3)
 
     override val name: String get() = "Boo-boo"
@@ -21,7 +21,7 @@ class BooBoo @Inject constructor(private val customEnchantUtils: CustomEnchantUt
 
     override val tickDelay: Long get() = 1L
 
-    override fun onTick(player: Player) {
+    override fun onTimeStep(player: Player) {
         val leggings = player.inventory.leggings
         val data = customEnchantUtils.getItemEnchantData(this, leggings)
         if (data.itemHasEnchant()) {

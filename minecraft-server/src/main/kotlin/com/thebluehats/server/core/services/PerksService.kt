@@ -9,6 +9,6 @@ import com.thebluehats.server.game.utils.Registerer
 class PerksService : Service {
     override fun provision(injector: Injector) {
         val registerer: Registerer<Perk> = injector.getInstance(PerkManager::class.java)
-        registerer.register(arrayOf(injector.getInstance(Vampire::class.java)))
+        registerer.register(injector.getInstance(Vampire::class.java))
     }
 }

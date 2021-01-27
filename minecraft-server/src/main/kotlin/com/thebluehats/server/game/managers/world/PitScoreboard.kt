@@ -3,6 +3,7 @@ package com.thebluehats.server.game.managers.world
 import com.thebluehats.server.api.daos.PerformanceStatsService
 import com.thebluehats.server.game.managers.combat.CombatManager
 import com.thebluehats.server.game.managers.combat.CombatStatus
+import com.thebluehats.server.game.managers.enchants.GlobalPlayerTimerListener
 import com.thebluehats.server.game.managers.enchants.GlobalTimerListener
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -18,7 +19,7 @@ import javax.inject.Inject
 class PitScoreboard @Inject constructor(
     private val combatManager: CombatManager,
     private val performanceStatsService: PerformanceStatsService
-) : Listener, GlobalTimerListener {
+) : Listener, GlobalPlayerTimerListener {
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) = buildScoreboard(event.player)
 
@@ -100,7 +101,7 @@ class PitScoreboard @Inject constructor(
         ) + ")" else formattedStatus
     }
 
-    override fun onTick(player: Player) = buildScoreboard(player)
+    override fun onTimeStep(player: Player) = buildScoreboard(player)
 
     override val tickDelay: Long get() = 20L
 }
