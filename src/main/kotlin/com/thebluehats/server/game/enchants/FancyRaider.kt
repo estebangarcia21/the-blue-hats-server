@@ -55,10 +55,10 @@ class FancyRaider @Inject constructor(
 
     override fun getDescription(level: Int): ArrayList<String> {
         val enchantLoreParser = EnchantLoreParser(
-            "Deal <red>+</red> damage vs. players<br/>wearing leather armor"
+            "Deal <red>+{0}%</red> damage vs. players<br/>wearing leather armor"
         )
 
-        enchantLoreParser.setSingleVariable("5%", "9%", "15%")
+        enchantLoreParser.setSingleVariable("5", "9", "15")
 
         return enchantLoreParser.parseForLevel(level)
     }
