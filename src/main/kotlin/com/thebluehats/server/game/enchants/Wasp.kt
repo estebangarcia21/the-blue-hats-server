@@ -47,7 +47,7 @@ class Wasp @Inject constructor(arrowDamageTrigger: ArrowDamageTrigger) :
         variables add Var(0, "II", "III", "IV")
         variables add Var(1, "6", "11", "16")
 
-        enchantLoreParser.setVariables(variables )
+        enchantLoreParser.setVariables(variables)
 
         return enchantLoreParser.parseForLevel(level)
     }

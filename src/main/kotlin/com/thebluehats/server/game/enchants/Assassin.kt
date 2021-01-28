@@ -48,7 +48,7 @@ class Assassin @Inject constructor(
             damagee.world.playSound(damagee.location, Sound.ENDERMAN_TELEPORT, 1f, 2f)
         }
 
-        timer.start(damagee, cooldownTime at level, seconds = true)
+        timer.start(damagee.uniqueId, cooldownTime at level, seconds = true)
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
