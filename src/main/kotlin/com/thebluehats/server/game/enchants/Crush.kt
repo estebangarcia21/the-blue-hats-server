@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.*
 
-class Crush @Inject constructor(private val timer: Timer<Player>, playerDamageTrigger: PlayerDamageTrigger) :
+class Crush @Inject constructor(private val timer: Timer<UUID>, playerDamageTrigger: PlayerDamageTrigger) :
     DamageTriggeredEnchant(arrayOf(playerDamageTrigger)) {
     private val weaknessAmplifier = EnchantProperty(4, 5, 6)
     private val weaknessDuration = EnchantProperty(4, 8, 10)
@@ -33,11 +33,12 @@ class Crush @Inject constructor(private val timer: Timer<Player>, playerDamageTr
 
     override fun execute(data: DamageEventEnchantData) {
         val damager = data.damager
+        val playerUuid = damager.uniqueId
         val damagee = data.damagee
         val level = data.level
 
-        if (!timer.isRunning(damager)) {
-            damagee.player.addPotionEffect(
+        if (!timer.isRunning(playerUuid)) {
+            damagee.addPotionEffect(
                 PotionEffect(
                     PotionEffectType.WEAKNESS,
                     weaknessDuration.getValueAtLevel(level), weaknessAmplifier.getValueAtLevel(level)
@@ -45,7 +46,7 @@ class Crush @Inject constructor(private val timer: Timer<Player>, playerDamageTr
             )
         }
 
-        timer.start(damager, 40, false)
+        timer.start(playerUuid, 40, resetTime = false)
     }
 
     override fun getDescription(level: Int): ArrayList<String> {
