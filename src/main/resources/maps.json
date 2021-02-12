@@ -1,33 +1,33 @@
 [
     {
-        "name": "Seasons",
-        "spawn": {
-            "location": {
+        "Name": "Seasons",
+        "Spawn": {
+            "Location": {
                 "x": 0.5,
                 "y": 114.5,
                 "z": 9.5
             },
-            "rotation": -180,
-            "bounds": {
-                "minBound": {
+            "Rotation": -180,
+            "Bounds": {
+                "MinBound": {
                     "x": 35.5,
                     "y": 77.5,
                     "z": 30
                 },
-                "maxBound": {
+                "MaxBound": {
                     "x": -42.5,
                     "y": 111.5,
                     "z": -45.5
                 }
             }
         },
-        "bounds": {
-            "minBound": {
+        "Bounds": {
+            "MinBound": {
                 "x": 130.5,
                 "y": 0,
                 "z": 144.5
             },
-            "maxBound": {
+            "MaxBound": {
                 "x": -126.5,
                 "y": 150,
                 "z": -220
@@ -35,34 +35,34 @@
         }
     },
     {
-        "name": "Genesis",
-        "spawn": {
-            "location": {
+        "Name": "Genesis",
+        "Spawn": {
+            "Location": {
                 "x": 0.5,
                 "y": 86.5,
                 "z": 11.5
             },
-            "rotation": -180,
-            "bounds": {
-                "minBound": {
+            "Rotation": -180,
+            "Bounds": {
+                "MinBound": {
                     "x": 35.5,
                     "y": 77.5,
                     "z": 30.5
                 },
-                "maxBound": {
+                "MaxBound": {
                     "x": -42.5,
                     "y": 111.5,
                     "z": -45.5
                 }
             }
         },
-        "bounds": {
-            "minBound": {
+        "Bounds": {
+            "MinBound": {
                 "x": 120.5,
                 "y": 0,
                 "z": 144.5
             },
-            "maxBound": {
+            "MaxBound": {
                 "x": -126.5,
                 "y": 129.5,
                 "z": -124.5

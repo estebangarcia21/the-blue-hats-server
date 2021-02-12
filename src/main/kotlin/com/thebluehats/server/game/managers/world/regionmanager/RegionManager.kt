@@ -1,6 +1,8 @@
 package com.thebluehats.server.game.managers.world.regionmanager
 
+import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.thebluehats.server.game.managers.world.regionmanager.maps.response.Map
 import com.thebluehats.server.game.managers.world.regionmanager.maps.response.Position
 import com.thebluehats.server.game.utils.EntityValidator
@@ -22,7 +24,7 @@ class RegionManager : EntityValidator {
     private val activeMap: Map
 
     private fun parseMapsFromJSON() {
-        val gson = Gson()
+        val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create()
         val reader: Reader = InputStreamReader(javaClass.getResourceAsStream("/maps.json"))
         maps.addAll(listOf(*gson.fromJson(reader, Array<Map>::class.java)))
     }

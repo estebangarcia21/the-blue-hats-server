@@ -12,11 +12,12 @@ import org.bukkit.World
 import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import java.util.*
 
 class AssassinTest : DescribeSpec({
     describe("assassin") {
         it("teleports the player behind the player who damages them") {
-            val timerMock = mockk<Timer<Player>> {
+            val timerMock = mockk<Timer<UUID>> {
                 every { start(any(), any(), any(), any(), any()) } returns Unit
                 every { isRunning(any()) } returns false
             }
@@ -59,7 +60,7 @@ class AssassinTest : DescribeSpec({
         }
 
         it("teleports the player to the player who damages them if there is no room behind them") {
-            val timerMock = mockk<Timer<Player>> {
+            val timerMock = mockk<Timer<UUID>> {
                 every { start(any(), any(), any(), any(), any()) } returns Unit
                 every { isRunning(any()) } returns false
             }
