@@ -6,7 +6,7 @@ import io.kotest.matchers.shouldBe
 class LoreParserTest : DescribeSpec({
     describe("lore parser") {
         it("replaces a single variable") {
-            val elp = LoreParser("Hello world {0}!")
+            val elp = BasicLoreParser("Hello world {0}!")
 
             val expectedLore = arrayListOf("§7Hello world 1!")
 

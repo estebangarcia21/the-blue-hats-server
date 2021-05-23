@@ -1,7 +1,7 @@
 package com.thebluehats.server.game.commands
 
 import com.google.inject.Inject
-import com.thebluehats.server.game.utils.LoreParser
+import com.thebluehats.server.game.utils.BasicLoreParser
 import com.thebluehats.server.game.utils.PantsData
 import com.thebluehats.server.game.utils.PantsData.FreshPantsColor
 import org.bukkit.ChatColor
@@ -44,7 +44,7 @@ class GiveFreshItemCommand @Inject constructor(private val pantsData: PantsData)
     }
 
     private fun giveFreshHandheldItem(player: Player, handheldFreshItem: HandheldFreshItem) {
-        val freshItemLore = LoreParser("Kept on death<br/><br/>Used in the mystic well").parse()
+        val freshItemLore = BasicLoreParser("Kept on death<br/><br/>Used in the mystic well").parse()
         val freshItem = if (handheldFreshItem == HandheldFreshItem.SWORD) ItemStack(Material.GOLD_SWORD) else ItemStack(
             Material.BOW
         )
@@ -75,7 +75,7 @@ class GiveFreshItemCommand @Inject constructor(private val pantsData: PantsData)
                 + pantsColorName.substring(1) + " Pants")
         applyFlags(freshPantsMeta)
 
-        val loreParser = LoreParser(
+        val loreParser = BasicLoreParser(
             "Kept on death<br/><br/>{0}Used in the mystic well{1}<br/>{0}Also, a fashion statement{1}"
         )
 

@@ -3,7 +3,7 @@ package com.thebluehats.server.game.utils
 import org.apache.commons.lang.StringUtils
 import java.util.*
 
-class EnchantLoreParser(lore: String = "") : LoreParserBase(lore) {
+class EnchantLoreParser(lore: String = "") : LoreParser(lore) {
     private val extraStrings = ArrayList<String>()
 
     private var variableMatrix: Array<Array<String>?>? = null
@@ -35,7 +35,7 @@ class EnchantLoreParser(lore: String = "") : LoreParserBase(lore) {
         variableMatrix = variables
     }
 
-    override fun insertVariableValuesForLine(line: String): String {
+    override fun expandTemplates(line: String): String {
         if (variableMatrix == null && singleVariable == null) return line
 
         var formattedLine = line

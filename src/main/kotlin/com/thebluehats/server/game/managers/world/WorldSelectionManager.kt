@@ -2,7 +2,7 @@ package com.thebluehats.server.game.managers.world
 
 import com.google.inject.Inject
 import com.thebluehats.server.game.managers.world.regionmanager.RegionManager
-import com.thebluehats.server.game.utils.LoreParser
+import com.thebluehats.server.game.utils.BasicLoreParser
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -38,7 +38,7 @@ class WorldSelectionManager @Inject constructor(
         gui.setItem(3, ItemStack(Material.BLAZE_POWDER))
         var meta = gui.getItem(3).itemMeta
         meta.displayName = ChatColor.RED.toString() + "The Toxic World"
-        val toxicWorldLore = LoreParser(
+        val toxicWorldLore = BasicLoreParser(
             "A world where any<br/>enchants are allowed<br/><br/><italic>No token limit on items</italic>"
         ).parse()
         meta.lore = toxicWorldLore
@@ -46,7 +46,7 @@ class WorldSelectionManager @Inject constructor(
         gui.setItem(5, ItemStack(Material.QUARTZ))
         meta = gui.getItem(5).itemMeta
         meta.displayName = ChatColor.AQUA.toString() + "The Peaceful World"
-        val peacefulWorldLore = LoreParser(
+        val peacefulWorldLore = BasicLoreParser(
             "A world where the most toxic<br/>enchants are removed from<br/>existance for peaceful<br/>gameplay and fair fights<br/><br/><italic>8 tokens maximum on items</italic>"
         )
             .parse()

@@ -1,27 +1,38 @@
 package com.thebluehats.server.game.utils
 
 import org.apache.commons.lang.StringUtils
+import org.bukkit.ChatColor
 import java.util.*
 
-class LoreParser(lore: String) : LoreParserBase(lore) {
-    private var variables: Array<String>? = null
+abstract class LoreParser protected constructor(protected val lore: String) {
+    /**
+     * Replaces HTML color tags with the specified Minecraft color chat code.
+     * Example: `<red>This is red chat!</red>`
+     */
+    protected fun parseLore(lore: String): ArrayList<String> {
+        val parsedLore = ArrayList<String>()
+        val lines = lore.split("<br/>").toTypedArray()
 
-    fun parse(): ArrayList<String> {
-        return parseLore(lore)
-    }
+        lines.forEach { l ->
+            var formattedLine = expandTemplates(ChatColor.GRAY.toString() + l)
 
-    fun setVariables(variables: Array<String>) {
-        this.variables = variables
-    }
+            ChatColor.values().forEach { c ->
+                val name = c.name.toLowerCase()
 
-    override fun insertVariableValuesForLine(line: String): String {
-        if (variables == null) return line
-        var formattedLine = line
+                formattedLine = StringUtils.replace(formattedLine, "-","_" )
+                formattedLine = StringUtils.replace(formattedLine, "<$name>", c.toString())
+                formattedLine = StringUtils.replace(formattedLine, "</$name>", ChatColor.GRAY.toString())
+            }
 
-        variables!!.indices.forEach { i ->
-            formattedLine = StringUtils.replace(formattedLine, "{$i}", variables!![i])
+            parsedLore.add(formattedLine)
         }
 
-        return formattedLine
+        return parsedLore
     }
+
+    /**
+     * Replaces the variable templates in one lore line.
+     * For example `Hello {0}!`
+     */
+    protected abstract fun expandTemplates(line: String): String
 }

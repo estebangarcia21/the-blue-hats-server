@@ -1,6 +1,6 @@
 package com.thebluehats.server.game.commands
 
-import com.thebluehats.server.game.utils.LoreParser
+import com.thebluehats.server.game.utils.BasicLoreParser
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -17,7 +17,7 @@ class GiveBreadCommand : GameCommand() {
     override fun runCommand(player: Player, cmd: String?, args: Array<String>) {
         val bread = ItemStack(Material.BREAD, 64)
         val meta = bread.itemMeta
-        val breadLore = LoreParser("Heals <red>4❤</red><br/>Grants <gold>1❤</gold>").parse()
+        val breadLore = BasicLoreParser("Heals <red>4❤</red><br/>Grants <gold>1❤</gold>").parse()
         meta.displayName = ChatColor.GOLD.toString() + "Yummy Bread"
         meta.lore = breadLore
         bread.itemMeta = meta
